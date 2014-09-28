@@ -27,20 +27,23 @@ public class Workers {
 	 //taxes on consumption, tax rate evolves??...T = \phi c
 	 double taxRate = 0.1;
 	 double taxConsumTot=taxRate*consumption;
+	 //savings = deposits
 	 int saving;
-	 double wealth=RandomHelper.nextDoubleFromTo(100.07, 10000.09);
-	 double deposits, workerLoan;
+	 double wealth=RandomHelper.nextDoubleFromTo(-500.0, 1000.09);
+	 double workerLoan;
+	 double studentLoan;
+	
 	//ABILITY
 	 double abilityStudent = RandomHelper.nextDoubleFromTo(0,0.5);
-	 double abilityStudThres = 0.25;
+	 //double abilityStudThres = 0.25;
 	 boolean InvestEducation;
-	 double invest;
-	 //double probabilityInvestEdu;
-	 //condizionare a ability e wealth
-	 int yearEdu=1;
+	 int studentSpending;
+	 //settare totYearsEdu come somma dei time step. come si fa?!
 	 int totYearsEdu;
 	 int costEdu=300;
-	 double lambda;
+	 boolean successEdu;
+	 double lambda=0.3;
+	 
 	 //spostare iL in banca dopo!
 	 double iL=0.03;
 	 double abilityWorker=abilityStudent+lambda*totYearsEdu;
@@ -49,78 +52,73 @@ public class Workers {
 	 //cosi si possono creare array con le identities di workers e students separatamente? 
 	 //ArrayList<Students> studentsList = new ArrayList<Students>();
 	 ArrayList<Workers> workersList = new ArrayList<Workers>();
-	
+	 ArrayList<Double> abilityStudentList = new ArrayList<Double>();
 
 	public Workers(int workerID){
 		super();
 		identity = workerID;
 		//livello iniziale di ricchezza
-		//wealth=0;
+		wealth=RandomHelper.nextDoubleFromTo(-500.0, 1000.09);
+		abilityStudent = RandomHelper.nextDoubleFromTo(0,0.5);
 		
-		
-		//********define Bank.il in bank!
-		//disposableIncome=workerWage+deposits-Bank.iL*workerLoan-taxConsumTot;
-		
-
 		//check schedule
 		 //@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
 		
-		//rivedere threshold
-			if(RandomHelper.nextDouble()>abilityStudThres && wealth > 100){
+		public void chooseEdu(){
+			if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
 				InvestEducation=true;
-				/*if(wealth > 0){
-					  invest=costEdu;
+				if(wealth >= 300){
+					  studentSpending=costEdu;
 				 }
 			  else{
-				  if(wealth < 0)
-				  invest=costEdu*iL;
+				  if(wealth < 300)
+				  studentLoan=costEdu*iL;
 				  }
-				  */
 		  }
 	  else{
-		  if(RandomHelper.nextDouble()<abilityStudThres && wealth < 100){
+		  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
 			  InvestEducation=false;
+			  for(int i=0; i<abilityStudentList.size(); i++){
+				  sumAbilityWorker=abilityStudentList.get(i)+lambda*totYearsEdu;
+			  }
 		  }
 		  
-		  System.out.println("ID " +workerID+ " investe in Edu " +InvestEducation+ " threshold " +abilityStudThres+ " wealth " +wealth);
+		  System.out.println("ID " +workerID+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " wealth " +wealth);
 	  }
+		
+			//next time step?? schedule?!
+		if(InvestEducation=true){
+			successEdu=abilityStudent;
+		//update abilities dopo un anno di education	
+			if(abilityStudentList.get(i)>abilityStudent){
+			successEdu=true;
+			abilityStudentList.add(new Double(1.0));
+		}
+		}
+		else{
+			if(abilityStudentList.get(i)>abilityStudent)
+			successEdu=false;
+		abilityStudentList.add(new Double(0.0));
+			}
+		}
 	}
 	
-	public double getInvest(){
-		return invest;
+	public double getStudentSpending(){
+		return studentSpending;
 	}
 	
 	public double getWealth(){
 		return wealth;
 	}
-
-	 	  	  
-		/* stato di occupazione/disoccupazione iniziale --->useful per inizializzare labor mkt
-		if(RandomHelper.nextDouble()<initialProbabilityToBeEmployed){
-		status=0;
+	
+	public double getAbilityStudent(){
+		return abilityStudent;
 	}
-	else{
-		status=1;
+	
+	public double getStudentLoan(){
+		return studentLoan;
 	}
-	*/
-	
-	
-	
 
-
-
-	/* if(Context.verbouseFlag){
-		System.out.println("Creato con l'ID "+workerID+" wealth="+wealth+" occupato="+employed+" wage="+workerWage);
-	}
-	*/
-	 
-	 /*per labor market
-		public void reset(){
-			workerWage=0;
-			status=0;
-		}
-*/
-	
 	
 	
 }
