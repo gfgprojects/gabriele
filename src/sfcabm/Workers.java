@@ -47,7 +47,7 @@ public class Workers {
 	 //spostare iL in banca dopo!
 	 double iL=0.03;
 	 double abilityWorker=abilityStudent+lambda*totYearsEdu;
-	 
+	double sumAbilityWorker; 
 	 //forse e il caso di creare due classi, 
 	 //cosi si possono creare array con le identities di workers e students separatamente? 
 	 //ArrayList<Students> studentsList = new ArrayList<Students>();
@@ -63,7 +63,7 @@ public class Workers {
 		
 		//check schedule
 		 //@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
-		
+	}	
 		public void chooseEdu(){
 			if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
 				InvestEducation=true;
@@ -83,24 +83,31 @@ public class Workers {
 			  }
 		  }
 		  
-		  System.out.println("ID " +workerID+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " wealth " +wealth);
-	  }
+		  System.out.println("ID " +identity+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " wealth " +wealth);
 		
 			//next time step?? schedule?!
 		if(InvestEducation=true){
-			successEdu=abilityStudent;
+			if(RandomHelper.nextDouble()*0.5<abilityStudent){
+				successEdu=true;
+			}
+			else{
+				successEdu=false;
+			}
+
 		//update abilities dopo un anno di education	
-			if(abilityStudentList.get(i)>abilityStudent){
+			if(RandomHelper.nextDouble()>abilityStudent){
 			successEdu=true;
 			abilityStudentList.add(new Double(1.0));
 		}
 		}
+/*
 		else{
 			if(abilityStudentList.get(i)>abilityStudent)
 			successEdu=false;
 		abilityStudentList.add(new Double(0.0));
 			}
-		}
+*/
+	  }
 	}
 	
 	public double getStudentSpending(){
