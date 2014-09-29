@@ -39,14 +39,13 @@ public class Workers {
 	 boolean InvestEducation;
 	 int studentSpending;
 	 //settare totYearsEdu come somma dei time step. come si fa?!
-	 int totYearsEdu;
+	 int totYearsEdu=10;
 	 int costEdu=300;
 	 boolean successEdu;
 	 double lambda=0.3;
 	 
 	 //spostare iL in banca dopo!
 	 double iL=0.03;
-	 double abilityWorker=abilityStudent+lambda*totYearsEdu;
 	double sumAbilityWorker; 
 	 //forse e il caso di creare due classi, 
 	 //cosi si possono creare array con le identities di workers e students separatamente? 
@@ -61,54 +60,50 @@ public class Workers {
 		wealth=RandomHelper.nextDoubleFromTo(-500.0, 1000.09);
 		abilityStudent = RandomHelper.nextDoubleFromTo(0,0.5);
 		
+		//workersList.clear();
+		abilityStudentList.clear();
+		
 		//check schedule
 		 //@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
 	}	
-		public void chooseEdu(){
-			if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
-				InvestEducation=true;
-				if(wealth >= 300){
-					  studentSpending=costEdu;
-				 }
-			  else{
-				  if(wealth < 300)
-				  studentLoan=costEdu*iL;
-				  }
-		  }
-	  else{
-		  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
-			  InvestEducation=false;
-			  for(int i=0; i<abilityStudentList.size(); i++){
-				  sumAbilityWorker=abilityStudentList.get(i)+lambda*totYearsEdu;
+	public void chooseEdu(){
+		if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
+			InvestEducation=true;
+			if(wealth >= 300){
+				  studentSpending=costEdu;
+			 }
+		  else{
+			  if(wealth < 300)
+			  studentLoan=costEdu*iL;
 			  }
+	  }
+  else{
+	  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
+		  InvestEducation=false;
+		  for(int i=0; i<abilityStudentList.size(); i++){
+			  sumAbilityWorker=abilityStudentList.get(i);
+			  //+lambda*totYearsEdu;
 		  }
-		  
-		  System.out.println("ID " +identity+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " wealth " +wealth);
-		
-			//next time step?? schedule?!
-		if(InvestEducation=true){
-			if(RandomHelper.nextDouble()*0.5<abilityStudent){
-				successEdu=true;
-			}
-			else{
-				successEdu=false;
-			}
-
-		//update abilities dopo un anno di education	
-			if(RandomHelper.nextDouble()>abilityStudent){
+	  }
+	  
+	  System.out.println("ID " +identity+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " wealth " +wealth);
+	
+		//next time step?? schedule?!
+	if(InvestEducation=true){
+		if(RandomHelper.nextDouble()*0.5<abilityStudent){
 			successEdu=true;
 			abilityStudentList.add(new Double(1.0));
 		}
-		}
-/*
 		else{
-			if(abilityStudentList.get(i)>abilityStudent)
 			successEdu=false;
-		abilityStudentList.add(new Double(0.0));
-			}
-*/
-	  }
+		}
+		
+		//System.out.println("successo "+successEdu);
 	}
+
+  }
+}
+
 	
 	public double getStudentSpending(){
 		return studentSpending;
