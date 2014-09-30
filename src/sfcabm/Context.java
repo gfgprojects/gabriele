@@ -13,6 +13,8 @@ public class Context implements ContextBuilder<Object> {
 		public repast.simphony.context.Context<Object> build(
 				repast.simphony.context.Context<Object> context) {
 	
+			//int maxIter=30;
+			
 			for (int i = 0; i< NumWorkers; i++){
 				context.add(new Workers(i));
 				
@@ -31,5 +33,6 @@ public class Context implements ContextBuilder<Object> {
 			
 		}
 
+		
 
 	}
