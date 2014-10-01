@@ -47,6 +47,7 @@ public class Consumer {
 	public Consumer(int workerID){
 		super();
 		identity = workerID;
+		isStudent=true;
 		
 	}
 	
@@ -82,8 +83,11 @@ public class Consumer {
 	  	}
 		
 	
-	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=1.0)
+//	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=1.0)
 	private void stepStudent() {
+	if(Context.verbousFlag){
+		System.out.println("Stepping Student "+identity);
+	}	
 		if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
 			InvestEducation=true;
 			if(wealth >= 300){
@@ -112,7 +116,9 @@ public class Consumer {
 		}
 		*/
 		
+	if(Context.verbousFlag){
 		System.out.println("ID " +identity+ " investe in Edu " +InvestEducation+ " ability " +abilityStudent+ " count " +count+ " wealth " +wealth);
+	}
 		//" ability " +abilityStudent+
 	}
 

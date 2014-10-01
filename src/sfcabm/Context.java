@@ -8,6 +8,7 @@ import sfcabm.Consumer;
 import sfcabm.Firm;
 
 public class Context implements ContextBuilder<Object> {
+	public static boolean verbousFlag=true;
 		private static final int NumWorkers = 5;
 		private static final int NumFirm = 10;
 		/*
