@@ -37,6 +37,7 @@ public class Context implements ContextBuilder<Object> {
 			
 			for (int i = 0; i< NumWorkers; i++){
 				context.add(new Consumer(i));
+			}
 				
 				//non sicura che vada bene, ma il eclipse consiglia cosi
 			for (int m = 0; m<NumFirm; m++){
@@ -47,7 +48,6 @@ public class Context implements ContextBuilder<Object> {
 			//context.add(theLaborMkt);
 			
 			
-			}
 			/*
 			 if (RunEnvironment.getInstance().isBatch())
 		        {
