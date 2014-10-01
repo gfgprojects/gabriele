@@ -26,6 +26,8 @@ public class Firm {
 	public Firm(int j) {
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 
 	//reset the firm each time step 
