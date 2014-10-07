@@ -27,7 +27,9 @@ public class Consumer {
 	 //spostare iL in banca dopo!
 	double iL=0.03;
 
-	 double sumAbilityStudent;
+	 double sumAbilityStudent=0;
+	 int numberOfSuccessfulPeriodsOfEducation=0;
+	 int numberOfFailedPeriodsOfEducation=0;
 	 boolean InvestEducation;
 	 double studentSpending;
 	
@@ -68,6 +70,9 @@ public class Consumer {
 	}
 
 	private void stepWorker() {
+		if(Context.verbousFlag){
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" I am a worker");
+		}	
 	}
 
 
@@ -81,24 +86,39 @@ public class Consumer {
 		  }
 	  	}
 	
-	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=1.0)
 	private void stepStudent() {
-		sumAbilityStudent=0;
 		
-	if(Context.verbousFlag){
-		System.out.println("Stepping Student "+identity);
-	}	
-
-		if(RandomHelper.nextDouble()>abilityStudent & wealth > 100){
-			InvestEducation=true;
+	//se questo metodo viene eseguito significa che il soggetto ha deciso di studiare
+	//se ho un successo nello studio
+		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
+			numberOfSuccessfulPeriodsOfEducation++;
+			numberOfFailedPeriodsOfEducation=0;
+			if(numberOfSuccessfulPeriodsOfEducation>9){
+				isStudent=false;
+				//calcolare qui titolo di studio e produttività da lavoratore
+			}
 	  }
-  else{
-	  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
+	  else{
+		  numberOfFailedPeriodsOfEducation++;
+	  }
+
+	//ora decide se continuare diventare worker
+	
+		//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
+	  if(numberOfFailedPeriodsOfEducation>2){
+		  isStudent=false;
+		  //calcolare qui titolo di studio e produttività da lavoratore
+	  }
+
+/*
+	  else{
+//	  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
 		  InvestEducation=false;
-		  }
+//		  }
   }
 		
-		while (isStudent=true) {
+
+  while (isStudent=true) {
 		if(RandomHelper.nextDouble()>abilityStudent){
 			double count = 0.0;
 			if ( count <= abilityStudent ){
@@ -107,10 +127,11 @@ public class Consumer {
 			sumAbilityStudent = count++;
 	}
 		}
+  */
 		
 	if(Context.verbousFlag){
-
-		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
+		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation);
+		//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
 	}
 	}
