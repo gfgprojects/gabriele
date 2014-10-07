@@ -9,7 +9,7 @@ import sfcabm.Firm;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
-		private static final int NumWorkers = 5;
+		private static final int NumConsumers = 3;
 		private static final int NumFirm = 10;
 		/*
 		double initialProbabilityToBeEmployed=0.7;
@@ -36,7 +36,7 @@ public class Context implements ContextBuilder<Object> {
 	
 			//int maxIter=30;
 			
-			for (int i = 0; i< NumWorkers; i++){
+			for (int i = 0; i< NumConsumers; i++){
 				context.add(new Consumer(i));
 			}
 				
@@ -49,13 +49,13 @@ public class Context implements ContextBuilder<Object> {
 			//context.add(theLaborMkt);
 			
 			
-			/*
-			 if (RunEnvironment.getInstance().isBatch())
-		        {
-		            RunEnvironment.getInstance().endAt(100);
-		        }
-		        */
 			
+			/* if (RunEnvironment.getInstance().isBatch())
+		        {
+		            RunEnvironment.getInstance().endAt(10);
+		        }
+		        
+			*/
 			return context;
 			
 			
