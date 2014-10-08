@@ -28,6 +28,15 @@ public class Consumer {
 	double iL=0.03;
 
 	 double sumAbilityStudent=0;
+	 //structure degree
+	 int degree;
+	 int elementary;
+	 int intermediate;
+	 int college;
+	 int bachelor;
+	 int master;
+	 int phd;
+	 double productivity;
 	 int numberOfSuccessfulPeriodsOfEducation=0;
 	 int numberOfFailedPeriodsOfEducation=0;
 	 boolean InvestEducation;
@@ -93,9 +102,9 @@ public class Consumer {
 		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 			numberOfSuccessfulPeriodsOfEducation++;
 			numberOfFailedPeriodsOfEducation=0;
-			if(numberOfSuccessfulPeriodsOfEducation>9){
+			if(numberOfSuccessfulPeriodsOfEducation>15){
 				isStudent=false;
-				//calcolare qui titolo di studio e produttività da lavoratore
+				//calcolare qui titolo di studio e produttivit da lavoratore
 			}
 	  }
 	  else{
@@ -103,31 +112,37 @@ public class Consumer {
 	  }
 
 	//ora decide se continuare diventare worker
-	
 		//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
-	  if(numberOfFailedPeriodsOfEducation>2){
+	  if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
 		  isStudent=false;
-		  //calcolare qui titolo di studio e produttività da lavoratore
+		  //calcolare qui titolo di studio e produttivit da lavoratore
+		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
+			if(sumAbilityStudent<5){
+				degree=elementary;
+				productivity=0.05;
+			} 
+			if(sumAbilityStudent<8){
+				degree=intermediate;
+				productivity=0.09;
+			}
+			if(sumAbilityStudent<13){
+				degree=college;
+				productivity=0.12;
+			}
+			if(sumAbilityStudent<16){
+				degree=bachelor;
+				productivity=0.2;
+			}
+			if(sumAbilityStudent<18){
+				degree=master;
+				productivity=0.24;
+			}
+			if(sumAbilityStudent<21){
+				degree=phd;
+				productivity=0.3;
+			}
 	  }
 
-/*
-	  else{
-//	  if(RandomHelper.nextDouble()<abilityStudent & wealth < 100){
-		  InvestEducation=false;
-//		  }
-  }
-		
-
-  while (isStudent=true) {
-		if(RandomHelper.nextDouble()>abilityStudent){
-			double count = 0.0;
-			if ( count <= abilityStudent ){
-				count++;
-			}
-			sumAbilityStudent = count++;
-	}
-		}
-  */
 		
 	if(Context.verbousFlag){
 		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation);
