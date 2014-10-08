@@ -10,7 +10,8 @@ import sfcabm.Consumer;
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
 		private static final int NumConsumers = 5;
-		//private static final int NumFirm = 10;
+		private static final int NumFirm = 3;
+		
 		/*
 		double initialProbabilityToBeEmployed=0.7;
 		VARIABILI USATE IN LAB MKT
@@ -40,10 +41,10 @@ public class Context implements ContextBuilder<Object> {
 				context.add(new Consumer(i));
 			}
 				
-				//non sicura che vada bene, ma il eclipse consiglia cosi
-			//for (int m = 0; m<NumFirm; m++){
-			//		context.add(new Firm(m, m, m, m));
-			//	}
+				
+			for (int f = 0; f<NumFirm; f++){
+				context.add(new Firm(f));
+			}
 				
 			//LaborMkt theLaborMkt=new LaborMkt();
 			//context.add(theLaborMkt);

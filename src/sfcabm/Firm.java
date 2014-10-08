@@ -1,5 +1,7 @@
 package sfcabm;
 
+import java.util.ArrayList;
+
 //import java.util.ArrayList;
 //import sfcabm.LaborMkt;
 
@@ -13,9 +15,10 @@ public class Firm {
 	double firmWageSum;
 	int numVacancy;
 	int numJobs;
+
 	
-	//ArrayList applicationList = new ArrayList();
-	//ArrayList jobList = new ArrayList();
+	ArrayList<Object> applicationList = new ArrayList<Object>();
+	ArrayList<Object> jobList = new ArrayList<Object>();
 	
 	
 	

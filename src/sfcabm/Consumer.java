@@ -12,6 +12,8 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 
 
 public class Consumer {
+	//labor mkt
+	public static int numApplic;
 	int identity;
 	boolean isStudent;
 	//public double disposableIncome,desiredConsumption,consumption,desiredChangeInWealth,desiredWealth;
@@ -28,7 +30,7 @@ public class Consumer {
 	double iL=0.03;
 	double iD=0.01;
 
-	 double sumAbilityStudent=0;
+	 double sumAbilityStudent= 0;
 	 //structure degree
 	 int degree;
 /*
@@ -86,6 +88,8 @@ public class Consumer {
 		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 		}	
+		
+		
 	}
 
 
