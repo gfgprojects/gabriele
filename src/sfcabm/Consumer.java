@@ -9,7 +9,7 @@ import repast.simphony.random.RandomHelper;
 //import repast.simphony.parameter.Parameters;
 //import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
-
+//import repast.simphony.context.Context;
 
 public class Consumer {
 	int identity;
@@ -51,6 +51,7 @@ public class Consumer {
 	 int costEdu=300;
 
 	 double consumption;
+	 Context myContext;
 	 
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
