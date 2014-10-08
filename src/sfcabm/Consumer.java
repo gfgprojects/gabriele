@@ -26,6 +26,7 @@ public class Consumer {
 	 double studentLoan;
 	 //spostare iL in banca dopo!
 	double iL=0.03;
+	double iD=0.01;
 
 	 double sumAbilityStudent=0;
 	 //structure degree
@@ -47,6 +48,8 @@ public class Consumer {
 	 boolean InvestEducation;
 	 double studentSpending;
 	 int costEdu=300;
+
+	 double consumption;
 	 
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
@@ -87,14 +90,20 @@ public class Consumer {
 
 
 	private void consumptionStudent() {
-		if(wealth >= 300){
-			  studentSpending=costEdu;
+		if(Context.verbousFlag){
+			System.out.print("Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
+		}	
+		consumption=costEdu;
+		if(wealth >= 0){
+			  wealth=wealth*(1+iD)-consumption;
 		 }
 	  else{
-		  if(wealth < 300)
-		  studentLoan=costEdu*iL;
-		  }
+			  wealth=wealth*(1+iL)-consumption;
 	  	}
+		if(Context.verbousFlag){
+			System.out.println(" final wealth "+wealth);
+		}	
+	}
 	
 	private void stepStudent() {
 		
