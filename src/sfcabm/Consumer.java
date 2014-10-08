@@ -37,12 +37,14 @@ public class Consumer {
 	 int master;
 	 int phd;
 	 double productivity;
+	 
 	 int numberOfSuccessfulPeriodsOfEducation=0;
 	 int numberOfFailedPeriodsOfEducation=0;
+	 
 	 boolean InvestEducation;
 	 double studentSpending;
 	 int costEdu=300;
-	 //boolean successEdu;
+	 
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
 	 
@@ -98,7 +100,7 @@ public class Consumer {
 		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 			numberOfSuccessfulPeriodsOfEducation++;
 			numberOfFailedPeriodsOfEducation=0;
-			if(numberOfSuccessfulPeriodsOfEducation>21){
+			if(numberOfSuccessfulPeriodsOfEducation>9){
 				isStudent=false;
 				//calcolare qui titolo di studio e produttivit da lavoratore
 			}

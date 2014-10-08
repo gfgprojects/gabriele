@@ -41,8 +41,8 @@ public class Context implements ContextBuilder<Object> {
 			}
 				
 				//non sicura che vada bene, ma il eclipse consiglia cosi
-			for (int m = 0; m<NumFirm; m++){
-					context.add(new Firm(m, m, m, m));
+			for (int f = 0; f<NumFirm; f++){
+					context.add(new Firm(f));
 				}
 				
 			//LaborMkt theLaborMkt=new LaborMkt();

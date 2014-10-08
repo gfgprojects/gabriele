@@ -6,6 +6,7 @@ package sfcabm;
 public class Firm {
 
 	int FirmID;
+	int identity;
 	double reservationWageFirmSum;
 	int vacancySum;
 	int totalJobs;
@@ -17,15 +18,13 @@ public class Firm {
 	//ArrayList jobList = new ArrayList();
 	
 	
-	public Firm(int FirmID, double reservationWageFirmSum, int vacancySum, int totalJobs){
+	
+	public Firm(int FirmID) {
 		super();
-		//identity = FirmID
+		identity = FirmID;
 	}
 	
-	
-	public Firm(int j) {
-		// TODO Auto-generated constructor stub
-	}
+
 	
 	
 
