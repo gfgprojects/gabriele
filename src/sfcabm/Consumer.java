@@ -41,10 +41,6 @@ public class Consumer {
 	 int numberOfFailedPeriodsOfEducation=0;
 	 boolean InvestEducation;
 	 double studentSpending;
-	
-	// int yearsEdu=RandomHelper.nextIntFromTo(1,15);
-	 int maxYearsEdu=15;
-	 int totYearsEdu;
 	 int costEdu=300;
 	 //boolean successEdu;
 	 //DEFINIRE LAMBDA double lambda=0.3;
@@ -102,7 +98,7 @@ public class Consumer {
 		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 			numberOfSuccessfulPeriodsOfEducation++;
 			numberOfFailedPeriodsOfEducation=0;
-			if(numberOfSuccessfulPeriodsOfEducation>15){
+			if(numberOfSuccessfulPeriodsOfEducation>21){
 				isStudent=false;
 				//calcolare qui titolo di studio e produttivit da lavoratore
 			}
@@ -117,27 +113,27 @@ public class Consumer {
 		  isStudent=false;
 		  //calcolare qui titolo di studio e produttivit da lavoratore
 		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
-			if(sumAbilityStudent<5){
+			if(sumAbilityStudent<=5){
 				degree=elementary;
 				productivity=0.05;
 			} 
-			if(sumAbilityStudent<8){
+			if(sumAbilityStudent<=8){
 				degree=intermediate;
 				productivity=0.09;
 			}
-			if(sumAbilityStudent<13){
+			if(sumAbilityStudent<=13){
 				degree=college;
 				productivity=0.12;
 			}
-			if(sumAbilityStudent<16){
+			if(sumAbilityStudent<=16){
 				degree=bachelor;
 				productivity=0.2;
 			}
-			if(sumAbilityStudent<18){
+			if(sumAbilityStudent<=18){
 				degree=master;
 				productivity=0.24;
 			}
-			if(sumAbilityStudent<21){
+			if(sumAbilityStudent<=21){
 				degree=phd;
 				productivity=0.3;
 			}
