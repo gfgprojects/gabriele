@@ -20,30 +20,26 @@ public class Consumer {
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
 	 public static double abilityStudent = RandomHelper.nextDoubleFromTo(0.0,0.5);
 	 //double taxConsumTot=taxRate*consumption;
-
+	 double sumAbilityStudent=0;
+	 int numberOfSuccessfulPeriodsOfEducation=0;
+	 int numberOfFailedPeriodsOfEducation=0;
+	 boolean InvestEducation;
+	 double studentSpending;
+	 int costEdu=300;
+	 double productivity;
+	 
 	 //DEBT
 	 //double workerLoan;
 	 double studentLoan;
 	 //spostare iL in banca dopo!
 	double iL=0.03;
 
-	 double sumAbilityStudent=0;
+
 	 //structure degree
-	 int degree;
-	 int elementary;
-	 int intermediate;
-	 int college;
-	 int bachelor;
-	 int master;
-	 int phd;
-	 double productivity;
+	// String[] degree = {"elementary intermediate college bachelor master phd"};
+	
 	 
-	 int numberOfSuccessfulPeriodsOfEducation=0;
-	 int numberOfFailedPeriodsOfEducation=0;
 	 
-	 boolean InvestEducation;
-	 double studentSpending;
-	 int costEdu=300;
 	 
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
@@ -77,9 +73,10 @@ public class Consumer {
 	}
 
 	private void stepWorker() {
-		if(Context.verbousFlag){
+		/*if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isStudent "+isStudent+" I am a worker");
-		}	
+		}
+		*/	
 	}
 
 
@@ -102,8 +99,40 @@ public class Consumer {
 			numberOfFailedPeriodsOfEducation=0;
 			if(numberOfSuccessfulPeriodsOfEducation>9){
 				isStudent=false;
-				//calcolare qui titolo di studio e produttivit da lavoratore
 			}
+			/*	//calcolare qui titolo di studio e produttivit da lavoratore
+				sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
+				if(sumAbilityStudent<=5){
+					//degree=char[0];
+					productivity=0.05;
+				} 
+				else 
+				if(sumAbilityStudent<=8){
+					//degree=intermediate;
+					//degree=char[1];
+					productivity=0.09;
+				}
+				else
+				if(sumAbilityStudent<=13){
+					//degree=college;
+					productivity=0.14;
+				}
+				else
+				if(sumAbilityStudent<=16){
+					//degree=bachelor;
+					productivity=0.34;
+				}
+				else
+				if(sumAbilityStudent<=18){
+					//degree=master;
+					productivity=0.68;
+				}
+				else
+				if(sumAbilityStudent<=21){
+					//degree=phd;
+					productivity=1;
+				}
+				*/
 	  }
 	  else{
 		  numberOfFailedPeriodsOfEducation++;
@@ -113,39 +142,45 @@ public class Consumer {
 		//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
 	  if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
 		  isStudent=false;
+	  }
 		  //calcolare qui titolo di studio e produttivit da lavoratore
 		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
 			if(sumAbilityStudent<=5){
-				degree=elementary;
+				//degree=char[0];
 				productivity=0.05;
 			} 
+			else 
 			if(sumAbilityStudent<=8){
-				degree=intermediate;
+				//degree=intermediate;
+				//degree=char[1];
 				productivity=0.09;
 			}
+			else
 			if(sumAbilityStudent<=13){
-				degree=college;
-				productivity=0.12;
+				//degree=college;
+				productivity=0.14;
 			}
+			else
 			if(sumAbilityStudent<=16){
-				degree=bachelor;
-				productivity=0.2;
+				//degree=bachelor;
+				productivity=0.34;
 			}
+			else
 			if(sumAbilityStudent<=18){
-				degree=master;
-				productivity=0.24;
+				//degree=master;
+				productivity=0.68;
 			}
+			else
 			if(sumAbilityStudent<=21){
-				degree=phd;
-				productivity=0.3;
+				//degree=phd;
+				productivity=1;
 			}
-	  }
 
 		
 	if(Context.verbousFlag){
-		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation);
+		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+ " productivity " +productivity);
 		//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
-
+		//"productivity" +productivity+ "degree" +degree+
 	}
 	}
 	
@@ -169,5 +204,14 @@ public class Consumer {
 		return studentLoan;
 	}
 	
+	public double getProductivity(){
+		return productivity;
+	}
+	
+//	public int degree(){
+//		return degree;
+//	}
+	
 	
 }
+

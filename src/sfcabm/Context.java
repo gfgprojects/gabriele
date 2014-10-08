@@ -5,12 +5,12 @@ import repast.simphony.dataLoader.ContextBuilder;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
 import sfcabm.Consumer;
-import sfcabm.Firm;
+//import sfcabm.Firm;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
-		private static final int NumConsumers = 3;
-		private static final int NumFirm = 10;
+		private static final int NumConsumers = 5;
+		//private static final int NumFirm = 10;
 		/*
 		double initialProbabilityToBeEmployed=0.7;
 		VARIABILI USATE IN LAB MKT
@@ -41,9 +41,9 @@ public class Context implements ContextBuilder<Object> {
 			}
 				
 				//non sicura che vada bene, ma il eclipse consiglia cosi
-			for (int f = 0; f<NumFirm; f++){
-					context.add(new Firm(f));
-				}
+			//for (int m = 0; m<NumFirm; m++){
+			//		context.add(new Firm(m, m, m, m));
+			//	}
 				
 			//LaborMkt theLaborMkt=new LaborMkt();
 			//context.add(theLaborMkt);
