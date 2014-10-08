@@ -18,28 +18,35 @@ public class Consumer {
 	// double saving;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
-	 public static double abilityStudent = RandomHelper.nextDoubleFromTo(0.0,0.5);
+	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.0,0.5);
 	 //double taxConsumTot=taxRate*consumption;
-	 double sumAbilityStudent=0;
-	 int numberOfSuccessfulPeriodsOfEducation=0;
-	 int numberOfFailedPeriodsOfEducation=0;
-	 boolean InvestEducation;
-	 double studentSpending;
-	 int costEdu=300;
-	 double productivity;
-	 
+
 	 //DEBT
 	 //double workerLoan;
 	 double studentLoan;
 	 //spostare iL in banca dopo!
 	double iL=0.03;
 
-
+	 double sumAbilityStudent=0;
 	 //structure degree
-	// String[] degree = {"elementary intermediate college bachelor master phd"};
-	
+	 int degree;
+/*
+	 int elementary;
+	 int intermediate;
+	 int college;
+	 int bachelor;
+	 int master;
+	 int phd;
+	 */
+	 double productivity;
 	 
+	 int numberOfSuccessfulPeriodsOfEducation=0;
+	 int numberOfFailedPeriodsOfEducation=0;
+	 int numberOfConsecutiveFailedPeriodsOfEducation=0;
 	 
+	 boolean InvestEducation;
+	 double studentSpending;
+	 int costEdu=300;
 	 
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
@@ -73,10 +80,9 @@ public class Consumer {
 	}
 
 	private void stepWorker() {
-		/*if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" I am a worker");
-		}
-		*/	
+		if(Context.verbousFlag){
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+		}	
 	}
 
 
@@ -96,91 +102,53 @@ public class Consumer {
 	//se ho un successo nello studio
 		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 			numberOfSuccessfulPeriodsOfEducation++;
-			numberOfFailedPeriodsOfEducation=0;
-			if(numberOfSuccessfulPeriodsOfEducation>9){
-				isStudent=false;
-			}
-			/*	//calcolare qui titolo di studio e produttivit da lavoratore
-				sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
-				if(sumAbilityStudent<=5){
-					//degree=char[0];
-					productivity=0.05;
-				} 
-				else 
-				if(sumAbilityStudent<=8){
-					//degree=intermediate;
-					//degree=char[1];
-					productivity=0.09;
-				}
-				else
-				if(sumAbilityStudent<=13){
-					//degree=college;
-					productivity=0.14;
-				}
-				else
-				if(sumAbilityStudent<=16){
-					//degree=bachelor;
-					productivity=0.34;
-				}
-				else
-				if(sumAbilityStudent<=18){
-					//degree=master;
-					productivity=0.68;
-				}
-				else
-				if(sumAbilityStudent<=21){
-					//degree=phd;
-					productivity=1;
-				}
-				*/
+			numberOfConsecutiveFailedPeriodsOfEducation=0;
 	  }
 	  else{
 		  numberOfFailedPeriodsOfEducation++;
+		  numberOfConsecutiveFailedPeriodsOfEducation++;
 	  }
 
 	//ora decide se continuare diventare worker
 		//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
+//	  if(numberOfConsecutiveFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
 	  if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
 		  isStudent=false;
-	  }
 		  //calcolare qui titolo di studio e produttivit da lavoratore
-		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
-			if(sumAbilityStudent<=5){
-				//degree=char[0];
-				productivity=0.05;
-			} 
-			else 
-			if(sumAbilityStudent<=8){
-				//degree=intermediate;
-				//degree=char[1];
+//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
+			degree=6;
+			if(numberOfSuccessfulPeriodsOfEducation<=21){
+				degree=5;
+				productivity=0.3;
+			}
+			if(numberOfSuccessfulPeriodsOfEducation<=18){
+				degree=4;
+				productivity=0.24;
+			}
+			if(numberOfSuccessfulPeriodsOfEducation<=16){
+				degree=3;
+				productivity=0.2;
+			}
+			if(numberOfSuccessfulPeriodsOfEducation<=13){
+				degree=2;
+				productivity=0.12;
+			}
+			if(numberOfSuccessfulPeriodsOfEducation<=8){
+				degree=1;
 				productivity=0.09;
 			}
-			else
-			if(sumAbilityStudent<=13){
-				//degree=college;
-				productivity=0.14;
-			}
-			else
-			if(sumAbilityStudent<=16){
-				//degree=bachelor;
-				productivity=0.34;
-			}
-			else
-			if(sumAbilityStudent<=18){
-				//degree=master;
-				productivity=0.68;
-			}
-			else
-			if(sumAbilityStudent<=21){
-				//degree=phd;
-				productivity=1;
-			}
+			if(numberOfSuccessfulPeriodsOfEducation<=5){
+				degree=0;
+				productivity=0.05;
+			} 
+			productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation-1)*0.5/21;
+	  }
 
 		
 	if(Context.verbousFlag){
-		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+ " productivity " +productivity);
+		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree);
 		//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
-		//"productivity" +productivity+ "degree" +degree+
+
 	}
 	}
 	
@@ -204,14 +172,5 @@ public class Consumer {
 		return studentLoan;
 	}
 	
-	public double getProductivity(){
-		return productivity;
-	}
-	
-//	public int degree(){
-//		return degree;
-//	}
-	
 	
 }
-
