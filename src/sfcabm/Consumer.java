@@ -14,6 +14,7 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 public class Consumer {
 	int identity;
 	boolean isStudent;
+	boolean isWorking;
 	//public double disposableIncome,desiredConsumption,consumption,desiredChangeInWealth,desiredWealth;
 	// double saving;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
@@ -58,6 +59,7 @@ public class Consumer {
 		super();
 		identity = consumerID;
 		isStudent=true;
+		isWorking=false;
 		
 	}
 	
@@ -83,9 +85,19 @@ public class Consumer {
 	}
 
 	private void stepWorker() {
-		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
-		}	
+		if(isWorking){
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+			}
+		}
+		else{
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+			}
+		}
+
+
+
 	}
 
 
