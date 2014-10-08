@@ -38,7 +38,7 @@ public class Context implements ContextBuilder<Object> {
 			//int maxIter=30;
 			
 			for (int i = 0; i< NumConsumers; i++){
-				context.add(new Consumer(i));
+				context.add(new Consumer(i,context));
 			}
 				
 				

@@ -2,7 +2,7 @@ package sfcabm;
 
 //import sfcabm.Bank;
 //import sfcabm.LaborMkt; 
-//import sfcabm.Firm;
+import sfcabm.Firm;
 
 
 import repast.simphony.random.RandomHelper;
@@ -10,6 +10,7 @@ import repast.simphony.random.RandomHelper;
 //import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 //import repast.simphony.context.Context;
+import repast.simphony.util.collections.IndexedIterable;
 
 public class Consumer {
 	int identity;
@@ -51,8 +52,11 @@ public class Consumer {
 	 int costEdu=300;
 
 	 double consumption;
-	 Context myContext;
-	 
+	 repast.simphony.context.Context<Object> myContext;
+	 IndexedIterable<Object> firmsList;
+
+
+//	 Context<Object> myContext;
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
 	 
@@ -63,7 +67,15 @@ public class Consumer {
 		isWorking=false;
 		
 	}
-	
+		public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
+//		public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
+		super();
+		identity = consumerID;
+		isStudent=true;
+		isWorking=false;
+		myContext=con;
+	}
+
 	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
 	public void step(){
 	    if(isStudent){
@@ -95,6 +107,14 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
+			try{
+				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+			System.out.println("sending application to firm "+((Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)))).getID());
+
 		}
 
 

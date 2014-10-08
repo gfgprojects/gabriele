@@ -28,7 +28,12 @@ public class Firm {
 	}
 	
 
-	
+	public int getID(){
+		return identity;
+	}
+public void printID(){
+System.out.println("I am firm "+identity);
+}	
 	
 
 
