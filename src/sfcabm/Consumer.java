@@ -52,8 +52,12 @@ public class Consumer {
 	 int costEdu=300;
 
 	 double consumption;
+	 
+	 curriculum = new Object();
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
+	 
+	
 
 
 //	 Context<Object> myContext;
@@ -114,11 +118,7 @@ public class Consumer {
 				System.out.println("Class not found");
 			}
 			System.out.println("sending application to firm "+((Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)))).getID());
-
 		}
-
-
-
 	}
 
 
