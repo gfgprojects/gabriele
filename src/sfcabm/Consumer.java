@@ -53,7 +53,6 @@ public class Consumer {
 
 	 double consumption;
 	 
-	 curriculum = new Object();
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
 	 
