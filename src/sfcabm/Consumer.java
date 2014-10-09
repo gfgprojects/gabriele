@@ -3,6 +3,7 @@ package sfcabm;
 //import sfcabm.Bank;
 //import sfcabm.LaborMkt; 
 import sfcabm.Firm;
+import sfcabm.Curriculum;
 
 
 import repast.simphony.random.RandomHelper;
@@ -55,8 +56,8 @@ public class Consumer {
 	 
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
-	 
-	
+	Curriculum myCurriculum;
+	Firm aFirm;	
 
 
 //	 Context<Object> myContext;
@@ -110,13 +111,20 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
+			myCurriculum=new Curriculum(degree,identity,10,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 			}
 			catch(ClassNotFoundException e){
 				System.out.println("Class not found");
 			}
-			System.out.println("sending application to firm "+((Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)))).getID());
+
+			aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
+			if(Context.verbousFlag){
+				System.out.println("sending application to firm "+aFirm.getID());
+			}
+			aFirm.receiveCurriculum(myCurriculum);
+
 		}
 	}
 
