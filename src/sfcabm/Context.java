@@ -1,6 +1,7 @@
 package sfcabm;
 
 import repast.simphony.dataLoader.ContextBuilder;
+import repast.simphony.util.collections.IndexedIterable;
 //import repast.simphony.engine.environment.RunEnvironment;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
@@ -33,7 +34,9 @@ public class Context implements ContextBuilder<Object> {
 		public static int consumerExitAge=50;
 
 		Consumer aConsumer;
-		
+		Firm aFirm;
+
+		IndexedIterable consumersList,firmsList;
 		
 	
 		//public static boolean verbouseFlag=true;
@@ -50,12 +53,28 @@ public class Context implements ContextBuilder<Object> {
 				
 				
 			for (int f = 0; f<NumFirm; f++){
-				context.add(new Firm(f));
+				context.add(new Firm(f,context));
 			}
 				
 			LaborMarket theLaborMarket=new LaborMarket();
 			context.add(theLaborMarket);
 			
+			try{
+				consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
+				firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+			for(int i=0;i<consumersList.size();i++){
+				aConsumer=(Consumer)consumersList.get(i);
+				aConsumer.sendInitialJobApplication();
+			}
+			for(int i=0;i<firmsList.size();i++){
+				aFirm=(Firm)firmsList.get(i);
+				aFirm.setInitialWorkers();
+			}
+
 			
 			
 			/* if (RunEnvironment.getInstance().isBatch())

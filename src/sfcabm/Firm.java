@@ -1,6 +1,7 @@
 package sfcabm;
 
 import java.util.ArrayList;
+import repast.simphony.util.collections.IndexedIterable;
 
 //import java.util.ArrayList;
 //import sfcabm.LaborMkt;
@@ -17,9 +18,14 @@ public class Firm {
 	int numVacancy;
 	int numJobs;
 
+	 repast.simphony.context.Context<Object> myContext;
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
-	ArrayList<Object> jobList = new ArrayList<Object>();
+	ArrayList<Consumer> workersList = new ArrayList<Consumer>();
+
+	Curriculum aCurriculum;
+	Consumer aConsumer;
+	 IndexedIterable<Object> consumersList;
 
 
 
@@ -28,6 +34,11 @@ public class Firm {
 		identity = FirmID;
 	}
 
+	public Firm(int FirmID,repast.simphony.context.Context<Object> con) {
+		super();
+		identity = FirmID;
+		myContext=con;
+	}
 
 	public int getID(){
 		return identity;
@@ -41,7 +52,38 @@ public class Firm {
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
-	}	
+	}
+	public void setInitialWorkers(){
+		if(applicationList.size()>0){
+			try{
+				consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+
+
+			for(int i=0;i<applicationList.size();i++){
+				aCurriculum=(Curriculum)applicationList.get(i);
+				int curriculumSenderID=aCurriculum.getSenderID();
+				for(int j=0;j<consumersList.size();j++){
+					aConsumer=(Consumer)consumersList.get(j);
+					if(aConsumer.getIdentity()==curriculumSenderID){
+						workersList.add(aConsumer);
+						aConsumer.jobObtained(identity);
+					}
+				}
+
+
+
+			}
+		}
+		else{
+			System.out.println("NO WORKERS");
+		}
+
+	}
+
 
 
 

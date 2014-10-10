@@ -102,22 +102,22 @@ public class Consumer {
 			//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
 		}
 		degree=6;
-		if(numberOfSuccessfulPeriodsOfEducation<=21){
+		if(numberOfSuccessfulPeriodsOfEducation<21){
 			degree=5;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation<=18){
+		if(numberOfSuccessfulPeriodsOfEducation<18){
 			degree=4;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation<=16){
+		if(numberOfSuccessfulPeriodsOfEducation<16){
 			degree=3;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation<=13){
+		if(numberOfSuccessfulPeriodsOfEducation<13){
 			degree=2;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation<=8){
+		if(numberOfSuccessfulPeriodsOfEducation<8){
 			degree=1;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation<=5){
+		if(numberOfSuccessfulPeriodsOfEducation<5){
 			degree=0;
 		} 
 		productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation)*0.5/21;
@@ -225,22 +225,22 @@ public class Consumer {
 //		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
 	  }
 			degree=6;
-			if(numberOfSuccessfulPeriodsOfEducation<=21){
+			if(numberOfSuccessfulPeriodsOfEducation<21){
 				degree=5;
 			}
-			if(numberOfSuccessfulPeriodsOfEducation<=18){
+			if(numberOfSuccessfulPeriodsOfEducation<18){
 				degree=4;
 			}
-			if(numberOfSuccessfulPeriodsOfEducation<=16){
+			if(numberOfSuccessfulPeriodsOfEducation<16){
 				degree=3;
 			}
-			if(numberOfSuccessfulPeriodsOfEducation<=13){
+			if(numberOfSuccessfulPeriodsOfEducation<13){
 				degree=2;
 			}
-			if(numberOfSuccessfulPeriodsOfEducation<=8){
+			if(numberOfSuccessfulPeriodsOfEducation<8){
 				degree=1;
 			}
-			if(numberOfSuccessfulPeriodsOfEducation<=5){
+			if(numberOfSuccessfulPeriodsOfEducation<5){
 				degree=0;
 			} 
 			productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation-1)*0.5/21;
@@ -252,7 +252,41 @@ public class Consumer {
 
 	}
 	}
+
+	public void sendInitialJobApplication(){
+		if(isStudent){
+			System.out.println("Sono uno studente");
+		}
+		else{
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+			}
+			myCurriculum=new Curriculum(degree,identity,10,10.5);
+			try{
+				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+
+			aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
+			if(Context.verbousFlag){
+				System.out.println("  sending application to firm "+aFirm.getID());
+			}
+			aFirm.receiveCurriculum(myCurriculum);
+
+		}
+	}
+	public void jobObtained(int id){
+		isWorking=true;
+		if(Context.verbousFlag){
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" ... Wow, I got a job from firm "+id);
+		}
+	}
 	
+
+
 	public double getStudentSpending(){
 		return studentSpending;
 	}
@@ -271,6 +305,9 @@ public class Consumer {
 	
 	public double getStudentLoan(){
 		return studentLoan;
+	}
+	public int getIdentity(){
+		return identity;
 	}
 	
 	
