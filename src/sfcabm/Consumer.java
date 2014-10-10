@@ -58,6 +58,7 @@ public class Consumer {
 	 IndexedIterable<Object> firmsList;
 	Curriculum myCurriculum;
 	Firm aFirm;	
+	LaborMarket myLaborMarket;
 
 
 //	 Context<Object> myContext;
@@ -114,6 +115,7 @@ public class Consumer {
 			myCurriculum=new Curriculum(degree,identity,10,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
 			}
 			catch(ClassNotFoundException e){
 				System.out.println("Class not found");
@@ -121,9 +123,13 @@ public class Consumer {
 
 			aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
 			if(Context.verbousFlag){
-				System.out.println("sending application to firm "+aFirm.getID());
+				System.out.println("  sending application to firm "+aFirm.getID());
 			}
 			aFirm.receiveCurriculum(myCurriculum);
+			if(Context.verbousFlag){
+				System.out.println("  sending application to labor agency");
+			}
+			myLaborMarket.receiveCurriculum(myCurriculum);
 
 		}
 	}

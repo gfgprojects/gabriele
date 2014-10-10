@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import sfcabm.Firm;
 import sfcabm.Consumer;
+import sfcabm.Curriculum;
 
 
 public class LaborMarket {
@@ -16,49 +17,25 @@ public class LaborMarket {
 	
 	//IMPORTARE NUMERO FIRM E WORKER?!?!
 	
-	//creare liste firms e Consumer
-	ArrayList<Firm> firmList = new ArrayList<Firm>();
-	ArrayList<Consumer> workerList = new ArrayList<Consumer>();
+	//creare liste per domande di lavoro
+	ArrayList<Curriculum> laborDemandsList = new ArrayList<Curriculum>();
+
+	public LaborMarket(){
+	}
+	public void receiveCurriculum(Curriculum aCV){
+		laborDemandsList.add(aCV);
+		if(Context.verbousFlag){
+			System.out.println("  Labor agency received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
+		}
+	}	
+
+
+	
 
 }
 
 	
 	//workerList.clear();
 	//firmList.clear();
-
-
-//job application
-public void application(){
-	for (int i=0; i< workerList.size(); i++){
-		Consumer aConsumer = workerList.get(i);
-		//cosi le application avvengono random. le imprese dovrebbero scegliere in base alle produttivita
-		Collections.shuffle(firmList);
-		for (int g = 0; g < aConsumer.numApplic; g++){
-			for(int f = 0; f < firmList.size(); f++){
-				Firm aFirm = firmList.get(f);
-				if (!aFirm.applicationList.contains(aConsumer) & aFirm.numVacancy > 0){
-					aFirm.applicationList.add(aConsumer);
-				}
-			}
-		}
-	}
-	
-	public void hire(){
-		int counter = 0;
-		for (int i = 0; i < firmList.size(); i++){
-			Firm aFirm = firmList.get(i);
-			counter = counter + aFirm.numVacancy;
-		}
-		
-		vacancySum = counter;
-		
-		for (int i = 0; i < workerList.size(); i++){
-			Consumer aConsumer = workerList.get(i);
-			applicSum = applicSum + aConsumer.numApplic;
-		}
-	}
-	
-
-
 
 

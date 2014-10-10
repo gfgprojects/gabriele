@@ -39,7 +39,7 @@ public class Firm {
 	public void receiveCurriculum(Curriculum aCV){
 		applicationList.add(aCV);
 		if(Context.verbousFlag){
-			System.out.println("Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
+			System.out.println("  Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}	
 

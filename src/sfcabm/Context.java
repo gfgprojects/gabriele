@@ -5,7 +5,8 @@ import repast.simphony.dataLoader.ContextBuilder;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
 import sfcabm.Consumer;
-//import sfcabm.Firm;
+import sfcabm.Firm;
+import sfcabm.LaborMarket;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
@@ -46,8 +47,8 @@ public class Context implements ContextBuilder<Object> {
 				context.add(new Firm(f));
 			}
 				
-			//LaborMkt theLaborMkt=new LaborMkt();
-			//context.add(theLaborMkt);
+			LaborMarket theLaborMarket=new LaborMarket();
+			context.add(theLaborMarket);
 			
 			
 			
