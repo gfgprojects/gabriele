@@ -1,4 +1,4 @@
-package sfcabm;
+ package sfcabm;
 
 public class Curriculum {
 	int senderDegree;
