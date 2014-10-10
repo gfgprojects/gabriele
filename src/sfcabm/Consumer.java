@@ -72,8 +72,7 @@ public class Consumer {
 		isWorking=false;
 		
 	}
-		public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
-//		public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
+	public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
 		super();
 		identity = consumerID;
 		isStudent=true;
@@ -81,7 +80,60 @@ public class Consumer {
 		myContext=con;
 	}
 
-	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
+	public void initialize(){
+		int age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
+//		int age=RandomHelper.nextIntFromTo(1,21);
+		int iterations=0;
+		int maxIterations=Math.min(age,22);
+		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
+			if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
+				numberOfSuccessfulPeriodsOfEducation++;
+				numberOfConsecutiveFailedPeriodsOfEducation=0;
+			}
+			else{
+				numberOfFailedPeriodsOfEducation++;
+				numberOfConsecutiveFailedPeriodsOfEducation++;
+			}
+			iterations++;
+		}
+		if(numberOfFailedPeriodsOfEducation>2){
+			isStudent=false;
+			//calcolare qui titolo di studio e produttivit da lavoratore
+			//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
+		}
+		degree=6;
+		if(numberOfSuccessfulPeriodsOfEducation<=21){
+			degree=5;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation<=18){
+			degree=4;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation<=16){
+			degree=3;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation<=13){
+			degree=2;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation<=8){
+			degree=1;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation<=5){
+			degree=0;
+		} 
+		productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation)*0.5/21;
+
+
+		if(Context.verbousFlag){
+			System.out.println("Consumer "+identity+" age "+(age+5)+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity+" abilityStudent "+abilityStudent);
+			//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
+
+		}
+	}
+
+
+
+
+//	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
 	public void step(){
 	    if(isStudent){
 	        stepStudent();
@@ -175,27 +227,21 @@ public class Consumer {
 			degree=6;
 			if(numberOfSuccessfulPeriodsOfEducation<=21){
 				degree=5;
-				productivity=0.3;
 			}
 			if(numberOfSuccessfulPeriodsOfEducation<=18){
 				degree=4;
-				productivity=0.24;
 			}
 			if(numberOfSuccessfulPeriodsOfEducation<=16){
 				degree=3;
-				productivity=0.2;
 			}
 			if(numberOfSuccessfulPeriodsOfEducation<=13){
 				degree=2;
-				productivity=0.12;
 			}
 			if(numberOfSuccessfulPeriodsOfEducation<=8){
 				degree=1;
-				productivity=0.09;
 			}
 			if(numberOfSuccessfulPeriodsOfEducation<=5){
 				degree=0;
-				productivity=0.05;
 			} 
 			productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation-1)*0.5/21;
 

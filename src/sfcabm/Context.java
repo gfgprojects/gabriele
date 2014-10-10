@@ -10,7 +10,7 @@ import sfcabm.LaborMarket;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
-		private static final int NumConsumers = 5;
+		private static final int NumConsumers = 10;
 		private static final int NumFirm = 3;
 		
 		/*
@@ -29,6 +29,10 @@ public class Context implements ContextBuilder<Object> {
 		public static double beta = 0.4;
 		//taxes on consumption, tax rate evolves??...T = \phi c
 		public static double taxRate = 0.1;
+
+		public static int consumerExitAge=50;
+
+		Consumer aConsumer;
 		
 		
 	
@@ -39,7 +43,9 @@ public class Context implements ContextBuilder<Object> {
 			//int maxIter=30;
 			
 			for (int i = 0; i< NumConsumers; i++){
-				context.add(new Consumer(i,context));
+				aConsumer=new Consumer(i,context);
+				aConsumer.initialize();
+				context.add(aConsumer);
 			}
 				
 				
