@@ -13,7 +13,8 @@ public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
 		private static final int NumConsumers = 10;
 		private static final int NumFirm = 3;
-		
+		public static int consumerExitAge=50;
+		public static int parameterOfProductivityInProductionFuncion=100;
 		/*
 		double initialProbabilityToBeEmployed=0.7;
 		VARIABILI USATE IN LAB MKT
@@ -31,7 +32,6 @@ public class Context implements ContextBuilder<Object> {
 		//taxes on consumption, tax rate evolves??...T = \phi c
 		public static double taxRate = 0.1;
 
-		public static int consumerExitAge=50;
 
 		Consumer aConsumer;
 		Firm aFirm;

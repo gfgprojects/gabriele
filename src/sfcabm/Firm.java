@@ -8,7 +8,7 @@ import repast.simphony.util.collections.IndexedIterable;
 import sfcabm.Curriculum;
 
 public class Firm {
-
+	long production;
 	int FirmID;
 	int identity;
 	double reservationWageFirmSum;
@@ -17,6 +17,7 @@ public class Firm {
 	double firmWageSum;
 	int numVacancy;
 	int numJobs;
+	double sumOfWorkersProductivity=0;
 
 	 repast.simphony.context.Context<Object> myContext;
 
@@ -70,17 +71,20 @@ public class Firm {
 					aConsumer=(Consumer)consumersList.get(j);
 					if(aConsumer.getIdentity()==curriculumSenderID){
 						workersList.add(aConsumer);
-						aConsumer.jobObtained(identity);
+						aConsumer.jobObtained(this);
+						sumOfWorkersProductivity=sumOfWorkersProductivity+aConsumer.getProductivity();
 					}
 				}
-
-
-
 			}
 		}
 		else{
 			System.out.println("NO WORKERS");
 		}
+		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
+		if(Context.verbousFlag){
+			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
+		}
+		
 
 	}
 

@@ -17,6 +17,7 @@ public class Consumer {
 	int identity;
 	boolean isStudent;
 	boolean isWorking;
+	Firm myEmployer=null;
 	//public double disposableIncome,desiredConsumption,consumption,desiredChangeInWealth,desiredWealth;
 	// double saving;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
@@ -164,7 +165,7 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
-			myCurriculum=new Curriculum(degree,identity,10,10.5);
+			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
@@ -255,13 +256,15 @@ public class Consumer {
 
 	public void sendInitialJobApplication(){
 		if(isStudent){
-			System.out.println("Sono uno studente");
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+			}
 		}
 		else{
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
-			myCurriculum=new Curriculum(degree,identity,10,10.5);
+			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
@@ -278,10 +281,12 @@ public class Consumer {
 
 		}
 	}
-	public void jobObtained(int id){
+	public void jobObtained(Firm employer){
 		isWorking=true;
+		myEmployer=employer;
+		int employerID=myEmployer.getID();
 		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" ... Wow, I got a job from firm "+id);
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID);
 		}
 	}
 	
@@ -309,6 +314,9 @@ public class Consumer {
 	public int getIdentity(){
 		return identity;
 	}
+	public double getProductivity(){
+		return productivity;
+	}	
 	
 	
 }
