@@ -18,7 +18,16 @@ public class Firm {
 	int numVacancy;
 	int numJobs;
 	double sumOfWorkersProductivity=0;
-
+	public double desiredOutput;
+	public double expectedSales;
+	public double potentialOutput;
+	public int ActualCapital;
+	public double sigma=0.3;
+	public double averageAbilityFirm;
+	public int NumWorkersFirm;
+	public int laborD;
+	public double consumption=100;
+	
 	 repast.simphony.context.Context<Object> myContext;
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
@@ -84,10 +93,24 @@ public class Firm {
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
-		
+
 
 	}
-
+	
+	//non so calcolare il numero dei workers di ogni firm
+	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
+	
+	public void laborDemand(){
+		averageAbilityFirm=sumOfWorkersProductivity/NumWorkersFirm;
+		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
+		expectedSales=Math.exp(consumption);
+		desiredOutput=expectedSales;
+		
+		if (potentialOutput<desiredOutput){
+			laborD++;
+		}
+		else laborD=0;
+	}
 
 
 
