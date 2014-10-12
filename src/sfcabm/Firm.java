@@ -1,11 +1,15 @@
 package sfcabm;
 
 import java.util.ArrayList;
+
+import repast.simphony.random.RandomHelper;
 import repast.simphony.util.collections.IndexedIterable;
 
 //import java.util.ArrayList;
 //import sfcabm.LaborMkt;
 import sfcabm.Curriculum;
+import sfcabm.LaborOffer;
+import sfcabm.LaborMarket;
 
 public class Firm {
 	long production;
@@ -27,6 +31,9 @@ public class Firm {
 	public int NumWorkersFirm;
 	public int laborD;
 	public double consumption=100;
+	double senderProductivity;
+	int senderID;
+	double senderFirmReservationWage;
 	
 	 repast.simphony.context.Context<Object> myContext;
 
@@ -36,6 +43,9 @@ public class Firm {
 	Curriculum aCurriculum;
 	Consumer aConsumer;
 	 IndexedIterable<Object> consumersList;
+		LaborOffer myOffer;
+		Firm aFirm;	
+		LaborMarket myLaborMarket;
 
 
 
@@ -102,6 +112,7 @@ public class Firm {
 	
 	public void laborDemand(){
 		averageAbilityFirm=sumOfWorkersProductivity/NumWorkersFirm;
+		//ActualCapital=(1-sigma)*pastCapital+investment
 		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
 		expectedSales=Math.exp(consumption);
 		desiredOutput=expectedSales;
@@ -112,6 +123,27 @@ public class Firm {
 		else laborD=0;
 	}
 
+	public void sendLaborDemand(){
+		myOffer = new LaborOffer(senderProductivity,identity,senderFirmReservationWage);
+		try{
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		if(Context.verbousFlag){
+			System.out.println("  sending offer to consumer "+aConsumer.getIdentity());
+		}
+		
+		aConsumer.receiveLaborD(myOffer);
+	}
+	
+	myLaborMarket.receiveLaborD(myOffer);
+
+	public void hire(){
+		
+	}
 
 
 	//reset the firm each time step 

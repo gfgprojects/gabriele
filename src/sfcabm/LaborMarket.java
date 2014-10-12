@@ -19,6 +19,7 @@ public class LaborMarket {
 	
 	//creare liste per domande di lavoro
 	ArrayList<Curriculum> laborDemandsList = new ArrayList<Curriculum>();
+	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 
 	public LaborMarket(){
 	}
@@ -29,6 +30,12 @@ public class LaborMarket {
 		}
 	}	
 
+	public void receiveLaborD(LaborOffer aOffer){
+		laborOfferList.add(aOffer);
+		if(Context.verbousFlag){
+			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.senderFirmReservationWage());
+		}
+	}
 
 	
 
