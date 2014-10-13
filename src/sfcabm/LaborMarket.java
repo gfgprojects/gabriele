@@ -23,6 +23,7 @@ public class LaborMarket {
 
 	public LaborMarket(){
 	}
+	
 	public void receiveCurriculum(Curriculum aCV){
 		laborDemandsList.add(aCV);
 		if(Context.verbousFlag){
@@ -30,16 +31,14 @@ public class LaborMarket {
 		}
 	}	
 
-	public void receiveLaborD(LaborOffer aOffer){
+	public void receiveLaborDemand(LaborOffer aOffer){
 		laborOfferList.add(aOffer);
 		if(Context.verbousFlag){
 			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.senderFirmReservationWage());
 		}
 	}
-
-	
-
 }
+
 
 	
 	//workerList.clear();

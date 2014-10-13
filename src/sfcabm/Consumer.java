@@ -2,10 +2,10 @@ package sfcabm;
 
 //import sfcabm.Bank;
 //import sfcabm.LaborMkt; 
+import java.util.ArrayList;
+
 import sfcabm.Firm;
 import sfcabm.Curriculum;
-
-
 import repast.simphony.random.RandomHelper;
 //import repast.simphony.parameter.Parameters;
 //import repast.simphony.engine.environment.RunEnvironment;
@@ -57,9 +57,11 @@ public class Consumer {
 	 
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
+	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 	Curriculum myCurriculum;
 	Firm aFirm;	
 	LaborMarket myLaborMarket;
+	LaborOffer myOffer;
 
 
 //	 Context<Object> myContext;
@@ -154,6 +156,13 @@ public class Consumer {
 	private void consumptionWorker() {
 		
 	}
+	
+	public void receiveLaborDemand(LaborOffer aOffer){
+		laborOfferList.add(aOffer);
+		if(Context.verbousFlag){
+			System.out.println("  Consumer "+identity+" received offer from firm "+aOffer.getSenderID()+" productivity "+aOffer.getSenderProductivity());
+		}
+	}
 
 	private void stepWorker() {
 		if(isWorking){
@@ -185,6 +194,7 @@ public class Consumer {
 			myLaborMarket.receiveCurriculum(myCurriculum);
 
 		}
+		
 	}
 
 

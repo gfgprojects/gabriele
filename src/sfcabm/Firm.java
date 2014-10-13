@@ -28,7 +28,7 @@ public class Firm {
 	public int ActualCapital;
 	public double sigma=0.3;
 	public double averageAbilityFirm;
-	public int NumWorkersFirm;
+	public int employed;
 	public int laborD;
 	public double consumption=100;
 	double senderProductivity;
@@ -42,11 +42,10 @@ public class Firm {
 
 	Curriculum aCurriculum;
 	Consumer aConsumer;
-	 IndexedIterable<Object> consumersList;
-		LaborOffer myOffer;
-		Firm aFirm;	
-		LaborMarket myLaborMarket;
-
+	IndexedIterable<Object> consumersList;
+	Firm aFirm;	
+	LaborMarket myLaborMarket;
+	LaborOffer myOffer;
 
 
 	public Firm(int FirmID) {
@@ -73,6 +72,7 @@ public class Firm {
 			System.out.println("  Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}
+	
 	public void setInitialWorkers(){
 		if(applicationList.size()>0){
 			try{
@@ -109,14 +109,15 @@ public class Firm {
 	
 	//non so calcolare il numero dei workers di ogni firm
 	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
-	
-	public void laborDemand(){
-		averageAbilityFirm=sumOfWorkersProductivity/NumWorkersFirm;
+	public void productionDecision(){
+		averageAbilityFirm=sumOfWorkersProductivity/employed;
 		//ActualCapital=(1-sigma)*pastCapital+investment
 		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
 		expectedSales=Math.exp(consumption);
 		desiredOutput=expectedSales;
-		
+	}
+	
+	public void laborDemand(){
 		if (potentialOutput<desiredOutput){
 			laborD++;
 		}
@@ -132,15 +133,22 @@ public class Firm {
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
+		aConsumer=(Consumer)workersList.get(RandomHelper.nextIntFromTo(0,(workersList.size()-1)));
 		if(Context.verbousFlag){
 			System.out.println("  sending offer to consumer "+aConsumer.getIdentity());
 		}
 		
-		aConsumer.receiveLaborD(myOffer);
+		aConsumer.receiveLaborDemand(myOffer);
+		if(Context.verbousFlag){
+			System.out.println("  sending job offer to labor agency");
 	}
 	
-	myLaborMarket.receiveLaborD(myOffer);
+	myLaborMarket.receiveLaborDemand(myOffer);
+	}
 
+	
+	
+	
 	public void hire(){
 		
 	}
