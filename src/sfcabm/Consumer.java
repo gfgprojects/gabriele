@@ -157,6 +157,7 @@ public class Consumer {
 		
 	}
 	
+	
 	public void receiveLaborDemand(LaborOffer aOffer){
 		laborOfferList.add(aOffer);
 		if(Context.verbousFlag){

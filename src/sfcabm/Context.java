@@ -11,8 +11,8 @@ import sfcabm.LaborMarket;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
-		private static final int NumConsumers = 10;
-		private static final int NumFirm = 3;
+		public static int NumConsumers = 10;
+		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		/*
@@ -52,7 +52,7 @@ public class Context implements ContextBuilder<Object> {
 			}
 				
 				
-			for (int f = 0; f<NumFirm; f++){
+			for (int f = 0; f<NumFirms; f++){
 				context.add(new Firm(f,context));
 			}
 				

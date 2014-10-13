@@ -10,6 +10,7 @@ import repast.simphony.util.collections.IndexedIterable;
 import sfcabm.Curriculum;
 import sfcabm.LaborOffer;
 import sfcabm.LaborMarket;
+import sfcabm.Context;
 
 public class Firm {
 	long production;
@@ -22,18 +23,25 @@ public class Firm {
 	int numVacancy;
 	int numJobs;
 	double sumOfWorkersProductivity=0;
+	
+	/*
 	public double desiredOutput;
 	public double expectedSales;
 	public double potentialOutput;
 	public int ActualCapital;
 	public double sigma=0.3;
-	public double averageAbilityFirm;
-	public int employed;
-	public int laborD;
-	public double consumption=100;
+	*/
+	
 	double senderProductivity;
 	int senderID;
 	double senderFirmReservationWage;
+	
+	
+	public double initialOutput;
+	public double initialCapitalStock;
+	public double firmTech=1;
+	public double averageAbilityFirm=0.8;
+	
 	
 	 repast.simphony.context.Context<Object> myContext;
 
@@ -107,22 +115,36 @@ public class Firm {
 
 	}
 	
-	//non so calcolare il numero dei workers di ogni firm
-	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
-	public void productionDecision(){
-		averageAbilityFirm=sumOfWorkersProductivity/employed;
-		//ActualCapital=(1-sigma)*pastCapital+investment
-		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
-		expectedSales=Math.exp(consumption);
-		desiredOutput=expectedSales;
+	
+	//INIZIALIZZARE OUTPUT LEVEL: iniziare in full employment??
+	//ho dato dei valori costanti a technology firm e average ability per partire, ma non so se e giusto
+	
+	public void setInitialProduction(){
+		initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
+		initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
 	}
 	
-	public void laborDemand(){
+	
+	/*questo viene dopo INIZIALIZZAZIONE
+	
+	//non so calcolare il numero dei workers di ogni firm
+	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
+	 * 
+	 * 
+	public void productionDecision(){
+		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
+		expectedSales=
+		desiredOutput=expectedSales;
+		
 		if (potentialOutput<desiredOutput){
-			laborD++;
+			laborDemand++;
 		}
-		else laborD=0;
+		else laborDemand=0;
 	}
+	
+	//public void laborDemand(){
+		
+	//}
 
 	public void sendLaborDemand(){
 		myOffer = new LaborOffer(senderProductivity,identity,senderFirmReservationWage);
@@ -135,7 +157,7 @@ public class Firm {
 		}
 		aConsumer=(Consumer)workersList.get(RandomHelper.nextIntFromTo(0,(workersList.size()-1)));
 		if(Context.verbousFlag){
-			System.out.println("  sending offer to consumer "+aConsumer.getIdentity());
+			System.out.println("  sending offer to worker "+aConsumer.getIdentity());
 		}
 		
 		aConsumer.receiveLaborDemand(myOffer);
@@ -147,11 +169,11 @@ public class Firm {
 	}
 
 	
-	
-	
 	public void hire(){
 		
 	}
+	questo viene dopo
+	*/
 
 
 	//reset the firm each time step 
