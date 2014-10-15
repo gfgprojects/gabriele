@@ -79,7 +79,7 @@ public class Context implements ContextBuilder<Object> {
 
 			officeForStatistics=new OfficeForStatistics(context);
 			officeForStatistics.computeVariables();
-			officeForStatistics.publicIndustriesStats();
+			officeForStatistics.publishIndustriesStats();
 
 			
 			

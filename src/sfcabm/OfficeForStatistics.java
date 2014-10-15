@@ -91,7 +91,7 @@ public class OfficeForStatistics{
 	}
 
 
-	public void publicIndustriesStats(){
+	public void publishIndustriesStats(){
 		try{
 			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
 		}
