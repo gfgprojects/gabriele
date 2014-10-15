@@ -8,6 +8,7 @@ import repast.simphony.util.collections.IndexedIterable;
 import sfcabm.Consumer;
 import sfcabm.Firm;
 import sfcabm.LaborMarket;
+import sfcabm.OfficeForStatistics;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verbousFlag=true;
@@ -37,7 +38,8 @@ public class Context implements ContextBuilder<Object> {
 		Firm aFirm;
 
 		IndexedIterable consumersList,firmsList;
-		
+		OfficeForStatistics officeForStatistics;
+
 	
 		//public static boolean verbouseFlag=true;
 		public repast.simphony.context.Context<Object> build(
@@ -74,6 +76,10 @@ public class Context implements ContextBuilder<Object> {
 				aFirm=(Firm)firmsList.get(i);
 				aFirm.setInitialWorkers();
 			}
+
+			officeForStatistics=new OfficeForStatistics(context);
+			officeForStatistics.computeVariables();
+			officeForStatistics.publicIndustriesStats();
 
 			
 			

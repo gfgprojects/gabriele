@@ -3,6 +3,7 @@ package sfcabm;
 //import sfcabm.Bank;
 //import sfcabm.LaborMkt; 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import sfcabm.Firm;
 import sfcabm.Curriculum;
@@ -63,6 +64,8 @@ public class Consumer {
 	LaborMarket myLaborMarket;
 	LaborOffer myOffer;
 
+	Iterator<Industry> industriesListIterator;
+	Industry anIndustry;
 
 //	 Context<Object> myContext;
 	 //DEFINIRE LAMBDA double lambda=0.3;
@@ -328,6 +331,20 @@ public class Consumer {
 	public double getProductivity(){
 		return productivity;
 	}	
-	
+	public void showInfoOnIndustries(){
+System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am ready to decide my consumption using the following info");
+		if(Context.verbousFlag){
+			industriesListIterator=OfficeForStatistics.industriesList.iterator();
+
+			while(industriesListIterator.hasNext()){
+				anIndustry=industriesListIterator.next();
+				System.out.println("absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
+
+			}
+
+		}
+
+
+	}
 	
 }

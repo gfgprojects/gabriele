@@ -23,7 +23,7 @@ public class Firm {
 	int numVacancy;
 	int numJobs;
 	double sumOfWorkersProductivity=0;
-	
+	int productAbsoluteRank;
 	/*
 	public double desiredOutput;
 	public double expectedSales;
@@ -108,6 +108,8 @@ public class Firm {
 			System.out.println("NO WORKERS");
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
+	//	productAbsoluteRank=1;
+		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
@@ -123,7 +125,13 @@ public class Firm {
 		initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
 		initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
 	}
-	
+		public int getProductAbsoluteRank(){
+		return productAbsoluteRank;
+	}
+	public long getProduction(){
+		return production;
+	}
+
 	
 	/*questo viene dopo INIZIALIZZAZIONE
 	
