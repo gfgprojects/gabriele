@@ -100,7 +100,8 @@ public class OfficeForStatistics{
 		}
 
 
-		statAction=statActionFactory.createActionForIterable(consumersList,"showInfoOnIndustries",false);
+//		statAction=statActionFactory.createActionForIterable(consumersList,"showInfoOnIndustries",false);
+		statAction=statActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 		statAction.execute();
 	}
 }

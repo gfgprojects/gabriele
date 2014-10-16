@@ -105,7 +105,7 @@ public class Firm {
 			}
 		}
 		else{
-			System.out.println("NO WORKERS");
+			System.out.println("  Firm "+identity+" NO WORKERS");
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 	//	productAbsoluteRank=1;
