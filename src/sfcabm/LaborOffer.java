@@ -1,19 +1,16 @@
 package sfcabm;
 
 public class LaborOffer {
-
-	double senderProductivity;
+//inteso come post vacancy
+	//double senderProductivity;
 	int senderID;
 	double senderFirmReservationWage;
 
-	public LaborOffer(double firmprod,int id, double sfrw){
-		senderProductivity=firmprod;
+	public LaborOffer(int id, double sfrw){
 		senderID=id;
 		senderFirmReservationWage=sfrw;
 	}
-	public double getSenderProductivity(){
-		return senderProductivity;
-	}
+
 	
 	public int getSenderID(){
 		return senderID;

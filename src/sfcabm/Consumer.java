@@ -164,7 +164,7 @@ public class Consumer {
 	public void receiveLaborDemand(LaborOffer aOffer){
 		laborOfferList.add(aOffer);
 		if(Context.verbousFlag){
-			System.out.println("  Consumer "+identity+" received offer from firm "+aOffer.getSenderID()+" productivity "+aOffer.getSenderProductivity());
+			System.out.println("  Consumer "+identity+" received offer from firm "+aOffer.getSenderID());
 		}
 	}
 

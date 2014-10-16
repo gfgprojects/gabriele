@@ -113,27 +113,37 @@ public class Firm {
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
-
-
+}
+	
+	// SEND LABOR DEMAND TO LABOR MARKET
+	 
+	public void sendLaborDemand(){
+		myOffer = new LaborOffer(identity,senderFirmReservationWage);
+		try{
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+	
+	myLaborMarket.receiveLaborDemand(myOffer);
 	}
+
+	/*
+	public void hire(){
+		
+	}
+	questo viene dopo
+	*/
 	
 	
-	//INIZIALIZZARE OUTPUT LEVEL: iniziare in full employment??
-	//ho dato dei valori costanti a technology firm e average ability per partire, ma non so se e giusto
-	
+	//INIZIALIZZARE OUTPUT LEVEL:
+	//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
+	/*
 	public void setInitialProduction(){
 		initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
 		initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
 	}
-		public int getProductAbsoluteRank(){
-		return productAbsoluteRank;
-	}
-	public long getProduction(){
-		return production;
-	}
-
-	
-	/*questo viene dopo INIZIALIZZAZIONE
 	
 	//non so calcolare il numero dei workers di ogni firm
 	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
@@ -141,7 +151,7 @@ public class Firm {
 	 * 
 	public void productionDecision(){
 		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
-		expectedSales=
+		expectedSales=???
 		desiredOutput=expectedSales;
 		
 		if (potentialOutput<desiredOutput){
@@ -150,38 +160,18 @@ public class Firm {
 		else laborDemand=0;
 	}
 	
-	//public void laborDemand(){
-		
-	//}
-
-	public void sendLaborDemand(){
-		myOffer = new LaborOffer(senderProductivity,identity,senderFirmReservationWage);
-		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
-		}
-		catch(ClassNotFoundException e){
-			System.out.println("Class not found");
-		}
-		aConsumer=(Consumer)workersList.get(RandomHelper.nextIntFromTo(0,(workersList.size()-1)));
-		if(Context.verbousFlag){
-			System.out.println("  sending offer to worker "+aConsumer.getIdentity());
-		}
-		
-		aConsumer.receiveLaborDemand(myOffer);
-		if(Context.verbousFlag){
-			System.out.println("  sending job offer to labor agency");
-	}
-	
-	myLaborMarket.receiveLaborDemand(myOffer);
-	}
-
-	
-	public void hire(){
-		
-	}
-	questo viene dopo
 	*/
+	
+	public int getProductAbsoluteRank(){
+		return productAbsoluteRank;
+	}
+	
+	public long getProduction(){
+		return production;
+	}
+
+	
+	
 
 
 	//reset the firm each time step 
