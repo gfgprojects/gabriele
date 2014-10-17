@@ -59,6 +59,8 @@ public class Consumer {
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
+	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
+	AProductDemand aProductDemand;
 	Curriculum myCurriculum;
 	Firm aFirm;	
 	LaborMarket myLaborMarket;
@@ -170,14 +172,26 @@ public class Consumer {
 	
 	
 	private void stepWorkerConsumption() {
+		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
+		demandsList = new ArrayList<AProductDemand>();
+
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
 		}
-		consumption=wage*RandomHelper.nextDoubleFromTo(0.5,1.5);
-			if(Context.verbousFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption);
-			}
 		
+		if(Context.verbousFlag){
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
+		}
+
+			industriesListIterator=OfficeForStatistics.industriesList.iterator();
+			while(industriesListIterator.hasNext()){
+				anIndustry=industriesListIterator.next();
+				int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
+				aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
+				aProductDemand.inform(identity);
+				demandsList.add(aProductDemand);
+			}
+
 	}
 	
 	

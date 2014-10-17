@@ -15,7 +15,7 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction;
 	IndexedIterable<Object> firmsList,consumersList;
 
 	Firm aFirm;
@@ -61,14 +61,17 @@ public class OfficeForStatistics{
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
-
+//compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
+		aggregateProduction=0;
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
+			aggregateProduction=aggregateProduction+aFirm.getProduction();
 			int position=(int)(aFirm.getProductAbsoluteRank()-minimumAbsoluteRank);
 			anIndustry=industriesList.get(position);
 			anIndustry.increaseNumberOfFirms();
 			anIndustry.increaseProduction(aFirm.getProduction());
 		}
+//delete from the industries list those with zero production
 		industriesListIterator=industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
@@ -76,7 +79,8 @@ public class OfficeForStatistics{
 				industriesListIterator.remove();
 			}
 		}
-
+	
+//print to terminal information on industries
 		if(Context.verbousFlag){
 			System.out.println("STATS OFFICE: NEW DATA FROM INDUSTRIES ARE AVAILABLE");
 			industriesListIterator=industriesList.iterator();
@@ -84,7 +88,30 @@ public class OfficeForStatistics{
 				anIndustry=industriesListIterator.next();
 				System.out.println("absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
 			}
+			System.out.println("aggregate production "+aggregateProduction);
 		}
+
+//set relative rank for each firm
+		
+		int minimumAbsoluteRankOfFirmsWithPositiveProduction=industriesList.get(0).getAbsoluteRank();
+		for(int i=0;i<industriesList.size();i++){
+			anIndustry=industriesList.get(i);
+			anIndustry.setRelativeRank(minimumAbsoluteRankOfFirmsWithPositiveProduction);
+			anIndustry.setMarketShare(aggregateProduction);
+		}
+	
+//compute totalWeightedProduction
+		totalWeightedProduction=0;
+		for(int i=0;i<industriesList.size();i++){
+			anIndustry=industriesList.get(i);
+			totalWeightedProduction=totalWeightedProduction+anIndustry.getWeightedProduction();
+		}
+//set product diffusion indicator for each industry
+		for(int i=0;i<industriesList.size();i++){
+			anIndustry=industriesList.get(i);
+			anIndustry.setProductDiffusionIndicator(totalWeightedProduction);
+		}
+		
 
 
 
