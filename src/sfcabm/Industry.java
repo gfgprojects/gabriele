@@ -1,8 +1,12 @@
 package sfcabm;
 
+import java.util.ArrayList;
+
 public class Industry{
 	int absoluteRank,relativeRank,numberOfFirms;
 	double production,marketShare,weightedProduction,productAttractivenesIndicator,demand;
+	ArrayList<Firm> theIndustryFirmsList=new ArrayList<Firm>();
+	Firm aFirm;
 
 	public Industry(int ar){
 		absoluteRank=ar;
@@ -21,9 +25,15 @@ public class Industry{
 	}
 
 	public void allocateDemand(){
-		System.out.println("AR "+absoluteRank+" RR "+relativeRank+" production "+production+" demand "+demand);
+		System.out.println("AR "+absoluteRank+" RR "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
+		for(int i=0;i<theIndustryFirmsList.size();i++){
+			aFirm=theIndustryFirmsList.get(i);
+			aFirm.setDemand(production,demand);
+		}
 	}
-
+	public void addFirm(Firm af){
+		theIndustryFirmsList.add(af);
+	}
 
 
 	public void setRelativeRank(int mar){

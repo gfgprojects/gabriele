@@ -24,6 +24,7 @@ public class Firm {
 	int numJobs;
 	double sumOfWorkersProductivity=0;
 	int productAbsoluteRank;
+	int demand;
 	/*
 	public double desiredOutput;
 	public double expectedSales;
@@ -162,6 +163,13 @@ public class Firm {
 	
 	*/
 	
+	public void setDemand(double industryProduction,double industryDemand){
+		demand=(int)Math.round(production/industryProduction*industryDemand);
+		if(Context.verbousFlag){
+			System.out.println("  Firm "+identity+" production "+production+" demand "+demand);
+		}
+	}
+
 	public int getProductAbsoluteRank(){
 		return productAbsoluteRank;
 	}

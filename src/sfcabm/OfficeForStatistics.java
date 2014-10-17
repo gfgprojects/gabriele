@@ -74,6 +74,7 @@ public class OfficeForStatistics{
 			anIndustry=industriesList.get(position);
 			anIndustry.increaseNumberOfFirms();
 			anIndustry.increaseProduction(aFirm.getProduction());
+			anIndustry.addFirm(aFirm);
 		}
 //delete from the industries list those with zero production
 		industriesListIterator=industriesList.iterator();
