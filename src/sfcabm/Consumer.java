@@ -52,7 +52,6 @@ public class Consumer {
 	 
 	 boolean InvestEducation;
 	 double studentSpending;
-	 int costEdu=300;
 
 	 double consumption;
 	 
@@ -240,7 +239,7 @@ public class Consumer {
 		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
 		}	
-		consumption=costEdu;
+		consumption=Context.costEdu;
 		if(wealth >= 0){
 			wealth=wealth*(1+iD)-consumption;
 		}
@@ -250,6 +249,17 @@ public class Consumer {
 		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
 		}
+		industriesListIterator=OfficeForStatistics.industriesList.iterator();
+		while(industriesListIterator.hasNext()){
+			anIndustry=industriesListIterator.next();
+			int tmpDemand=(int)Math.round(Context.costEdu*anIndustry.getProductAttractiveness());
+			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
+			aProductDemand.inform(identity);
+			demandsList.add(aProductDemand);
+		}
+
+
+
 	}
 	
 	private void stepStudentState() {

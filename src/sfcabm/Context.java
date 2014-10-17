@@ -16,7 +16,8 @@ public class Context implements ContextBuilder<Object> {
 		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
-		public static int unemploymentDole=10; 
+		public static int unemploymentDole=10;
+		public static int costEdu=10;
 		/*
 		double initialProbabilityToBeEmployed=0.7;
 		VARIABILI USATE IN LAB MKT
