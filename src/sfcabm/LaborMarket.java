@@ -34,7 +34,7 @@ public class LaborMarket {
 	public void receiveLaborDemand(LaborOffer aOffer){
 		laborOfferList.add(aOffer);
 		if(Context.verbousFlag){
-			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.senderFirmReservationWage());
+			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.getSenderFirmReservationWage());
 		}
 	}
 }

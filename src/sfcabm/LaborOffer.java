@@ -15,7 +15,7 @@ public class LaborOffer {
 	public int getSenderID(){
 		return senderID;
 	}
-	public double senderFirmReservationWage(){
+	public double getSenderFirmReservationWage(){
 		return senderFirmReservationWage;
 	}
 }

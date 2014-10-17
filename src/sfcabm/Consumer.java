@@ -25,7 +25,7 @@ public class Consumer {
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
 	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.0,0.5);
 	 //double taxConsumTot=taxRate*consumption;
-	 double wage=0;
+
 	 //DEBT
 	 //double workerLoan;
 	 double studentLoan;
@@ -33,8 +33,6 @@ public class Consumer {
 	double iL=0.03;
 	double iD=0.01;
 
-	 double sumAbilityStudent=0;
-	 //structure degree
 	 int degree;
 /*
 	 int elementary;
@@ -58,8 +56,6 @@ public class Consumer {
 	 repast.simphony.context.Context<Object> myContext;
 	 IndexedIterable<Object> firmsList;
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
-	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
-	AProductDemand aProductDemand;
 	Curriculum myCurriculum;
 	Firm aFirm;	
 	LaborMarket myLaborMarket;
@@ -141,56 +137,24 @@ public class Consumer {
 
 
 //	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
-	public void stepState(){
+	public void step(){
 	    if(isStudent){
-	        stepStudentState();
+	        stepStudent();
+	        consumptionStudent();
 	    }
 	    else{
-	        stepWorkerState();
+	        stepWorker();
+	        consumptionWorker();
 	    }
 	    
 	//    disposableIncome=workerWage+saving-iL*workerLoan-iL*studentLoan;
 	    //-taxes
 	}
 
-	public void stepConsumption(){
-	    if(isStudent){
-	        stepStudentConsumption();
-	    }
-	    else{
-	        stepWorkerConsumption();
-	    }
-	    
-	//    disposableIncome=workerWage+saving-iL*workerLoan-iL*studentLoan;
-	    //-taxes
-	}
-
-
-	
-
 	
 	
-	private void stepWorkerConsumption() {
-		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
-		demandsList = new ArrayList<AProductDemand>();
-
-		if(!isWorking){
-			wage=(double)Context.unemploymentDole;
-		}
+	private void consumptionWorker() {
 		
-		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
-		}
-
-			industriesListIterator=OfficeForStatistics.industriesList.iterator();
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-				int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
-				aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
-				aProductDemand.inform(identity);
-				demandsList.add(aProductDemand);
-			}
-
 	}
 	
 	
@@ -201,7 +165,7 @@ public class Consumer {
 		}
 	}
 
-	private void stepWorkerState() {
+	private void stepWorker() {
 		if(isWorking){
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
@@ -235,20 +199,20 @@ public class Consumer {
 	}
 
 
-	private void stepStudentConsumption() {
+	private void consumptionStudent() {
 		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
+			System.out.print("Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
 		}	
 		consumption=Context.costEdu;
 		if(wealth >= 0){
-			wealth=wealth*(1+iD)-consumption;
-		}
-		else{
-			wealth=wealth*(1+iL)-consumption;
-		}
+			  wealth=wealth*(1+iD)-consumption;
+		 }
+	  else{
+			  wealth=wealth*(1+iL)-consumption;
+	  	}
 		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
-		}
+			System.out.println(" final wealth "+wealth);
+		}	
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
@@ -262,7 +226,7 @@ public class Consumer {
 
 	}
 	
-	private void stepStudentState() {
+	private void stepStudent() {
 		
 	//se questo metodo viene eseguito significa che il soggetto ha deciso di studiare
 	//se ho un successo nello studio
@@ -319,12 +283,6 @@ public class Consumer {
 			}
 		}
 		else{
-			if(RandomHelper.nextDouble()<0.5){
-			if(Context.verbousFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
-			}
-			}
-			else{
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
@@ -342,17 +300,15 @@ public class Consumer {
 				System.out.println("  sending application to firm "+aFirm.getID());
 			}
 			aFirm.receiveCurriculum(myCurriculum);
-		}
 
 		}
 	}
 	public void jobObtained(Firm employer){
 		isWorking=true;
 		myEmployer=employer;
-		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
 		int employerID=myEmployer.getID();
 		if(Context.verbousFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID);
 		}
 	}
 	
@@ -370,12 +326,12 @@ public class Consumer {
 		return abilityStudent;
 	}
 	
-	public double getSumAbility(){
-		return sumAbilityStudent;
-	}
-	
 	public double getStudentLoan(){
 		return studentLoan;
+	}
+	
+	public int getDegree(int i){
+	return degree;
 	}
 	public int getIdentity(){
 		return identity;
@@ -395,7 +351,6 @@ System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+is
 			}
 
 		}
-
 
 	}
 	
