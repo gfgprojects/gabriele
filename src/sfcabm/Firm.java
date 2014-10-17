@@ -24,27 +24,25 @@ public class Firm {
 	int numJobs;
 	double sumOfWorkersProductivity=0;
 	int productAbsoluteRank;
-	
 	/*
 	public double desiredOutput;
 	public double expectedSales;
 	public double potentialOutput;
 	public int ActualCapital;
 	public double sigma=0.3;
+	*/
+	
+	double senderProductivity;
+	int senderID;
+	double senderFirmReservationWage;
+	
+	
 	public double initialOutput;
 	public double initialCapitalStock;
 	public double firmTech=1;
 	public double averageAbilityFirm=0.8;
-	*/
-
-	int senderID;
-	double senderFirmReservationWage;
-	double wageBase=300;
-	int degree;
 	
-	public int sumAbility0, sumAbility1, sumAbility2, sumAbility3, sumAbility4, sumAbility5, sumAbility6;
-	public double avgAbility0, avgAbility1, avgAbility2, avgAbility3, avgAbility4, avgAbility5, avgAbility6;
-	public double senderFirmReservationWage_0, senderFirmReservationWage_1, senderFirmReservationWage_2, senderFirmReservationWage_3, senderFirmReservationWage_4, senderFirmReservationWage_5, senderFirmReservationWage_6; 
+	
 	 repast.simphony.context.Context<Object> myContext;
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
@@ -117,64 +115,6 @@ public class Firm {
 		}
 }
 	
-	//CALCOLARE WAGE OFFER FIRM
-	//CASO 1: PERFECT FORESIGHT
-	
-//public void wageOffer(){
-//		senderFirmReservationWage=wageBase*aConsumer.getProductivity();
-//	}
-	
-	
-	//CASO 2: ASYMMETRIC INFO: WORKERS' AVERAGE ABILITY
- public void wageOffer(){
-	 	sumAbility0= (int) aConsumer.getDegree(degree=0);
-		sumAbility1=(int) aConsumer.getDegree(degree=1);
-		sumAbility2=(int) aConsumer.getDegree(degree=2);
-		sumAbility3=(int) aConsumer.getDegree(degree=3);
-		sumAbility4=(int) aConsumer.getDegree(degree=4);
-		sumAbility5=(int) aConsumer.getDegree(degree=5);
-		sumAbility6=(int) aConsumer.getDegree(degree=6);
-		
-	for (int w=0; w < workersList.size(); w++){
-		switch (degree){
-		case 1: degree = 0;
-		avgAbility0=sumAbility0/workersList.size();
-		senderFirmReservationWage_0=wageBase*avgAbility0;
-		break;
-		
-		case 2: degree = 1;
-		avgAbility1=sumAbility1/workersList.size();
-		senderFirmReservationWage_1=wageBase*avgAbility1;
-		break;
-		
-		case 3: degree = 2;
-		avgAbility2=sumAbility2/workersList.size();
-		senderFirmReservationWage_2=wageBase*avgAbility2;
-		break;
-		
-		case 4: degree = 3;
-		avgAbility3=sumAbility3/workersList.size();
-		senderFirmReservationWage_3=wageBase*avgAbility3;
-		break;
-		
-		case 5: degree = 4;
-		avgAbility4=sumAbility4/workersList.size();
-		senderFirmReservationWage_4=wageBase*avgAbility4;
-		break;
-		
-		case 6: degree = 5;
-		avgAbility5=sumAbility5/workersList.size();
-		senderFirmReservationWage_5=wageBase*avgAbility5;
-		break;
-		
-		case 7: degree = 6;
-		avgAbility6=sumAbility6/workersList.size();
-		senderFirmReservationWage_6=wageBase*avgAbility6;
-		break;
-		}
-	}
- }
-	
 	// SEND LABOR DEMAND TO LABOR MARKET
 	 
 	public void sendLaborDemand(){
@@ -189,8 +129,12 @@ public class Firm {
 	myLaborMarket.receiveLaborDemand(myOffer);
 	}
 
-	//questo viene dopo
-	
+	/*
+	public void hire(){
+		
+	}
+	questo viene dopo
+	*/
 	
 	
 	//INIZIALIZZARE OUTPUT LEVEL:
@@ -225,4 +169,17 @@ public class Firm {
 	public long getProduction(){
 		return production;
 	}
+
+	
+	
+
+
+	//reset the firm each time step 
+	/*public void reset(){
+	  numJobs=0;
+	  firmWageSum=0;
+	  applicationList.clear();
+	  jobList.clear();
+	}
+	*/
 }
