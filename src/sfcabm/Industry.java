@@ -2,12 +2,13 @@ package sfcabm;
 
 public class Industry{
 	int absoluteRank,relativeRank,numberOfFirms;
-	double production,marketShare,weightedProduction,productAttractivenesIndicator;
+	double production,marketShare,weightedProduction,productAttractivenesIndicator,demand;
 
 	public Industry(int ar){
 		absoluteRank=ar;
 		numberOfFirms=0;
 		production=0;
+		demand=0;
 	}
 	public void increaseNumberOfFirms(){
 		numberOfFirms++;
@@ -15,6 +16,16 @@ public class Industry{
 	public void increaseProduction(double fp){
 		production=production+fp;
 	}
+	public void increaseDemand(double dem){
+		demand=demand+dem;
+	}
+
+	public void allocateDemand(){
+		System.out.println("AR "+absoluteRank+" RR "+relativeRank+" production "+production+" demand "+demand);
+	}
+
+
+
 	public void setRelativeRank(int mar){
 		relativeRank=absoluteRank-mar+1;
 	}

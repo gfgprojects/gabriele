@@ -109,7 +109,7 @@ public class Firm {
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 	//	productAbsoluteRank=1;
-		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
+		productAbsoluteRank=RandomHelper.nextIntFromTo(1,3);
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}

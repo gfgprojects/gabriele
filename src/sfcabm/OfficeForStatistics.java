@@ -15,15 +15,19 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand;
 	IndexedIterable<Object> firmsList,consumersList;
 
 	Firm aFirm;
+	Consumer aConsumer;
 	Industry anIndustry;
 	Iterator<Industry> industriesListIterator;
 
 	DefaultActionFactory statActionFactory;
 	IAction statAction;
+	ArrayList anOrderList;
+	AProductDemand anOrder;
+
 
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
@@ -115,6 +119,34 @@ public class OfficeForStatistics{
 
 
 
+	}
+
+
+	public void computeDemand(){
+		aggregateDemand=0;
+		try{
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		for(int i=0;i<consumersList.size();i++){
+			aConsumer=(Consumer)consumersList.get(i);
+			anOrderList=aConsumer.getOrders();
+
+			for(int j=0;j<anOrderList.size();j++){
+				anOrder=(AProductDemand)anOrderList.get(j);
+				anIndustry=industriesList.get(j);
+				anIndustry.increaseDemand(anOrder.getDemand());
+				aggregateDemand=aggregateDemand+anOrder.getDemand();
+			}
+
+		}
+		System.out.println("AGGREGATE DEMAND "+aggregateDemand);
+		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
+		statAction.execute();
 	}
 
 

@@ -89,6 +89,7 @@ public class Context implements ContextBuilder<Object> {
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 			contextAction.execute();
 
+			officeForStatistics.computeDemand();
 
 
 

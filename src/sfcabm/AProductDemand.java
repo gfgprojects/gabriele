@@ -12,4 +12,8 @@ public class AProductDemand{
 		System.out.println("   consumer "+id+" new order of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand);
 	}
 
+	public int getDemand(){
+		return demand;
+	}
+
 }

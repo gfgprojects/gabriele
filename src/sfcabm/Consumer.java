@@ -383,6 +383,10 @@ public class Consumer {
 	}
 	public double getProductivity(){
 		return productivity;
+	}
+	public ArrayList getOrders(){
+		return demandsList;
+	
 	}	
 	public void showInfoOnIndustries(){
 System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am ready to decide my consumption using the following info");
