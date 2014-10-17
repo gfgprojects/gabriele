@@ -2,6 +2,8 @@ package sfcabm;
 
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.engine.schedule.DefaultActionFactory;
+import repast.simphony.engine.schedule.IAction;
 //import repast.simphony.engine.environment.RunEnvironment;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
@@ -42,27 +44,29 @@ public class Context implements ContextBuilder<Object> {
 		IndexedIterable consumersList,firmsList;
 		OfficeForStatistics officeForStatistics;
 
+	DefaultActionFactory contextActionFactory= new DefaultActionFactory();
+	IAction contextAction;
 	
 		//public static boolean verbouseFlag=true;
 		public repast.simphony.context.Context<Object> build(
 				repast.simphony.context.Context<Object> context) {
-	
+
 			//int maxIter=30;
-			
+
 			for (int i = 0; i< NumConsumers; i++){
 				aConsumer=new Consumer(i,context);
 				aConsumer.initialize();
 				context.add(aConsumer);
 			}
-				
-				
+
+
 			for (int f = 0; f<NumFirms; f++){
 				context.add(new Firm(f,context));
 			}
-				
+
 			LaborMarket theLaborMarket=new LaborMarket();
 			context.add(theLaborMarket);
-			
+
 			try{
 				consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
 				firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
@@ -81,16 +85,19 @@ public class Context implements ContextBuilder<Object> {
 
 			officeForStatistics=new OfficeForStatistics(context);
 			officeForStatistics.computeVariables();
-			officeForStatistics.publishIndustriesStats();
 
-			
-			
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
+			contextAction.execute();
+
+
+
+
 			/* if (RunEnvironment.getInstance().isBatch())
-		        {
-		            RunEnvironment.getInstance().endAt(10);
-		        }
-		        
-			*/
+			   {
+			   RunEnvironment.getInstance().endAt(10);
+			   }
+
+*/
 			return context;
 			
 			

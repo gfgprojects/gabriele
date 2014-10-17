@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import sfcabm.Firm;
 import sfcabm.Curriculum;
+import sfcabm.AProductDemand;
 import repast.simphony.random.RandomHelper;
 //import repast.simphony.parameter.Parameters;
 //import repast.simphony.engine.environment.RunEnvironment;
