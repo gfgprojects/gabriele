@@ -117,6 +117,8 @@ public class OfficeForStatistics{
 			anIndustry.setProductDiffusionIndicator(totalWeightedProduction);
 		}
 		
+		statAction=statActionFactory.createActionForIterable(firmsList,"computeAverageProductivityForEachDegreeOfEducation",false);
+		statAction.execute();
 
 
 

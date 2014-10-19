@@ -387,7 +387,12 @@ public class Consumer {
 	public ArrayList getOrders(){
 		return demandsList;
 	
-	}	
+	}
+	public int getDegree(){
+		return degree;
+	}
+
+
 	public void showInfoOnIndustries(){
 System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am ready to decide my consumption using the following info");
 		if(Context.verbousFlag){

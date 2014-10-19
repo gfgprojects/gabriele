@@ -56,6 +56,10 @@ public class Firm {
 	LaborMarket myLaborMarket;
 	LaborOffer myOffer;
 
+	int[] numberOfWokersInADegree;
+	double[] totalProductivityOfWorkersInADegree;
+	double[] averageProductivityOfWorkersInADegree;
+
 
 	public Firm(int FirmID) {
 		super();
@@ -115,6 +119,23 @@ public class Firm {
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
 }
+
+//compute average productivity for each degree of education
+	public void computeAverageProductivityForEachDegreeOfEducation(){
+		numberOfWokersInADegree=new int[7];
+		totalProductivityOfWorkersInADegree=new double[7];
+		averageProductivityOfWorkersInADegree=new double[7];
+		for(int i=0;i<workersList.size();i++){
+			aConsumer=(Consumer)workersList.get(i);
+			int degree=aConsumer.getDegree();
+			numberOfWokersInADegree[degree]++;
+			totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
+			averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
+		}
+		for(int j=0;j<7;j++){
+			System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
+		}
+	}
 	
 	// SEND LABOR DEMAND TO LABOR MARKET
 	 
