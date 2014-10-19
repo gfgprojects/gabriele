@@ -198,6 +198,13 @@ public class Firm {
 	public long getProduction(){
 		return production;
 	}
+	public int[] getnumberOfWokersInADegree(){
+		return numberOfWokersInADegree;
+	}
+	public double[] getTotalProductivityOfWorkersInADegree(){
+		return totalProductivityOfWorkersInADegree;
+	}
+
 
 	
 	

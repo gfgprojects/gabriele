@@ -9,7 +9,9 @@ public class AProductDemand{
 	}
 
 	public void inform(int id){
-		System.out.println("   consumer "+id+" new order of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand);
+		if(Context.verbousFlag){
+			System.out.println("   consumer "+id+" new order of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand);
+		}
 	}
 
 	public int getDemand(){

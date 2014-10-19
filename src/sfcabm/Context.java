@@ -13,8 +13,8 @@ import sfcabm.LaborMarket;
 import sfcabm.OfficeForStatistics;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verbousFlag=true;
-		public static int NumConsumers = 10;
+	public static boolean verbousFlag=false;
+		public static int NumConsumers = 200;
 		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;

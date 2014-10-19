@@ -28,6 +28,12 @@ public class OfficeForStatistics{
 	ArrayList anOrderList;
 	AProductDemand anOrder;
 
+	int[] numberOfWokersInADegree;
+	double[] totalProductivityOfWorkersInADegree;
+	double[] averageProductivityOfWorkersInADegree;
+	int numberOfWorkers=0;
+	double totalProductivity=0;
+	double averageProductivity=0;
 
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
@@ -116,10 +122,41 @@ public class OfficeForStatistics{
 			anIndustry=industriesList.get(i);
 			anIndustry.setProductDiffusionIndicator(totalWeightedProduction);
 		}
-		
+//let firms computeAverageProductivityForEachDegreeOfEducation		
 		statAction=statActionFactory.createActionForIterable(firmsList,"computeAverageProductivityForEachDegreeOfEducation",false);
 		statAction.execute();
+// computeAverageProductivityForEachDegreeOfEducation for the economy		
+		numberOfWokersInADegree=new int[7];
+		totalProductivityOfWorkersInADegree=new double[7];
+		averageProductivityOfWorkersInADegree=new double[7];
+		numberOfWorkers=0;
+		totalProductivity=0;
 
+		for(int i=0;i<firmsList.size();i++){
+			aFirm=(Firm)firmsList.get(i);
+			int[] aFirmNumberOfWokersInADegree=aFirm.getnumberOfWokersInADegree();
+			double[] aFirmTotalProductivityOfWorkersInADegree=aFirm.getTotalProductivityOfWorkersInADegree();
+			for(int j=0;j<7;j++){
+				numberOfWokersInADegree[j]=numberOfWokersInADegree[j]+aFirmNumberOfWokersInADegree[j];
+				totalProductivityOfWorkersInADegree[j]=totalProductivityOfWorkersInADegree[j]+aFirmTotalProductivityOfWorkersInADegree[j];
+				numberOfWorkers=numberOfWorkers+aFirmNumberOfWokersInADegree[j];
+				totalProductivity=totalProductivity+aFirmTotalProductivityOfWorkersInADegree[j];
+
+
+				if(numberOfWokersInADegree[j]>0){
+					averageProductivityOfWorkersInADegree[j]=totalProductivityOfWorkersInADegree[j]/numberOfWokersInADegree[j];
+				}
+				else{
+					averageProductivityOfWorkersInADegree[j]=0;
+				}
+			}
+
+		}
+		averageProductivity=totalProductivity/numberOfWorkers;
+			for(int z=0;z<7;z++){
+				System.out.println("system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
+			}
+			System.out.println("system number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
 
 
 	}

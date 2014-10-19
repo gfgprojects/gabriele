@@ -24,7 +24,7 @@ public class Consumer {
 	// double saving;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
-	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.0,0.5);
+	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.35,0.5);
 	 //double taxConsumTot=taxRate*consumption;
 	 double wage=0;
 	 //DEBT
@@ -320,7 +320,7 @@ public class Consumer {
 			}
 		}
 		else{
-			if(RandomHelper.nextDouble()<0.5){
+			if(RandomHelper.nextDouble()<0.0){
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 			}
