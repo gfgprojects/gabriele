@@ -44,7 +44,7 @@ public class Firm {
 	public double averageAbilityFirm=0.8;
 	
 	
-	 repast.simphony.context.Context<Object> myContext;
+	repast.simphony.context.Context<Object> myContext;
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
 	ArrayList<Consumer> workersList = new ArrayList<Consumer>();
@@ -136,8 +136,26 @@ public class Firm {
 			System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
 		}
 	}
-	
-	// SEND LABOR DEMAND TO LABOR MARKET
+
+	public void setWorkersWage(){
+		for(int i=0;i<workersList.size();i++){
+			aConsumer=workersList.get(i);
+			int degree=aConsumer.getDegree();
+			double aWage;
+			switch(Context.wageSettingRule){
+				case 0: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+					break;
+				case 1: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+					break;
+				case 2: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+					break;
+				default: System.out.println("Unknown wage setting rule");
+					break;
+			}
+		}
+	}
+
+// SEND LABOR DEMAND TO LABOR MARKET
 	 
 	public void sendLaborDemand(){
 		myOffer = new LaborOffer(identity,senderFirmReservationWage);

@@ -104,7 +104,7 @@ public class Consumer {
 			}
 			iterations++;
 		}
-		if(numberOfFailedPeriodsOfEducation>2){
+		if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation==21){
 			isStudent=false;
 			//calcolare qui titolo di studio e produttivit da lavoratore
 			//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
@@ -350,11 +350,15 @@ public class Consumer {
 	public void jobObtained(Firm employer){
 		isWorking=true;
 		myEmployer=employer;
-		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
+//		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
 		int employerID=myEmployer.getID();
 		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
 		}
+	}
+	public void setWage(double w){
+		wage=w;
+			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
 	}
 	
 

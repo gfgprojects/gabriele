@@ -13,13 +13,20 @@ import sfcabm.LaborMarket;
 import sfcabm.OfficeForStatistics;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verbousFlag=false;
-		public static int NumConsumers = 200;
+	public static boolean verbousFlag=true;
+		public static int NumConsumers = 10;
 		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int unemploymentDole=10;
 		public static int costEdu=10;
+		// set the wageSettingRule variable to
+		//	0 if you want the wage depend on the worker productivity
+		//	1 if you want the wage depend on the average productivity of workers having the worker degree in the employer's firm
+		//	2 if you want the wage depend on the average productivity of workers having the worker degree in the economy
+		
+		public static int wageSettingRule=2;
+
 		/*
 		double initialProbabilityToBeEmployed=0.7;
 		VARIABILI USATE IN LAB MKT
@@ -85,6 +92,10 @@ public class Context implements ContextBuilder<Object> {
 
 			officeForStatistics=new OfficeForStatistics(context);
 			officeForStatistics.computeVariables();
+
+			
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setWorkersWage",false);
+			contextAction.execute();
 
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 			contextAction.execute();

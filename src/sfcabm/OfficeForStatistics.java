@@ -30,7 +30,7 @@ public class OfficeForStatistics{
 
 	int[] numberOfWokersInADegree;
 	double[] totalProductivityOfWorkersInADegree;
-	double[] averageProductivityOfWorkersInADegree;
+	public static double[] averageProductivityOfWorkersInADegree;
 	int numberOfWorkers=0;
 	double totalProductivity=0;
 	double averageProductivity=0;
