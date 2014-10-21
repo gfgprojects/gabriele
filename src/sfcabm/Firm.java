@@ -208,6 +208,10 @@ public class Firm {
 			System.out.println("  Firm "+identity+" production "+production+" demand "+demand);
 		}
 	}
+	public void jettisoningCurricula(){
+		applicationList = new ArrayList<Curriculum>();
+	}
+
 
 	public int getProductAbsoluteRank(){
 		return productAbsoluteRank;

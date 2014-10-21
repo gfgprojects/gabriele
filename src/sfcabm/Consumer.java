@@ -320,7 +320,7 @@ public class Consumer {
 			}
 		}
 		else{
-			if(RandomHelper.nextDouble()<0.0){
+			if(RandomHelper.nextDouble()<0.5){
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 			}
@@ -347,6 +347,81 @@ public class Consumer {
 
 		}
 	}
+
+	public void sendJobApplications(){
+		if(isStudent){
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+			}
+		}
+		else{
+			if(isWorking){
+			}
+			else{
+			if(Context.verbousFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+			}
+			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
+			try{
+				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+			
+			ArrayList<Integer> firmsPositions=new ArrayList<Integer>();
+			int numberOfApplicationsToSend=Math.min(Context.numberOfJobApplicationAnUneployedSends,firmsList.size());
+			switch(Context.firmsWorkersMatching){
+				case 0:
+					for(int i=0;i<firmsList.size();i++){
+						firmsPositions.add(new Integer(i));
+					}
+					for(int i=0;i<numberOfApplicationsToSend;i++){
+						int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+
+						aFirm=(Firm)firmsList.get(position);
+						if(Context.verbousFlag){
+							System.out.println("  sending application to firm "+aFirm.getID());
+						}
+						aFirm.receiveCurriculum(myCurriculum);
+					}
+					break;
+				case 1: 
+					for(int i=0;i<firmsList.size();i++){
+						firmsPositions.add(new Integer(i));
+					}
+					for(int i=0;i<numberOfApplicationsToSend;i++){
+						int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+
+						aFirm=(Firm)firmsList.get(position);
+						if(Context.verbousFlag){
+							System.out.println("  sending application to firm "+aFirm.getID());
+						}
+						aFirm.receiveCurriculum(myCurriculum);
+					}
+					if(Context.verbousFlag){
+						System.out.println("  sending application to office for labor ");
+					}
+					myLaborMarket.receiveCurriculum(myCurriculum);
+					break;
+				case 2:
+					if(Context.verbousFlag){
+						System.out.println("  sending application to office for labor ");
+					}
+					myLaborMarket.receiveCurriculum(myCurriculum);
+					break;
+				default: System.out.println("Unknown workers firms matching mechanism");
+					 break;
+			}
+		}
+
+		}
+	}
+
+
+
+
 	public void jobObtained(Firm employer){
 		isWorking=true;
 		myEmployer=employer;

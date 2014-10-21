@@ -37,6 +37,13 @@ public class LaborMarket {
 			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.getSenderFirmReservationWage());
 		}
 	}
+
+	public void jettisoningCurricula(){
+		laborDemandsList = new ArrayList<Curriculum>();
+		if(Context.verbousFlag){
+			System.out.println("  Labor agency jettisoning curricula ");
+		}
+	}
 }
 
 

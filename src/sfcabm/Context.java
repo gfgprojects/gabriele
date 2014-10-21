@@ -24,8 +24,21 @@ public class Context implements ContextBuilder<Object> {
 		//	0 if you want the wage depend on the worker productivity
 		//	1 if you want the wage depend on the average productivity of workers having the worker degree in the employer's firm
 		//	2 if you want the wage depend on the average productivity of workers having the worker degree in the economy
-		
 		public static int wageSettingRule=2;
+
+
+		//set the firmsWorkersMatching variable to
+		//	0 do the following: 	unemployed send applications to firms
+		//				firms employ by looking at the received applications
+		//	1 do the following:	unemployed send applications to firms and to the office for labor
+		//				firms employ by looking at the received applications. If they need additional workers ask to the office for labor
+		//	2 do the following:	unemployed send applications to the office for labor only
+		//				firms post their vacancies to the office for labor only
+		//				the office for labor match vacancies an unemployed
+		
+		public static int firmsWorkersMatching=1;
+	
+		public static int numberOfJobApplicationAnUneployedSends=3;
 
 		/*
 		double initialProbabilityToBeEmployed=0.7;
@@ -101,6 +114,14 @@ public class Context implements ContextBuilder<Object> {
 			contextAction.execute();
 
 			officeForStatistics.computeDemand();
+
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"jettisoningCurricula",false);
+			contextAction.execute();
+
+			theLaborMarket.jettisoningCurricula();
+
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
+			contextAction.execute();
 
 
 
