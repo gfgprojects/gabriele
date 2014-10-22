@@ -13,8 +13,8 @@ import sfcabm.LaborMarket;
 import sfcabm.OfficeForStatistics;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verbousFlag=true;
-		public static int NumConsumers = 10;
+	public static boolean verbousFlag=false;
+		public static int NumConsumers = 20;
 		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
@@ -39,6 +39,7 @@ public class Context implements ContextBuilder<Object> {
 		public static int firmsWorkersMatching=1;
 	
 		public static int numberOfJobApplicationAnUneployedSends=3;
+		public static double percentageDemandGapThresholdInFiringWorkers=0.05;
 
 		/*
 		double initialProbabilityToBeEmployed=0.7;
@@ -119,6 +120,9 @@ public class Context implements ContextBuilder<Object> {
 			contextAction.execute();
 
 			theLaborMarket.jettisoningCurricula();
+
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"laborForceDownwardAdjustment",false);
+			contextAction.execute();
 
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
 			contextAction.execute();

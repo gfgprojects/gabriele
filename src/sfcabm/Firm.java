@@ -1,6 +1,7 @@
 package sfcabm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import repast.simphony.random.RandomHelper;
 import repast.simphony.util.collections.IndexedIterable;
@@ -25,25 +26,28 @@ public class Firm {
 	double sumOfWorkersProductivity=0;
 	int productAbsoluteRank;
 	int demand;
-	/*
-	public double desiredOutput;
-	public double expectedSales;
-	public double potentialOutput;
-	public int ActualCapital;
-	public double sigma=0.3;
-	*/
+	double productionCapacityAfterWorkersRetire;
 	
+		/*
+	   public double desiredOutput;
+	   public double expectedSales;
+	   public double potentialOutput;
+	   public int ActualCapital;
+	   public double sigma=0.3;
+	   */
+
 	double senderProductivity;
 	int senderID;
 	double senderFirmReservationWage;
-	
-	
+
+
 	public double initialOutput;
 	public double initialCapitalStock;
 	public double firmTech=1;
 	public double averageAbilityFirm=0.8;
 	
-	
+
+
 	repast.simphony.context.Context<Object> myContext;
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
@@ -60,6 +64,7 @@ public class Firm {
 	double[] totalProductivityOfWorkersInADegree;
 	double[] averageProductivityOfWorkersInADegree;
 
+	Iterator<Consumer> workersListIterator;
 
 	public Firm(int FirmID) {
 		super();
@@ -85,42 +90,82 @@ public class Firm {
 			System.out.println("  Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}
-	
+
 	public void setInitialWorkers(){
 		if(applicationList.size()>0){
-			try{
-				consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
-			}
-			catch(ClassNotFoundException e){
-				System.out.println("Class not found");
-			}
-
-
+			/*
+			   try{
+			   consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			   }
+			   catch(ClassNotFoundException e){
+			   System.out.println("Class not found");
+			   }
+			   */
 			for(int i=0;i<applicationList.size();i++){
 				aCurriculum=(Curriculum)applicationList.get(i);
-				int curriculumSenderID=aCurriculum.getSenderID();
-				for(int j=0;j<consumersList.size();j++){
-					aConsumer=(Consumer)consumersList.get(j);
-					if(aConsumer.getIdentity()==curriculumSenderID){
-						workersList.add(aConsumer);
-						aConsumer.jobObtained(this);
-						sumOfWorkersProductivity=sumOfWorkersProductivity+aConsumer.getProductivity();
-					}
-				}
+				aConsumer=aCurriculum.getSender();
+				workersList.add(aConsumer);
+				aConsumer.jobObtained(this);
+				sumOfWorkersProductivity=sumOfWorkersProductivity+aConsumer.getProductivity();
 			}
+			/*
+			   for(int i=0;i<applicationList.size();i++){
+			   aCurriculum=(Curriculum)applicationList.get(i);
+			   int curriculumSenderID=aCurriculum.getSenderID();
+			   for(int j=0;j<consumersList.size();j++){
+			   aConsumer=(Consumer)consumersList.get(j);
+			   if(aConsumer.getIdentity()==curriculumSenderID){
+			   workersList.add(aConsumer);
+			   aConsumer.jobObtained(this);
+			   sumOfWorkersProductivity=sumOfWorkersProductivity+aConsumer.getProductivity();
+			   }
+			   }
+			   }
+			   */
 		}
 		else{
 			System.out.println("  Firm "+identity+" NO WORKERS");
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
-	//	productAbsoluteRank=1;
-		productAbsoluteRank=RandomHelper.nextIntFromTo(1,3);
+		//	productAbsoluteRank=1;
+		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
-}
+	}
 
-//compute average productivity for each degree of education
+	public void laborForceDownwardAdjustment(){
+		if(Context.verbousFlag){
+			System.out.println("  Firm "+identity+" downward labor force adjustment ");
+		}
+		productionCapacityAfterWorkersRetire=0;
+		workersListIterator=workersList.iterator();
+		while(workersListIterator.hasNext()){
+			aConsumer=workersListIterator.next();
+			if(aConsumer.getAge()<Context.consumerExitAge){
+				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+			}
+			else{
+				aConsumer.receiveRetirementNew();
+				workersListIterator.remove();
+			}
+		}
+//		if((productionCapacityAfterWorkersRetire-demand)>(OfficeForStatistics.averageProductivity*Context.parameterOfProductivityInProductionFuncion)){
+		if((productionCapacityAfterWorkersRetire-demand)>0){
+			while(productionCapacityAfterWorkersRetire>demand){
+				int latestWorkerPosition=workersList.size()-1;
+				aConsumer=workersList.get(latestWorkerPosition);
+				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				aConsumer.receiveFiredNew();
+				workersList.remove(latestWorkerPosition);
+			}
+		}
+
+	}
+
+
+
+	//compute average productivity for each degree of education
 	public void computeAverageProductivityForEachDegreeOfEducation(){
 		numberOfWokersInADegree=new int[7];
 		totalProductivityOfWorkersInADegree=new double[7];
@@ -150,13 +195,13 @@ public class Firm {
 				case 2: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
 					break;
 				default: System.out.println("Unknown wage setting rule");
-					break;
+					 break;
 			}
 		}
 	}
 
-// SEND LABOR DEMAND TO LABOR MARKET
-	 
+	// SEND LABOR DEMAND TO LABOR MARKET
+
 	public void sendLaborDemand(){
 		myOffer = new LaborOffer(identity,senderFirmReservationWage);
 		try{
@@ -165,43 +210,43 @@ public class Firm {
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
-	
-	myLaborMarket.receiveLaborDemand(myOffer);
+
+		myLaborMarket.receiveLaborDemand(myOffer);
 	}
 
 	/*
-	public void hire(){
-		
-	}
-	questo viene dopo
-	*/
-	
-	
+	   public void hire(){
+
+	   }
+	   questo viene dopo
+	   */
+
+
 	//INIZIALIZZARE OUTPUT LEVEL:
 	//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
 	/*
-	public void setInitialProduction(){
-		initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
-		initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
-	}
-	
+	   public void setInitialProduction(){
+	   initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
+	   initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
+	   }
+
 	//non so calcolare il numero dei workers di ogni firm
 	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
 	 * 
 	 * 
-	public void productionDecision(){
-		potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
-		expectedSales=???
-		desiredOutput=expectedSales;
-		
-		if (potentialOutput<desiredOutput){
-			laborDemand++;
-		}
-		else laborDemand=0;
-	}
-	
-	*/
-	
+	 public void productionDecision(){
+	 potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
+	 expectedSales=???
+	 desiredOutput=expectedSales;
+
+	 if (potentialOutput<desiredOutput){
+	 laborDemand++;
+	 }
+	 else laborDemand=0;
+	 }
+
+*/
+
 	public void setDemand(double industryProduction,double industryDemand){
 		demand=(int)Math.round(production/industryProduction*industryDemand);
 		if(Context.verbousFlag){
@@ -216,7 +261,7 @@ public class Firm {
 	public int getProductAbsoluteRank(){
 		return productAbsoluteRank;
 	}
-	
+
 	public long getProduction(){
 		return production;
 	}
@@ -228,8 +273,8 @@ public class Firm {
 	}
 
 
-	
-	
+
+
 
 
 	//reset the firm each time step 

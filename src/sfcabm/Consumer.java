@@ -16,7 +16,7 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.util.collections.IndexedIterable;
 
 public class Consumer {
-	int identity;
+	int identity,age;
 	boolean isStudent;
 	boolean isWorking;
 	Firm myEmployer=null;
@@ -56,8 +56,8 @@ public class Consumer {
 
 	 double consumption;
 	 
-	 repast.simphony.context.Context<Object> myContext;
-	 IndexedIterable<Object> firmsList;
+	repast.simphony.context.Context<Object> myContext;
+	IndexedIterable<Object> firmsList;
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
 	AProductDemand aProductDemand;
@@ -89,8 +89,8 @@ public class Consumer {
 	}
 
 	public void initialize(){
-		int age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
-//		int age=RandomHelper.nextIntFromTo(1,21);
+//		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
+		age=RandomHelper.nextIntFromTo(1,50);
 		int iterations=0;
 		int maxIterations=Math.min(age,22);
 		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
@@ -212,7 +212,7 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
-			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
+			myCurriculum=new Curriculum(this,degree,identity,10,productivity,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
@@ -329,7 +329,7 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
-			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
+			myCurriculum=new Curriculum(this,degree,identity,10,productivity,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
@@ -361,7 +361,7 @@ public class Consumer {
 			if(Context.verbousFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
-			myCurriculum=new Curriculum(degree,identity,10,productivity,10.5);
+			myCurriculum=new Curriculum(this,degree,identity,10,productivity,10.5);
 			try{
 				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
@@ -435,6 +435,17 @@ public class Consumer {
 		wage=w;
 			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
 	}
+	public void receiveRetirementNew(){
+		isWorking=false;
+			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
+		myEmployer=null;
+	}
+	
+	public void receiveFiredNew(){
+		isWorking=false;
+			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
+		myEmployer=null;
+	}
 	
 
 
@@ -469,6 +480,9 @@ public class Consumer {
 	}
 	public int getDegree(){
 		return degree;
+	}
+	public int getAge(){
+		return age;
 	}
 
 

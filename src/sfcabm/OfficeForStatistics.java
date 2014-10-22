@@ -33,7 +33,7 @@ public class OfficeForStatistics{
 	public static double[] averageProductivityOfWorkersInADegree;
 	int numberOfWorkers=0;
 	double totalProductivity=0;
-	double averageProductivity=0;
+	public static double averageProductivity=0;
 
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
