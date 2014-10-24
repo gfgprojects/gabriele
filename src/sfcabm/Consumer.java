@@ -447,6 +447,11 @@ public class Consumer {
 		myEmployer=null;
 	}
 	
+	public void receiveHiredNew(Firm employer){
+		isWorking=true;
+		myEmployer=employer;
+			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
+	}
 
 
 	public double getStudentSpending(){
@@ -483,6 +488,9 @@ public class Consumer {
 	}
 	public int getAge(){
 		return age;
+	}
+	public boolean getIsWorkingFlag(){
+		return isWorking;
 	}
 
 

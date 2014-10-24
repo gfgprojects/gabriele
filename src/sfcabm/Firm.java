@@ -65,6 +65,7 @@ public class Firm {
 	double[] averageProductivityOfWorkersInADegree;
 
 	Iterator<Consumer> workersListIterator;
+	Iterator<Curriculum> applicationListIterator;
 
 	public Firm(int FirmID) {
 		super();
@@ -164,125 +165,164 @@ public class Firm {
 	}
 
 
-
-	//compute average productivity for each degree of education
-	public void computeAverageProductivityForEachDegreeOfEducation(){
-		numberOfWokersInADegree=new int[7];
-		totalProductivityOfWorkersInADegree=new double[7];
-		averageProductivityOfWorkersInADegree=new double[7];
-		for(int i=0;i<workersList.size();i++){
-			aConsumer=(Consumer)workersList.get(i);
-			int degree=aConsumer.getDegree();
-			numberOfWokersInADegree[degree]++;
-			totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
-			averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
-		}
-		for(int j=0;j<7;j++){
-			System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
-		}
-	}
-
-	public void setWorkersWage(){
-		for(int i=0;i<workersList.size();i++){
-			aConsumer=workersList.get(i);
-			int degree=aConsumer.getDegree();
-			double aWage;
-			switch(Context.wageSettingRule){
-				case 0: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+	public void laborForceUpwardAdjustment(){
+			switch(Context.firmsWorkersMatching){
+				case 0:
+					hireUsingReceivedCV();
 					break;
-				case 1: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+				case 1:
+					hireUsingReceivedCV();
 					break;
-				case 2: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+				case 2:
 					break;
-				default: System.out.println("Unknown wage setting rule");
+				default: System.out.println("Unknown workers firms matching mechanism");
 					 break;
 			}
-		}
 	}
 
-	// SEND LABOR DEMAND TO LABOR MARKET
+	public void hireUsingReceivedCV(){
+		applicationListIterator=applicationList.iterator();
+		System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkersRetire+" dem "+demand);
+		while(productionCapacityAfterWorkersRetire<demand && applicationListIterator.hasNext()){
+			//		while(applicationListIterator.hasNext()){
+			aCurriculum=applicationListIterator.next();
+			aConsumer=aCurriculum.getSender();
+			if(aConsumer.getIsWorkingFlag()){
+				applicationListIterator.remove();
+			}
+			else{
+				aConsumer.receiveHiredNew(this);
+				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				workersList.add(aConsumer);
+				applicationListIterator.remove();
+			}
+			System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkersRetire+" dem "+demand);
+			}
 
-	public void sendLaborDemand(){
-		myOffer = new LaborOffer(identity,senderFirmReservationWage);
-		try{
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+
 		}
-		catch(ClassNotFoundException e){
-			System.out.println("Class not found");
+
+
+
+
+		//compute average productivity for each degree of education
+		public void computeAverageProductivityForEachDegreeOfEducation(){
+			numberOfWokersInADegree=new int[7];
+			totalProductivityOfWorkersInADegree=new double[7];
+			averageProductivityOfWorkersInADegree=new double[7];
+			for(int i=0;i<workersList.size();i++){
+				aConsumer=(Consumer)workersList.get(i);
+				int degree=aConsumer.getDegree();
+				numberOfWokersInADegree[degree]++;
+				totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
+				averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
+			}
+			for(int j=0;j<7;j++){
+				System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
+			}
 		}
 
-		myLaborMarket.receiveLaborDemand(myOffer);
-	}
+		public void setWorkersWage(){
+			for(int i=0;i<workersList.size();i++){
+				aConsumer=workersList.get(i);
+				int degree=aConsumer.getDegree();
+				double aWage;
+				switch(Context.wageSettingRule){
+					case 0: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+						break;
+					case 1: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+						break;
+					case 2: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+						break;
+					default: System.out.println("Unknown wage setting rule");
+						 break;
+				}
+			}
+		}
 
-	/*
-	   public void hire(){
+		// SEND LABOR DEMAND TO LABOR MARKET
 
-	   }
-	   questo viene dopo
-	   */
+		public void sendLaborDemand(){
+			myOffer = new LaborOffer(identity,senderFirmReservationWage);
+			try{
+				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			}
+			catch(ClassNotFoundException e){
+				System.out.println("Class not found");
+			}
+
+			myLaborMarket.receiveLaborDemand(myOffer);
+		}
+
+		/*
+		   public void hire(){
+
+		   }
+		   questo viene dopo
+		   */
 
 
-	//INIZIALIZZARE OUTPUT LEVEL:
-	//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
-	/*
-	   public void setInitialProduction(){
-	   initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
-	   initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
-	   }
+		//INIZIALIZZARE OUTPUT LEVEL:
+		//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
+		/*
+		   public void setInitialProduction(){
+		   initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
+		   initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
+		   }
 
-	//non so calcolare il numero dei workers di ogni firm
-	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
-	 * 
-	 * 
-	 public void productionDecision(){
-	 potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
-	 expectedSales=???
-	 desiredOutput=expectedSales;
+		//non so calcolare il numero dei workers di ogni firm
+		//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
+		 * 
+		 * 
+		 public void productionDecision(){
+		 potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
+		 expectedSales=???
+		 desiredOutput=expectedSales;
 
-	 if (potentialOutput<desiredOutput){
-	 laborDemand++;
-	 }
-	 else laborDemand=0;
-	 }
+		 if (potentialOutput<desiredOutput){
+		 laborDemand++;
+		 }
+		 else laborDemand=0;
+		 }
 
 */
 
-	public void setDemand(double industryProduction,double industryDemand){
-		demand=(int)Math.round(production/industryProduction*industryDemand);
-		if(Context.verbousFlag){
-			System.out.println("  Firm "+identity+" production "+production+" demand "+demand);
+		public void setDemand(double industryProduction,double industryDemand){
+			demand=(int)Math.round(production/industryProduction*industryDemand);
+			if(Context.verbousFlag){
+				System.out.println("  Firm "+identity+" production "+production+" demand "+demand);
+			}
 		}
-	}
-	public void jettisoningCurricula(){
-		applicationList = new ArrayList<Curriculum>();
-	}
+		public void jettisoningCurricula(){
+			applicationList = new ArrayList<Curriculum>();
+		}
 
 
-	public int getProductAbsoluteRank(){
-		return productAbsoluteRank;
-	}
+		public int getProductAbsoluteRank(){
+			return productAbsoluteRank;
+		}
 
-	public long getProduction(){
-		return production;
-	}
-	public int[] getnumberOfWokersInADegree(){
-		return numberOfWokersInADegree;
-	}
-	public double[] getTotalProductivityOfWorkersInADegree(){
-		return totalProductivityOfWorkersInADegree;
-	}
-
-
+		public long getProduction(){
+			return production;
+		}
+		public int[] getnumberOfWokersInADegree(){
+			return numberOfWokersInADegree;
+		}
+		public double[] getTotalProductivityOfWorkersInADegree(){
+			return totalProductivityOfWorkersInADegree;
+		}
 
 
 
 
-	//reset the firm each time step 
-	/*public void reset(){
-	  numJobs=0;
-	  firmWageSum=0;
-	  applicationList.clear();
-	  jobList.clear();
-	}
-	*/
+
+
+		//reset the firm each time step 
+		/*public void reset(){
+		  numJobs=0;
+		  firmWageSum=0;
+		  applicationList.clear();
+		  jobList.clear();
+		}
+		*/
 }
