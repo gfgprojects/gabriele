@@ -36,7 +36,7 @@ public class Context implements ContextBuilder<Object> {
 		//				firms post their vacancies to the office for labor only
 		//				the office for labor match vacancies an unemployed
 		
-		public static int firmsWorkersMatching=1;
+		public static int firmsWorkersMatching=2;
 	
 		public static int numberOfJobApplicationAnUneployedSends=2;
 		public static double percentageDemandGapThresholdInFiringWorkers=0.05;
@@ -130,6 +130,7 @@ public class Context implements ContextBuilder<Object> {
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"laborForceUpwardAdjustment",false);
 			contextAction.execute();
 
+			officeForStatistics.activateLaborMarket();
 
 			/* if (RunEnvironment.getInstance().isBatch())
 			   {

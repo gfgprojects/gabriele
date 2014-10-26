@@ -12,6 +12,7 @@ import sfcabm.Firm;
 
 public class OfficeForStatistics{
 	repast.simphony.context.Context<Object> myContext;
+	LaborMarket myLaborMarket;
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
@@ -189,6 +190,27 @@ public class OfficeForStatistics{
 		statAction.execute();
 	}
 
+	public void activateLaborMarket(){
+			System.out.println("LABOR MARKET");
+				try{
+					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+				}
+				catch(ClassNotFoundException e){
+					System.out.println("Class not found");
+				}
+			switch(Context.firmsWorkersMatching){
+				case 0: System.out.println("   match not needed");
+					break;
+				case 1:
+					myLaborMarket.match();
+					break;
+				case 2:
+					myLaborMarket.match();
+					break;
+				default: System.out.println("Unknown workers firms matching mechanism");
+					 break;
+			}
+	}
 
 	public void publishIndustriesStats(){
 		try{

@@ -19,7 +19,9 @@ public class LaborMarket {
 	
 	//creare liste per domande di lavoro
 	ArrayList<Curriculum> laborDemandsList = new ArrayList<Curriculum>();
-	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
+	ArrayList<LaborOffer> laborOffersList = new ArrayList<LaborOffer>();
+	LaborOffer aLaborOffer;
+	Curriculum aLaborDemand;
 
 	public LaborMarket(){
 	}
@@ -31,11 +33,37 @@ public class LaborMarket {
 		}
 	}	
 
-	public void receiveLaborDemand(LaborOffer aOffer){
-		laborOfferList.add(aOffer);
+	public void receiveVacancies(LaborOffer aOffer){
+		laborOffersList.add(aOffer);
 		if(Context.verbousFlag){
 			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.getSenderFirmReservationWage());
 		}
+	}
+	public void match(){
+		System.out.println("Trying to match");
+		if(laborOffersList.size()>0){
+			System.out.println("   offer:");
+			for(int i=0;i<laborOffersList.size();i++){
+				aLaborOffer=laborOffersList.get(i);
+				System.out.println("      firm "+aLaborOffer.getSenderID()+" needed "+aLaborOffer.getNeededProductionCapacity());
+
+			}
+		}
+		else{
+			System.out.println("   no offers from firms");
+		}
+		if(laborDemandsList.size()>0){
+			System.out.println("   demand:");
+			for(int i=0;i<laborDemandsList.size();i++){
+				aLaborDemand=laborDemandsList.get(i);
+				System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree());
+
+			}
+		}
+		else{
+			System.out.println("   no unemployed");
+		}
+
 	}
 
 	public void jettisoningCurricula(){

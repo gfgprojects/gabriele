@@ -26,7 +26,7 @@ public class Firm {
 	double sumOfWorkersProductivity=0;
 	int productAbsoluteRank;
 	int demand;
-	double productionCapacityAfterWorkersRetire;
+	double productionCapacityAfterWorkforceAdjustment;
 	
 		/*
 	   public double desiredOutput;
@@ -139,12 +139,12 @@ public class Firm {
 		if(Context.verbousFlag){
 			System.out.println("  Firm "+identity+" downward labor force adjustment ");
 		}
-		productionCapacityAfterWorkersRetire=0;
+		productionCapacityAfterWorkforceAdjustment=0;
 		workersListIterator=workersList.iterator();
 		while(workersListIterator.hasNext()){
 			aConsumer=workersListIterator.next();
 			if(aConsumer.getAge()<Context.consumerExitAge){
-				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
 			}
 			else{
 				aConsumer.receiveRetirementNew();
@@ -152,11 +152,11 @@ public class Firm {
 			}
 		}
 //		if((productionCapacityAfterWorkersRetire-demand)>(OfficeForStatistics.averageProductivity*Context.parameterOfProductivityInProductionFuncion)){
-		if((productionCapacityAfterWorkersRetire-demand)>0){
-			while(productionCapacityAfterWorkersRetire>demand){
+		if((productionCapacityAfterWorkforceAdjustment-demand)>0){
+			while(productionCapacityAfterWorkforceAdjustment>demand){
 				int latestWorkerPosition=workersList.size()-1;
 				aConsumer=workersList.get(latestWorkerPosition);
-				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
 				aConsumer.receiveFiredNew();
 				workersList.remove(latestWorkerPosition);
 			}
@@ -172,8 +172,10 @@ public class Firm {
 					break;
 				case 1:
 					hireUsingReceivedCV();
+					sendVacancies();
 					break;
 				case 2:
+					sendVacancies();
 					break;
 				default: System.out.println("Unknown workers firms matching mechanism");
 					 break;
@@ -182,8 +184,8 @@ public class Firm {
 
 	public void hireUsingReceivedCV(){
 		applicationListIterator=applicationList.iterator();
-		System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkersRetire+" dem "+demand);
-		while(productionCapacityAfterWorkersRetire<demand && applicationListIterator.hasNext()){
+		System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+		while(productionCapacityAfterWorkforceAdjustment<demand && applicationListIterator.hasNext()){
 			//		while(applicationListIterator.hasNext()){
 			aCurriculum=applicationListIterator.next();
 			aConsumer=aCurriculum.getSender();
@@ -192,11 +194,11 @@ public class Firm {
 			}
 			else{
 				aConsumer.receiveHiredNew(this);
-				productionCapacityAfterWorkersRetire=productionCapacityAfterWorkersRetire+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
 				workersList.add(aConsumer);
 				applicationListIterator.remove();
 			}
-			System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkersRetire+" dem "+demand);
+			System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
 			}
 
 
@@ -242,16 +244,18 @@ public class Firm {
 
 		// SEND LABOR DEMAND TO LABOR MARKET
 
-		public void sendLaborDemand(){
-			myOffer = new LaborOffer(identity,senderFirmReservationWage);
-			try{
-				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
-			}
-			catch(ClassNotFoundException e){
-				System.out.println("Class not found");
-			}
+		public void sendVacancies(){
+			if(productionCapacityAfterWorkforceAdjustment<demand){
+				myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
+				try{
+					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+				}
+				catch(ClassNotFoundException e){
+					System.out.println("Class not found");
+				}
 
-			myLaborMarket.receiveLaborDemand(myOffer);
+				myLaborMarket.receiveVacancies(myOffer);
+			}
 		}
 
 		/*
