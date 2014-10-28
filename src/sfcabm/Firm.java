@@ -204,6 +204,11 @@ public class Firm {
 
 		}
 
+	public void hire(Consumer newWorker){
+				workersList.add(newWorker);
+				newWorker.receiveHiredNew(this);
+	}
+
 
 
 

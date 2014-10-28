@@ -5,13 +5,15 @@ public class Curriculum {
 	int senderID;
 	int senderAge;
 	double senderReservationWage;
+	double senderProduction;
 	Consumer theSender;
 
-	public Curriculum(Consumer sender,int dg,int id,int age,double productivity, double srw){
+	public Curriculum(Consumer sender,int dg,int id,int age,double production, double srw){
 		theSender=sender;
 		senderDegree=dg;
 		senderID=id;
 		senderAge=age;
+		senderProduction=production;
 		senderReservationWage=srw;
 	}
 	public int getSenderDegree(){
@@ -22,6 +24,9 @@ public class Curriculum {
 	}
 	public int getSenderAge(){
 		return senderAge;
+	}
+	public double getSenderProduction(){
+		return senderProduction;
 	}
 	public double getSenderReservationWage(){
 		return senderReservationWage;

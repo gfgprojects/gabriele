@@ -26,5 +26,8 @@ public class LaborOffer {
 	public double getNeededProductionCapacity(){
 		return neededProductionCapacity;
 	}
+	public void decreaseNeededProductionCapacityAfterHiring(double capacityIncrease){
+		neededProductionCapacity=neededProductionCapacity-capacityIncrease;
+	}
 }
 

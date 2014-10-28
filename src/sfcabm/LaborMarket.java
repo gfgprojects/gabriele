@@ -1,5 +1,6 @@
 package sfcabm;
 
+import repast.simphony.random.RandomHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,6 +23,8 @@ public class LaborMarket {
 	ArrayList<LaborOffer> laborOffersList = new ArrayList<LaborOffer>();
 	LaborOffer aLaborOffer;
 	Curriculum aLaborDemand;
+	Consumer aConsumer;
+	Firm aFirm;
 
 	public LaborMarket(){
 	}
@@ -40,6 +43,8 @@ public class LaborMarket {
 		}
 	}
 	public void match(){
+
+//print situation on the screen
 		System.out.println("Trying to match");
 		if(laborOffersList.size()>0){
 			System.out.println("   offer:");
@@ -56,13 +61,28 @@ public class LaborMarket {
 			System.out.println("   demand:");
 			for(int i=0;i<laborDemandsList.size();i++){
 				aLaborDemand=laborDemandsList.get(i);
-				System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree());
+				System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree()+" production "+aLaborDemand.getSenderProduction());
 
 			}
 		}
 		else{
 			System.out.println("   no unemployed");
 		}
+//matching
+		while(laborOffersList.size()>0 && laborDemandsList.size()>0){
+			aLaborOffer=laborOffersList.get(RandomHelper.nextIntFromTo(0,laborOffersList.size()-1));
+			aFirm=aLaborOffer.getSender();
+			aLaborDemand=laborDemandsList.get(RandomHelper.nextIntFromTo(0,laborDemandsList.size()-1));
+			double aLaborDemandProduction=aLaborDemand.getSenderProduction();
+			aConsumer=aLaborDemand.getSender();
+			aFirm.hire(aConsumer);
+			aLaborOffer.decreaseNeededProductionCapacityAfterHiring(aLaborDemandProduction);
+			if(aLaborOffer.getNeededProductionCapacity()<0){
+				laborOffersList.remove(aLaborOffer);
+			}
+			laborDemandsList.remove(aLaborDemand);
+		}
+
 
 	}
 
