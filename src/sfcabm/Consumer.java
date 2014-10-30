@@ -36,7 +36,7 @@ public class Consumer {
 
 	 double sumAbilityStudent=0;
 	 //structure degree
-	 int degree;
+	 int degree=0;
 /*
 	 int elementary;
 	 int intermediate;
@@ -45,7 +45,7 @@ public class Consumer {
 	 int master;
 	 int phd;
 	 */
-	 double productivity;
+	 double productivity=0;
 	 
 	 int numberOfSuccessfulPeriodsOfEducation=0;
 	 int numberOfFailedPeriodsOfEducation=0;
@@ -88,9 +88,19 @@ public class Consumer {
 		myContext=con;
 	}
 
+	public Consumer(int consumerID, repast.simphony.context.Context<Object> con,double W){
+		super();
+		identity = consumerID;
+		isStudent=true;
+		isWorking=false;
+		myContext=con;
+		wealth=W;
+		age=0;
+	}
+
 	public void initialize(){
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
-		age=RandomHelper.nextIntFromTo(1,50);
+		age=RandomHelper.nextIntFromTo(40,60);
 		int iterations=0;
 		int maxIterations=Math.min(age,22);
 		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
@@ -433,24 +443,32 @@ public class Consumer {
 	}
 	public void setWage(double w){
 		wage=w;
+		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
+		}
 	}
 	public void receiveRetirementNew(){
 		isWorking=false;
+		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
+		}
 		myEmployer=null;
 	}
 	
 	public void receiveFiredNew(){
 		isWorking=false;
+		if(Context.verbousFlag){
 			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
+		}
 		myEmployer=null;
 	}
 	
 	public void receiveHiredNew(Firm employer){
 		isWorking=true;
 		myEmployer=employer;
-			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
+		if(Context.verbousFlag){
+			System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
+		}
 	}
 
 

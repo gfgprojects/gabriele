@@ -45,28 +45,31 @@ public class LaborMarket {
 	public void match(){
 
 //print situation on the screen
-		System.out.println("Trying to match");
-		if(laborOffersList.size()>0){
-			System.out.println("   offer:");
-			for(int i=0;i<laborOffersList.size();i++){
-				aLaborOffer=laborOffersList.get(i);
-				System.out.println("      firm "+aLaborOffer.getSenderID()+" needed "+aLaborOffer.getNeededProductionCapacity());
 
-			}
-		}
-		else{
-			System.out.println("   no offers from firms");
-		}
-		if(laborDemandsList.size()>0){
-			System.out.println("   demand:");
-			for(int i=0;i<laborDemandsList.size();i++){
-				aLaborDemand=laborDemandsList.get(i);
-				System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree()+" production "+aLaborDemand.getSenderProduction());
+		if(Context.verbousFlag){
+			System.out.println("Trying to match");
+			if(laborOffersList.size()>0){
+				System.out.println("   offer:");
+				for(int i=0;i<laborOffersList.size();i++){
+					aLaborOffer=laborOffersList.get(i);
+					System.out.println("      firm "+aLaborOffer.getSenderID()+" needed "+aLaborOffer.getNeededProductionCapacity());
 
+				}
 			}
-		}
-		else{
-			System.out.println("   no unemployed");
+			else{
+				System.out.println("   no offers from firms");
+			}
+			if(laborDemandsList.size()>0){
+				System.out.println("   demand:");
+				for(int i=0;i<laborDemandsList.size();i++){
+					aLaborDemand=laborDemandsList.get(i);
+					System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree()+" production "+aLaborDemand.getSenderProduction());
+
+				}
+			}
+			else{
+				System.out.println("   no unemployed");
+			}
 		}
 //matching
 		while(laborOffersList.size()>0 && laborDemandsList.size()>0){
@@ -81,6 +84,26 @@ public class LaborMarket {
 				laborOffersList.remove(aLaborOffer);
 			}
 			laborDemandsList.remove(aLaborDemand);
+		}
+
+//print situation on the screen
+		if(Context.verbousFlag){
+			if(laborOffersList.size()>0){
+				System.out.println("Unsatisfied firms");
+				for(int i=0;i<laborOffersList.size();i++){
+					aLaborOffer=laborOffersList.get(i);
+					System.out.println("      firm "+aLaborOffer.getSenderID()+" needed "+aLaborOffer.getNeededProductionCapacity());
+				}
+			}
+			if(laborDemandsList.size()>0){
+				System.out.println("   Unsatified workers:");
+				for(int i=0;i<laborDemandsList.size();i++){
+					aLaborDemand=laborDemandsList.get(i);
+					System.out.println("      unemplyed "+aLaborDemand.getSenderID()+" degree "+aLaborDemand.getSenderDegree()+" production "+aLaborDemand.getSenderProduction());
+
+				}
+			}
+
 		}
 
 

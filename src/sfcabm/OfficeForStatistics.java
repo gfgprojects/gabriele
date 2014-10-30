@@ -7,22 +7,25 @@ import repast.simphony.data2.AggregateDataSource;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.DefaultActionFactory;
 import repast.simphony.engine.schedule.IAction;
+import repast.simphony.util.ContextUtils;
 
 import sfcabm.Firm;
 
 public class OfficeForStatistics{
-	repast.simphony.context.Context<Object> myContext;
+	public repast.simphony.context.Context<Object> myContext;
 	LaborMarket myLaborMarket;
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
 	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand;
-	IndexedIterable<Object> firmsList,consumersList;
+	public IndexedIterable<Object> firmsList,consumersList;
 
 	Firm aFirm;
 	Consumer aConsumer;
+	Object anObj;
 	Industry anIndustry;
 	Iterator<Industry> industriesListIterator;
+	Iterator contextIterator;
 
 	DefaultActionFactory statActionFactory;
 	IAction statAction;
@@ -154,11 +157,12 @@ public class OfficeForStatistics{
 
 		}
 		averageProductivity=totalProductivity/numberOfWorkers;
+		if(Context.verbousFlag){
 			for(int z=0;z<7;z++){
 				System.out.println("system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
 			}
 			System.out.println("system number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
-
+		}
 
 	}
 
@@ -185,13 +189,18 @@ public class OfficeForStatistics{
 			}
 
 		}
-		System.out.println("AGGREGATE DEMAND "+aggregateDemand);
+
+		if(Context.verbousFlag){
+			System.out.println("AGGREGATE DEMAND "+aggregateDemand);
+		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
 	}
 
 	public void activateLaborMarket(){
-			System.out.println("LABOR MARKET");
+		if(Context.verbousFlag){
+			System.out.println("LABOR AGENCY");
+		}
 				try{
 					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
 				}
@@ -199,7 +208,9 @@ public class OfficeForStatistics{
 					System.out.println("Class not found");
 				}
 			switch(Context.firmsWorkersMatching){
-				case 0: System.out.println("   match not needed");
+				case 0: if(Context.verbousFlag){
+						System.out.println("   matching activity was not required");
+					}
 					break;
 				case 1:
 					myLaborMarket.match();
@@ -210,6 +221,38 @@ public class OfficeForStatistics{
 				default: System.out.println("Unknown workers firms matching mechanism");
 					 break;
 			}
+	}
+
+	public void performConsumersTurnover(){
+		if(Context.verbousFlag){
+			System.out.println("CONSUMERS TURNOVER");
+		}
+		ArrayList<Consumer> newConsumersList = new ArrayList<Consumer>();
+		Consumer aNewConsumer;
+		contextIterator=myContext.iterator();
+		while(contextIterator.hasNext()){
+			anObj=contextIterator.next();
+			if(anObj instanceof Consumer){
+				aConsumer=(Consumer)anObj;
+				if(aConsumer.getAge()>Context.consumerExitAge){
+					if(Context.verbousFlag){
+						System.out.println("    Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
+					}
+					contextIterator.remove();
+					aNewConsumer=new Consumer(Context.consumersProgressiveIdentificationNumber,myContext,aConsumer.getWealth());
+					Context.consumersProgressiveIdentificationNumber++;
+					newConsumersList.add(aNewConsumer);
+				}
+			}
+
+		}
+		for(int i=0;i<newConsumersList.size();i++){
+			aConsumer=newConsumersList.get(i);
+			myContext.add(aConsumer);
+			if(Context.verbousFlag){
+				System.out.println("    Entry of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
+			}
+		}
 	}
 
 	public void publishIndustriesStats(){

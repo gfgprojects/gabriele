@@ -125,7 +125,9 @@ public class Firm {
 			   */
 		}
 		else{
-			System.out.println("  Firm "+identity+" NO WORKERS");
+			if(Context.verbousFlag){
+				System.out.println("  Firm "+identity+" NO WORKERS");
+			}
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 		//	productAbsoluteRank=1;
@@ -184,7 +186,9 @@ public class Firm {
 
 	public void hireUsingReceivedCV(){
 		applicationListIterator=applicationList.iterator();
-		System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+		if(Context.verbousFlag){
+			System.out.println("     Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+		}
 		while(productionCapacityAfterWorkforceAdjustment<demand && applicationListIterator.hasNext()){
 			//		while(applicationListIterator.hasNext()){
 			aCurriculum=applicationListIterator.next();
@@ -198,7 +202,9 @@ public class Firm {
 				workersList.add(aConsumer);
 				applicationListIterator.remove();
 			}
-			System.out.println("Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+			if(Context.verbousFlag){
+				System.out.println("     Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+			}
 			}
 
 
@@ -224,9 +230,11 @@ public class Firm {
 				totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
 				averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
 			}
+		if(Context.verbousFlag){
 			for(int j=0;j<7;j++){
 				System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
 			}
+		}
 		}
 
 		public void setWorkersWage(){
