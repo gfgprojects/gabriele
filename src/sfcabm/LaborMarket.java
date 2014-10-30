@@ -31,14 +31,14 @@ public class LaborMarket {
 	
 	public void receiveCurriculum(Curriculum aCV){
 		laborDemandsList.add(aCV);
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("  Labor agency received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}	
 
 	public void receiveVacancies(LaborOffer aOffer){
 		laborOffersList.add(aOffer);
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("  Labor agency received offer from firm "+aOffer.getSenderID()+" wageOffer "+aOffer.getSenderFirmReservationWage());
 		}
 	}
@@ -46,7 +46,7 @@ public class LaborMarket {
 
 //print situation on the screen
 
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("Trying to match");
 			if(laborOffersList.size()>0){
 				System.out.println("   offer:");
@@ -87,7 +87,7 @@ public class LaborMarket {
 		}
 
 //print situation on the screen
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			if(laborOffersList.size()>0){
 				System.out.println("Unsatisfied firms");
 				for(int i=0;i<laborOffersList.size();i++){
@@ -111,7 +111,7 @@ public class LaborMarket {
 
 	public void jettisoningCurricula(){
 		laborDemandsList = new ArrayList<Curriculum>();
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("  Labor agency jettisoning curricula ");
 		}
 	}

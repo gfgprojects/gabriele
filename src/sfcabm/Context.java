@@ -13,7 +13,7 @@ import sfcabm.LaborMarket;
 import sfcabm.OfficeForStatistics;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verbousFlag=true;
+	public static boolean verboseFlag=true;
 		public static int NumConsumers = 20;
 		public static int NumFirms = 3;
 		public static int consumerExitAge=50;
@@ -40,6 +40,7 @@ public class Context implements ContextBuilder<Object> {
 	
 		public static int numberOfJobApplicationAnUneployedSends=2;
 		public static int consumersProgressiveIdentificationNumber=0; 
+		public static int firmsProgressiveIdentificationNumber=0; 
 
 		/*
 		double initialProbabilityToBeEmployed=0.7;
@@ -83,7 +84,8 @@ public class Context implements ContextBuilder<Object> {
 
 
 			for (int f = 0; f<NumFirms; f++){
-				context.add(new Firm(f,context));
+				context.add(new Firm(firmsProgressiveIdentificationNumber,context));
+				firmsProgressiveIdentificationNumber++;
 			}
 
 			LaborMarket theLaborMarket=new LaborMarket();
@@ -108,7 +110,8 @@ public class Context implements ContextBuilder<Object> {
 			officeForStatistics=new OfficeForStatistics(context);
 			officeForStatistics.computeVariables();
 
-			
+// trial cycle to be replaced with scheduled actions
+	
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"setWorkersWage",false);
 			contextAction.execute();
 
@@ -127,13 +130,16 @@ public class Context implements ContextBuilder<Object> {
 
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
 			contextAction.execute();
+		if(verboseFlag){
 System.out.println("DIRECT HIRING");
+		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"laborForceUpwardAdjustment",false);
 			contextAction.execute();
 
 			officeForStatistics.activateLaborMarket();
 	
 			officeForStatistics.performConsumersTurnover();
+			officeForStatistics.performFirmsTurnover();
 
 			/* if (RunEnvironment.getInstance().isBatch())
 			   {

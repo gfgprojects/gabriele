@@ -8,6 +8,7 @@ import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.DefaultActionFactory;
 import repast.simphony.engine.schedule.IAction;
 import repast.simphony.util.ContextUtils;
+import repast.simphony.random.RandomHelper;
 
 import sfcabm.Firm;
 
@@ -59,7 +60,7 @@ public class OfficeForStatistics{
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("maximum absolute rank "+maximumAbsoluteRank+" minimum Ansolute Rank "+minimumAbsoluteRank);
 		}
 		
@@ -96,7 +97,7 @@ public class OfficeForStatistics{
 		}
 	
 //print to terminal information on industries
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("STATS OFFICE: NEW DATA FROM INDUSTRIES ARE AVAILABLE");
 			industriesListIterator=industriesList.iterator();
 			while(industriesListIterator.hasNext()){
@@ -157,7 +158,7 @@ public class OfficeForStatistics{
 
 		}
 		averageProductivity=totalProductivity/numberOfWorkers;
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			for(int z=0;z<7;z++){
 				System.out.println("system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
 			}
@@ -190,7 +191,7 @@ public class OfficeForStatistics{
 
 		}
 
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("AGGREGATE DEMAND "+aggregateDemand);
 		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
@@ -198,7 +199,7 @@ public class OfficeForStatistics{
 	}
 
 	public void activateLaborMarket(){
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("LABOR AGENCY");
 		}
 				try{
@@ -208,7 +209,7 @@ public class OfficeForStatistics{
 					System.out.println("Class not found");
 				}
 			switch(Context.firmsWorkersMatching){
-				case 0: if(Context.verbousFlag){
+				case 0: if(Context.verboseFlag){
 						System.out.println("   matching activity was not required");
 					}
 					break;
@@ -224,18 +225,21 @@ public class OfficeForStatistics{
 	}
 
 	public void performConsumersTurnover(){
-		if(Context.verbousFlag){
+		if(Context.verboseFlag){
 			System.out.println("CONSUMERS TURNOVER");
 		}
+
+// remove
 		ArrayList<Consumer> newConsumersList = new ArrayList<Consumer>();
 		Consumer aNewConsumer;
 		contextIterator=myContext.iterator();
 		while(contextIterator.hasNext()){
 			anObj=contextIterator.next();
+			//check consumers
 			if(anObj instanceof Consumer){
 				aConsumer=(Consumer)anObj;
 				if(aConsumer.getAge()>Context.consumerExitAge){
-					if(Context.verbousFlag){
+					if(Context.verboseFlag){
 						System.out.println("    Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 					}
 					contextIterator.remove();
@@ -244,16 +248,60 @@ public class OfficeForStatistics{
 					newConsumersList.add(aNewConsumer);
 				}
 			}
-
 		}
+
+// add new consumers to context
 		for(int i=0;i<newConsumersList.size();i++){
 			aConsumer=newConsumersList.get(i);
 			myContext.add(aConsumer);
-			if(Context.verbousFlag){
+			if(Context.verboseFlag){
 				System.out.println("    Entry of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 			}
 		}
 	}
+
+	public void performFirmsTurnover(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS TURNOVER");
+		}
+
+// remove
+		ArrayList<Firm> newFirmsList = new ArrayList<Firm>();
+		Firm aNewFirm;
+		contextIterator=myContext.iterator();
+		while(contextIterator.hasNext()){
+			anObj=contextIterator.next();
+		//check firms
+			if(anObj instanceof Firm){
+				aFirm=(Firm)anObj;
+				if(aFirm.getProduction()<20){
+					if(Context.verboseFlag){
+						System.out.println("    Exit  of firm "+aFirm.getID()+" production "+aFirm.getProduction());
+					}
+					contextIterator.remove();
+					aNewFirm=new Firm(Context.firmsProgressiveIdentificationNumber,myContext);
+					Context.firmsProgressiveIdentificationNumber++;
+					newFirmsList.add(aNewFirm);
+				}
+
+			}
+
+		}
+
+// add new Firms to context
+		for(int i=0;i<newFirmsList.size();i++){
+			aFirm=newFirmsList.get(i);
+			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+			myContext.add(aFirm);
+			if(Context.verboseFlag){
+				System.out.println("    Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
+			}
+		}
+
+
+
+	}
+
 
 	public void publishIndustriesStats(){
 		try{
