@@ -187,7 +187,7 @@ public class Firm {
 	public void hireUsingReceivedCV(){
 		applicationListIterator=applicationList.iterator();
 		if(Context.verbousFlag){
-			System.out.println("     Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+			System.out.println("     firm "+identity+" application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
 		}
 		while(productionCapacityAfterWorkforceAdjustment<demand && applicationListIterator.hasNext()){
 			//		while(applicationListIterator.hasNext()){
@@ -195,6 +195,9 @@ public class Firm {
 			aConsumer=aCurriculum.getSender();
 			if(aConsumer.getIsWorkingFlag()){
 				applicationListIterator.remove();
+				if(Context.verbousFlag){
+					System.out.println("     the sender was hired by another firm");
+				}
 			}
 			else{
 				aConsumer.receiveHiredNew(this);
@@ -203,7 +206,7 @@ public class Firm {
 				applicationListIterator.remove();
 			}
 			if(Context.verbousFlag){
-				System.out.println("     Application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
+				System.out.println("     firm "+identity+" application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
 			}
 			}
 

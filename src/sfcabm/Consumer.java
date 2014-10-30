@@ -171,7 +171,7 @@ public class Consumer {
 	    else{
 	        stepWorkerConsumption();
 	    }
-	    
+	   age++; 
 	//    disposableIncome=workerWage+saving-iL*workerLoan-iL*studentLoan;
 	    //-taxes
 	}
