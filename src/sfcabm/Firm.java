@@ -81,6 +81,9 @@ public class Firm {
 	public int getID(){
 		return identity;
 	}
+	public int getIdentity(){
+		return identity;
+	}
 	public void printID(){
 		System.out.println("I am firm "+identity);
 	}
@@ -88,7 +91,7 @@ public class Firm {
 	public void receiveCurriculum(Curriculum aCV){
 		applicationList.add(aCV);
 		if(Context.verboseFlag){
-			System.out.println("  Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
+			System.out.println("       Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}
 
@@ -133,13 +136,13 @@ public class Firm {
 		//	productAbsoluteRank=1;
 		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verboseFlag){
-			System.out.println("  Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
+			System.out.println("     Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
 	}
 
 	public void laborForceDownwardAdjustment(){
 		if(Context.verboseFlag){
-			System.out.println("  Firm "+identity+" downward labor force adjustment ");
+			System.out.println("     Firm "+identity+" downward labor force adjustment ");
 		}
 		productionCapacityAfterWorkforceAdjustment=0;
 		workersListIterator=workersList.iterator();
@@ -235,7 +238,7 @@ public class Firm {
 			}
 		if(Context.verboseFlag){
 			for(int j=0;j<7;j++){
-				System.out.println("Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tp "+totalProductivityOfWorkersInADegree[j]+" ap "+averageProductivityOfWorkersInADegree[j]);
+				System.out.println("     Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
 			}
 		}
 		}
@@ -313,11 +316,14 @@ public class Firm {
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
 			if(Context.verboseFlag){
-				System.out.println("  Firm "+identity+" production "+production+" demand "+demand);
+				System.out.println("         Firm "+identity+" production "+production+" demand "+demand);
 			}
 		}
 		public void jettisoningCurricula(){
 			applicationList = new ArrayList<Curriculum>();
+			if(Context.verboseFlag){
+				System.out.println("     Firm "+identity+" jettisoning curricula ");
+			}
 		}
 
 

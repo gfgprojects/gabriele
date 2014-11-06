@@ -57,7 +57,7 @@ public class Consumer {
 	 double consumption;
 	 
 	repast.simphony.context.Context<Object> myContext;
-	IndexedIterable<Object> firmsList;
+	IndexedIterable<Object> firmsList,banksList;
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
 	AProductDemand aProductDemand;
@@ -72,6 +72,8 @@ public class Consumer {
 //	 Context<Object> myContext;
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
+	 BankAccount aBankAccount;
+	 Bank aBank;
 	 
 	public Consumer(int consumerID){
 		super();
@@ -142,12 +144,37 @@ public class Consumer {
 
 
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" age "+(age+5)+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity+" abilityStudent "+abilityStudent);
+			System.out.println("     Consumer "+identity+" age "+(age+5)+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity+" abilityStudent "+abilityStudent);
 			//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
 		}
+
+
 	}
 
+public void setupBankAccount(){
+	try{
+		banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+	}
+	catch(ClassNotFoundException e){
+		System.out.println("Class not found");
+	}
+	ArrayList<Integer> banksPositions=new ArrayList<Integer>();
+	int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAConsumerCanBeCostumerOf,banksList.size());
+	for(int i=0;i<banksList.size();i++){
+		banksPositions.add(new Integer(i));
+	}
+	for(int i=0;i<numberOfBanksToBeCustomerOf;i++){
+		int position=banksPositions.remove(RandomHelper.nextIntFromTo(0,(banksPositions.size()-1)));
+	aBank=(Bank)banksList.get(position);
+		if(Context.verboseFlag){
+			System.out.println("       open account");
+		}
+	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(-500,500),this);
+	aBank.addAccount(aBankAccount);
+
+	}
+}
 
 
 
@@ -190,7 +217,7 @@ public class Consumer {
 		}
 		
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
 		}
 
 			industriesListIterator=OfficeForStatistics.industriesList.iterator();
@@ -248,7 +275,7 @@ public class Consumer {
 
 	private void stepStudentConsumption() {
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
 		}	
 		consumption=Context.costEdu;
 		if(wealth >= 0){
@@ -258,7 +285,7 @@ public class Consumer {
 			wealth=wealth*(1+iL)-consumption;
 		}
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
 		}
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
@@ -326,18 +353,18 @@ public class Consumer {
 	public void sendInitialJobApplication(){
 		if(isStudent){
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
 			}
 		}
 		else{
 			if(RandomHelper.nextDouble()<0.5){
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 			}
 			}
 			else{
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
 			myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
 			try{
@@ -350,7 +377,7 @@ public class Consumer {
 
 			aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
 			if(Context.verboseFlag){
-				System.out.println("  sending application to firm "+aFirm.getID());
+				System.out.println("     sending application to firm "+aFirm.getID());
 			}
 			aFirm.receiveCurriculum(myCurriculum);
 		}
@@ -361,7 +388,7 @@ public class Consumer {
 	public void sendJobApplications(){
 		if(isStudent){
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I am a student");
 			}
 		}
 		else{
@@ -369,7 +396,7 @@ public class Consumer {
 			}
 			else{
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 			}
 			myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
 			try{
@@ -392,7 +419,7 @@ public class Consumer {
 
 						aFirm=(Firm)firmsList.get(position);
 						if(Context.verboseFlag){
-							System.out.println("  sending application to firm "+aFirm.getID());
+							System.out.println("       sending application to firm "+aFirm.getID());
 						}
 						aFirm.receiveCurriculum(myCurriculum);
 					}
@@ -438,19 +465,19 @@ public class Consumer {
 //		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
 		int employerID=myEmployer.getID();
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
 		}
 	}
 	public void setWage(double w){
 		wage=w;
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
+			System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
 		}
 	}
 	public void receiveRetirementNew(){
 		isWorking=false;
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
+			System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
 		}
 		myEmployer=null;
 	}
@@ -458,7 +485,7 @@ public class Consumer {
 	public void receiveFiredNew(){
 		isWorking=false;
 		if(Context.verboseFlag){
-			System.out.println("Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
+			System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
 		}
 		myEmployer=null;
 	}

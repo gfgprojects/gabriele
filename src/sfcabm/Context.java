@@ -11,11 +11,13 @@ import sfcabm.Consumer;
 import sfcabm.Firm;
 import sfcabm.LaborMarket;
 import sfcabm.OfficeForStatistics;
+import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verboseFlag=true;
-		public static int NumConsumers = 20;
+	public static boolean verboseFlag=false;
+		public static int NumConsumers = 5;
 		public static int NumFirms = 3;
+		public static int NumBanks = 1;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int unemploymentDole=10;
@@ -39,8 +41,10 @@ public class Context implements ContextBuilder<Object> {
 		public static int firmsWorkersMatching=0;
 	
 		public static int numberOfJobApplicationAnUneployedSends=2;
+		public static int numberOfBanksAConsumerCanBeCostumerOf=1;
 		public static int consumersProgressiveIdentificationNumber=0; 
 		public static int firmsProgressiveIdentificationNumber=0; 
+		public static int banksProgressiveIdentificationNumber=0; 
 
 		/*
 		double initialProbabilityToBeEmployed=0.7;
@@ -75,6 +79,9 @@ public class Context implements ContextBuilder<Object> {
 
 			//int maxIter=30;
 
+		if(verboseFlag){
+System.out.println("CREATING CONSUMERS");
+		}
 			for (int i = 0; i< NumConsumers; i++){
 				aConsumer=new Consumer(consumersProgressiveIdentificationNumber,context);
 				consumersProgressiveIdentificationNumber++;
@@ -82,12 +89,29 @@ public class Context implements ContextBuilder<Object> {
 				context.add(aConsumer);
 			}
 
+		if(verboseFlag){
+System.out.println("CREATING FIRMS");
+		}
 
 			for (int f = 0; f<NumFirms; f++){
 				context.add(new Firm(firmsProgressiveIdentificationNumber,context));
 				firmsProgressiveIdentificationNumber++;
 			}
 
+		if(verboseFlag){
+System.out.println("CREATING BANKS");
+		}
+
+			for (int b = 0; b<NumBanks; b++){
+				context.add(new Bank(banksProgressiveIdentificationNumber,context));
+				banksProgressiveIdentificationNumber++;
+			}
+
+
+
+		if(verboseFlag){
+System.out.println("CREATING OFFICE FOR LABOR");
+		}
 			LaborMarket theLaborMarket=new LaborMarket();
 			context.add(theLaborMarket);
 
@@ -98,36 +122,86 @@ public class Context implements ContextBuilder<Object> {
 			catch(ClassNotFoundException e){
 				System.out.println("Class not found");
 			}
+
+//			if(verboseFlag){
+System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"setupBankAccount",false);
+			contextAction.execute();
+
+
+
+
+		if(verboseFlag){
+System.out.println("CREATING OFFICE FOR STATISTICS");
+		}
+			officeForStatistics=new OfficeForStatistics(context);
+
+	
+		if(verboseFlag){
+System.out.println("CONSUMERS: SEND CVs");
+		}
+
 			for(int i=0;i<consumersList.size();i++){
 				aConsumer=(Consumer)consumersList.get(i);
 				aConsumer.sendInitialJobApplication();
 			}
+
+
+		if(verboseFlag){
+System.out.println("FIRMS: HIRE");
+		}
 			for(int i=0;i<firmsList.size();i++){
 				aFirm=(Firm)firmsList.get(i);
 				aFirm.setInitialWorkers();
 			}
 
-			officeForStatistics=new OfficeForStatistics(context);
+// trial cycle to be replaced with scheduled actions
+
+
+
+
+		if(verboseFlag){
+System.out.println("END OF INITIAL SETUP");
+System.out.println("==========================================");
+System.out.println("START OF ITERATION CYCLE");
+System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES");
+		}
+
 			officeForStatistics.computeVariables();
 
-// trial cycle to be replaced with scheduled actions
 	
+		if(verboseFlag){
+System.out.println("FIRMS: SET WAGE");
+		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"setWorkersWage",false);
 			contextAction.execute();
 
+		if(verboseFlag){
+System.out.println("CONSUMERS STEP CONSUMPTION");
+		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 			contextAction.execute();
 
 			officeForStatistics.computeDemand();
 
+		if(verboseFlag){
+System.out.println("JETTISONING CURRICULA");
+		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"jettisoningCurricula",false);
 			contextAction.execute();
 
 			theLaborMarket.jettisoningCurricula();
 
+		if(verboseFlag){
+System.out.println("FIRMS PERFORM DOWNWARD ADJUSTMENT OF LABOR FORCE");
+		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"laborForceDownwardAdjustment",false);
 			contextAction.execute();
 
+		if(verboseFlag){
+System.out.println("CONSUMERS SEND CVs");
+		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
 			contextAction.execute();
 		if(verboseFlag){

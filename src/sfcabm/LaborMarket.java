@@ -112,7 +112,7 @@ public class LaborMarket {
 	public void jettisoningCurricula(){
 		laborDemandsList = new ArrayList<Curriculum>();
 		if(Context.verboseFlag){
-			System.out.println("  Labor agency jettisoning curricula ");
+			System.out.println("     Labor agency jettisoning curricula ");
 		}
 	}
 }

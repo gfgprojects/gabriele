@@ -26,7 +26,7 @@ public class Industry{
 
 	public void allocateDemand(){
 		if(Context.verboseFlag){
-			System.out.println("AR "+absoluteRank+" RR "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
 		}
 		for(int i=0;i<theIndustryFirmsList.size();i++){
 			aFirm=theIndustryFirmsList.get(i);
@@ -48,7 +48,7 @@ public class Industry{
 	public void setProductDiffusionIndicator(double twp){
 		productAttractivenesIndicator=production*relativeRank/twp;
 		if(Context.verboseFlag){
-			System.out.println("AR "+absoluteRank+" RR "+relativeRank+" mark share "+marketShare+" product attractiveness indicator "+productAttractivenesIndicator);
+			System.out.println("     Industry with AR "+absoluteRank+" RR "+relativeRank+" market share "+marketShare+" product attractiveness indicator "+productAttractivenesIndicator);
 		}
 	}
 	public double getProduction(){

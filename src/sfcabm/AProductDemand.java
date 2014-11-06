@@ -10,7 +10,7 @@ public class AProductDemand{
 
 	public void inform(int id){
 		if(Context.verboseFlag){
-			System.out.println("   consumer "+id+" new order of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand);
+			System.out.println("        consumer "+id+" new order of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand);
 		}
 	}
 

@@ -61,7 +61,7 @@ public class OfficeForStatistics{
 			System.out.println("Class not found");
 		}
 		if(Context.verboseFlag){
-			System.out.println("maximum absolute rank "+maximumAbsoluteRank+" minimum Ansolute Rank "+minimumAbsoluteRank);
+			System.out.println("     maximum absolute rank "+maximumAbsoluteRank+" minimum Ansolute Rank "+minimumAbsoluteRank);
 		}
 		
 
@@ -98,13 +98,13 @@ public class OfficeForStatistics{
 	
 //print to terminal information on industries
 		if(Context.verboseFlag){
-			System.out.println("STATS OFFICE: NEW DATA FROM INDUSTRIES ARE AVAILABLE");
+//			System.out.println("STATS OFFICE: NEW DATA FROM INDUSTRIES ARE AVAILABLE");
 			industriesListIterator=industriesList.iterator();
 			while(industriesListIterator.hasNext()){
 				anIndustry=industriesListIterator.next();
-				System.out.println("absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
 			}
-			System.out.println("aggregate production "+aggregateProduction);
+			System.out.println("     aggregate production "+aggregateProduction);
 		}
 
 //set relative rank for each firm
@@ -160,9 +160,9 @@ public class OfficeForStatistics{
 		averageProductivity=totalProductivity/numberOfWorkers;
 		if(Context.verboseFlag){
 			for(int z=0;z<7;z++){
-				System.out.println("system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
+				System.out.println("     system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
 			}
-			System.out.println("system number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
+			System.out.println("     system number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
 		}
 
 	}
@@ -192,7 +192,8 @@ public class OfficeForStatistics{
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("AGGREGATE DEMAND "+aggregateDemand);
+			System.out.println("OFFICE FOR STATISTICS: COMPUTE DEMAND ");
+			System.out.println("     Aggregate demand "+aggregateDemand);
 		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
@@ -210,7 +211,7 @@ public class OfficeForStatistics{
 				}
 			switch(Context.firmsWorkersMatching){
 				case 0: if(Context.verboseFlag){
-						System.out.println("   matching activity was not required");
+						System.out.println("     matching activity was not asked");
 					}
 					break;
 				case 1:
@@ -240,7 +241,7 @@ public class OfficeForStatistics{
 				aConsumer=(Consumer)anObj;
 				if(aConsumer.getAge()>Context.consumerExitAge){
 					if(Context.verboseFlag){
-						System.out.println("    Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
+						System.out.println("     Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 					}
 					contextIterator.remove();
 					aNewConsumer=new Consumer(Context.consumersProgressiveIdentificationNumber,myContext,aConsumer.getWealth());
@@ -255,7 +256,7 @@ public class OfficeForStatistics{
 			aConsumer=newConsumersList.get(i);
 			myContext.add(aConsumer);
 			if(Context.verboseFlag){
-				System.out.println("    Entry of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
+				System.out.println("     Entry of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 			}
 		}
 	}
@@ -276,7 +277,7 @@ public class OfficeForStatistics{
 				aFirm=(Firm)anObj;
 				if(aFirm.getProduction()<20){
 					if(Context.verboseFlag){
-						System.out.println("    Exit  of firm "+aFirm.getID()+" production "+aFirm.getProduction());
+						System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
 					}
 					contextIterator.remove();
 					aNewFirm=new Firm(Context.firmsProgressiveIdentificationNumber,myContext);
@@ -294,7 +295,7 @@ public class OfficeForStatistics{
 			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
 			myContext.add(aFirm);
 			if(Context.verboseFlag){
-				System.out.println("    Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
+				System.out.println("     Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
 			}
 		}
 
