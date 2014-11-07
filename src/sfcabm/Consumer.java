@@ -60,6 +60,7 @@ public class Consumer {
 	IndexedIterable<Object> firmsList,banksList;
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
+	ArrayList<BankAccount> bankAccountsList = new ArrayList<BankAccount>();
 	AProductDemand aProductDemand;
 	Curriculum myCurriculum;
 	Firm aFirm;	
@@ -160,7 +161,7 @@ public void setupBankAccount(){
 		System.out.println("Class not found");
 	}
 	ArrayList<Integer> banksPositions=new ArrayList<Integer>();
-	int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAConsumerCanBeCostumerOf,banksList.size());
+	int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAConsumerCanBeCustumerOf,banksList.size());
 	for(int i=0;i<banksList.size();i++){
 		banksPositions.add(new Integer(i));
 	}
@@ -171,6 +172,7 @@ public void setupBankAccount(){
 			System.out.println("       open account");
 		}
 	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(-500,500),this);
+	bankAccountsList.add(aBankAccount);
 	aBank.addAccount(aBankAccount);
 
 	}
@@ -496,6 +498,16 @@ public void setupBankAccount(){
 		if(Context.verboseFlag){
 			System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
 		}
+	}
+
+	public void computeWealth(){
+		wealth=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			wealth=wealth+aBankAccount.getAccount();
+		}
+System.out.println("     Consumer "+identity+" wealth "+wealth);
+		
 	}
 
 

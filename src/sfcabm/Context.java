@@ -15,11 +15,12 @@ import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=false;
-		public static int NumConsumers = 5;
+		public static int NumConsumers = 20;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
+		public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 		public static int unemploymentDole=10;
 		public static int costEdu=10;
 		// set the wageSettingRule variable to
@@ -41,7 +42,8 @@ public class Context implements ContextBuilder<Object> {
 		public static int firmsWorkersMatching=0;
 	
 		public static int numberOfJobApplicationAnUneployedSends=2;
-		public static int numberOfBanksAConsumerCanBeCostumerOf=1;
+		public static int numberOfBanksAConsumerCanBeCustumerOf=1;
+		public static int numberOfBanksAFirmCanBeCustumerOf=1;
 		public static int consumersProgressiveIdentificationNumber=0; 
 		public static int firmsProgressiveIdentificationNumber=0; 
 		public static int banksProgressiveIdentificationNumber=0; 
@@ -67,7 +69,7 @@ public class Context implements ContextBuilder<Object> {
 		Consumer aConsumer;
 		Firm aFirm;
 
-		IndexedIterable consumersList,firmsList;
+		IndexedIterable consumersList,firmsList,banksList;
 		OfficeForStatistics officeForStatistics;
 
 	DefaultActionFactory contextActionFactory= new DefaultActionFactory();
@@ -118,17 +120,11 @@ System.out.println("CREATING OFFICE FOR LABOR");
 			try{
 				consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
 				firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
+				banksList=context.getObjects(Class.forName("sfcabm.Bank"));
 			}
 			catch(ClassNotFoundException e){
 				System.out.println("Class not found");
 			}
-
-//			if(verboseFlag){
-System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
-//		}
-			contextAction=contextActionFactory.createActionForIterable(consumersList,"setupBankAccount",false);
-			contextAction.execute();
-
 
 
 
@@ -156,7 +152,47 @@ System.out.println("FIRMS: HIRE");
 				aFirm.setInitialWorkers();
 			}
 
-// trial cycle to be replaced with scheduled actions
+//			if(verboseFlag){
+System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"setupBankAccount",false);
+			contextAction.execute();
+
+//			if(verboseFlag){
+System.out.println("FIRMS SETUP BANK ACCOUNTS");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setupBankAccount",false);
+			contextAction.execute();
+
+//			if(verboseFlag){
+System.out.println("BANK SETUP BALANCE");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(banksList,"computeDemandedCredit",false);
+			contextAction.execute();
+			contextAction=contextActionFactory.createActionForIterable(banksList,"computeDeposits",false);
+			contextAction.execute();
+			contextAction=contextActionFactory.createActionForIterable(banksList,"setupBalance",false);
+			contextAction.execute();
+			contextAction=contextActionFactory.createActionForIterable(banksList,"computeBalanceVariables",false);
+			contextAction.execute();
+
+
+//			if(verboseFlag){
+System.out.println("CHECK BALANCE SHEET CONSISTENCY");
+//}
+
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"computeWealth",false);
+			contextAction.execute();
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"computeSumOfBankAccounts",false);
+			contextAction.execute();
+
+			
+			
+			
+			
+			
+			
+			// trial cycle to be replaced with scheduled actions
 
 
 

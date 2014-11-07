@@ -27,6 +27,7 @@ public class Firm {
 	int productAbsoluteRank;
 	int demand;
 	double productionCapacityAfterWorkforceAdjustment;
+	public double productionCapital,debt,equity,sumOfBankAccounts;
 	
 		/*
 	   public double desiredOutput;
@@ -52,10 +53,11 @@ public class Firm {
 
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
 	ArrayList<Consumer> workersList = new ArrayList<Consumer>();
+	ArrayList<BankAccount> bankAccountsList = new ArrayList<BankAccount>();
 
 	Curriculum aCurriculum;
 	Consumer aConsumer;
-	IndexedIterable<Object> consumersList;
+	IndexedIterable<Object> consumersList,banksList;
 	Firm aFirm;	
 	LaborMarket myLaborMarket;
 	LaborOffer myOffer;
@@ -66,6 +68,8 @@ public class Firm {
 
 	Iterator<Consumer> workersListIterator;
 	Iterator<Curriculum> applicationListIterator;
+	 BankAccount aBankAccount;
+	 Bank aBank;
 
 	public Firm(int FirmID) {
 		super();
@@ -138,6 +142,37 @@ public class Firm {
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
+	}
+
+	public void setupBankAccount(){
+		productionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
+		debt=productionCapital-equity;
+		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
+		try{
+			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		ArrayList<Integer> banksPositions=new ArrayList<Integer>();
+		int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAFirmCanBeCustumerOf,banksList.size());
+		for(int i=0;i<banksList.size();i++){
+			banksPositions.add(new Integer(i));
+		}
+		for(int i=0;i<numberOfBanksToBeCustomerOf;i++){
+			int position=banksPositions.remove(RandomHelper.nextIntFromTo(0,(banksPositions.size()-1)));
+			aBank=(Bank)banksList.get(position);
+			if(Context.verboseFlag){
+				System.out.println("       open account");
+			}
+			aBankAccount=new BankAccount(-debt,this);
+			bankAccountsList.add(aBankAccount);
+			aBank.addAccount(aBankAccount);
+
+		}
+
+
 	}
 
 	public void laborForceDownwardAdjustment(){
@@ -309,6 +344,15 @@ public class Firm {
 		 }
 
 */
+	public void computeSumOfBankAccounts(){
+		sumOfBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			sumOfBankAccounts+=aBankAccount.getAccount();
+		}
+System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
+		
+	}
 
 		public void setProductAbsoluteRank(int pab){
 			productAbsoluteRank=pab;

@@ -30,4 +30,16 @@ public class BankAccount{
 		}
 
 	}
+	public double getDemandedCredit(){
+		return demandedCredit;
+	}
+	public double getAccount(){
+		return account;
+	}
+	public void setAccount(double ac){
+		account=ac;
+		demandedCredit=0;
+		allowedCredit=0;
+//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+	}
 }
