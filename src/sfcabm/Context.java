@@ -15,7 +15,7 @@ import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=false;
-		public static int NumConsumers = 20;
+		public static int NumConsumers = 5;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
 		public static int consumerExitAge=50;
@@ -81,7 +81,17 @@ public class Context implements ContextBuilder<Object> {
 
 			//int maxIter=30;
 
-		if(verboseFlag){
+if(verboseFlag){
+	System.out.println("");
+	System.out.println("");
+	System.out.println("BEGINNING OF INITIAL SETUP");
+	System.out.println("==========================================");
+	System.out.println("");
+	System.out.println("");
+}
+
+
+if(verboseFlag){
 System.out.println("CREATING CONSUMERS");
 		}
 			for (int i = 0; i< NumConsumers; i++){
@@ -152,21 +162,21 @@ System.out.println("FIRMS: HIRE");
 				aFirm.setInitialWorkers();
 			}
 
-//			if(verboseFlag){
+			if(verboseFlag){
 System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
-//		}
+		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"setupBankAccount",false);
 			contextAction.execute();
 
-//			if(verboseFlag){
+			if(verboseFlag){
 System.out.println("FIRMS SETUP BANK ACCOUNTS");
-//		}
+		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"setupBankAccount",false);
 			contextAction.execute();
 
-//			if(verboseFlag){
+			if(verboseFlag){
 System.out.println("BANK SETUP BALANCE");
-//		}
+		}
 			contextAction=contextActionFactory.createActionForIterable(banksList,"computeDemandedCredit",false);
 			contextAction.execute();
 			contextAction=contextActionFactory.createActionForIterable(banksList,"computeDeposits",false);
@@ -177,9 +187,9 @@ System.out.println("BANK SETUP BALANCE");
 			contextAction.execute();
 
 
-//			if(verboseFlag){
+			if(verboseFlag){
 System.out.println("CHECK BALANCE SHEET CONSISTENCY");
-//}
+}
 
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"computeWealth",false);
 			contextAction.execute();
@@ -218,6 +228,24 @@ System.out.println("CONSUMERS STEP CONSUMPTION");
 		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 			contextAction.execute();
+
+//		if(verboseFlag){
+System.out.println("BANKS EXTEND CONSUMER CREDIT");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(banksList,"setAllowedConsumersCredit",false);
+			contextAction.execute();
+
+	
+//		if(verboseFlag){
+System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"adjustConsumptionAccordingToExtendedCredit",false);
+			contextAction.execute();
+
+
+
+
 
 			officeForStatistics.computeDemand();
 

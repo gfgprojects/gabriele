@@ -1,6 +1,7 @@
 package sfcabm;
 
 import java.util.ArrayList;
+import repast.simphony.random.RandomHelper;
 
 public class Bank {
 	ArrayList<BankAccount> accountsList=new ArrayList<BankAccount>();
@@ -9,16 +10,20 @@ public class Bank {
 	int identity;
 	
 	public double iL;
-	double deposits,loans,demandedCredit,equity;
+	double deposits,loans,demandedCredit,allowedCredit,equity;
 
 	public Bank(int id,repast.simphony.context.Context<Object> con){
 		identity=id;
 		myContext=con;
-		System.out.println("Bank Created");
+		if(Context.verboseFlag){
+		System.out.println("Bank "+identity+" created");
+		}
 	}
 	public void addAccount(BankAccount ba){
 		accountsList.add(ba);
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" added account");
+		}
 	}
 	public void computeDemandedCredit(){
 		demandedCredit=0;
@@ -26,7 +31,9 @@ public class Bank {
 			aBankAccount=(BankAccount)accountsList.get(i);
 			demandedCredit=demandedCredit-aBankAccount.getDemandedCredit();
 		}
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" demanded credit "+demandedCredit);
+		}
 	}
 	public void computeDeposits(){
 		deposits=0;
@@ -36,7 +43,9 @@ public class Bank {
 				deposits=deposits+aBankAccount.getAccount();
 		}
 	}
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" deposits "+deposits);
+		}
 
 	}
 	public void setupBalance(){
@@ -51,7 +60,9 @@ public class Bank {
 				aBankAccount.setAccount(aBankAccount.getDemandedCredit());
 			}
 		}
+		if(Context.verboseFlag){
 		System.out.println("   BANK "+identity+" COORDINATING customers' balances with my balance for consistency ");
+		}
 	}
 	public void computeBalanceVariables(){
 		deposits=0;
@@ -65,8 +76,33 @@ public class Bank {
 			loans=loans-aBankAccount.getAccount();
 		}
 	}
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" deposits "+deposits+" loans "+loans);
+		}
 
+	}
+	public void setAllowedConsumersCredit(){
+		demandedCredit=0;
+		allowedCredit=0;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			demandedCredit=demandedCredit-aBankAccount.getDemandedCredit();
+			if(RandomHelper.nextDouble()>0.5){
+				double demCred=aBankAccount.getDemandedCredit();
+				double allCred=demCred*0.5;
+				aBankAccount.setAllowedCredit(allCred);
+				allowedCredit=allowedCredit-allCred;
+			}
+			else{
+				double demCred=aBankAccount.getDemandedCredit();
+				double allCred=demCred*1;
+				aBankAccount.setAllowedCredit(allCred);
+				allowedCredit=allowedCredit-allCred;
+			}
+		}
+//		if(Context.verboseFlag){
+		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
+//		}
 	}
 
 }

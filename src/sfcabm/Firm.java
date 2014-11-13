@@ -148,7 +148,9 @@ public class Firm {
 		productionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
 		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
 		debt=productionCapital-equity;
+		if(Context.verboseFlag){
 		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
+		}
 		try{
 			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
 		}
@@ -350,7 +352,9 @@ public class Firm {
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			sumOfBankAccounts+=aBankAccount.getAccount();
 		}
-System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
+		}
 		
 	}
 

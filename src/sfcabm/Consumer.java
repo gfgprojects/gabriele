@@ -54,7 +54,7 @@ public class Consumer {
 	 boolean InvestEducation;
 	 double studentSpending;
 
-	 double consumption;
+	 double consumption,desiredDemand;
 	 
 	repast.simphony.context.Context<Object> myContext;
 	IndexedIterable<Object> firmsList,banksList;
@@ -213,6 +213,7 @@ public void setupBankAccount(){
 	private void stepWorkerConsumption() {
 		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
 		demandsList = new ArrayList<AProductDemand>();
+		desiredDemand=0;
 
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
@@ -226,10 +227,17 @@ public void setupBankAccount(){
 			while(industriesListIterator.hasNext()){
 				anIndustry=industriesListIterator.next();
 				int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
+				desiredDemand+=tmpDemand;
 				aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
 				aProductDemand.inform(identity);
 				demandsList.add(aProductDemand);
 			}
+
+		aBankAccount=(BankAccount)bankAccountsList.get(RandomHelper.nextIntFromTo(0,bankAccountsList.size()-1));
+		aBankAccount.setDesiredCredit(wage,desiredDemand);
+
+
+
 
 	}
 	
@@ -290,14 +298,18 @@ public void setupBankAccount(){
 			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
 		}
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
+		desiredDemand=0;
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
 			int tmpDemand=(int)Math.round(Context.costEdu*anIndustry.getProductAttractiveness());
+			desiredDemand+=tmpDemand;
 			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
 			aProductDemand.inform(identity);
 			demandsList.add(aProductDemand);
 		}
 
+		aBankAccount=(BankAccount)bankAccountsList.get(RandomHelper.nextIntFromTo(0,bankAccountsList.size()-1));
+		aBankAccount.setDesiredCredit(wage,desiredDemand);
 
 
 	}
@@ -351,6 +363,25 @@ public void setupBankAccount(){
 
 	}
 	}
+
+	public void adjustConsumptionAccordingToExtendedCredit(){
+		double askedCredit=aBankAccount.getDemandedCredit();
+		double allowedCredit=aBankAccount.getAllowedCredit();
+		double allowedDemand=0;
+			if(allowedCredit>askedCredit){
+				allowedDemand=aBankAccount.getAccount()+wage-aBankAccount.getAllowedCredit();
+				if(allowedDemand<wage){
+					allowedDemand=wage;
+					System.out.println("             CONSUMER CANNOT PAY BACK");
+				}
+			}
+			else{
+				allowedDemand=desiredDemand;
+			}
+//			if(Context.verboseFlag){
+				System.out.println("     Consumer "+identity+" askedCred "+askedCredit+" allow "+allowedCredit+" wage "+wage+" desired Demand "+desiredDemand+" allowed Demand "+allowedDemand);
+//			}
+	}	
 
 	public void sendInitialJobApplication(){
 		if(isStudent){
@@ -506,7 +537,9 @@ public void setupBankAccount(){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			wealth=wealth+aBankAccount.getAccount();
 		}
-System.out.println("     Consumer "+identity+" wealth "+wealth);
+		if(Context.verboseFlag){
+			System.out.println("     Consumer "+identity+" wealth "+wealth);
+		}
 		
 	}
 
