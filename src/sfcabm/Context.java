@@ -15,7 +15,7 @@ import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=false;
-		public static int NumConsumers = 5;
+		public static int NumConsumers = 20;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
 		public static int consumerExitAge=50;
@@ -229,25 +229,31 @@ System.out.println("CONSUMERS STEP CONSUMPTION");
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 			contextAction.execute();
 
-//		if(verboseFlag){
+		if(verboseFlag){
 System.out.println("BANKS EXTEND CONSUMER CREDIT");
-//		}
+		}
 
 			contextAction=contextActionFactory.createActionForIterable(banksList,"setAllowedConsumersCredit",false);
 			contextAction.execute();
 
 	
-//		if(verboseFlag){
+		if(verboseFlag){
 System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
-//		}
+		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"adjustConsumptionAccordingToExtendedCredit",false);
 			contextAction.execute();
 
 
+			officeForStatistics.computeDemand();
+			officeForStatistics.allocateDesiredDemand();
 
 
+			officeForStatistics.matchDemandAndSupply();
 
 			officeForStatistics.computeDemand();
+			officeForStatistics.allocateDemand();
+
+
 
 		if(verboseFlag){
 System.out.println("JETTISONING CURRICULA");

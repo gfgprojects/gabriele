@@ -55,11 +55,15 @@ public class BankAccount{
 		if(demandedCredit>0){
 			demandedCredit=0;
 		}
+		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" wage "+w+" desiredDemand "+dD+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+		}
 	}
 	public void setAllowedCredit(double aC){
 		allowedCredit=aC;
+		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+		}
 	}
 
 }

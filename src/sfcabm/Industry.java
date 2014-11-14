@@ -23,6 +23,15 @@ public class Industry{
 	public void increaseDemand(double dem){
 		demand=demand+dem;
 	}
+	public void allocateDesiredDemand(){
+		if(Context.verboseFlag){
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
+		}
+		for(int i=0;i<theIndustryFirmsList.size();i++){
+			aFirm=theIndustryFirmsList.get(i);
+			aFirm.setDesiredDemand(production,demand);
+		}
+	}
 
 	public void allocateDemand(){
 		if(Context.verboseFlag){
@@ -54,6 +63,9 @@ public class Industry{
 	public double getProduction(){
 		return production;
 	}
+	public double getDemand(){
+		return demand;
+	}
 	public int getAbsoluteRank(){
 		return absoluteRank;
 	}
@@ -68,6 +80,10 @@ public class Industry{
 	}
 	public double getProductAttractiveness(){
 		return productAttractivenesIndicator;
+	}
+
+	public void resetDemand(){
+		demand=0;
 	}
 
 

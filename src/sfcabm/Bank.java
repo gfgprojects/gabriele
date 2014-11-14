@@ -100,9 +100,9 @@ public class Bank {
 				allowedCredit=allowedCredit-allCred;
 			}
 		}
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
-//		}
+		}
 	}
 
 }

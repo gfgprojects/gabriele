@@ -370,17 +370,26 @@ public void setupBankAccount(){
 		double allowedDemand=0;
 			if(allowedCredit>askedCredit){
 				allowedDemand=aBankAccount.getAccount()+wage-aBankAccount.getAllowedCredit();
-				if(allowedDemand<wage){
-					allowedDemand=wage;
+				if(allowedDemand<Context.unemploymentDole){
+					allowedDemand=Context.unemploymentDole;
 					System.out.println("             CONSUMER CANNOT PAY BACK");
 				}
 			}
 			else{
 				allowedDemand=desiredDemand;
 			}
-//			if(Context.verboseFlag){
+			if(Context.verboseFlag){
 				System.out.println("     Consumer "+identity+" askedCred "+askedCredit+" allow "+allowedCredit+" wage "+wage+" desired Demand "+desiredDemand+" allowed Demand "+allowedDemand);
-//			}
+			}
+	for(int i=0;i<demandsList.size();i++){
+		aProductDemand=demandsList.get(i);
+		aProductDemand.adjustDemand(identity,allowedDemand/desiredDemand);
+	}
+	}
+
+	public void adjustConsumtionToMatchDemandAndSupply(int rankPosition, double multiplier){
+		aProductDemand=demandsList.get(rankPosition);
+		aProductDemand.adjustDemand(identity,multiplier);
 	}	
 
 	public void sendInitialJobApplication(){

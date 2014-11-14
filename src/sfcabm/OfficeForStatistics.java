@@ -53,6 +53,7 @@ public class OfficeForStatistics{
 	public void computeVariables(){
 		maximumAbsoluteRankDataSource.reset();
 		minimumAbsoluteRankDataSource.reset();
+		industriesList = new ArrayList<Industry>();
 		try{
 			maximumAbsoluteRank=(double)maximumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("sfcabm.Firm")),0);
 			minimumAbsoluteRank=(double)minimumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("sfcabm.Firm")),0);
@@ -170,6 +171,10 @@ public class OfficeForStatistics{
 
 	public void computeDemand(){
 		aggregateDemand=0;
+		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
+		statAction.execute();
+
+
 		try{
 			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
 		}
@@ -191,13 +196,49 @@ public class OfficeForStatistics{
 
 		}
 
-		if(Context.verboseFlag){
+//		if(Context.verboseFlag){
 			System.out.println("OFFICE FOR STATISTICS: COMPUTE DEMAND ");
-			System.out.println("     Aggregate demand "+aggregateDemand);
-		}
+			industriesListIterator=industriesList.iterator();
+			while(industriesListIterator.hasNext()){
+				anIndustry=industriesListIterator.next();
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
+			}
+			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
+//		}
+	}
+
+	public void allocateDesiredDemand(){
+		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDesiredDemand",false);
+		statAction.execute();
+	}
+
+
+	public void allocateDemand(){
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
 	}
+
+
+	public void matchDemandAndSupply(){
+				double multiplier;
+		if(aggregateDemand>aggregateProduction){
+			for(int i=0;i<industriesList.size();i++){
+				anIndustry=(Industry)industriesList.get(i);
+				multiplier=anIndustry.getProduction()/anIndustry.getDemand();
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
+				for(int j=0;j<consumersList.size();j++){
+					aConsumer=(Consumer)consumersList.get(j);
+					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+				}
+
+			}
+		}
+		else{
+			System.out.println("domanda insuff");
+		}
+	}
+
+
 
 	public void activateLaborMarket(){
 		if(Context.verboseFlag){

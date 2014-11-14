@@ -14,6 +14,13 @@ public class AProductDemand{
 		}
 	}
 
+	public void adjustDemand(int id,double factor){
+		demand=(int)(demand*factor);
+		if(Context.verboseFlag){
+			System.out.println("        consumer "+id+" revised demand of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand+" previously demanded "+(int)(demand/factor));
+		}
+	}
+
 	public int getDemand(){
 		return demand;
 	}

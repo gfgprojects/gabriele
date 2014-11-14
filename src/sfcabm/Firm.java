@@ -25,7 +25,7 @@ public class Firm {
 	int numJobs;
 	double sumOfWorkersProductivity=0;
 	int productAbsoluteRank;
-	int demand;
+	int demand,desiredDemand;
 	double productionCapacityAfterWorkforceAdjustment;
 	public double productionCapital,debt,equity,sumOfBankAccounts;
 	
@@ -361,11 +361,22 @@ public class Firm {
 		public void setProductAbsoluteRank(int pab){
 			productAbsoluteRank=pab;
 		}
+
+
+		public void setDesiredDemand(double industryProduction,double industryDemand){
+			demand=(int)Math.round(production/industryProduction*industryDemand);
+			desiredDemand=demand;
+			if(Context.verboseFlag){
+				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+			}
+		}
+
+
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
-			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand "+demand);
-			}
+//			if(Context.verboseFlag){
+				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+//			}
 		}
 		public void jettisoningCurricula(){
 			applicationList = new ArrayList<Curriculum>();
