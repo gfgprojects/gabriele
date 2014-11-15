@@ -21,6 +21,7 @@ public class Context implements ContextBuilder<Object> {
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
+		public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.1;
 		public static int unemploymentDole=10;
 		public static int costEdu=10;
 		// set the wageSettingRule variable to
