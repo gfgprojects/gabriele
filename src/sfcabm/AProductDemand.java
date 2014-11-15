@@ -1,8 +1,9 @@
 package sfcabm;
 
 public class AProductDemand{
-	int absoluteRank,relativeRank,demand;
-	public AProductDemand(int ar,int rr,int dem){
+	int absoluteRank,relativeRank;
+	double demand;
+	public AProductDemand(int ar,int rr,double dem){
 		absoluteRank=ar;
 		relativeRank=rr;
 		demand=dem;
@@ -15,13 +16,13 @@ public class AProductDemand{
 	}
 
 	public void adjustDemand(int id,double factor){
-		demand=(int)Math.floor(demand*factor);
+		demand=demand*factor;
 		if(Context.verboseFlag){
 			System.out.println("        consumer "+id+" revised demand of product with absolute rank "+absoluteRank+" and relative rank "+relativeRank+" demanded quantity "+demand+" previously demanded "+(int)(demand/factor));
 		}
 	}
 
-	public int getDemand(){
+	public double getDemand(){
 		return demand;
 	}
 

@@ -234,7 +234,7 @@ public class OfficeForStatistics{
 				excessDemandToAllocate+= anIndustry.getDemand()-anIndustry.getProduction();
 			}
 			else{
-				multiplier=anIndustry.getProduction()/(anIndustry.getDemand()+excessDemandToAllocate);
+				multiplier=(anIndustry.getDemand()+excessDemandToAllocate)/anIndustry.getDemand();
 				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
 				for(int j=0;j<consumersList.size();j++){
 					aConsumer=(Consumer)consumersList.get(j);
