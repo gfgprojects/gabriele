@@ -220,7 +220,37 @@ public class OfficeForStatistics{
 
 
 	public void matchDemandAndSupply(){
-				double multiplier;
+		double multiplier;
+		double excessDemandToAllocate=0;
+		for(int i=industriesList.size()-1;i>=0;i--){
+			anIndustry=(Industry)industriesList.get(i);
+			if((excessDemandToAllocate+anIndustry.getDemand())>anIndustry.getProduction()){
+				multiplier=anIndustry.getProduction()/anIndustry.getDemand();
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
+				for(int j=0;j<consumersList.size();j++){
+					aConsumer=(Consumer)consumersList.get(j);
+					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+				}
+				excessDemandToAllocate+= anIndustry.getDemand()-anIndustry.getProduction();
+			}
+			else{
+				multiplier=anIndustry.getProduction()/(anIndustry.getDemand()+excessDemandToAllocate);
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
+				for(int j=0;j<consumersList.size();j++){
+					aConsumer=(Consumer)consumersList.get(j);
+					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+				}
+				excessDemandToAllocate=0;
+			}
+		}
+
+
+
+
+
+
+/*
+
 		if(aggregateDemand>aggregateProduction){
 			for(int i=0;i<industriesList.size();i++){
 				anIndustry=(Industry)industriesList.get(i);
@@ -236,6 +266,7 @@ public class OfficeForStatistics{
 		else{
 			System.out.println("domanda insuff");
 		}
+*/
 	}
 
 

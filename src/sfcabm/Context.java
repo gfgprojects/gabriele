@@ -15,7 +15,7 @@ import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=false;
-		public static int NumConsumers = 20;
+		public static int NumConsumers = 50;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
 		public static int consumerExitAge=50;
