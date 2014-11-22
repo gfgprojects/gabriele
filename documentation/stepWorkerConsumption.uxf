@@ -30,7 +30,7 @@
     <type>com.umlet.element.custom.State</type>
     <coordinates>
       <x>520</x>
-      <y>100</y>
+      <y>90</y>
       <w>180</w>
       <h>120</h>
     </coordinates>
@@ -49,7 +49,7 @@ BankAccount
     <type>com.umlet.element.custom.State</type>
     <coordinates>
       <x>120</x>
-      <y>110</y>
+      <y>100</y>
       <w>280</w>
       <h>120</h>
     </coordinates>
@@ -68,9 +68,9 @@ AProductDemand (max relative rank)</panel_attributes>
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
       <x>50</x>
-      <y>280</y>
+      <y>270</y>
       <w>869</w>
-      <h>785</h>
+      <h>1001</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepWorkerConsumption()
 Start
@@ -78,9 +78,9 @@ empty demandsList
 desiredDemand=0
 While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext()]
 
-		preference
+		preferences
 
-		wage
+		income
 
 		Industry.productAttractiveness
 
@@ -88,8 +88,12 @@ While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext(
 
 	determine consumption for this product type\create a new AproductDemand having the computed demand\add the productDemand to the demandsList
 	increase desiredDemand\by this product desiredDemand
-select a BankAccount randomly
-set the desired credit in\the selected BankAccount
+If
+	[if\credit is not needed\to obtain the desired\demand]
+
+	[if\credit is needed\to obtain the desired\demand]
+	select a BankAccount randomly
+	set the desired credit in\the selected BankAccount
 End
 </panel_attributes>
     <additional_attributes/>
@@ -98,7 +102,7 @@ End
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
       <x>20</x>
-      <y>60</y>
+      <y>50</y>
       <w>280</w>
       <h>30</h>
     </coordinates>
@@ -109,7 +113,7 @@ End
     <type>com.umlet.element.custom.SynchBarHorizontal</type>
     <coordinates>
       <x>40</x>
-      <y>250</y>
+      <y>240</y>
       <w>810</w>
       <h>20</h>
     </coordinates>
@@ -120,7 +124,7 @@ End
     <type>com.umlet.element.custom.SynchBarHorizontal</type>
     <coordinates>
       <x>40</x>
-      <y>80</y>
+      <y>70</y>
       <w>810</w>
       <h>20</h>
     </coordinates>
@@ -131,7 +135,7 @@ End
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
       <x>20</x>
-      <y>230</y>
+      <y>220</y>
       <w>280</w>
       <h>30</h>
     </coordinates>
@@ -142,7 +146,7 @@ End
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
       <x>330</x>
-      <y>10</y>
+      <y>0</y>
       <w>280</w>
       <h>30</h>
     </coordinates>

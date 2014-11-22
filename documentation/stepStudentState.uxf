@@ -5,24 +5,24 @@
     <coordinates>
       <x>20</x>
       <y>0</y>
-      <w>683</w>
-      <h>831</h>
+      <w>710</w>
+      <h>847</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepStudentState()
 Start
 If
-	[isStudent=false]
+	[if isStudent=false]
 
-	[isStudent=true]
+	[if isStudent=true]
 	If
-		[success]
+		[if success]
 		increase\number of\successful\years of\education
 
-		[failure]
+		[if failure]
 		increase\number of\failed\years of\education
 	EndIf
 	If
-		[failed years of education &gt;2\or\successful years of education &gt; 21]
+		[if\failed years of education &gt;2\or\successful years of education &gt; 21]
 		isStudent=false\set degree\set productivity
 
 		[else]
