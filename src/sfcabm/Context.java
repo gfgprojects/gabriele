@@ -212,7 +212,7 @@ System.out.println("CHECK BALANCE SHEET CONSISTENCY");
 System.out.println("END OF INITIAL SETUP");
 System.out.println("==========================================");
 System.out.println("START OF ITERATION CYCLE");
-System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES");
+System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES (PRODUCT DIFFUSION INDICATOR, PRODUCTIVITIES ...");
 		}
 
 			officeForStatistics.computeVariables();

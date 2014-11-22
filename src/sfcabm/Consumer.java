@@ -14,7 +14,6 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.engine.schedule.ScheduledMethod;
 //import repast.simphony.context.Context;
 import repast.simphony.util.collections.IndexedIterable;
-
 public class Consumer {
 	int identity,age;
 	boolean isStudent;

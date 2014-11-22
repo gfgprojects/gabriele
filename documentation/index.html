@@ -1,0 +1,145 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY LANG="it-IT">
+
+<h1>Main loop</h1>
+
+<table border=1>
+<tr>
+	<td><b>Office for statistics</b>:</td> 
+	<td><a href="computeVariables.html">conputeVariables</a></td>
+	<td> (workers productivities, product diffusion indicator,... )</td>
+</tr>
+<tr>
+	<td><b>Firms</b>: </td>
+	<td><a href="setWorkersWage.html"> setWorkersWage</a></td>
+	<td>Firms pay wage to workers </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="stepWorkerConsumption.html"> stepConsumption</a></td>
+	<td> compute the desired consumption. Consumers with a negative bank account or those with a positive bank account but who want to consume more than their bank account set the desired credit accordingly.</td>
+</tr>
+<tr>
+	<td><b>Bank</b>:</td> 
+	<td><a href="setAllowedConsumersCredit.html"> set maximum credit consumers can have</a></td>
+	<td> set maximum credit consumers can have </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="adjustConsumptionAccordingToExtendedCredit.html">adjust desired consumption according to extended credit</a></td>
+	<td>Those consumers who are credit constrained revise their desired consumption. Those who have negative desired consumption activate the <b>bailout procedure</b></td>
+</tr>
+<tr>
+	<td><b>Office for statistics</b>:</td> 
+	<td><a href="computeDemand.html">computeDemand</a></td>
+	<td>Compute the <b>desired demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="allocateDesiredDemand.html">allocateDesiredDemand</a></td>
+	<td>Each industry allocates <b>desired demand</b> to firms. Firms will use this figure to set production inputs for the next period</td>
+</tr>
+<tr>
+	<td> </td>
+	<td><a href="matchDemandAndSupply.html">match Demand And Supply</a> </td>
+	<td>This mimic the good market functioning. Consumers who cannot find the desired product redirect their demand to other type of product. The desired demand of each consumer is thus revised and becomes <b>effective demand</b>.</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="computeDemand.html">computeDemand</a></td>
+	<td>Compute the <b>effective demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="allocateDemand.html">allocateDemand</a></td>
+	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to compute profits.</td>
+</tr>
+<tr>
+	<td><b>(TBD) Firms</b> </td>
+	<td><a href="setNewBalanceSheetSituation.html">setNewBalanceSheetSituation</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>OfficeForLabor</b> </td>
+	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="laborForceDownwardAdjustment.html">laborForceDownwardAdjustment</a> </td>
+	<td>Account for retired workers and fire if needed. Fired workers set the isWorking flag to false. </td>
+</tr>
+<tr>
+	<td><b>Consumers </b> </td>
+	<td><a href="sendJobApplications.html">sendJobApplications</a> </td>
+	<td>Unemployed consumers (those with isWorking=flalse) send curricula to firms and to office for labor </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="laborForceUpwardAdjustment.html">laborForceUpwardAdjustment</a> </td>
+	<td>The execution of this action depends on the model parametrization. If active, firms hire new workers directly according to their needs. Some firms could not find all the desired workers and some workers could not find a job. Unsatified position could be fulfilled if the following action is active in the simulation parametrization.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="activateLaborMarket.html">activate Office For Labor</a> </td>
+	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
+</tr>
+<tr>
+	<td><b>TBD Firms</b> </td>
+	<td><a href="stepDesiredProductionCapital">setDesiredProductionCapital</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>TBD Banks </b> </td>
+	<td><a href="setAllowedFirmsCredit">set maximum credit to firms to adjust production capital</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>TBD Firms </b> </td>
+	<td><a href="stepProductionCapital">setProductionCapital</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>(TBD) Firms </b> </td>
+	<td><a href="confirmHiredWorkers">confirmNewHiring</a> </td>
+	<td>(TBD) If credit is not enought, some worker cannot be hired </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performConsumersTurnover.html">performConsumersTurnover</a> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performFirmsTurnover.html">performFirmsTurnover</a> </td>
+	<td> </td>
+</tr>
+
+</table>
+
+</BODY>
+
+<tr>
+	<td><b> </b> </td>
+	<td><a href=""></a> </td>
+	<td> </td>
+</tr>
+
+
+
+<tr>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+<a href=""></a>
+
