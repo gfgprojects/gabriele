@@ -225,6 +225,13 @@ System.out.println("FIRMS: SET WAGE");
 			contextAction.execute();
 
 		if(verboseFlag){
+System.out.println("STUDENTS STEP STATE");
+		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepStudentState",false);
+			contextAction.execute();
+
+
+		if(verboseFlag){
 System.out.println("CONSUMERS STEP CONSUMPTION");
 		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"stepConsumption",false);

@@ -180,17 +180,19 @@ public void setupBankAccount(){
 
 
 //	@ScheduledMethod(start = 1, interval = 1,shuffle=false,priority=2.0)
-	public void stepState(){
+
+/*
+public void stepState(){
 	    if(isStudent){
 	        stepStudentState();
 	    }
 	    else{
 	        stepWorkerState();
 	    }
-	    
 	//    disposableIncome=workerWage+saving-iL*workerLoan-iL*studentLoan;
 	    //-taxes
 	}
+*/	    
 
 	public void stepConsumption(){
 	    if(isStudent){
@@ -248,7 +250,8 @@ public void setupBankAccount(){
 		}
 	}
 
-	private void stepWorkerState() {
+/*
+public void stepWorkerState() {
 		if(isWorking){
 			if(Context.verboseFlag){
 				System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
@@ -280,7 +283,7 @@ public void setupBankAccount(){
 		}
 		
 	}
-
+*/
 
 	private void stepStudentConsumption() {
 		if(Context.verboseFlag){
@@ -313,27 +316,27 @@ public void setupBankAccount(){
 
 	}
 	
-	private void stepStudentState() {
-		
-	//se questo metodo viene eseguito significa che il soggetto ha deciso di studiare
-	//se ho un successo nello studio
-		if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
-			numberOfSuccessfulPeriodsOfEducation++;
-			numberOfConsecutiveFailedPeriodsOfEducation=0;
-	  }
-	  else{
-		  numberOfFailedPeriodsOfEducation++;
-		  numberOfConsecutiveFailedPeriodsOfEducation++;
-	  }
+	public void stepStudentState() {
+		if(isStudent){	
+			//se questo metodo viene eseguito significa che il soggetto ha deciso di studiare
+			//se ho un successo nello studio
+			if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
+				numberOfSuccessfulPeriodsOfEducation++;
+				numberOfConsecutiveFailedPeriodsOfEducation=0;
+			}
+			else{
+				numberOfFailedPeriodsOfEducation++;
+				numberOfConsecutiveFailedPeriodsOfEducation++;
+			}
 
-	//ora decide se continuare diventare worker
-		//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
-//	  if(numberOfConsecutiveFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
-	  if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
-		  isStudent=false;
-		  //calcolare qui titolo di studio e produttivit da lavoratore
-//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
-	  }
+			//ora decide se continuare diventare worker
+			//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
+			//	  if(numberOfConsecutiveFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
+			if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
+				isStudent=false;
+				//calcolare qui titolo di studio e produttivit da lavoratore
+				//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
+			}
 			degree=6;
 			if(numberOfSuccessfulPeriodsOfEducation<21){
 				degree=5;
@@ -355,18 +358,20 @@ public void setupBankAccount(){
 			} 
 			productivity=abilityStudent+(numberOfSuccessfulPeriodsOfEducation-1)*0.5/21;
 
-		
-	if(Context.verboseFlag){
-		System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity);
-		//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
-	}
-	}
+			if(Context.verboseFlag){
+				System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity);
+				//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
-	public void adjustConsumptionAccordingToExtendedCredit(){
-		double askedCredit=aBankAccount.getDemandedCredit();
-		double allowedCredit=aBankAccount.getAllowedCredit();
-		double allowedDemand=0;
+			}
+
+			}
+		}
+
+		public void adjustConsumptionAccordingToExtendedCredit(){
+			double askedCredit=aBankAccount.getDemandedCredit();
+			double allowedCredit=aBankAccount.getAllowedCredit();
+			double allowedDemand=0;
 			if(allowedCredit>askedCredit){
 				allowedDemand=aBankAccount.getAccount()+wage-aBankAccount.getAllowedCredit();
 				if(allowedDemand<Context.unemploymentDole){
@@ -380,232 +385,232 @@ public void setupBankAccount(){
 			if(Context.verboseFlag){
 				System.out.println("     Consumer "+identity+" askedCred "+askedCredit+" allow "+allowedCredit+" wage "+wage+" desired Demand "+desiredDemand+" allowed Demand "+allowedDemand);
 			}
-	for(int i=0;i<demandsList.size();i++){
-		aProductDemand=demandsList.get(i);
-		aProductDemand.adjustDemand(identity,allowedDemand/desiredDemand);
-	}
-	}
-
-	public void adjustConsumtionToMatchDemandAndSupply(int rankPosition, double multiplier){
-		aProductDemand=demandsList.get(rankPosition);
-		aProductDemand.adjustDemand(identity,multiplier);
-	}	
-
-	public void sendInitialJobApplication(){
-		if(isStudent){
-			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+			for(int i=0;i<demandsList.size();i++){
+				aProductDemand=demandsList.get(i);
+				aProductDemand.adjustDemand(identity,allowedDemand/desiredDemand);
 			}
 		}
-		else{
-			if(RandomHelper.nextDouble()<0.5){
-			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
-			}
+
+		public void adjustConsumtionToMatchDemandAndSupply(int rankPosition, double multiplier){
+			aProductDemand=demandsList.get(rankPosition);
+			aProductDemand.adjustDemand(identity,multiplier);
+		}	
+
+		public void sendInitialJobApplication(){
+			if(isStudent){
+				if(Context.verboseFlag){
+					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+				}
 			}
 			else{
-			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
-			}
-			myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
-			try{
-				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
-			}
-			catch(ClassNotFoundException e){
-				System.out.println("Class not found");
-			}
+				if(RandomHelper.nextDouble()<0.5){
+					if(Context.verboseFlag){
+						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
+					}
+				}
+				else{
+					if(Context.verboseFlag){
+						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+					}
+					myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
+					try{
+						firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+					}
+					catch(ClassNotFoundException e){
+						System.out.println("Class not found");
+					}
 
-			aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
-			if(Context.verboseFlag){
-				System.out.println("     sending application to firm "+aFirm.getID());
+					aFirm=(Firm)firmsList.get(RandomHelper.nextIntFromTo(0,(firmsList.size()-1)));
+					if(Context.verboseFlag){
+						System.out.println("     sending application to firm "+aFirm.getID());
+					}
+					aFirm.receiveCurriculum(myCurriculum);
+				}
+
 			}
-			aFirm.receiveCurriculum(myCurriculum);
 		}
 
-		}
-	}
-
-	public void sendJobApplications(){
-		if(isStudent){
-			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I am a student");
-			}
-		}
-		else{
-			if(isWorking){
+		public void sendJobApplications(){
+			if(isStudent){
+				if(Context.verboseFlag){
+					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I am a student");
+				}
 			}
 			else{
+				if(isWorking){
+				}
+				else{
+					if(Context.verboseFlag){
+						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+					}
+					myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
+					try{
+						firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+					}
+					catch(ClassNotFoundException e){
+						System.out.println("Class not found");
+					}
+
+					ArrayList<Integer> firmsPositions=new ArrayList<Integer>();
+					int numberOfApplicationsToSend=Math.min(Context.numberOfJobApplicationAnUneployedSends,firmsList.size());
+					switch(Context.firmsWorkersMatching){
+						case 0:
+							for(int i=0;i<firmsList.size();i++){
+								firmsPositions.add(new Integer(i));
+							}
+							for(int i=0;i<numberOfApplicationsToSend;i++){
+								int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+
+								aFirm=(Firm)firmsList.get(position);
+								if(Context.verboseFlag){
+									System.out.println("       sending application to firm "+aFirm.getID());
+								}
+								aFirm.receiveCurriculum(myCurriculum);
+							}
+							break;
+						case 1: 
+							for(int i=0;i<firmsList.size();i++){
+								firmsPositions.add(new Integer(i));
+							}
+							for(int i=0;i<numberOfApplicationsToSend;i++){
+								int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+
+								aFirm=(Firm)firmsList.get(position);
+								if(Context.verboseFlag){
+									System.out.println("  sending application to firm "+aFirm.getID());
+								}
+								aFirm.receiveCurriculum(myCurriculum);
+							}
+							if(Context.verboseFlag){
+								System.out.println("  sending application to office for labor ");
+							}
+							myLaborMarket.receiveCurriculum(myCurriculum);
+							break;
+						case 2:
+							if(Context.verboseFlag){
+								System.out.println("  sending application to office for labor ");
+							}
+							myLaborMarket.receiveCurriculum(myCurriculum);
+							break;
+						default: System.out.println("Unknown workers firms matching mechanism");
+							 break;
+					}
+				}
+
+			}
+		}
+
+
+
+
+		public void jobObtained(Firm employer){
+			isWorking=true;
+			myEmployer=employer;
+			//		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
+			int employerID=myEmployer.getID();
 			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
+				System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
 			}
-			myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
-			try{
-				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+		}
+		public void setWage(double w){
+			wage=w;
+			if(Context.verboseFlag){
+				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
 			}
-			catch(ClassNotFoundException e){
-				System.out.println("Class not found");
+		}
+		public void receiveRetirementNew(){
+			isWorking=false;
+			if(Context.verboseFlag){
+				System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
 			}
-			
-			ArrayList<Integer> firmsPositions=new ArrayList<Integer>();
-			int numberOfApplicationsToSend=Math.min(Context.numberOfJobApplicationAnUneployedSends,firmsList.size());
-			switch(Context.firmsWorkersMatching){
-				case 0:
-					for(int i=0;i<firmsList.size();i++){
-						firmsPositions.add(new Integer(i));
-					}
-					for(int i=0;i<numberOfApplicationsToSend;i++){
-						int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+			myEmployer=null;
+		}
 
-						aFirm=(Firm)firmsList.get(position);
-						if(Context.verboseFlag){
-							System.out.println("       sending application to firm "+aFirm.getID());
-						}
-						aFirm.receiveCurriculum(myCurriculum);
-					}
-					break;
-				case 1: 
-					for(int i=0;i<firmsList.size();i++){
-						firmsPositions.add(new Integer(i));
-					}
-					for(int i=0;i<numberOfApplicationsToSend;i++){
-						int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+		public void receiveFiredNew(){
+			isWorking=false;
+			if(Context.verboseFlag){
+				System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
+			}
+			myEmployer=null;
+		}
 
-						aFirm=(Firm)firmsList.get(position);
-						if(Context.verboseFlag){
-							System.out.println("  sending application to firm "+aFirm.getID());
-						}
-						aFirm.receiveCurriculum(myCurriculum);
-					}
-					if(Context.verboseFlag){
-						System.out.println("  sending application to office for labor ");
-					}
-					myLaborMarket.receiveCurriculum(myCurriculum);
-					break;
-				case 2:
-					if(Context.verboseFlag){
-						System.out.println("  sending application to office for labor ");
-					}
-					myLaborMarket.receiveCurriculum(myCurriculum);
-					break;
-				default: System.out.println("Unknown workers firms matching mechanism");
-					 break;
+		public void receiveHiredNew(Firm employer){
+			isWorking=true;
+			myEmployer=employer;
+			if(Context.verboseFlag){
+				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
 			}
 		}
 
-		}
-	}
-
-
-
-
-	public void jobObtained(Firm employer){
-		isWorking=true;
-		myEmployer=employer;
-//		wage=Context.parameterOfProductivityInProductionFuncion*productivity;
-		int employerID=myEmployer.getID();
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" productivity "+productivity+" ... Wow, I got a job from firm "+employerID+" wage "+wage);
-		}
-	}
-	public void setWage(double w){
-		wage=w;
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
-		}
-	}
-	public void receiveRetirementNew(){
-		isWorking=false;
-		if(Context.verboseFlag){
-			System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
-		}
-		myEmployer=null;
-	}
-	
-	public void receiveFiredNew(){
-		isWorking=false;
-		if(Context.verboseFlag){
-			System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
-		}
-		myEmployer=null;
-	}
-	
-	public void receiveHiredNew(Firm employer){
-		isWorking=true;
-		myEmployer=employer;
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" wow firm "+myEmployer.getID()+" hired me ");
-		}
-	}
-
-	public void computeWealth(){
-		wealth=0;
-		for(int i=0;i<bankAccountsList.size();i++){
-			aBankAccount=(BankAccount)bankAccountsList.get(i);
-			wealth=wealth+aBankAccount.getAccount();
-		}
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" wealth "+wealth);
-		}
-		
-	}
-
-
-	public double getStudentSpending(){
-		return studentSpending;
-	}
-	
-	public double getWealth(){
-		return wealth;
-	}
-	
-	public double getAbilityStudent(){
-		return abilityStudent;
-	}
-	
-	public double getSumAbility(){
-		return sumAbilityStudent;
-	}
-	
-	public double getStudentLoan(){
-		return studentLoan;
-	}
-	public int getIdentity(){
-		return identity;
-	}
-	public double getProductivity(){
-		return productivity;
-	}
-	public ArrayList getOrders(){
-		return demandsList;
-	
-	}
-	public int getDegree(){
-		return degree;
-	}
-	public int getAge(){
-		return age;
-	}
-	public boolean getIsWorkingFlag(){
-		return isWorking;
-	}
-
-
-	public void showInfoOnIndustries(){
-System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am ready to decide my consumption using the following info");
-		if(Context.verboseFlag){
-			industriesListIterator=OfficeForStatistics.industriesList.iterator();
-
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-				System.out.println("absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
-
+		public void computeWealth(){
+			wealth=0;
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				wealth=wealth+aBankAccount.getAccount();
+			}
+			if(Context.verboseFlag){
+				System.out.println("     Consumer "+identity+" wealth "+wealth);
 			}
 
 		}
 
 
-	}
+		public double getStudentSpending(){
+			return studentSpending;
+		}
+
+		public double getWealth(){
+			return wealth;
+		}
+
+		public double getAbilityStudent(){
+			return abilityStudent;
+		}
+
+		public double getSumAbility(){
+			return sumAbilityStudent;
+		}
+
+		public double getStudentLoan(){
+			return studentLoan;
+		}
+		public int getIdentity(){
+			return identity;
+		}
+		public double getProductivity(){
+			return productivity;
+		}
+		public ArrayList getOrders(){
+			return demandsList;
+
+		}
+		public int getDegree(){
+			return degree;
+		}
+		public int getAge(){
+			return age;
+		}
+		public boolean getIsWorkingFlag(){
+			return isWorking;
+		}
+
+
+		public void showInfoOnIndustries(){
+			System.out.println("Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am ready to decide my consumption using the following info");
+			if(Context.verboseFlag){
+				industriesListIterator=OfficeForStatistics.industriesList.iterator();
+
+				while(industriesListIterator.hasNext()){
+					anIndustry=industriesListIterator.next();
+					System.out.println("absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
+
+				}
+
+			}
+
+
+		}
 	
 }
