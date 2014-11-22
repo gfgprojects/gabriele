@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>683</w>
+      <h>831</h>
+    </coordinates>
+    <panel_attributes>title:Consumer.stepStudentState()
+Start
+If
+	[isStudent=false]
+
+	[isStudent=true]
+	If
+		[success]
+		increase\number of\successful\years of\education
+
+		[failure]
+		increase\number of\failed\years of\education
+	EndIf
+	If
+		[failed years of education &gt;2\or\successful years of education &gt; 21]
+		isStudent=false\set degree\set productivity
+
+		[else]
+	EndIf
+
+
+EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
