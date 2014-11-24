@@ -34,6 +34,8 @@ public class BankAccount{
 		}
 
 	}
+
+
 	public double getDemandedCredit(){
 		return demandedCredit;
 	}

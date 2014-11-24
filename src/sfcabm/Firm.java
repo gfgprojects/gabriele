@@ -195,8 +195,37 @@ public class Firm {
 
 	public void setDesiredProductionCapital(){
 		desiredProductionCapital=Math.round(desiredDemand*productionCapital/demand);
+		double financialResourcesInBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size()-1;i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			if(aBankAccount.getAccount()>0){
+				financialResourcesInBankAccounts+=aBankAccount.getAccount();
+				aBankAccount.setAccount(0);
+			}
+		}
+//identify the bank account with the best position
+		int positionOfBestBankAccount=0;
+		double creditToAsk;
+		aBankAccount=(BankAccount)bankAccountsList.get(0);
+		double bestAccount=aBankAccount.getAccount();
+		for(int j=1;j<bankAccountsList.size()-1;j++){
+			aBankAccount=(BankAccount)bankAccountsList.get(j);
+			if(aBankAccount.getAccount()>bestAccount){
+				positionOfBestBankAccount=j;
+			}
+		}
+
+		creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+
+		if(creditToAsk>0){
+			aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
+			aBankAccount.setDesiredCredit(0.0,creditToAsk);
+		}
+		else{
+			creditToAsk=0;
+		}
 //		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital);
+			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" asked credit "+creditToAsk);
 //		}
 	
 
