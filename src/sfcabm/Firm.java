@@ -27,8 +27,8 @@ public class Firm {
 	int productAbsoluteRank;
 	int demand,desiredDemand;
 	double productionCapacityAfterWorkforceAdjustment;
-	public double productionCapital,debt,equity,sumOfBankAccounts;
-	
+	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
+	double cashOnHand;	
 		/*
 	   public double desiredOutput;
 	   public double expectedSales;
@@ -177,6 +177,31 @@ public class Firm {
 
 	}
 
+	public void makeProduction(){
+			for(int i=0;i<workersList.size();i++){
+				aConsumer=workersList.get(i);
+				sumOfWorkersProductivity+=aConsumer.getProductivity();
+			}
+
+		int workersPotentialProduction=(int)Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
+		int capitalPotentialProduction=(int)Math.round(productionCapital/Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion*Context.parameterOfProductivityInProductionFuncion);
+		production=Math.min(workersPotentialProduction,capitalPotentialProduction);
+//		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" workers Potential Production "+workersPotentialProduction+" capital potential Production "+capitalPotentialProduction+" production "+production);
+//		}
+	
+
+	}
+
+	public void setDesiredProductionCapital(){
+		desiredProductionCapital=Math.round(desiredDemand*productionCapital/demand);
+//		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital);
+//		}
+	
+
+	}
+
 	public void laborForceDownwardAdjustment(){
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" downward labor force adjustment ");
@@ -258,7 +283,17 @@ public class Firm {
 				newWorker.receiveHiredNew(this);
 	}
 
-
+	public void computeEconomicResultAndUpdateBalanceSheetItems(){
+		firmWageSum=0;
+		for(int i =0; i<workersList.size();i++){
+			aConsumer=(Consumer)workersList.get(i);
+			firmWageSum+=aConsumer.getWage();
+		}
+		cashOnHand=demand-firmWageSum;
+//		if(Context.verboseFlag){
+			System.out.println("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand);
+//		}
+	}
 
 
 		//compute average productivity for each degree of education
@@ -273,24 +308,24 @@ public class Firm {
 				totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
 				averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
 			}
-		if(Context.verboseFlag){
-			for(int j=0;j<7;j++){
-				System.out.println("     Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
+			if(Context.verboseFlag){
+				for(int j=0;j<7;j++){
+					System.out.println("     Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
+				}
 			}
-		}
 		}
 
 		public void setWorkersWage(){
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
 				int degree=aConsumer.getDegree();
-				double aWage;
+				//double aWage;
 				switch(Context.wageSettingRule){
-					case 0: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+					case 0: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
 						break;
-					case 1: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+					case 1: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
 						break;
-					case 2: aConsumer.setWage(Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+					case 2: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
 						break;
 					default: System.out.println("Unknown wage setting rule");
 						 break;
@@ -346,17 +381,17 @@ public class Firm {
 		 }
 
 */
-	public void computeSumOfBankAccounts(){
-		sumOfBankAccounts=0;
-		for(int i=0;i<bankAccountsList.size();i++){
-			aBankAccount=(BankAccount)bankAccountsList.get(i);
-			sumOfBankAccounts+=aBankAccount.getAccount();
+		public void computeSumOfBankAccounts(){
+			sumOfBankAccounts=0;
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				sumOfBankAccounts+=aBankAccount.getAccount();
+			}
+			if(Context.verboseFlag){
+				System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
+			}
+
 		}
-		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
-		}
-		
-	}
 
 		public void setProductAbsoluteRank(int pab){
 			productAbsoluteRank=pab;
@@ -374,9 +409,9 @@ public class Firm {
 
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
-//			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
-//			}
+			//			if(Context.verboseFlag){
+			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+			//			}
 		}
 		public void jettisoningCurricula(){
 			applicationList = new ArrayList<Curriculum>();
@@ -384,8 +419,12 @@ public class Firm {
 				System.out.println("     Firm "+identity+" jettisoning curricula ");
 			}
 		}
-
-
+/*
+		public void setDesiredProductionCapital(){
+			desiredProductionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+			System.out.println("     Firm "+identity+" desired production capital "+desiredProductionCapital);
+		}
+*/
 		public int getProductAbsoluteRank(){
 			return productAbsoluteRank;
 		}

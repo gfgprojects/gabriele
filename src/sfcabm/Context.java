@@ -22,6 +22,7 @@ public class Context implements ContextBuilder<Object> {
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 		public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.1;
+		public static double laborMarketStateToSetWage=0.5;
 		public static int unemploymentDole=10;
 		public static int costEdu=10;
 		// set the wageSettingRule variable to
@@ -217,6 +218,13 @@ System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES (PRODUCT DIFFUSION 
 
 			officeForStatistics.computeVariables();
 
+//		if(verboseFlag){
+System.out.println("FIRMS: SET WAGE");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"makeProduction",false);
+			contextAction.execute();
+
+
 	
 		if(verboseFlag){
 System.out.println("FIRMS: SET WAGE");
@@ -261,6 +269,21 @@ System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 			officeForStatistics.computeDemand();
 			officeForStatistics.allocateDemand();
 
+	
+//			if(verboseFlag){
+System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"computeEconomicResultAndUpdateBalanceSheetItems",false);
+			contextAction.execute();
+
+//if(verboseFlag){
+System.out.println("FIRMS COMPUTE DESIRED CAPITAL");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredProductionCapital",false);
+			contextAction.execute();
+
+
+
 
 
 		if(verboseFlag){
@@ -289,7 +312,15 @@ System.out.println("DIRECT HIRING");
 			contextAction.execute();
 
 			officeForStatistics.activateLaborMarket();
-	
+
+/*
+			if(verboseFlag){
+System.out.println("SET DESIRED CAPITAL");
+		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredProductionCapital",false);
+			contextAction.execute();
+*/
+
 			officeForStatistics.performConsumersTurnover();
 			officeForStatistics.performFirmsTurnover();
 

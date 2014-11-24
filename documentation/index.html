@@ -13,18 +13,23 @@
 </tr>
 <tr>
 	<td><b>Firms</b>: </td>
+	<td><a href="makeProduction.html"> makeProduction</a></td>
+	<td>Firms make production. </td>
+</tr>
+<tr>
+	<td><b>Firms</b>: </td>
 	<td><a href="setWorkersWage.html"> setWorkersWage</a></td>
-	<td>Firms pay wage to workers. Productivities computed in the previous step ca be used to set the wage. </td>
+	<td>Firms pay wage to workers. Productivities computed in the previous step can be used to set the wage. </td>
 </tr>
 <tr>
 	<td><b>Consumers</b>: </td>
 	<td><a href="stepStudentState.html"> stepStudentState</a></td>
-	<td> compute the desired consumption. Consumers with a negative bank account or those with a positive bank account but who want to consume more than their bank account set the desired credit accordingly.</td>
+	<td> studens evolve their position. </td>
 </tr>
 <tr>
 	<td><b>Consumers</b>: </td>
 	<td><a href="stepWorkerConsumption.html"> stepConsumption</a></td>
-	<td> studens evolve their position.</td>
+	<td>compute the desired consumption. Consumers with a negative bank account or those with a positive bank account but who want to consume more than their bank account set the desired credit accordingly.</td>
 </tr>
 <tr>
 	<td><b>Bank</b>:</td> 
@@ -59,11 +64,11 @@
 <tr>
 	<td></td> 
 	<td><a href="allocateDemand.html">allocateDemand</a></td>
-	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to compute profits.</td>
+	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to compute the economic result.</td>
 </tr>
 <tr>
 	<td><b>(TBD) Firms</b> </td>
-	<td><a href="setNewBalanceSheetSituation.html">setNewBalanceSheetSituation</a> </td>
+	<td><a href="computeEconomicResultAndUpdateBalanceSheetItems.html">computeEconomicResultAndUpdateBalanceSheetItems</a> </td>
 	<td>(TBD) </td>
 </tr>
 <tr>
@@ -74,6 +79,16 @@
 <tr>
 	<td><b>(TBD) Banks</b> </td>
 	<td><a href="setBalanceSheetStrategy.html">setBalanceSheetStrategy</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>TBD Firms</b> </td>
+	<td><a href="stepDesiredProductionCapital">setDesiredProductionCapital</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>TBD Banks </b> </td>
+	<td><a href="setAllowedFirmsCredit">set maximum credit to firms to adjust production capital</a> </td>
 	<td>(TBD) </td>
 </tr>
 <tr>
@@ -107,19 +122,9 @@
 	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
 </tr>
 <tr>
-	<td><b>TBD Firms</b> </td>
-	<td><a href="stepDesiredProductionCapital">setDesiredProductionCapital</a> </td>
-	<td>(TBD) </td>
-</tr>
-<tr>
-	<td><b>TBD Banks </b> </td>
-	<td><a href="setAllowedFirmsCredit">set maximum credit to firms to adjust production capital</a> </td>
-	<td>(TBD) </td>
-</tr>
-<tr>
 	<td><b>TBD Firms </b> </td>
 	<td><a href="stepProductionCapital">setProductionCapital</a> </td>
-	<td>(TBD) </td>
+	<td>(TBD) if workers are not available, do not borrow all the allowed credit.</td>
 </tr>
 <tr>
 	<td><b>(TBD) Firms </b> </td>

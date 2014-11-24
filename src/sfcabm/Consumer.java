@@ -595,6 +595,9 @@ public void stepWorkerState() {
 		public boolean getIsWorkingFlag(){
 			return isWorking;
 		}
+		public double getWage(){
+			return wage;
+		}
 
 
 		public void showInfoOnIndustries(){
