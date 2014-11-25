@@ -95,7 +95,30 @@ public class Bank {
 			}
 			else{
 				double demCred=aBankAccount.getDemandedCredit();
-				double allCred=demCred*1;
+				double allCred=demCred*1.0;
+				aBankAccount.setAllowedCredit(allCred);
+				allowedCredit=allowedCredit-allCred;
+			}
+		}
+		if(Context.verboseFlag){
+		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
+		}
+	}
+	public void setAllowedFirmsCredit(){
+		demandedCredit=0;
+		allowedCredit=0;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			demandedCredit=demandedCredit-aBankAccount.getDemandedCredit();
+			if(RandomHelper.nextDouble()>0.5){
+				double demCred=aBankAccount.getDemandedCredit();
+				double allCred=demCred*0.5;
+				aBankAccount.setAllowedCredit(allCred);
+				allowedCredit=allowedCredit-allCred;
+			}
+			else{
+				double demCred=aBankAccount.getDemandedCredit();
+				double allCred=demCred*1.5;
 				aBankAccount.setAllowedCredit(allCred);
 				allowedCredit=allowedCredit-allCred;
 			}

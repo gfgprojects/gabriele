@@ -28,7 +28,7 @@ public class Firm {
 	int demand,desiredDemand;
 	double productionCapacityAfterWorkforceAdjustment;
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
-	double cashOnHand;	
+	double cashOnHand,financialResourcesInBankAccounts;	
 		/*
 	   public double desiredOutput;
 	   public double expectedSales;
@@ -193,9 +193,9 @@ public class Firm {
 
 	}
 
-	public void setDesiredProductionCapital(){
-		desiredProductionCapital=Math.round(desiredDemand*productionCapital/demand);
-		double financialResourcesInBankAccounts=0;
+	public void setDesiredCredit(){
+		desiredProductionCapital=Math.round(desiredDemand*productionCapital/production);
+		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size()-1;i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			if(aBankAccount.getAccount()>0){
@@ -215,21 +215,85 @@ public class Firm {
 			}
 		}
 
-		creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+		aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
 
-		if(creditToAsk>0){
-			aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
-			aBankAccount.setDesiredCredit(0.0,creditToAsk);
+		if(desiredProductionCapital>productionCapital){
+			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+
+			if(creditToAsk>0){
+				aBankAccount.setDesiredCredit(0.0,creditToAsk);
+			}
+			else{
+				creditToAsk=0;
+			}
 		}
 		else{
-			creditToAsk=0;
+			if(cashOnHand+financialResourcesInBankAccounts<0){
+				creditToAsk=cashOnHand+financialResourcesInBankAccounts;
+				aBankAccount.setDesiredCredit(0.0,-creditToAsk);
+			}
+			else{
+				creditToAsk=0;
+			}
 		}
 //		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" asked credit "+creditToAsk);
+			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
 //		}
 	
 
 	}
+
+	public void adjustProductionCapital(){
+		double creditToAsk;
+		if(desiredProductionCapital>productionCapital){
+			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+
+			if(creditToAsk>0){
+				if(aBankAccount.getAllowedCredit()>aBankAccount.getAccount()){
+					productionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts+aBankAccount.getAllowedCredit()-aBankAccount.getAccount();
+					if(productionCapital>desiredProductionCapital){
+						productionCapital=desiredProductionCapital;
+						aBankAccount.setAccount(aBankAccount.getDemandedCredit());
+					}
+					else{
+						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+					}
+				}
+				else{
+					if(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts>aBankAccount.getAllowedCredit()){
+						aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+					}
+					else{
+						System.out.println("      Firm cannot refund");
+					}
+				}
+			}
+			else{
+				productionCapital=desiredProductionCapital;
+				aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+				creditToAsk=0;
+			}
+		}
+		else{
+			productionCapital=desiredProductionCapital;
+			if(cashOnHand+financialResourcesInBankAccounts<0){
+				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
+						System.out.println("      Firm cannot refund");
+				}
+				else{
+					aBankAccount.setAccount(aBankAccount.getDemandedCredit());
+				}
+			}
+			else{
+				aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+				creditToAsk=0;
+			}
+		}
+System.out.println("     Firm "+identity+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+
+	}
+
+
 
 	public void laborForceDownwardAdjustment(){
 		if(Context.verboseFlag){
@@ -283,7 +347,7 @@ public class Firm {
 		if(Context.verboseFlag){
 			System.out.println("     firm "+identity+" application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
 		}
-		while(productionCapacityAfterWorkforceAdjustment<demand && applicationListIterator.hasNext()){
+		while(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital) && applicationListIterator.hasNext()){
 			//		while(applicationListIterator.hasNext()){
 			aCurriculum=applicationListIterator.next();
 			aConsumer=aCurriculum.getSender();
@@ -314,6 +378,7 @@ public class Firm {
 
 	public void computeEconomicResultAndUpdateBalanceSheetItems(){
 		firmWageSum=0;
+		cashOnHand=0;
 		for(int i =0; i<workersList.size();i++){
 			aConsumer=(Consumer)workersList.get(i);
 			firmWageSum+=aConsumer.getWage();
@@ -326,7 +391,7 @@ public class Firm {
 
 
 		//compute average productivity for each degree of education
-		public void computeAverageProductivityForEachDegreeOfEducation(){
+	public void computeAverageProductivityForEachDegreeOfEducation(){
 			numberOfWokersInADegree=new int[7];
 			totalProductivityOfWorkersInADegree=new double[7];
 			averageProductivityOfWorkersInADegree=new double[7];
@@ -365,7 +430,7 @@ public class Firm {
 		// SEND LABOR DEMAND TO LABOR MARKET
 
 		public void sendVacancies(){
-			if(productionCapacityAfterWorkforceAdjustment<demand){
+			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
 				myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
 				try{
 					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);

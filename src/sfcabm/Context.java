@@ -21,7 +21,7 @@ public class Context implements ContextBuilder<Object> {
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
-		public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.1;
+		public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 		public static double laborMarketStateToSetWage=0.5;
 		public static int unemploymentDole=10;
 		public static int costEdu=10;
@@ -279,8 +279,22 @@ System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
 //if(verboseFlag){
 System.out.println("FIRMS COMPUTE DESIRED CAPITAL");
 //		}
-			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredProductionCapital",false);
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredCredit",false);
 			contextAction.execute();
+
+//		if(verboseFlag){
+System.out.println("BANKS EXTEND FIRM CREDIT");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(banksList,"setAllowedFirmsCredit",false);
+			contextAction.execute();
+
+//if(verboseFlag){
+System.out.println("FIRMS ADJUST PRODUCTION CAPITAL");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"adjustProductionCapital",false);
+			contextAction.execute();
+
 
 
 

@@ -67,9 +67,9 @@
 	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to compute the economic result.</td>
 </tr>
 <tr>
-	<td><b>(TBD) Firms</b> </td>
+	<td><b>Firms</b> </td>
 	<td><a href="computeEconomicResultAndUpdateBalanceSheetItems.html">computeEconomicResultAndUpdateBalanceSheetItems</a> </td>
-	<td>(TBD) </td>
+	<td>compute cashOnHand as the difference of production an wages. </td>
 </tr>
 <tr>
 	<td><b>(TBD) Firms</b> </td>
@@ -82,24 +82,29 @@
 	<td>(TBD) </td>
 </tr>
 <tr>
-	<td><b>TBD Firms</b> </td>
-	<td><a href="stepDesiredProductionCapital">setDesiredProductionCapital</a> </td>
-	<td>(TBD) </td>
+	<td><b>Firms</b> </td>
+	<td><a href="stepDesiredCredit">setDesiredProductionCapital</a> </td>
+	<td>Credit can be asked to increase production capital or to restore a negative cash flow</td>
 </tr>
 <tr>
-	<td><b>TBD Banks </b> </td>
+	<td><b>Banks </b> </td>
 	<td><a href="setAllowedFirmsCredit">set maximum credit to firms to adjust production capital</a> </td>
-	<td>(TBD) </td>
+	<td>random for now</td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="adjustProductionCapital">adjustProductionCapital</a> </td>
+	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
 </tr>
 <tr>
 	<td><b>Firms</b> </td>
 	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
-	<td> </td>
+	<td>jettisoningCurricula </td>
 </tr>
 <tr>
 	<td><b>OfficeForLabor</b> </td>
 	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
-	<td> </td>
+	<td>jettisoningCurricula </td>
 </tr>
 <tr>
 	<td><b>Firms </b> </td>
@@ -122,24 +127,14 @@
 	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
 </tr>
 <tr>
-	<td><b>TBD Firms </b> </td>
-	<td><a href="stepProductionCapital">setProductionCapital</a> </td>
-	<td>(TBD) if workers are not available, do not borrow all the allowed credit.</td>
-</tr>
-<tr>
-	<td><b>(TBD) Firms </b> </td>
-	<td><a href="confirmHiredWorkers">confirmNewHiring</a> </td>
-	<td>(TBD) If credit is not enought, some worker cannot be hired </td>
-</tr>
-<tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performConsumersTurnover.html">performConsumersTurnover</a> </td>
-	<td> </td>
+	<td>performConsumersTurnover </td>
 </tr>
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performFirmsTurnover.html">performFirmsTurnover</a> </td>
-	<td> </td>
+	<td>performConsumersTurnover </td>
 </tr>
 
 </table>
