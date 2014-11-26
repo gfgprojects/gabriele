@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>1168</w>
+      <h>899</h>
+    </coordinates>
+    <panel_attributes>title:Firm.setDesiredCredit()
+Start
+desiredProductionCapital =\desiredDemand/demand*\productionCapital
+financialResourceInBankAccounts =\sum of bankAccounts with positive\account
+identify the bankAccount with bestPosition\as the one to which credit will be asked
+If
+	[if\desiredCapital\&gt; capital]
+	creditToAsk=\desiredProductionCapital-\productionCapital-\cashOnHand-\financialResourcesInBankAccounts;
+	If
+		[creditToAsk&gt;0]
+		bestAccount.setDesiredCredit(0,creditToAsk)
+
+		[if\creditToAsk&lt;=0]
+	EndIf
+
+	[if\desiredCapital\&lt;= capital]
+	If
+		[if\cashOnHand+\finalcialResourceIBA&lt;0]
+		creditToAsk =\cashOnHand+\finalcialResourceIBA
+		bestAccount.setDesiredCredit(0,-creditToAsk)
+
+		[if\cashOnHand+\finalcialResourceIBA&gt;=0]
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
