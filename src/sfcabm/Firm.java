@@ -270,7 +270,7 @@ public class Firm {
 			}
 			else{
 				productionCapital=desiredProductionCapital;
-				aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
 			}
 		}
