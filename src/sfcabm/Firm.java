@@ -28,7 +28,7 @@ public class Firm {
 	int demand,desiredDemand;
 	double productionCapacityAfterWorkforceAdjustment;
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
-	double cashOnHand,financialResourcesInBankAccounts;	
+	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts;	
 		/*
 	   public double desiredOutput;
 	   public double expectedSales;
@@ -194,7 +194,7 @@ public class Firm {
 	}
 
 	public void setDesiredCredit(){
-		desiredProductionCapital=Math.round(desiredDemand*productionCapital/production);
+		desiredProductionCapital=Math.round(desiredDemand*(productionCapital+capitalDepreciation)/production);
 		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size()-1;i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -243,7 +243,7 @@ public class Firm {
 
 	}
 
-	public void adjustProductionCapital(){
+	public void adjustProductionCapitalAndBankAccount(){
 		double creditToAsk;
 		if(desiredProductionCapital>productionCapital){
 			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
@@ -376,7 +376,7 @@ System.out.println("     Firm "+identity+" production Capital "+productionCapita
 				newWorker.receiveHiredNew(this);
 	}
 
-	public void computeEconomicResultAndUpdateBalanceSheetItems(){
+	public void computeEconomicResultAndCapitalDepreciation(){
 		firmWageSum=0;
 		cashOnHand=0;
 		for(int i =0; i<workersList.size();i++){
@@ -384,9 +384,16 @@ System.out.println("     Firm "+identity+" production Capital "+productionCapita
 			firmWageSum+=aConsumer.getWage();
 		}
 		cashOnHand=demand-firmWageSum;
+		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
 //		if(Context.verboseFlag){
-			System.out.println("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand);
+			System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 //		}
+
+		productionCapital+=-capitalDepreciation;
+//		if(Context.verboseFlag){
+			System.out.println(" productionCapital "+productionCapital);
+//		}
+
 	}
 
 
