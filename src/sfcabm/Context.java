@@ -237,11 +237,18 @@ System.out.println("FIRMS: SET WAGE");
 			contextAction.execute();
 
 //		if(verboseFlag){
-System.out.println("BANKS: UPDATE CONSUMERS Accounts");
+System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS");
 //		}
 
 			contextAction=contextActionFactory.createActionForIterable(banksList,"updateConsumersAccounts",false);
 			contextAction.execute();
+
+		if(verboseFlag){
+System.out.println("CONSUMERS: PAY BACK BANK DEBT");
+		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"payBackBankDebt",false);
+			contextAction.execute();
+
 
 
 	
