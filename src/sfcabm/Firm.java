@@ -178,6 +178,8 @@ public class Firm {
 	}
 
 	public void makeProduction(){
+		System.out.println("     Firm "+identity+"production capital "+productionCapital+" numberOfWorkers "+workersList.size());
+			sumOfWorkersProductivity=0;
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
 				sumOfWorkersProductivity+=aConsumer.getProductivity();
