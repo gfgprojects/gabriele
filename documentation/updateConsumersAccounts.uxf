@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>70</y>
+      <w>1149</w>
+      <h>1093</h>
+    </coordinates>
+    <panel_attributes>title:Bank.updateConsumersAccounts()
+Start
+While[while\accountsList.\hasNext]
+	get account
+	get amount
+	get ownerType
+	If
+		[if\ownerType\==consumer]
+		If
+			[account amount &gt;=0]
+			increase amount by\accrued interests
+
+			[account amount &lt;0]
+			If
+				[consumer isStudent\or unemployed worker]
+				increase amount by\interest at subsidized rate
+				set allowedCredit to account
+
+				[consumer isWorking]
+				increase amount by\interest at loans rate
+				set allowedCredit to account*0.9\or to account\with probability 0.5,0.5
+			EndIf
+		EndIf
+
+		[else]
+	EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
