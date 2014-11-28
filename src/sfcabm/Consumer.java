@@ -212,7 +212,7 @@ public void stepState(){
 		disposableIncome=wage;
 		if(totalAmountToRefund>0){
 		if(Context.verboseFlag){
-			System.out.println(" To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" income "+disposableIncome);
+			System.out.println("     To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" income "+disposableIncome);
 		}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.unemploymentDole;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
@@ -270,7 +270,7 @@ public void stepState(){
 				disposableIncome=Context.unemploymentDole;
 			}
 		if(Context.verboseFlag){
-			System.out.println(" totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome+" wage "+wage);
+			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome+" wage "+wage);
 		}
 		}
 }

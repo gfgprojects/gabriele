@@ -119,7 +119,7 @@ public class Bank {
 							}
 							else{
 								if(Context.verboseFlag){
-									System.out.println("     refund not asked");
+									System.out.println("     refund asked");
 								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
 							}
