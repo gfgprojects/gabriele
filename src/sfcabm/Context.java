@@ -14,7 +14,7 @@ import sfcabm.OfficeForStatistics;
 import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verboseFlag=false;
+	public static boolean verboseFlag=true;
 		public static int NumConsumers = 10;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;

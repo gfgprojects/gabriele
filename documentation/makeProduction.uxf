@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>614</w>
+      <h>339</h>
+    </coordinates>
+    <panel_attributes>title:Firm.makeProduction()
+Start
+compute\sumOfworkersProductivity
+workersPotentialProduction =sumOfWorkersProductivities*\parameterOfProductivityInProductionFunction
+capitalPotentialProduction =productionCapital/capitalNeededForEachWorker*\parameterOfProductivityInProductionFunction
+production=min(workerPotentialProduction,capitalPotentialProduction)
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

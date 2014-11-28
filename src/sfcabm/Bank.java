@@ -91,25 +91,43 @@ public class Bank {
 			tmpOwnerType=aBankAccount.getOwnerType();
 			if(tmpOwnerType=="consumer"){
 				if(tmpAccount>0){
+						if(Context.verboseFlag){
+						System.out.println("     consumer: account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
+						}
 					aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnDeposits));
 				}
 				else{
 					aConsumer=(Consumer)aBankAccount.getOwner();
 					if(aConsumer.getIsStudentFlag()){
+						if(Context.verboseFlag){
+						System.out.println("     student: account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
+						}
 						aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
 						aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 					}
 					else{
 						if(aConsumer.getIsWorkingFlag()){
+						if(Context.verboseFlag){
+						System.out.println("     worker: account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
+						}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
 							if(RandomHelper.nextDouble()>0.5){
+								if(Context.verboseFlag){
+									System.out.println("     refund not asked");
+								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 							}
 							else{
+								if(Context.verboseFlag){
+									System.out.println("     refund not asked");
+								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
 							}
 						}
 						else{
+							if(Context.verboseFlag){
+								System.out.println("     unemployed: account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
+							}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
 							aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 						}
@@ -132,7 +150,7 @@ public class Bank {
 				multiplier=0.5;
 			}
 			else{
-				multiplier=1.5;
+				multiplier=1.0;
 			}
 			anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
 			allowedCredit+=-anAccounAllowedCredit;

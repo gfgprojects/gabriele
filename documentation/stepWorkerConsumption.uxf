@@ -70,7 +70,7 @@ AProductDemand (max relative rank)</panel_attributes>
       <x>30</x>
       <y>260</y>
       <w>1165</w>
-      <h>1807</h>
+      <h>1839</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepWorkerConsumption()
 Start
@@ -85,10 +85,10 @@ While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext(
 While[while\bankAccountsList.\hasNext()]
 	get bankAccount
 	If
-		[account&gt;0]
+		[if\account&gt;0]
 		increase financialResourcesInBankAccounts\by account
 
-		[account&lt;=0]
+		[if\account&lt;=0]
 		increase outstandingDebtInBankAccounts\by account
 	EndIf
 (end computation of financialResources)
@@ -101,10 +101,10 @@ If
 
 	[if\desiredDemand&gt;\income+\financialResources]
 	If
-		[bestBankAccount&gt;=0]
+		[if\bestBankAccount&gt;=0]
 		set the desired credit in\the bestBankAccount\as \(desiredDemand -\income - financialResources)\because all the positive accounts\will be set to zero
 
-		[bestBanAccount&lt;0]
+		[if\bestBanAccount&lt;0]
 		set the desired credit in\the bestBankAccount\as the account+\(desiredDemand -\income - financialResources)
 	EndIf
 

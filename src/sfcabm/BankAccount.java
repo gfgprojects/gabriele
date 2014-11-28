@@ -55,7 +55,9 @@ public class BankAccount{
 		account=ac;
 		demandedCredit=0;
 		allowedCredit=0;
-//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+		if(Context.verboseFlag){
+			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+		}
 	}
 
 	public void setDesiredCredit(double w, double dD){
@@ -64,14 +66,14 @@ public class BankAccount{
 			demandedCredit=0;
 		}
 		if(Context.verboseFlag){
-			System.out.println("     bank account "+account+" wage "+w+" desiredDemand "+dD+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			System.out.println("       bank account "+account+" wage "+w+" desiredDemand "+dD+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 		}
 	}
 	public void setAllowedCredit(double aC){
 		allowedCredit=aC;
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
-//		}
+		}
 	}
 
 }

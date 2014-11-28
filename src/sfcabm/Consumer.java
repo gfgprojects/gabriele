@@ -209,9 +209,11 @@ public void stepState(){
 				financialResourcesInBankAccounts+=amountOfThisBankAccount;
 			}
 		}
+		disposableIncome=wage;
 		if(totalAmountToRefund>0){
-			disposableIncome=wage;
+		if(Context.verboseFlag){
 			System.out.println(" To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" income "+disposableIncome);
+		}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.unemploymentDole;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
 				for(int i=0;i<bankAccountsList.size();i++){
@@ -267,7 +269,9 @@ public void stepState(){
 				}
 				disposableIncome=Context.unemploymentDole;
 			}
+		if(Context.verboseFlag){
 			System.out.println(" totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome+" wage "+wage);
+		}
 		}
 }
 		
@@ -302,10 +306,11 @@ public void stepState(){
 
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
+			disposableIncome=wage;
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
@@ -407,10 +412,11 @@ public void stepWorkerState() {
 		desiredDemand=0;
 
 		wage=0;
+		disposableIncome=0;
 		
 
 		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
