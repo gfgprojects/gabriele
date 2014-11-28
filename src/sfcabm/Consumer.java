@@ -72,7 +72,7 @@ public class Consumer {
 //	 Context<Object> myContext;
 	 //DEFINIRE LAMBDA double lambda=0.3;
 	 //private ArrayList jobApplicationList= new ArrayList();
-	 BankAccount aBankAccount;
+	 BankAccount aBankAccount,bestBankAccount,worstBankAccount;
 	 Bank aBank;
 	 
 	public Consumer(int consumerID){
@@ -213,33 +213,64 @@ public void stepState(){
 	
 	private void stepWorkerConsumption() {
 		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
+		double financialResourcesInBankAccounts=0;
+		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
+		int positionOfBestAccount,positionOfWorstAccount;
 		demandsList = new ArrayList<AProductDemand>();
 		desiredDemand=0;
 
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
 		}
-		
+
 		if(Context.verboseFlag){
 			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
 		}
 
-			industriesListIterator=OfficeForStatistics.industriesList.iterator();
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-				int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
-				desiredDemand+=tmpDemand;
-				aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
-				aProductDemand.inform(identity);
-				demandsList.add(aProductDemand);
+		industriesListIterator=OfficeForStatistics.industriesList.iterator();
+		while(industriesListIterator.hasNext()){
+			anIndustry=industriesListIterator.next();
+			int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
+			desiredDemand+=tmpDemand;
+			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
+			aProductDemand.inform(identity);
+			demandsList.add(aProductDemand);
+		}
+
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount>0){
+				financialResourcesInBankAccounts+=amountOfThisBankAccount;
+			}
+		}
+
+		positionOfBestAccount=0;
+		positionOfWorstAccount=0;
+		aBankAccount=(BankAccount)bankAccountsList.get(0);
+		amountOfBestBankAccount=aBankAccount.getAccount();
+		amountOfWorstBankAccount=aBankAccount.getAccount();
+
+		for(int j=0;j<bankAccountsList.size();j++){
+			aBankAccount=(BankAccount)bankAccountsList.get(j);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount>amountOfBestBankAccount){
+				amountOfBestBankAccount=amountOfThisBankAccount;
+				positionOfBestAccount=j;
+			}
+			if(amountOfThisBankAccount<amountOfWorstBankAccount){
+				amountOfWorstBankAccount=amountOfThisBankAccount;
+				positionOfWorstAccount=j;
 			}
 
-		aBankAccount=(BankAccount)bankAccountsList.get(RandomHelper.nextIntFromTo(0,bankAccountsList.size()-1));
-		aBankAccount.setDesiredCredit(wage,desiredDemand);
+		}
 
+		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
+		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
-
-
+		if(desiredDemand<wage+financialResourcesInBankAccounts){
+			bestBankAccount.setDesiredCredit(0.0,desiredDemand-wage-financialResourcesInBankAccounts);
+		}
 	}
 	
 	
@@ -286,21 +317,22 @@ public void stepWorkerState() {
 */
 
 	private void stepStudentConsumption() {
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" initial wealth "+wealth);
-		}	
-		consumption=Context.costEdu;
-		if(wealth >= 0){
-			wealth=wealth*(1+iD)-consumption;
-		}
-		else{
-			wealth=wealth*(1+iL)-consumption;
-		}
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" consumption "+consumption+ " wealth "+wealth);
-		}
-		industriesListIterator=OfficeForStatistics.industriesList.iterator();
+
+		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
+		double financialResourcesInBankAccounts=0;
+		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
+		int positionOfBestAccount,positionOfWorstAccount;
+		demandsList = new ArrayList<AProductDemand>();
 		desiredDemand=0;
+
+		wage=0;
+		
+
+		if(Context.verboseFlag){
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+ " wealth "+wealth);
+		}
+
+		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
 			int tmpDemand=(int)Math.round(Context.costEdu*anIndustry.getProductAttractiveness());
@@ -310,8 +342,43 @@ public void stepWorkerState() {
 			demandsList.add(aProductDemand);
 		}
 
-		aBankAccount=(BankAccount)bankAccountsList.get(RandomHelper.nextIntFromTo(0,bankAccountsList.size()-1));
-		aBankAccount.setDesiredCredit(wage,desiredDemand);
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount>0){
+				financialResourcesInBankAccounts+=amountOfThisBankAccount;
+			}
+		}
+
+		positionOfBestAccount=0;
+		positionOfWorstAccount=0;
+		aBankAccount=(BankAccount)bankAccountsList.get(0);
+		amountOfBestBankAccount=aBankAccount.getAccount();
+		amountOfWorstBankAccount=aBankAccount.getAccount();
+
+		for(int j=0;j<bankAccountsList.size();j++){
+			aBankAccount=(BankAccount)bankAccountsList.get(j);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount>amountOfBestBankAccount){
+				amountOfBestBankAccount=amountOfThisBankAccount;
+				positionOfBestAccount=j;
+			}
+			if(amountOfThisBankAccount<amountOfWorstBankAccount){
+				amountOfWorstBankAccount=amountOfThisBankAccount;
+				positionOfWorstAccount=j;
+			}
+
+		}
+
+		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
+		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
+
+		if(desiredDemand<wage+financialResourcesInBankAccounts){
+			bestBankAccount.setDesiredCredit(0.0,desiredDemand-wage-financialResourcesInBankAccounts);
+		}
+
+
+
 
 
 	}
@@ -594,6 +661,9 @@ public void stepWorkerState() {
 		}
 		public boolean getIsWorkingFlag(){
 			return isWorking;
+		}
+		public boolean getIsStudentFlag(){
+			return isStudent;
 		}
 		public double getWage(){
 			return wage;

@@ -186,9 +186,9 @@ public class Firm {
 		int workersPotentialProduction=(int)Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 		int capitalPotentialProduction=(int)Math.round(productionCapital/Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion*Context.parameterOfProductivityInProductionFuncion);
 		production=Math.min(workersPotentialProduction,capitalPotentialProduction);
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" workers Potential Production "+workersPotentialProduction+" capital potential Production "+capitalPotentialProduction+" production "+production);
-//		}
+		}
 	
 
 	}
@@ -236,9 +236,9 @@ public class Firm {
 				creditToAsk=0;
 			}
 		}
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
-//		}
+		}
 	
 
 	}
@@ -278,7 +278,7 @@ public class Firm {
 			productionCapital=desiredProductionCapital;
 			if(cashOnHand+financialResourcesInBankAccounts<0){
 				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
-						System.out.println("      Firm cannot refund");
+					System.out.println("      Firm cannot refund");
 				}
 				else{
 					aBankAccount.setAccount(aBankAccount.getDemandedCredit());
@@ -289,7 +289,10 @@ public class Firm {
 				creditToAsk=0;
 			}
 		}
-System.out.println("     Firm "+identity+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+		}
 
 	}
 
@@ -385,14 +388,14 @@ System.out.println("     Firm "+identity+" production Capital "+productionCapita
 		}
 		cashOnHand=demand-firmWageSum;
 		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
-//		}
+		}
 
 		productionCapital+=-capitalDepreciation;
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.println(" productionCapital "+productionCapital);
-//		}
+		}
 
 	}
 
@@ -510,9 +513,9 @@ System.out.println("     Firm "+identity+" production Capital "+productionCapita
 
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
-			//			if(Context.verboseFlag){
+						if(Context.verboseFlag){
 			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
-			//			}
+						}
 		}
 		public void jettisoningCurricula(){
 			applicationList = new ArrayList<Curriculum>();

@@ -29,7 +29,7 @@
   <element>
     <type>com.umlet.element.custom.State</type>
     <coordinates>
-      <x>520</x>
+      <x>500</x>
       <y>90</y>
       <w>180</w>
       <h>120</h>
@@ -48,7 +48,7 @@ BankAccount
   <element>
     <type>com.umlet.element.custom.State</type>
     <coordinates>
-      <x>120</x>
+      <x>100</x>
       <y>100</y>
       <w>280</w>
       <h>120</h>
@@ -67,33 +67,47 @@ AProductDemand (max relative rank)</panel_attributes>
   <element>
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
-      <x>50</x>
-      <y>270</y>
-      <w>869</w>
-      <h>1001</h>
+      <x>30</x>
+      <y>260</y>
+      <w>1165</w>
+      <h>1807</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepWorkerConsumption()
 Start
 empty demandsList
-desiredDemand=0
+(start computation of desiredDemand)\desiredDemand=0
 While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext()]
-
-		preferences
-
-		income
-
-		Industry.productAttractiveness
-
-		user defined
-
-	determine consumption for this product type\create a new AproductDemand having the computed demand\add the productDemand to the demandsList
+	determine consumption for this product type
+	create a new AproductDemand having the computed demand
+	add the productDemand to the demandsList
 	increase desiredDemand\by this product desiredDemand
-If
-	[if\credit is not needed\to obtain the desired\demand]
+(end computation of desiredDemand)\\(startComputation of financialResources)\financialResourcesInBankAccounts=0\outstandingDebtInBankAcounts=0
+While[while\bankAccountsList.\hasNext()]
+	get bankAccount
+	If
+		[account&gt;0]
+		increase financialResourcesInBankAccounts\by account
 
-	[if\credit is needed\to obtain the desired\demand]
-	select a BankAccount randomly
-	set the desired credit in\the selected BankAccount
+		[account&lt;=0]
+		increase outstandingDebtInBankAccounts\by account
+	EndIf
+(end computation of financialResources)
+
+identification of\bestBankAccount\and\worstBankAccount
+
+If
+	[if\desiredDemand&lt;=\income+\financialResources]
+
+
+	[if\desiredDemand&gt;\income+\financialResources]
+	If
+		[bestBankAccount&gt;=0]
+		set the desired credit in\the bestBankAccount\as \(desiredDemand -\income - financialResources)\because all the positive accounts\will be set to zero
+
+		[bestBanAccount&lt;0]
+		set the desired credit in\the bestBankAccount\as the account+\(desiredDemand -\income - financialResources)
+	EndIf
+
 End
 </panel_attributes>
     <additional_attributes/>
@@ -101,7 +115,7 @@ End
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>20</x>
+      <x>0</x>
       <y>50</y>
       <w>280</w>
       <h>30</h>
@@ -112,7 +126,7 @@ End
   <element>
     <type>com.umlet.element.custom.SynchBarHorizontal</type>
     <coordinates>
-      <x>40</x>
+      <x>20</x>
       <y>240</y>
       <w>810</w>
       <h>20</h>
@@ -123,7 +137,7 @@ End
   <element>
     <type>com.umlet.element.custom.SynchBarHorizontal</type>
     <coordinates>
-      <x>40</x>
+      <x>20</x>
       <y>70</y>
       <w>810</w>
       <h>20</h>
@@ -134,7 +148,7 @@ End
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>20</x>
+      <x>0</x>
       <y>220</y>
       <w>280</w>
       <h>30</h>
@@ -145,7 +159,7 @@ End
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>330</x>
+      <x>310</x>
       <y>0</y>
       <w>280</w>
       <h>30</h>

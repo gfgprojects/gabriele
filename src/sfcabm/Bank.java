@@ -11,6 +11,7 @@ public class Bank {
 	
 	public double iL;
 	double deposits,loans,demandedCredit,allowedCredit,equity;
+	Consumer aConsumer;
 
 	public Bank(int id,repast.simphony.context.Context<Object> con){
 		identity=id;
@@ -81,24 +82,61 @@ public class Bank {
 		}
 
 	}
+	public void updateConsumersAccounts(){
+		double tmpAccount;
+		String tmpOwnerType;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			tmpAccount=aBankAccount.getAccount();
+			tmpOwnerType=aBankAccount.getOwnerType();
+			if(tmpOwnerType=="consumer"){
+				if(tmpAccount>0){
+					aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnDeposits));
+				}
+				else{
+					aConsumer=(Consumer)aBankAccount.getOwner();
+					if(aConsumer.getIsStudentFlag()){
+						aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
+						aBankAccount.setAllowedCredit(aBankAccount.getAccount());
+					}
+					else{
+						if(aConsumer.getIsWorkingFlag()){
+							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
+							if(RandomHelper.nextDouble()>0.5){
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount());
+							}
+							else{
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
+							}
+						}
+						else{
+							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
+							aBankAccount.setAllowedCredit(aBankAccount.getAccount());
+						}
+					}
+				}
+
+			}
+
+		}
+	}
 	public void setAllowedConsumersCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
+		double anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
-			demandedCredit=demandedCredit-aBankAccount.getDemandedCredit();
+			anAccountDesiredCredit=aBankAccount.getDemandedCredit();
+			demandedCredit=demandedCredit-anAccountDesiredCredit;
 			if(RandomHelper.nextDouble()>0.5){
-				double demCred=aBankAccount.getDemandedCredit();
-				double allCred=demCred*0.5;
-				aBankAccount.setAllowedCredit(allCred);
-				allowedCredit=allowedCredit-allCred;
+				multiplier=0.5;
 			}
 			else{
-				double demCred=aBankAccount.getDemandedCredit();
-				double allCred=demCred*1.0;
-				aBankAccount.setAllowedCredit(allCred);
-				allowedCredit=allowedCredit-allCred;
+				multiplier=1.5;
 			}
+			anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
+			allowedCredit+=-anAccounAllowedCredit;
+			aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 		}
 		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);

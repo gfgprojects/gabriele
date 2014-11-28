@@ -10,7 +10,7 @@
     </coordinates>
     <panel_attributes>title:Firm.setDesiredCredit()
 Start
-desiredProductionCapital =\desiredDemand/production*\productionCapital
+desiredProductionCapital =\desiredDemand/production*\(productionCapital+capitalDepreciation)
 financialResourceInBankAccounts =\sum of bankAccounts with positive\account
 identify the bankAccount with bestPosition\as the one to which credit will be asked
 If

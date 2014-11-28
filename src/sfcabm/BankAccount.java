@@ -45,6 +45,12 @@ public class BankAccount{
 	public double getAccount(){
 		return account;
 	}
+	public String getOwnerType(){
+		return ownerType;
+	}
+	public Object getOwner(){
+		return owner;
+	}
 	public void setAccount(double ac){
 		account=ac;
 		demandedCredit=0;
@@ -63,9 +69,9 @@ public class BankAccount{
 	}
 	public void setAllowedCredit(double aC){
 		allowedCredit=aC;
-		if(Context.verboseFlag){
+//		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
-		}
+//		}
 	}
 
 }
