@@ -138,21 +138,45 @@ public class Bank {
 
 		}
 	}
+
+	public void resetDemandedAndAllowedCredit(){
+		demandedCredit=0;
+		allowedCredit=0;
+	}
+
+
+/**
+ *Bank decides if credit demanded by consumers is extended; outstanding credit cannot be reduced here; Credit reduction was performed by bank in the updateConsumersAccounts method  
+ */
 	public void setAllowedConsumersCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
-		double anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
+		double anAccountAmount,anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
+			anAccountAmount=aBankAccount.getAccount();
 			anAccountDesiredCredit=aBankAccount.getDemandedCredit();
 			demandedCredit=demandedCredit-anAccountDesiredCredit;
-			if(RandomHelper.nextDouble()>0.5){
-				multiplier=0.5;
+			if(anAccountAmount>=0){
+				if(RandomHelper.nextDouble()>0.5){
+					multiplier=0.5;
+				}
+				else{
+					multiplier=1.0;
+				}
+				anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
 			}
 			else{
-				multiplier=1.0;
+				if(RandomHelper.nextDouble()>0.5){
+					multiplier=0.5;
+				}
+				else{
+					multiplier=1.0;
+				}
+				anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
+			
+
 			}
-			anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
 			allowedCredit+=-anAccounAllowedCredit;
 			aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 		}

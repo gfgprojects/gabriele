@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>70</y>
+      <w>983</w>
+      <h>1185</h>
+    </coordinates>
+    <panel_attributes>title:Bank.setAllowedConsumerCredit()
+Start
+totalDemandedCredit=0
+totalAllowedCredit=0
+While[while\bankAccountsList.\hasNext()]
+	get this account's\demanded credit
+	get this account's amount
+	increase totalDemandedCredit\by this account's demanded credit
+	If
+		[if\amount&gt;=0]
+		If
+			[if\uniform&gt;0.5]
+			multiplier=0.5
+
+			[if\uniform&lt;=0.5]
+			multiplier=1.0
+		EndIf
+		allowedCredit=multiplier*demandedCredit
+
+		[if\amount&lt;0]
+		If
+			[if\uniform&gt;0.5]
+			multiplier=0.5
+
+			[if\uniform&lt;=0.5]
+			multiplier=1.0
+		EndIf
+		allowedCredit=amount+multiplier*\(demandedCredit-amount)
+
+	allowedCredit =\multiplier*demandedCredit
+	set this account's \allowedCredit to\allowedCredit
+	increase totalAllowedCredit\by allowedCredit
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

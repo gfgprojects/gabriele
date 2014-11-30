@@ -173,6 +173,57 @@ public class OfficeForStatistics{
 
 	}
 
+/**
+ * The difference with the computeDemand method is that this method accounts for imperfection in the goods market 
+ */
+	public void computeDesiredDemand(){
+		aggregateDemand=0;
+		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
+		statAction.execute();
+
+
+		try{
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		for(int i=0;i<consumersList.size();i++){
+			aConsumer=(Consumer)consumersList.get(i);
+			anOrderList=aConsumer.getOrders();
+
+			for(int j=0;j<anOrderList.size();j++){
+				anOrder=(AProductDemand)anOrderList.get(j);
+				anIndustry=industriesList.get(j);
+				double tmpDemand=anOrder.getDemand()*Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections;
+				anIndustry.increaseDemand(tmpDemand);
+				aggregateDemand=aggregateDemand+tmpDemand;
+			}
+
+		}
+
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: COMPUTE DEMAND ");
+		}
+			industriesListIterator=industriesList.iterator();
+			while(industriesListIterator.hasNext()){
+				anIndustry=industriesListIterator.next();
+		if(Context.verboseFlag){
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
+		}
+			}
+
+		if(Context.verboseFlag){
+			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
+		}
+	}
+
+	public void allocateDesiredDemand(){
+		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDesiredDemand",false);
+		statAction.execute();
+	}
 
 	public void computeDemand(){
 		aggregateDemand=0;
@@ -217,44 +268,36 @@ public class OfficeForStatistics{
 		}
 	}
 
-	public void allocateDesiredDemand(){
-		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDesiredDemand",false);
-		statAction.execute();
-	}
-
-
 	public void allocateDemand(){
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
 	}
 
-
+/**
+ * This method allocates the excess of demand of an industry to the industry that produces the next less advanced product. The cycle starts from the industry that produces the most advanced product.  
+ */
 	public void matchDemandAndSupply(){
 		double multiplier;
 		double excessDemandToAllocate=0;
 		for(int i=industriesList.size()-1;i>=0;i--){
 			anIndustry=(Industry)industriesList.get(i);
 			if((excessDemandToAllocate+anIndustry.getDemand())>anIndustry.getProduction()){
-				multiplier=(anIndustry.getProduction()/anIndustry.getDemand())*(1-Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections);
-		if(Context.verboseFlag){
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
-		}
-				for(int j=0;j<consumersList.size();j++){
-					aConsumer=(Consumer)consumersList.get(j);
-					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+				multiplier=(anIndustry.getProduction()/anIndustry.getDemand());
+				if(Context.verboseFlag){
+					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
 				}
 				excessDemandToAllocate+= anIndustry.getDemand()-anIndustry.getProduction();
 			}
 			else{
 				multiplier=((anIndustry.getDemand()+excessDemandToAllocate)/anIndustry.getDemand())*(1-Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections);
-		if(Context.verboseFlag){
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
-		}
-				for(int j=0;j<consumersList.size();j++){
-					aConsumer=(Consumer)consumersList.get(j);
-					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+				if(Context.verboseFlag){
+					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
 				}
 				excessDemandToAllocate=0;
+			}
+			for(int j=0;j<consumersList.size();j++){
+				aConsumer=(Consumer)consumersList.get(j);
+				aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
 			}
 		}
 

@@ -249,6 +249,14 @@ System.out.println("CONSUMERS: PAY BACK BANK DEBT");
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"payBackBankDebt",false);
 			contextAction.execute();
 
+//		if(verboseFlag){
+System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(banksList,"resetDemandedAndAllowedCredit",false);
+			contextAction.execute();
+
+
 
 
 	
@@ -280,7 +288,7 @@ System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 			contextAction.execute();
 
 
-			officeForStatistics.computeDemand();
+			officeForStatistics.computeDesiredDemand();
 			officeForStatistics.allocateDesiredDemand();
 
 

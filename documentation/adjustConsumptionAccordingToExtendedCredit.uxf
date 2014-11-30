@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>507</w>
+      <h>817</h>
+    </coordinates>
+    <panel_attributes>title:Consumer.adjustConsumptionAccordingToExtendedCredit()
+Start
+get askedCredit from\the selected bank
+get allowedCredit from\the selected bank
+allowedDemand=0
+If
+	[if\allowedCredit\&gt; askedCredit\(note: the two\amounts are\negative)]
+	allowedDemand=\desiredDemand-\(-askedCredit-(-allowedCredit))
+
+	[if\allowedCredit\&lt;= askedCredit]
+	allowedDemand=\desiredDemand
+While[while\demandsList.\hasNext()]
+	adjust demand:\demand=demand*\allowedDemand/\desiredDemand
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

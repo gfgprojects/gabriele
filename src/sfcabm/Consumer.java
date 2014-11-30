@@ -316,7 +316,7 @@ public void stepState(){
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
-			int tmpDemand=(int)Math.round(preferenceParameter*wage*anIndustry.getProductAttractiveness());
+			int tmpDemand=(int)Math.round(preferenceParameter*disposableIncome*anIndustry.getProductAttractiveness());
 			desiredDemand+=tmpDemand;
 			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
 			aProductDemand.inform(identity);
@@ -354,8 +354,8 @@ public void stepState(){
 		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
-		if(desiredDemand<wage+financialResourcesInBankAccounts){
-			bestBankAccount.setDesiredCredit(0.0,desiredDemand-wage-financialResourcesInBankAccounts);
+		if(desiredDemand<disposableIncome+financialResourcesInBankAccounts){
+			bestBankAccount.setDesiredCredit(0.0,desiredDemand-disposableIncome-financialResourcesInBankAccounts);
 		}
 	}
 	
@@ -527,11 +527,13 @@ public void stepWorkerState() {
 			double allowedCredit=aBankAccount.getAllowedCredit();
 			double allowedDemand=0;
 			if(allowedCredit>askedCredit){
-				allowedDemand=aBankAccount.getAccount()+wage-aBankAccount.getAllowedCredit();
+				allowedDemand=desiredDemand-(allowedCredit-askedCredit);
+/*
 				if(allowedDemand<Context.unemploymentDole){
 					allowedDemand=Context.unemploymentDole;
 					System.out.println("             CONSUMER CANNOT PAY BACK");
 				}
+*/
 			}
 			else{
 				allowedDemand=desiredDemand;

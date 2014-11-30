@@ -421,6 +421,11 @@ public class Firm {
 			}
 		}
 
+/**
+ * This method cycles on the list of workers and sets the worker's wage according to your parametrization.
+ * <p> 
+ * According to the parametrization you have chosen for your model, the wage is proportional to the worker's productivity; the average productivity of workers employed by the firm and having the same education degree; the average productivity of workers having the same education degree in the whole economy.
+ */
 		public void setWorkersWage(){
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);

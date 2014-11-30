@@ -61,7 +61,12 @@ public class BankAccount{
 	}
 
 	public void setDesiredCredit(double w, double dD){
-		demandedCredit=account+w-dD;
+		if(account>0){
+			demandedCredit=w-dD;
+		}
+		else{
+			demandedCredit=account+w-dD;
+		}
 		if(demandedCredit>0){
 			demandedCredit=0;
 		}

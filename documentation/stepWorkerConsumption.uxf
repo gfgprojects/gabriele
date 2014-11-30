@@ -69,15 +69,15 @@ AProductDemand (max relative rank)</panel_attributes>
     <coordinates>
       <x>30</x>
       <y>260</y>
-      <w>1165</w>
-      <h>1839</h>
+      <w>899</w>
+      <h>1639</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepWorkerConsumption()
 Start
 empty demandsList
 (start computation of desiredDemand)\desiredDemand=0
 While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext()]
-	determine consumption for this product type
+	determine consumption for this product type\based on disposableIncome, etc. . . .
 	create a new AproductDemand having the computed demand
 	add the productDemand to the demandsList
 	increase desiredDemand\by this product desiredDemand
@@ -96,17 +96,11 @@ While[while\bankAccountsList.\hasNext()]
 identification of\bestBankAccount\and\worstBankAccount
 
 If
-	[if\desiredDemand&lt;=\income+\financialResources]
+	[if\desiredDemand&lt;=\disposableIncome+\financialResources]
 
 
-	[if\desiredDemand&gt;\income+\financialResources]
-	If
-		[if\bestBankAccount&gt;=0]
-		set the desired credit in\the bestBankAccount\as \(desiredDemand -\income - financialResources)\because all the positive accounts\will be set to zero
-
-		[if\bestBanAccount&lt;0]
-		set the desired credit in\the bestBankAccount\as the account+\(desiredDemand -\income - financialResources)
-	EndIf
+	[if\desiredDemand&gt;\disposableIncome+\financialResources]
+	set the desired credit in\the bestBankAccount\as the account+\(desiredDemand -\disposableIncome -\financialResources)
 
 End
 </panel_attributes>
@@ -166,5 +160,30 @@ End
     </coordinates>
     <panel_attributes>Consumer.stepWorkerConsumption()</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>960</x>
+      <y>1690</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>In future methods
+check how to manage
+the case of a positive
+account</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>750</x>
+      <y>1700</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;30;210;30</additional_attributes>
   </element>
 </diagram>
