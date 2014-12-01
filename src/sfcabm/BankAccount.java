@@ -53,8 +53,6 @@ public class BankAccount{
 	}
 	public void setAccount(double ac){
 		account=ac;
-		demandedCredit=0;
-		allowedCredit=0;
 		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
 		}
@@ -79,6 +77,17 @@ public class BankAccount{
 		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 		}
+	}
+
+	public void receiveDeposits(double dep){
+		account+=dep;
+	}
+
+	public void resetDemandedCredit(){
+		demandedCredit=0;
+	}
+	public void resetAllowedCredit(){
+		allowedCredit=0;
 	}
 
 }

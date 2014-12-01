@@ -168,6 +168,8 @@ System.out.println("FIRMS: HIRE");
 				aFirm.setInitialWorkers();
 			}
 
+
+
 			if(verboseFlag){
 System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
 		}
@@ -296,6 +298,13 @@ System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 
 			officeForStatistics.computeDemand();
 			officeForStatistics.allocateDemand();
+
+//			if(verboseFlag){
+System.out.println("CONSUMERS UNPDATE BANK ACCOUNT ACCORDING TO EFFECTIVE CONSUMPTION");
+//		}
+			contextAction=contextActionFactory.createActionForIterable(consumersList,"updateBankAccountAccordingToEffectiveConsumption",false);
+			contextAction.execute();
+
 
 	
 //			if(verboseFlag){

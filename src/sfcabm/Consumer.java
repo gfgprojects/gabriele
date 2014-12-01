@@ -54,7 +54,7 @@ public class Consumer {
 	 boolean InvestEducation;
 	 double studentSpending;
 
-	 double consumption,desiredDemand;
+	 double consumption,desiredDemand,financialResourcesInBankAccounts;
 	 
 	repast.simphony.context.Context<Object> myContext;
 	IndexedIterable<Object> firmsList,banksList;
@@ -198,7 +198,7 @@ public void stepState(){
 	public void payBackBankDebt(){
 		double amountOfThisBankAccount,resourcesAvailableToRefund;
 		double totalAmountToRefund=0;
-		double financialResourcesInBankAccounts=0;
+		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size();i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			amountOfThisBankAccount=aBankAccount.getAccount();
@@ -298,7 +298,7 @@ public void stepState(){
 	
 	private void stepWorkerConsumption() {
 		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
-		double financialResourcesInBankAccounts=0;
+		financialResourcesInBankAccounts=0;
 		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
 		int positionOfBestAccount,positionOfWorstAccount;
 		demandsList = new ArrayList<AProductDemand>();
@@ -405,7 +405,7 @@ public void stepWorkerState() {
 	private void stepStudentConsumption() {
 
 		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
-		double financialResourcesInBankAccounts=0;
+		financialResourcesInBankAccounts=0;
 		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
 		int positionOfBestAccount,positionOfWorstAccount;
 		demandsList = new ArrayList<AProductDemand>();
@@ -546,6 +546,44 @@ public void stepWorkerState() {
 				aProductDemand.adjustDemand(identity,allowedDemand/desiredDemand);
 			}
 		}
+
+		public void updateBankAccountAccordingToEffectiveConsumption(){
+			consumption=0;
+			for(int j=0;j<demandsList.size();j++){
+				aProductDemand=demandsList.get(j);
+				consumption+=aProductDemand.getDemand();
+			}
+
+					System.out.println("      consumption "+consumption+" disposableIncome "+disposableIncome);
+			if(disposableIncome>=consumption){
+				worstBankAccount.receiveDeposits(disposableIncome-consumption);
+			}
+			else{
+				consumption+=-disposableIncome;
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					double tmpAccount=aBankAccount.getAccount();
+					if(tmpAccount>=0){
+						if(tmpAccount<consumption){
+							consumption+=-tmpAccount;
+							aBankAccount.setAccount(0);
+						}
+						else{
+							aBankAccount.setAccount(tmpAccount-consumption);
+							consumption=0;
+						}
+					}
+				}
+				if(consumption>0){
+					System.out.println("      consumption "+consumption+" allowedCredit "+bestBankAccount.getAllowedCredit());
+					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+				}
+			}
+
+		}
+
+
+
 
 		public void adjustConsumtionToMatchDemandAndSupply(int rankPosition, double multiplier){
 			aProductDemand=demandsList.get(rankPosition);

@@ -77,6 +77,22 @@ public class OfficeForStatistics{
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
+//remove firms with 0 production
+
+		contextIterator=myContext.iterator();
+		while(contextIterator.hasNext()){
+			anObj=contextIterator.next();
+			if(anObj instanceof Firm){
+				aFirm=(Firm)anObj;
+				if(aFirm.getProduction()>0){
+				}
+				else{
+					System.out.println("     firm removed because producing "+aFirm.getProduction());
+					contextIterator.remove();
+				}
+			}
+		}
+
 //compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
 		aggregateProduction=0;
 		for(int i=0;i<firmsList.size();i++){
@@ -197,7 +213,7 @@ public class OfficeForStatistics{
 			for(int j=0;j<anOrderList.size();j++){
 				anOrder=(AProductDemand)anOrderList.get(j);
 				anIndustry=industriesList.get(j);
-				double tmpDemand=anOrder.getDemand()*Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections;
+				double tmpDemand=anOrder.getDemand()*(1-Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections);
 				anIndustry.increaseDemand(tmpDemand);
 				aggregateDemand=aggregateDemand+tmpDemand;
 			}
@@ -205,7 +221,7 @@ public class OfficeForStatistics{
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("OFFICE FOR STATISTICS: COMPUTE DEMAND ");
+			System.out.println("OFFICE FOR STATISTICS: COMPUTE DESIRED DEMAND ");
 		}
 			industriesListIterator=industriesList.iterator();
 			while(industriesListIterator.hasNext()){
@@ -221,6 +237,9 @@ public class OfficeForStatistics{
 	}
 
 	public void allocateDesiredDemand(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: ALLOCATE DESIRED DEMAND ");
+		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDesiredDemand",false);
 		statAction.execute();
 	}
@@ -269,6 +288,9 @@ public class OfficeForStatistics{
 	}
 
 	public void allocateDemand(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: ALLOCATE DEMAND ");
+		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
 	}

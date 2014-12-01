@@ -142,6 +142,11 @@ public class Bank {
 	public void resetDemandedAndAllowedCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			aBankAccount.resetDemandedCredit();
+			aBankAccount.resetAllowedCredit();
+		}
 	}
 
 
