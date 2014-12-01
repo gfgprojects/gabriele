@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>50</y>
+      <w>1146</w>
+      <h>1447</h>
+    </coordinates>
+    <panel_attributes>title:Consumer.updateBankAccountAccordingToEffectiveConsumption()
+Start
+compute consumption\summing over the\demandsList
+If
+	[if\disposableIncome&gt;=\consumption]
+	deposit savings in\the worstBankAccount
+
+
+	[if\disposableIncome&lt;\consumption]
+	decrease consumption by disposableIncome
+	While[for\over\bankAccountsList]
+		get bankAccount
+		get amount
+		If
+			[if\amount&gt;=0]
+			If
+				[if\amount\&lt;consumption]
+				reduce consumption\by amount
+				set this bankAccount=0
+
+				[if\amount\&gt;=consumption]
+				set this bankAccount\to (amount-consumption)
+			EndIf
+
+			[if\amount&lt;0]
+		EndIf
+
+	If
+		[if\consumption&gt;0]
+		set best bankAccount\equal to allowedCredit\in the same account
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
