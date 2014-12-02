@@ -402,6 +402,85 @@ public class Firm {
 	}
 
 
+		public void payBackBankDebt(){
+		double amountOfThisBankAccount,resourcesAvailableToRefund;
+		double totalAmountToRefund=0;
+		financialResourcesInBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount<0){
+				totalAmountToRefund+=-(amountOfThisBankAccount-aBankAccount.getAllowedCredit());
+			}
+			else{
+				financialResourcesInBankAccounts+=amountOfThisBankAccount;
+			}
+		}
+		if(totalAmountToRefund>0){
+//		if(Context.verboseFlag){
+			System.out.println("     To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
+//		}
+			resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
+			if(resourcesAvailableToRefund>=totalAmountToRefund){
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount<0){
+						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+					}
+				}
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount>0){
+						if(totalAmountToRefund>=amountOfThisBankAccount){
+							totalAmountToRefund+=-amountOfThisBankAccount;
+							aBankAccount.setAccount(0);
+						}
+						else{
+							aBankAccount.setAccount(amountOfThisBankAccount-totalAmountToRefund);
+							totalAmountToRefund=0;
+						}
+					}
+				}
+				if(totalAmountToRefund>0){
+					cashOnHand+=-totalAmountToRefund;
+				}
+
+
+			}
+			else{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount>0){
+						aBankAccount.setAccount(0);
+					}
+				}
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount<0){
+						double toPayBakToThisBankAccount=-(aBankAccount.getAccount()-aBankAccount.getAllowedCredit());
+						if(resourcesAvailableToRefund>toPayBakToThisBankAccount){
+							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+						}
+						else{
+							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
+							//							resourcesAvailableToRefund=0;
+							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+						}
+					}
+				}
+			}
+//		if(Context.verboseFlag){
+			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
+//		}
+		}
+}
+
+
 		//compute average productivity for each degree of education
 	public void computeAverageProductivityForEachDegreeOfEducation(){
 			numberOfWokersInADegree=new int[7];

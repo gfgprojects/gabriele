@@ -4,11 +4,11 @@
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
       <x>0</x>
-      <y>0</y>
+      <y>20</y>
       <w>2570</w>
-      <h>2105</h>
+      <h>2043</h>
     </coordinates>
-    <panel_attributes>title:Consumer.payBackBankDebt()
+    <panel_attributes>title:Firm.payBackBankDebt()
 Start
 totalAmountToRefund=0\financialResourcesInBankAccounts=0
 While[while\bankAccountsList.\hasNext()]
@@ -21,12 +21,11 @@ While[while\bankAccountsList.\hasNext()]
 		[if\amount&gt;=0]
 		financialResources\is increased by\ammount
 	EndIf
-disposableIncome=wage
 If
 	[if\totalAmountToRefund=0]
 
 	[if\totalAmountToRefund&gt;0]
-	resourcesAvailableToRefund=\financiaResources+disposableIncome-\unemploymentDole
+	resourcesAvailableToRefund=\financiaResources+cashOnHand
 	If
 		[if\resourcesAvailabeToRefund&gt;=\totalAmountToRefund]
 		put all the accounts\with negative amount\to allowed credit
@@ -46,7 +45,7 @@ If
 
 				[else]
 			EndIf
-		decrease disposableIncome\by totalAmountToRefund
+		decrease cashInHand\by totalAmountToRefund
 
 		[if\resourcesAvailabeToRefund&lt;\totalAmountToRefund]
 		put all the accounts\with positive amount\to zero

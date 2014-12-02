@@ -14,7 +14,7 @@ import sfcabm.OfficeForStatistics;
 import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verboseFlag=true;
+	public static boolean verboseFlag=false;
 		public static int NumConsumers = 10;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
@@ -312,6 +312,23 @@ System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
 //		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"computeEconomicResultAndCapitalDepreciation",false);
 			contextAction.execute();
+
+//		if(verboseFlag){
+System.out.println("BANKS: UPDATE FIRMS ACCOUNTS");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(banksList,"updateFirmsAccounts",false);
+			contextAction.execute();
+
+
+//		if(verboseFlag){
+System.out.println("FIRMS: PAY BACK BANK DEBT");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"payBackBankDebt",false);
+			contextAction.execute();
+
+
 
 //if(verboseFlag){
 System.out.println("FIRMS COMPUTE DESIRED CAPITAL");

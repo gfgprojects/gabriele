@@ -139,6 +139,46 @@ public class Bank {
 		}
 	}
 
+	public void updateFirmsAccounts(){
+		double tmpAccount;
+		String tmpOwnerType;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			tmpAccount=aBankAccount.getAccount();
+			tmpOwnerType=aBankAccount.getOwnerType();
+			if(tmpOwnerType=="firm"){
+				if(tmpAccount>0){
+						if(Context.verboseFlag){
+						System.out.println("     "+tmpOwnerType+": account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
+						}
+					aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnDeposits));
+				}
+				else{
+						if(Context.verboseFlag){
+						System.out.println("     "+tmpOwnerType+": account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
+						}
+							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
+							if(RandomHelper.nextDouble()>0.5){
+								if(Context.verboseFlag){
+									System.out.println("     refund not asked");
+								}
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount());
+							}
+							else{
+								if(Context.verboseFlag){
+									System.out.println("     refund asked");
+								}
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
+							}
+				}
+	
+			}
+		}
+
+	}
+
+
+
 	public void resetDemandedAndAllowedCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
