@@ -212,7 +212,7 @@ public void stepState(){
 		disposableIncome=wage;
 		if(totalAmountToRefund>0){
 		if(Context.verboseFlag){
-			System.out.println("     To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" income "+disposableIncome);
+			System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" wage "+disposableIncome);
 		}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.unemploymentDole;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
@@ -270,7 +270,7 @@ public void stepState(){
 				disposableIncome=Context.unemploymentDole;
 			}
 		if(Context.verboseFlag){
-			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome+" wage "+wage);
+			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" wage "+wage+" resourcesAvailableToRefund (wage+deposits-minimumConsumption) "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome);
 		}
 		}
 }
@@ -307,6 +307,12 @@ public void stepState(){
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
 			disposableIncome=wage;
+		}
+		wealth=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+				wealth+=amountOfThisBankAccount;
 		}
 
 		if(Context.verboseFlag){
@@ -354,7 +360,7 @@ public void stepState(){
 		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
-		if(desiredDemand<disposableIncome+financialResourcesInBankAccounts){
+		if(desiredDemand>disposableIncome+financialResourcesInBankAccounts){
 			bestBankAccount.setDesiredCredit(0.0,desiredDemand-disposableIncome-financialResourcesInBankAccounts);
 		}
 	}
@@ -402,6 +408,7 @@ public void stepWorkerState() {
 	}
 */
 
+
 	private void stepStudentConsumption() {
 
 		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
@@ -414,6 +421,12 @@ public void stepWorkerState() {
 		wage=0;
 		disposableIncome=0;
 		
+		wealth=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+				wealth+=amountOfThisBankAccount;
+		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
@@ -460,7 +473,7 @@ public void stepWorkerState() {
 		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
-		if(desiredDemand<wage+financialResourcesInBankAccounts){
+		if(desiredDemand>wage+financialResourcesInBankAccounts){
 			bestBankAccount.setDesiredCredit(0.0,desiredDemand-wage-financialResourcesInBankAccounts);
 		}
 
@@ -469,6 +482,8 @@ public void stepWorkerState() {
 
 
 	}
+	
+
 	
 	public void stepStudentState() {
 		if(isStudent){	
@@ -514,7 +529,7 @@ public void stepWorkerState() {
 
 
 			if(Context.verboseFlag){
-				System.out.println("Consumer "+identity+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity);
+				System.out.println("     student "+identity+" isStudent "+isStudent+" successes "+numberOfSuccessfulPeriodsOfEducation+" failures "+numberOfFailedPeriodsOfEducation+" consecutive failures "+numberOfConsecutiveFailedPeriodsOfEducation+" degree "+degree+" productivity "+productivity);
 				//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
 			}
@@ -554,7 +569,7 @@ public void stepWorkerState() {
 				consumption+=aProductDemand.getDemand();
 			}
 
-					System.out.println("      consumption "+consumption+" disposableIncome "+disposableIncome);
+					System.out.println("      consumer "+getIdentity()+" consumption "+consumption+" disposableIncome "+disposableIncome);
 			if(disposableIncome>=consumption){
 				worstBankAccount.receiveDeposits(disposableIncome-consumption);
 			}
@@ -567,15 +582,22 @@ public void stepWorkerState() {
 						if(tmpAccount<consumption){
 							consumption+=-tmpAccount;
 							aBankAccount.setAccount(0);
+							if(Context.verboseFlag){
+							System.out.println("       deposits in this account are lower than residual desired consumption. All deposits are withdrawn to buy consumption goods and the residual desired consumption is "+consumption);      
+							}
 						}
 						else{
+							if(Context.verboseFlag){
+							System.out.println("       deposits in this account are higher than residual desired consumption. Deposits are thus reduced by "+consumption);      
+							}
 							aBankAccount.setAccount(tmpAccount-consumption);
 							consumption=0;
 						}
 					}
 				}
 				if(consumption>0){
-					System.out.println("      consumption "+consumption+" allowedCredit "+bestBankAccount.getAllowedCredit());
+//					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit())+"    "+(-bestBankAccount.getAccount()));
+					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount()));
 					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
 				}
 			}

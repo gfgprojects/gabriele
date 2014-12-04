@@ -90,45 +90,50 @@ public class Bank {
 			tmpAccount=aBankAccount.getAccount();
 			tmpOwnerType=aBankAccount.getOwnerType();
 			if(tmpOwnerType=="consumer"){
+				aConsumer=(Consumer)aBankAccount.getOwner();
 				if(tmpAccount>0){
 						if(Context.verboseFlag){
-						System.out.println("     consumer: account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
+						System.out.println("     consumer "+aConsumer.getIdentity()+": account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
 						}
 					aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnDeposits));
+					aBankAccount.setDemandedCredit(0);
+					aBankAccount.setAllowedCredit(0);
 				}
 				else{
-					aConsumer=(Consumer)aBankAccount.getOwner();
 					if(aConsumer.getIsStudentFlag()){
 						if(Context.verboseFlag){
-						System.out.println("     student: account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
+						System.out.println("     student "+aConsumer.getIdentity()+": account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
 						}
 						aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
+						aBankAccount.setDemandedCredit(aBankAccount.getAccount());
 						aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 					}
 					else{
 						if(aConsumer.getIsWorkingFlag()){
 						if(Context.verboseFlag){
-						System.out.println("     worker: account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
+						System.out.println("     worker "+aConsumer.getIdentity()+": account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
 						}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
+							aBankAccount.setDemandedCredit(aBankAccount.getAccount());
 							if(RandomHelper.nextDouble()>0.5){
 								if(Context.verboseFlag){
-									System.out.println("     refund not asked");
+									System.out.println("      refund not asked");
 								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 							}
 							else{
 								if(Context.verboseFlag){
-									System.out.println("     refund asked");
+									System.out.println("      refund asked");
 								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
 							}
 						}
 						else{
 							if(Context.verboseFlag){
-								System.out.println("     unemployed: account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
+								System.out.println("     unemployed "+aConsumer.getIdentity()+": account "+tmpAccount+" interst rate -"+Context.interestRateOnSubsidizedLoans+" rufund not Asked");
 							}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnSubsidizedLoans));
+							aBankAccount.setDemandedCredit(aBankAccount.getAccount());
 							aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 						}
 					}
@@ -179,15 +184,29 @@ public class Bank {
 
 
 
-	public void resetDemandedAndAllowedCredit(){
+	public void resetConsumersDemandedAndAllowedCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
+			if(aBankAccount.getOwnerType()=="consumer"){
 			aBankAccount.resetDemandedCredit();
 			aBankAccount.resetAllowedCredit();
+			}
 		}
 	}
+	public void resetFirmsDemandedAndAllowedCredit(){
+		demandedCredit=0;
+		allowedCredit=0;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			if(aBankAccount.getOwnerType()=="firm"){
+			aBankAccount.resetDemandedCredit();
+			aBankAccount.resetAllowedCredit();
+			}
+		}
+	}
+
 
 
 /**
@@ -199,36 +218,99 @@ public class Bank {
 		double anAccountAmount,anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
-			anAccountAmount=aBankAccount.getAccount();
-			anAccountDesiredCredit=aBankAccount.getDemandedCredit();
-			demandedCredit=demandedCredit-anAccountDesiredCredit;
-			if(anAccountAmount>=0){
-				if(RandomHelper.nextDouble()>0.5){
-					multiplier=0.5;
+			if(aBankAccount.getOwnerType()=="consumer"){
+				aConsumer=(Consumer)aBankAccount.getOwner();
+				anAccountAmount=aBankAccount.getAccount();
+				anAccountDesiredCredit=aBankAccount.getDemandedCredit();
+				demandedCredit+=-anAccountDesiredCredit;
+				if(anAccountAmount>=0){
+					if(RandomHelper.nextDouble()>0.5){
+						multiplier=0.5;
+					}
+					else{
+						multiplier=1.0;
+					}
+					if(aConsumer.getIsStudentFlag()){
+						multiplier=1.0;
+					}
+					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
 				}
 				else{
-					multiplier=1.0;
-				}
-				anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
-			}
-			else{
-				if(RandomHelper.nextDouble()>0.5){
-					multiplier=0.5;
-				}
-				else{
-					multiplier=1.0;
-				}
-				anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
-			
+					if(RandomHelper.nextDouble()>0.5){
+						multiplier=0.5;
+					}
+					else{
+						multiplier=1.0;
+					}
+					if(aConsumer.getIsStudentFlag()){
+						multiplier=1.0;
+					}
+					if(anAccountDesiredCredit<0){
+						anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
+					}
+					else{
+						anAccounAllowedCredit=0;
+					}
 
+
+				}
+				allowedCredit+=-anAccounAllowedCredit;
+				System.out.println("      askedCredit "+aBankAccount.getDemandedCredit());
+				aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 			}
-			allowedCredit+=-anAccounAllowedCredit;
-			aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 		}
 		if(Context.verboseFlag){
-		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
+			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
 		}
 	}
+
+	public void setAllowedFirmsCredit(){
+		demandedCredit=0;
+		allowedCredit=0;
+		double anAccountAmount,anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
+		for(int i=0;i<accountsList.size();i++){
+			aBankAccount=(BankAccount)accountsList.get(i);
+			if(aBankAccount.getOwnerType()=="firm"){
+				anAccountAmount=aBankAccount.getAccount();
+				anAccountDesiredCredit=aBankAccount.getDemandedCredit();
+				demandedCredit=demandedCredit-anAccountDesiredCredit;
+				if(anAccountAmount>=0){
+					if(RandomHelper.nextDouble()>0.5){
+						multiplier=0.5;
+					}
+					else{
+						multiplier=1.0;
+					}
+					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
+				}
+				else{
+					if(RandomHelper.nextDouble()>0.5){
+						multiplier=0.5;
+					}
+					else{
+						multiplier=1.0;
+					}
+					if(anAccountDesiredCredit<0){
+						anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
+					}
+					else{
+						anAccounAllowedCredit=0;
+					}
+
+
+				}
+				allowedCredit+=-anAccounAllowedCredit;
+				System.out.println("      askedCredit "+aBankAccount.getDemandedCredit());
+				aBankAccount.setAllowedCredit(anAccounAllowedCredit);
+			}
+		}
+		if(Context.verboseFlag){
+			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
+		}
+	}
+
+
+/*
 	public void setAllowedFirmsCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
@@ -252,5 +334,6 @@ public class Bank {
 		System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
 		}
 	}
+*/
 
 }

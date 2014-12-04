@@ -68,7 +68,7 @@ public class Firm {
 
 	Iterator<Consumer> workersListIterator;
 	Iterator<Curriculum> applicationListIterator;
-	 BankAccount aBankAccount;
+	 BankAccount aBankAccount,bestBankAccount,worstBankAccount;
 	 Bank aBank;
 
 	public Firm(int FirmID) {
@@ -178,7 +178,7 @@ public class Firm {
 	}
 
 	public void makeProduction(){
-		System.out.println("     Firm "+identity+"production capital "+productionCapital+" numberOfWorkers "+workersList.size());
+		System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
 			sumOfWorkersProductivity=0;
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
@@ -207,23 +207,30 @@ public class Firm {
 		}
 //identify the bank account with the best position
 		int positionOfBestBankAccount=0;
+		int positionOfWorstBankAccount=0;
 		double creditToAsk;
 		aBankAccount=(BankAccount)bankAccountsList.get(0);
 		double bestAccount=aBankAccount.getAccount();
+		double worstAccount=aBankAccount.getAccount();
 		for(int j=1;j<bankAccountsList.size()-1;j++){
 			aBankAccount=(BankAccount)bankAccountsList.get(j);
 			if(aBankAccount.getAccount()>bestAccount){
 				positionOfBestBankAccount=j;
 			}
+			if(aBankAccount.getAccount()<worstAccount){
+				positionOfWorstBankAccount=j;
+			}
 		}
 
+		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
+		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstBankAccount);
 		aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
 
 		if(desiredProductionCapital>productionCapital){
 			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
 
 			if(creditToAsk>0){
-				aBankAccount.setDesiredCredit(0.0,creditToAsk);
+				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
 			}
 			else{
 				creditToAsk=0;
@@ -232,7 +239,7 @@ public class Firm {
 		else{
 			if(cashOnHand+financialResourcesInBankAccounts<0){
 				creditToAsk=cashOnHand+financialResourcesInBankAccounts;
-				aBankAccount.setDesiredCredit(0.0,-creditToAsk);
+				bestBankAccount.setDesiredCredit(0.0,-creditToAsk);
 			}
 			else{
 				creditToAsk=0;
@@ -495,7 +502,7 @@ public class Firm {
 			}
 			if(Context.verboseFlag){
 				for(int j=0;j<7;j++){
-					System.out.println("     Firm "+identity+" degree "+j+" n "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
+					System.out.println("     Firm "+identity+" degree "+j+" n. of employed workers "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
 				}
 			}
 		}

@@ -14,7 +14,7 @@ import sfcabm.OfficeForStatistics;
 import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verboseFlag=false;
+	public static boolean verboseFlag=true;
 		public static int NumConsumers = 10;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
@@ -239,7 +239,7 @@ System.out.println("FIRMS: SET WAGE");
 			contextAction.execute();
 
 //		if(verboseFlag){
-System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS");
+System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS (INTEREST AND ASK FOR REFUNDING)");
 //		}
 
 			contextAction=contextActionFactory.createActionForIterable(banksList,"updateConsumersAccounts",false);
@@ -252,10 +252,10 @@ System.out.println("CONSUMERS: PAY BACK BANK DEBT");
 			contextAction.execute();
 
 //		if(verboseFlag){
-System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS");
+System.out.println("BANKS: RESET CONSUMERS DEMANDED AND ALLOWED CREDIT");
 //		}
 
-			contextAction=contextActionFactory.createActionForIterable(banksList,"resetDemandedAndAllowedCredit",false);
+			contextAction=contextActionFactory.createActionForIterable(banksList,"resetConsumersDemandedAndAllowedCredit",false);
 			contextAction.execute();
 
 
@@ -284,7 +284,7 @@ System.out.println("BANKS: EXTEND CONSUMER CREDIT");
 
 	
 		if(verboseFlag){
-System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
+System.out.println("CONSUMERS: ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"adjustConsumptionAccordingToExtendedCredit",false);
 			contextAction.execute();
@@ -293,6 +293,9 @@ System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 			officeForStatistics.computeDesiredDemand();
 			officeForStatistics.allocateDesiredDemand();
 
+		if(verboseFlag){
+System.out.println("OFFICE FOR STATISTICS: MATCH DEMAND AND SUPPLY");
+		}
 
 			officeForStatistics.matchDemandAndSupply();
 
@@ -300,7 +303,7 @@ System.out.println("CONSUMERS ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
 			officeForStatistics.allocateDemand();
 
 //			if(verboseFlag){
-System.out.println("CONSUMERS UNPDATE BANK ACCOUNT ACCORDING TO EFFECTIVE CONSUMPTION");
+System.out.println("CONSUMERS: UPDATE BANK ACCOUNT ACCORDING TO EFFECTIVE CONSUMPTION");
 //		}
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"updateBankAccountAccordingToEffectiveConsumption",false);
 			contextAction.execute();
@@ -328,10 +331,17 @@ System.out.println("FIRMS: PAY BACK BANK DEBT");
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"payBackBankDebt",false);
 			contextAction.execute();
 
+//		if(verboseFlag){
+System.out.println("BANKS: RESET FIRMS DEMANDED AND ALLOWED CREDIT");
+//		}
+
+			contextAction=contextActionFactory.createActionForIterable(banksList,"resetFirmsDemandedAndAllowedCredit",false);
+			contextAction.execute();
+
 
 
 //if(verboseFlag){
-System.out.println("FIRMS COMPUTE DESIRED CAPITAL");
+System.out.println("FIRMS COMPUTE DESIRED CREDIT");
 //		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredCredit",false);
 			contextAction.execute();

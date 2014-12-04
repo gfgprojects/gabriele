@@ -53,9 +53,17 @@ public class BankAccount{
 	}
 	public void setAccount(double ac){
 		account=ac;
-//		if(Context.verboseFlag){
-			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
-//		}
+		if(Context.verboseFlag){
+//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+			System.out.println("      bank account "+account);
+		}
+	}
+	public void setDemandedCredit(double dc){
+		demandedCredit=dc;
+		if(Context.verboseFlag){
+//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+			System.out.println("      demanded credit "+demandedCredit);
+		}
 	}
 
 	public void setDesiredCredit(double w, double dD){
@@ -69,18 +77,22 @@ public class BankAccount{
 			demandedCredit=0;
 		}
 		if(Context.verboseFlag){
-			System.out.println("       bank account "+account+" wage "+w+" desiredDemand "+dD+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			System.out.println("        bank account "+account+" resources send to bank "+w+" new asked credit "+dD+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 		}
 	}
 	public void setAllowedCredit(double aC){
 		allowedCredit=aC;
-//		if(Context.verboseFlag){
-			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
-//		}
+		if(Context.verboseFlag){
+//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			System.out.println("      allowed credit "+allowedCredit);
+		}
 	}
 
 	public void receiveDeposits(double dep){
 		account+=dep;
+		if(Context.verboseFlag){
+			System.out.println("       previous account "+(account-dep)+" new deposits "+dep+" new account "+account);
+		}
 	}
 
 	public void resetDemandedCredit(){
@@ -88,6 +100,9 @@ public class BankAccount{
 	}
 	public void resetAllowedCredit(){
 		allowedCredit=0;
+//		if(Context.verboseFlag){
+			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+//		}
 	}
 
 }

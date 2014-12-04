@@ -9,6 +9,7 @@ import repast.simphony.engine.schedule.DefaultActionFactory;
 import repast.simphony.engine.schedule.IAction;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.random.RandomHelper;
+import repast.simphony.engine.environment.RunEnvironment;
 
 import sfcabm.Firm;
 
@@ -51,6 +52,56 @@ public class OfficeForStatistics{
 	}
 
 	public void computeVariables(){
+		//remove firms with 0 production
+
+		ArrayList<Firm> firmsToRemove=new ArrayList<Firm>();
+		Iterator contextIterator=myContext.iterator();
+		while(contextIterator.hasNext()){
+			anObj=contextIterator.next();
+			if(anObj instanceof Firm){
+				aFirm=(Firm)anObj;
+				if(aFirm.getProduction()>0){
+				}
+				else{
+					System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
+					firmsToRemove.add(aFirm);
+				}
+			}
+		}
+
+		for(int z=0;z<firmsToRemove.size();z++){
+			myContext.remove(firmsToRemove.get(z));
+		}
+
+
+		try{
+			firmsList=myContext.getObjects(Firm.class);
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+		if(firmsList.size()<1){
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(    SIMULATION STOPPED BECAUSE NO FIRM HAS POSITIVE PRODUCTION: PLEASE VERIFY YOUR PARAMETRIZATION!      :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+			System.exit(0);		
+		}
+
+//Absolute Ranks
 		maximumAbsoluteRankDataSource.reset();
 		minimumAbsoluteRankDataSource.reset();
 		industriesList = new ArrayList<Industry>();
@@ -64,36 +115,14 @@ public class OfficeForStatistics{
 		if(Context.verboseFlag){
 			System.out.println("     maximum absolute rank "+maximumAbsoluteRank+" minimum Ansolute Rank "+minimumAbsoluteRank);
 		}
-		
 
-		
+
+
 		for(int i=0;i<(int)(maximumAbsoluteRank-minimumAbsoluteRank+1);i++){
 			industriesList.add(new Industry((int)(i+minimumAbsoluteRank)));
 		}
-		
-		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-		}
-		catch(ClassNotFoundException e){
-			System.out.println("Class not found");
-		}
-//remove firms with 0 production
 
-		contextIterator=myContext.iterator();
-		while(contextIterator.hasNext()){
-			anObj=contextIterator.next();
-			if(anObj instanceof Firm){
-				aFirm=(Firm)anObj;
-				if(aFirm.getProduction()>0){
-				}
-				else{
-					System.out.println("     firm removed because producing "+aFirm.getProduction());
-					contextIterator.remove();
-				}
-			}
-		}
-
-//compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
+		//compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
 		aggregateProduction=0;
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
@@ -104,7 +133,7 @@ public class OfficeForStatistics{
 			anIndustry.increaseProduction(aFirm.getProduction());
 			anIndustry.addFirm(aFirm);
 		}
-//delete from the industries list those with zero production
+		//delete from the industries list those with zero production
 		industriesListIterator=industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
@@ -112,8 +141,8 @@ public class OfficeForStatistics{
 				industriesListIterator.remove();
 			}
 		}
-	
-//print to terminal information on industries
+
+		//print to terminal information on industries
 		if(Context.verboseFlag){
 			//			System.out.println("STATS OFFICE: NEW DATA FROM INDUSTRIES ARE AVAILABLE");
 			industriesListIterator=industriesList.iterator();
@@ -129,30 +158,30 @@ public class OfficeForStatistics{
 			}
 		}
 
-//set relative rank for each firm
-		
+		//set relative rank for each firm
+
 		int minimumAbsoluteRankOfFirmsWithPositiveProduction=industriesList.get(0).getAbsoluteRank();
 		for(int i=0;i<industriesList.size();i++){
 			anIndustry=industriesList.get(i);
 			anIndustry.setRelativeRank(minimumAbsoluteRankOfFirmsWithPositiveProduction);
 			anIndustry.setMarketShare(aggregateProduction);
 		}
-	
-//compute totalWeightedProduction
+
+		//compute totalWeightedProduction
 		totalWeightedProduction=0;
 		for(int i=0;i<industriesList.size();i++){
 			anIndustry=industriesList.get(i);
 			totalWeightedProduction=totalWeightedProduction+anIndustry.getWeightedProduction();
 		}
-//set product diffusion indicator for each industry
+		//set product diffusion indicator for each industry
 		for(int i=0;i<industriesList.size();i++){
 			anIndustry=industriesList.get(i);
 			anIndustry.setProductDiffusionIndicator(totalWeightedProduction);
 		}
-//let firms computeAverageProductivityForEachDegreeOfEducation		
+		//let firms computeAverageProductivityForEachDegreeOfEducation		
 		statAction=statActionFactory.createActionForIterable(firmsList,"computeAverageProductivityForEachDegreeOfEducation",false);
 		statAction.execute();
-// computeAverageProductivityForEachDegreeOfEducation for the economy		
+		// computeAverageProductivityForEachDegreeOfEducation for the economy		
 		numberOfWokersInADegree=new int[7];
 		totalProductivityOfWorkersInADegree=new double[7];
 		averageProductivityOfWorkersInADegree=new double[7];
@@ -182,9 +211,9 @@ public class OfficeForStatistics{
 		averageProductivity=totalProductivity/numberOfWorkers;
 		if(Context.verboseFlag){
 			for(int z=0;z<7;z++){
-				System.out.println("     system level degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
+				System.out.println("     system level: degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
 			}
-			System.out.println("     system number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
+			System.out.println("     system: number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
 		}
 
 	}
