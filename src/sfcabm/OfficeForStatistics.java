@@ -52,6 +52,7 @@ public class OfficeForStatistics{
 	}
 
 	public void computeVariables(){
+/*
 		//remove firms with 0 production
 
 		ArrayList<Firm> firmsToRemove=new ArrayList<Firm>();
@@ -72,7 +73,7 @@ public class OfficeForStatistics{
 		for(int z=0;z<firmsToRemove.size();z++){
 			myContext.remove(firmsToRemove.get(z));
 		}
-
+*/
 
 		try{
 			firmsList=myContext.getObjects(Firm.class);
@@ -80,25 +81,6 @@ public class OfficeForStatistics{
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
-		}
-
-		if(firmsList.size()<1){
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
-		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
-		System.out.println(":-(   :-(    SIMULATION STOPPED BECAUSE NO FIRM HAS POSITIVE PRODUCTION: PLEASE VERIFY YOUR PARAMETRIZATION!      :-(   :-(");
-		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
-		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-			System.exit(0);		
 		}
 
 //Absolute Ranks

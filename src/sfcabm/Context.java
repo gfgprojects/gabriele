@@ -1,9 +1,13 @@
 package sfcabm;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.DefaultActionFactory;
 import repast.simphony.engine.schedule.IAction;
+import repast.simphony.util.collections.IndexedIterable;
 //import repast.simphony.engine.environment.RunEnvironment;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
@@ -168,6 +172,55 @@ System.out.println("FIRMS: HIRE");
 				aFirm.setInitialWorkers();
 			}
 
+		if(verboseFlag){
+System.out.println("CONTEXT: REMOVING FIRMS WITH ZERO PRODUCTION");
+		}
+		ArrayList<Firm> firmsToRemove=new ArrayList<Firm>();
+		Iterator contextIterator=context.iterator();
+		while(contextIterator.hasNext()){
+			Object anObj=contextIterator.next();
+			if(anObj instanceof Firm){
+				aFirm=(Firm)anObj;
+				if(aFirm.getNumberOfWorkers()<1){
+					System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
+					firmsToRemove.add(aFirm);
+				}
+			}
+		}
+
+		for(int z=0;z<firmsToRemove.size();z++){
+			context.remove(firmsToRemove.get(z));
+		}
+//		try{
+			IndexedIterable firmsList=context.getObjects(Firm.class);
+//		}
+//		catch(ClassNotFoundException e){
+//			System.out.println("Class not found");
+//		}
+
+		if(firmsList.size()<1){
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(    SIMULATION STOPPED BECAUSE NO FIRM HAS POSITIVE PRODUCTION: PLEASE VERIFY YOUR PARAMETRIZATION!      :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+			System.exit(0);		
+		}
+
+
+
+
+
 
 
 			if(verboseFlag){
@@ -317,7 +370,7 @@ System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
 			contextAction.execute();
 
 //		if(verboseFlag){
-System.out.println("BANKS: UPDATE FIRMS ACCOUNTS");
+System.out.println("BANKS: UPDATE FIRMS ACCOUNTS (INTEREST AND ASK FOR REFUNDING)");
 //		}
 
 			contextAction=contextActionFactory.createActionForIterable(banksList,"updateFirmsAccounts",false);
@@ -354,7 +407,7 @@ System.out.println("BANKS EXTEND FIRM CREDIT");
 			contextAction.execute();
 
 //if(verboseFlag){
-System.out.println("FIRMS ADJUST PRODUCTION CAPITAL");
+System.out.println("FIRMS ADJUST PRODUCTION CAPITAL AND BANK ACCOUNTS");
 //		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"adjustProductionCapitalAndBankAccount",false);
 			contextAction.execute();

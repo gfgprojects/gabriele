@@ -12,6 +12,7 @@ public class Bank {
 	public double iL;
 	double deposits,loans,demandedCredit,allowedCredit,equity;
 	Consumer aConsumer;
+	Firm aFirm;
 
 	public Bank(int id,repast.simphony.context.Context<Object> con){
 		identity=id;
@@ -152,31 +153,38 @@ public class Bank {
 			tmpAccount=aBankAccount.getAccount();
 			tmpOwnerType=aBankAccount.getOwnerType();
 			if(tmpOwnerType=="firm"){
+				aFirm=(Firm)aBankAccount.getOwner();
 				if(tmpAccount>0){
-						if(Context.verboseFlag){
-						System.out.println("     "+tmpOwnerType+": account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
-						}
+					if(Context.verboseFlag){
+						System.out.println("     "+tmpOwnerType+" "+aFirm.getIdentity()+": account "+tmpAccount+" interst rate +"+Context.interestRateOnDeposits);
+					}
 					aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnDeposits));
+					aBankAccount.setDemandedCredit(0);
+					aBankAccount.setAllowedCredit(0);
 				}
 				else{
 						if(Context.verboseFlag){
-						System.out.println("     "+tmpOwnerType+": account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
+						System.out.println("     "+tmpOwnerType+" "+aFirm.getIdentity()+": account "+tmpAccount+" interst rate -"+Context.interestRateOnLoans);
 						}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
+							aBankAccount.setDemandedCredit(aBankAccount.getAccount());
 							if(RandomHelper.nextDouble()>0.5){
 								if(Context.verboseFlag){
-									System.out.println("     refund not asked");
+									System.out.println("      refund not asked");
 								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount());
 							}
 							else{
 								if(Context.verboseFlag){
-									System.out.println("     refund asked");
+									System.out.println("      refund asked");
 								}
 								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
 							}
 				}
 	
+				if(Context.verboseFlag){
+					System.out.println("      -----------");
+				}
 			}
 		}
 
@@ -190,8 +198,13 @@ public class Bank {
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
 			if(aBankAccount.getOwnerType()=="consumer"){
-			aBankAccount.resetDemandedCredit();
-			aBankAccount.resetAllowedCredit();
+				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
+					aBankAccount.resetAllowedCredit();
+				}
+				else{
+					aBankAccount.resetDemandedCredit();
+					aBankAccount.resetAllowedCredit();
+				}
 			}
 		}
 	}
@@ -201,8 +214,16 @@ public class Bank {
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
 			if(aBankAccount.getOwnerType()=="firm"){
-			aBankAccount.resetDemandedCredit();
-			aBankAccount.resetAllowedCredit();
+					aBankAccount.resetDemandedCredit();
+					aBankAccount.resetAllowedCredit();
+/*				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
+					aBankAccount.resetAllowedCredit();
+				}
+				else{
+					aBankAccount.resetDemandedCredit();
+					aBankAccount.resetAllowedCredit();
+				}
+*/
 			}
 		}
 	}

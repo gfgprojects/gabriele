@@ -261,7 +261,8 @@ public void stepState(){
 							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 						}
 						else{
-							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
+							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 							//							resourcesAvailableToRefund=0;
 							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
 						}

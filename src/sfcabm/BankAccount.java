@@ -4,6 +4,7 @@ public class BankAccount{
 	double account=0;
 	double demandedCredit=0;
 	double allowedCredit=0;
+	double unpaidAmount=0;
 	String ownerType;
 	Object owner;
 
@@ -104,5 +105,18 @@ public class BankAccount{
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 //		}
 	}
+	public void setUnpaidAmount(double ua){
+		unpaidAmount=ua;
+	}
+	public double getUnpaidAmount(){
+		return unpaidAmount;
+	}
+	public void increaseUnpaidAmount(double ua){
+		unpaidAmount+=ua;
+		if(Context.verboseFlag){
+			System.out.println("      bank account unpaid amount "+unpaidAmount);
+}
+	}
+
 
 }

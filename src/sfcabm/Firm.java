@@ -247,6 +247,7 @@ public class Firm {
 		}
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
+System.out.println("      ----------------");
 		}
 	
 
@@ -258,8 +259,9 @@ public class Firm {
 			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
 
 			if(creditToAsk>0){
-				if(aBankAccount.getAllowedCredit()>aBankAccount.getAccount()){
-					productionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts+aBankAccount.getAllowedCredit()-aBankAccount.getAccount();
+				if(aBankAccount.getAllowedCredit()<aBankAccount.getAccount()){
+						System.out.println("      asked credit; totally allowed");
+					productionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts-aBankAccount.getAllowedCredit()+aBankAccount.getAccount();
 					if(productionCapital>desiredProductionCapital){
 						productionCapital=desiredProductionCapital;
 						aBankAccount.setAccount(aBankAccount.getDemandedCredit());
@@ -269,15 +271,19 @@ public class Firm {
 					}
 				}
 				else{
+						System.out.println("      asked credit; partially allowd");
 					if(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts>aBankAccount.getAllowedCredit()){
-						aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+						productionCapital+=(aBankAccount.getAccount()+aBankAccount.getAllowedCredit()+cashOnHand+financialResourcesInBankAccounts);
+						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 					}
 					else{
 						System.out.println("      Firm cannot refund");
+						aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 					}
 				}
 			}
 			else{
+						System.out.println("      available funds are enough to finance new investment; the excess is deposited");
 				productionCapital=desiredProductionCapital;
 				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
@@ -287,20 +293,25 @@ public class Firm {
 			productionCapital=desiredProductionCapital;
 			if(cashOnHand+financialResourcesInBankAccounts<0){
 				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
+						System.out.println("      capital reduction; refund asked but not enough internal funds");
 					System.out.println("      Firm cannot refund");
+					aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 				}
 				else{
 					aBankAccount.setAccount(aBankAccount.getDemandedCredit());
+						System.out.println("      capital reduction; refund not asked are enough");
 				}
 			}
 			else{
 				aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+						System.out.println("      capital reduction; positive internal funds that are deposited");
 				creditToAsk=0;
 			}
 		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+			System.out.println("     -----------");
 		}
 
 	}
@@ -425,7 +436,7 @@ public class Firm {
 		}
 		if(totalAmountToRefund>0){
 //		if(Context.verboseFlag){
-			System.out.println("     To refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
+			System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
 //		}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
@@ -473,8 +484,12 @@ public class Firm {
 							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
 							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 						}
-						else{
-							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
+						else{ 
+							//		if(Context.verboseFlag){
+							System.out.println("      insolvency: occunting delayed to next method");
+							//		}
+//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 							//							resourcesAvailableToRefund=0;
 							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
 						}
@@ -482,7 +497,7 @@ public class Firm {
 				}
 			}
 //		if(Context.verboseFlag){
-			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
+			System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
 //		}
 		}
 }
@@ -634,6 +649,10 @@ public class Firm {
 		}
 		public double[] getTotalProductivityOfWorkersInADegree(){
 			return totalProductivityOfWorkersInADegree;
+		}
+
+		public int getNumberOfWorkers(){
+			return workersList.size();
 		}
 
 
