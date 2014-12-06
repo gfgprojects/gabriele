@@ -19,7 +19,7 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments;
 	public IndexedIterable<Object> firmsList,consumersList;
 
 	Firm aFirm;
@@ -305,6 +305,52 @@ public class OfficeForStatistics{
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateDemand",false);
 		statAction.execute();
 	}
+
+	public void computeInvestments(){
+		aggregateInvestments=0;
+//		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
+//		statAction.execute();
+
+
+		try{
+			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		for(int i=0;i<firmsList.size();i++){
+			aFirm=(Firm)firmsList.get(i);
+			double tmpInvestment=aFirm.getInvestment();
+			if(tmpInvestment>0){
+			aggregateInvestments+=tmpInvestment;
+			}
+		}
+
+//		if(Context.verboseFlag){
+//			System.out.println("OFFICE FOR STATISTICS: COMPUTE INVESTMENTS ");
+//		}
+			industriesListIterator=industriesList.iterator();
+			while(industriesListIterator.hasNext()){
+				anIndustry=industriesListIterator.next();
+				anIndustry.setInvestments(anIndustry.getProductAttractiveness()*aggregateInvestments);
+		if(Context.verboseFlag){
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" investments "+anIndustry.getInvestments());
+		}
+			}
+
+		if(Context.verboseFlag){
+			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction+" aggregate Investments "+aggregateInvestments);
+		}
+	}
+
+	public void allocateInvestments(){
+		statAction=statActionFactory.createActionForIterable(industriesList,"allocateInvestments",false);
+		statAction.execute();
+	}
+
+
 
 /**
  * This method allocates the excess of demand of an industry to the industry that produces the next less advanced product. The cycle starts from the industry that produces the most advanced product.  

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 
 public class Industry{
 	int absoluteRank,relativeRank,numberOfFirms;
-	double production,marketShare,weightedProduction,productAttractivenesIndicator,demand;
+	double production,marketShare,weightedProduction,productAttractivenesIndicator,demand,investments;
 	ArrayList<Firm> theIndustryFirmsList=new ArrayList<Firm>();
 	Firm aFirm;
+
 
 	public Industry(int ar){
 		absoluteRank=ar;
@@ -42,6 +43,23 @@ public class Industry{
 			aFirm.setDemand(production,demand);
 		}
 	}
+
+	public void allocateInvestments(){
+		if(Context.verboseFlag){
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand+" investments "+investments);
+		}
+		for(int i=0;i<theIndustryFirmsList.size();i++){
+			aFirm=theIndustryFirmsList.get(i);
+			aFirm.setOrdersOfProductsForInvestmentPurpose(production,investments);
+		}
+	}
+
+
+
+
+
+
+
 	public void addFirm(Firm af){
 		theIndustryFirmsList.add(af);
 	}
@@ -84,6 +102,12 @@ public class Industry{
 
 	public void resetDemand(){
 		demand=0;
+	}
+	public void setInvestments(double invest){
+		investments=invest;
+	}
+	public double getInvestments(){
+		return investments;
 	}
 
 

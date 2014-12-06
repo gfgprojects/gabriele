@@ -29,6 +29,8 @@ public class Firm {
 	double productionCapacityAfterWorkforceAdjustment;
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
 	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts;	
+	double firmInvestment=0;
+	double ordersOfProductsForInvestmentPurpose;
 		/*
 	   public double desiredOutput;
 	   public double expectedSales;
@@ -260,36 +262,44 @@ System.out.println("      ----------------");
 
 			if(creditToAsk>0){
 				if(aBankAccount.getAllowedCredit()<aBankAccount.getAccount()){
-						System.out.println("      asked credit; totally allowed");
-					productionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts-aBankAccount.getAllowedCredit()+aBankAccount.getAccount();
-					if(productionCapital>desiredProductionCapital){
+					double tmpProductionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts-aBankAccount.getAllowedCredit()+aBankAccount.getAccount();
+					if(tmpProductionCapital>=desiredProductionCapital){
+						System.out.println("      asked credit; totally allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
+						firmInvestment=desiredProductionCapital-productionCapital;
 						productionCapital=desiredProductionCapital;
 						aBankAccount.setAccount(aBankAccount.getDemandedCredit());
 					}
 					else{
+						System.out.println("      asked credit; partially allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
 						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+						firmInvestment=tmpProductionCapital-productionCapital;
+						productionCapital=tmpProductionCapital;
 					}
 				}
 				else{
-						System.out.println("      asked credit; partially allowd");
+						System.out.println("      asked credit; refund asked");
 					if(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts>aBankAccount.getAllowedCredit()){
+						firmInvestment=aBankAccount.getAccount()+aBankAccount.getAllowedCredit()+cashOnHand+financialResourcesInBankAccounts;
 						productionCapital+=(aBankAccount.getAccount()+aBankAccount.getAllowedCredit()+cashOnHand+financialResourcesInBankAccounts);
 						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 					}
 					else{
 						System.out.println("      Firm cannot refund");
 						aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+						firmInvestment=0;
 					}
 				}
 			}
 			else{
 						System.out.println("      available funds are enough to finance new investment; the excess is deposited");
+				firmInvestment=desiredProductionCapital-productionCapital;
 				productionCapital=desiredProductionCapital;
 				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
 			}
 		}
 		else{
+			firmInvestment=desiredProductionCapital-productionCapital;
 			productionCapital=desiredProductionCapital;
 			if(cashOnHand+financialResourcesInBankAccounts<0){
 				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
@@ -299,7 +309,7 @@ System.out.println("      ----------------");
 				}
 				else{
 					aBankAccount.setAccount(aBankAccount.getDemandedCredit());
-						System.out.println("      capital reduction; refund not asked are enough");
+						System.out.println("      capital reduction; allowed credit is enough to cover negative internal funds");
 				}
 			}
 			else{
@@ -310,7 +320,7 @@ System.out.println("      ----------------");
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+			System.out.println("     Firm "+identity+" investment "+firmInvestment+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
 			System.out.println("     -----------");
 		}
 
@@ -625,6 +635,17 @@ System.out.println("      ----------------");
 			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
 						}
 		}
+
+public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
+			ordersOfProductsForInvestmentPurpose=(int)Math.round(production/industryProduction*industryInvest);
+						if(Context.verboseFlag){
+			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" products ordered for investments "+ordersOfProductsForInvestmentPurpose);
+						}
+		}
+
+
+
+
 		public void jettisoningCurricula(){
 			applicationList = new ArrayList<Curriculum>();
 			if(Context.verboseFlag){
@@ -653,6 +674,9 @@ System.out.println("      ----------------");
 
 		public int getNumberOfWorkers(){
 			return workersList.size();
+		}
+		public double getInvestment(){
+			return firmInvestment;
 		}
 
 

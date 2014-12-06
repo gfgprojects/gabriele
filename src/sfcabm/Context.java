@@ -407,14 +407,22 @@ System.out.println("BANKS EXTEND FIRM CREDIT");
 			contextAction.execute();
 
 //if(verboseFlag){
-System.out.println("FIRMS ADJUST PRODUCTION CAPITAL AND BANK ACCOUNTS");
+System.out.println("FIRMS: ADJUST PRODUCTION CAPITAL AND BANK ACCOUNTS");
 //		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"adjustProductionCapitalAndBankAccount",false);
 			contextAction.execute();
 
+//if(verboseFlag){
+System.out.println("OFFICE FOR STATISTICS: COMPUTE AGGREGATE INVESTMENTS AND SET INDUSTRIES' INVESTMENTS");
+//		}
 
+officeForStatistics.computeInvestments();
 
+if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: ALLOCATE INVESTMENTS ");
+}
 
+officeForStatistics.allocateInvestments();
 
 
 		if(verboseFlag){
