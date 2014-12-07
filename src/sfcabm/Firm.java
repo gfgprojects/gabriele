@@ -421,7 +421,7 @@ System.out.println("      ----------------");
 			aConsumer=(Consumer)workersList.get(i);
 			firmWageSum+=aConsumer.getWage();
 		}
-		cashOnHand=demand-firmWageSum;
+		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
 		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
 		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);

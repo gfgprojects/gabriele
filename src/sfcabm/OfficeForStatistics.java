@@ -10,6 +10,8 @@ import repast.simphony.engine.schedule.IAction;
 import repast.simphony.util.ContextUtils;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.essentials.RepastEssentials;
 
 import sfcabm.Firm;
 
@@ -20,7 +22,7 @@ public class OfficeForStatistics{
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
 	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments;
-	public IndexedIterable<Object> firmsList,consumersList;
+	public IndexedIterable firmsList,consumersList,banksList;
 
 	Firm aFirm;
 	Consumer aConsumer;
@@ -41,6 +43,8 @@ public class OfficeForStatistics{
 	double totalProductivity=0;
 	public static double averageProductivity=0;
 
+	ScheduleParameters scheduleParameters;
+
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -52,38 +56,47 @@ public class OfficeForStatistics{
 	}
 
 	public void computeVariables(){
-/*
+		if(Context.verboseFlag){
+			System.out.println();
+			System.out.println("===================================================================");
+			System.out.println("SIMULATION TIME STEP: "+RepastEssentials.GetTickCount());
+			System.out.println("====================================================================");
+			System.out.println();
+			System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES (PRODUCT DIFFUSION INDICATOR, PRODUCTIVITIES ...");
+		}
+		/*
 		//remove firms with 0 production
 
 		ArrayList<Firm> firmsToRemove=new ArrayList<Firm>();
 		Iterator contextIterator=myContext.iterator();
 		while(contextIterator.hasNext()){
-			anObj=contextIterator.next();
-			if(anObj instanceof Firm){
-				aFirm=(Firm)anObj;
-				if(aFirm.getProduction()>0){
-				}
-				else{
-					System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
-					firmsToRemove.add(aFirm);
-				}
-			}
+		anObj=contextIterator.next();
+		if(anObj instanceof Firm){
+		aFirm=(Firm)anObj;
+		if(aFirm.getProduction()>0){
+		}
+		else{
+		System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
+		firmsToRemove.add(aFirm);
+		}
+		}
 		}
 
 		for(int z=0;z<firmsToRemove.size();z++){
-			myContext.remove(firmsToRemove.get(z));
+		myContext.remove(firmsToRemove.get(z));
 		}
-*/
-
+		*/
 		try{
 			firmsList=myContext.getObjects(Firm.class);
 			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
 
-//Absolute Ranks
+		//Absolute Ranks
 		maximumAbsoluteRankDataSource.reset();
 		minimumAbsoluteRankDataSource.reset();
 		industriesList = new ArrayList<Industry>();
@@ -200,9 +213,9 @@ public class OfficeForStatistics{
 
 	}
 
-/**
- * The difference with the computeDemand method is that this method accounts for imperfection in the goods market 
- */
+	/**
+	 * The difference with the computeDemand method is that this method accounts for imperfection in the goods market 
+	 */
 	public void computeDesiredDemand(){
 		aggregateDemand=0;
 		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
@@ -234,13 +247,13 @@ public class OfficeForStatistics{
 		if(Context.verboseFlag){
 			System.out.println("OFFICE FOR STATISTICS: COMPUTE DESIRED DEMAND ");
 		}
-			industriesListIterator=industriesList.iterator();
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-		if(Context.verboseFlag){
+		industriesListIterator=industriesList.iterator();
+		while(industriesListIterator.hasNext()){
+			anIndustry=industriesListIterator.next();
+			if(Context.verboseFlag){
 				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
-		}
 			}
+		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
@@ -285,13 +298,13 @@ public class OfficeForStatistics{
 		if(Context.verboseFlag){
 			System.out.println("OFFICE FOR STATISTICS: COMPUTE DEMAND ");
 		}
-			industriesListIterator=industriesList.iterator();
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-		if(Context.verboseFlag){
+		industriesListIterator=industriesList.iterator();
+		while(industriesListIterator.hasNext()){
+			anIndustry=industriesListIterator.next();
+			if(Context.verboseFlag){
 				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
-		}
 			}
+		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
@@ -307,9 +320,12 @@ public class OfficeForStatistics{
 	}
 
 	public void computeInvestments(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: COMPUTE AGGREGATE INVESTMENTS AND SET INDUSTRIES' INVESTMENTS");
+		}
 		aggregateInvestments=0;
-//		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
-//		statAction.execute();
+		//		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
+		//		statAction.execute();
 
 
 		try{
@@ -324,21 +340,21 @@ public class OfficeForStatistics{
 			aFirm=(Firm)firmsList.get(i);
 			double tmpInvestment=aFirm.getInvestment();
 			if(tmpInvestment>0){
-			aggregateInvestments+=tmpInvestment;
+				aggregateInvestments+=tmpInvestment;
 			}
 		}
 
-//		if(Context.verboseFlag){
-//			System.out.println("OFFICE FOR STATISTICS: COMPUTE INVESTMENTS ");
-//		}
-			industriesListIterator=industriesList.iterator();
-			while(industriesListIterator.hasNext()){
-				anIndustry=industriesListIterator.next();
-				anIndustry.setInvestments(anIndustry.getProductAttractiveness()*aggregateInvestments);
-		if(Context.verboseFlag){
+		//		if(Context.verboseFlag){
+		//			System.out.println("OFFICE FOR STATISTICS: COMPUTE INVESTMENTS ");
+		//		}
+		industriesListIterator=industriesList.iterator();
+		while(industriesListIterator.hasNext()){
+			anIndustry=industriesListIterator.next();
+			anIndustry.setInvestments(anIndustry.getProductAttractiveness()*aggregateInvestments);
+			if(Context.verboseFlag){
 				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" investments "+anIndustry.getInvestments());
-		}
 			}
+		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction+" aggregate Investments "+aggregateInvestments);
@@ -346,16 +362,22 @@ public class OfficeForStatistics{
 	}
 
 	public void allocateInvestments(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: ALLOCATE INVESTMENTS ");
+		}
 		statAction=statActionFactory.createActionForIterable(industriesList,"allocateInvestments",false);
 		statAction.execute();
 	}
 
 
 
-/**
- * This method allocates the excess of demand of an industry to the industry that produces the next less advanced product. The cycle starts from the industry that produces the most advanced product.  
- */
+	/**
+	 * This method allocates the excess of demand of an industry to the industry that produces the next less advanced product. The cycle starts from the industry that produces the most advanced product.  
+	 */
 	public void matchDemandAndSupply(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: MATCH DEMAND AND SUPPLY");
+		}
 		double multiplier;
 		double excessDemandToAllocate=0;
 		for(int i=industriesList.size()-1;i>=0;i--){
@@ -385,24 +407,24 @@ public class OfficeForStatistics{
 
 
 
-/*
+		/*
 
-		if(aggregateDemand>aggregateProduction){
-			for(int i=0;i<industriesList.size();i++){
-				anIndustry=(Industry)industriesList.get(i);
-				multiplier=anIndustry.getProduction()/anIndustry.getDemand();
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
-				for(int j=0;j<consumersList.size();j++){
-					aConsumer=(Consumer)consumersList.get(j);
-					aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
-				}
+		   if(aggregateDemand>aggregateProduction){
+		   for(int i=0;i<industriesList.size();i++){
+		   anIndustry=(Industry)industriesList.get(i);
+		   multiplier=anIndustry.getProduction()/anIndustry.getDemand();
+		   System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" multiplier "+multiplier);
+		   for(int j=0;j<consumersList.size();j++){
+		   aConsumer=(Consumer)consumersList.get(j);
+		   aConsumer.adjustConsumtionToMatchDemandAndSupply(i,multiplier);
+		   }
 
-			}
-		}
-		else{
-			System.out.println("domanda insuff");
-		}
-*/
+		   }
+		   }
+		   else{
+		   System.out.println("domanda insuff");
+		   }
+		   */
 	}
 
 
@@ -411,26 +433,26 @@ public class OfficeForStatistics{
 		if(Context.verboseFlag){
 			System.out.println("LABOR AGENCY");
 		}
-				try{
-					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
-				}
-				catch(ClassNotFoundException e){
-					System.out.println("Class not found");
-				}
-			switch(Context.firmsWorkersMatching){
-				case 0: if(Context.verboseFlag){
-						System.out.println("     matching activity was not asked");
-					}
-					break;
-				case 1:
-					myLaborMarket.match();
-					break;
-				case 2:
-					myLaborMarket.match();
-					break;
-				default: System.out.println("Unknown workers firms matching mechanism");
-					 break;
+		try{
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		switch(Context.firmsWorkersMatching){
+			case 0: if(Context.verboseFlag){
+					System.out.println("     matching activity was not asked");
 			}
+			break;
+			case 1:
+			myLaborMarket.match();
+			break;
+			case 2:
+			myLaborMarket.match();
+			break;
+			default: System.out.println("Unknown workers firms matching mechanism");
+				 break;
+		}
 	}
 
 	public void performConsumersTurnover(){
@@ -438,7 +460,8 @@ public class OfficeForStatistics{
 			System.out.println("CONSUMERS TURNOVER");
 		}
 
-// remove
+		// identify firms to be removed
+		ArrayList<Consumer> consumersToRemoveList = new ArrayList<Consumer>();
 		ArrayList<Consumer> newConsumersList = new ArrayList<Consumer>();
 		Consumer aNewConsumer;
 		contextIterator=myContext.iterator();
@@ -448,18 +471,25 @@ public class OfficeForStatistics{
 			if(anObj instanceof Consumer){
 				aConsumer=(Consumer)anObj;
 				if(aConsumer.getAge()>Context.consumerExitAge){
+					aConsumer.computeWealth();
 					if(Context.verboseFlag){
 						System.out.println("     Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 					}
+					consumersToRemoveList.add(aConsumer);
 					contextIterator.remove();
-					aNewConsumer=new Consumer(Context.consumersProgressiveIdentificationNumber,myContext,aConsumer.getWealth());
+					aNewConsumer=new Consumer(Context.consumersProgressiveIdentificationNumber,myContext,aConsumer.getBankAccountsList());
 					Context.consumersProgressiveIdentificationNumber++;
 					newConsumersList.add(aNewConsumer);
 				}
 			}
 		}
 
-// add new consumers to context
+		// remove
+		for(int i=0;i<consumersToRemoveList.size();i++){
+			myContext.remove(consumersToRemoveList.get(i));
+		}
+
+		// add new consumers to context
 		for(int i=0;i<newConsumersList.size();i++){
 			aConsumer=newConsumersList.get(i);
 			myContext.add(aConsumer);
@@ -474,20 +504,21 @@ public class OfficeForStatistics{
 			System.out.println("FIRMS TURNOVER");
 		}
 
-// remove
+		// identify firms to be removed
+		ArrayList<Firm> exitingFirmsList = new ArrayList<Firm>();
 		ArrayList<Firm> newFirmsList = new ArrayList<Firm>();
 		Firm aNewFirm;
 		contextIterator=myContext.iterator();
 		while(contextIterator.hasNext()){
 			anObj=contextIterator.next();
-		//check firms
+			//check firms
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
-				if(aFirm.getProduction()<20){
+				if(aFirm.getProduction()<10){
 					if(Context.verboseFlag){
 						System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
 					}
-					contextIterator.remove();
+					exitingFirmsList.add(aFirm);
 					aNewFirm=new Firm(Context.firmsProgressiveIdentificationNumber,myContext);
 					Context.firmsProgressiveIdentificationNumber++;
 					newFirmsList.add(aNewFirm);
@@ -497,7 +528,11 @@ public class OfficeForStatistics{
 
 		}
 
-// add new Firms to context
+		// remove
+		for(int i=0;i<exitingFirmsList.size();i++){
+			myContext.remove(exitingFirmsList.get(i));
+		}
+		// add new Firms to context
 		for(int i=0;i<newFirmsList.size();i++){
 			aFirm=newFirmsList.get(i);
 			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
@@ -521,8 +556,281 @@ public class OfficeForStatistics{
 		}
 
 
-//		statAction=statActionFactory.createActionForIterable(consumersList,"showInfoOnIndustries",false);
+		//		statAction=statActionFactory.createActionForIterable(consumersList,"showInfoOnIndustries",false);
 		statAction=statActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
 		statAction.execute();
 	}
+
+	public void scheduleEvents(){
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,50.0);
+		Context.schedule.schedule(scheduleParameters,this,"computeVariables");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
+		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,47.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksUpdateConsumersAccounts");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,46.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersPayBackBankDebt");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,45.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksResetConsumersDemandedAndAllowedCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,44.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleStepStudentState");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,43.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersStepConsumption");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,42.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksSetAllowedConsumersCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,41.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersAdjustConsumptionAccordingToExtendedCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,40.0);
+		Context.schedule.schedule(scheduleParameters,this,"computeDesiredDemand");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,39.0);
+		Context.schedule.schedule(scheduleParameters,this,"allocateDesiredDemand");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,38.0);
+		Context.schedule.schedule(scheduleParameters,this,"matchDemandAndSupply");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,37.0);
+		Context.schedule.schedule(scheduleParameters,this,"computeDemand");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,36.0);
+		Context.schedule.schedule(scheduleParameters,this,"allocateDemand");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,35.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersUpdateBankAccountAccordingToEffectiveConsumption");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsComputeEconomicResultAndCapitalDepreciation");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,33.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksUpdateFirmsAccounts");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,32.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsPayBackBankDebt");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,31.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksResetFirmsDemandedAndAllowedCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,30.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetDesiredCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,20.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksSetAllowedFirmsCredit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,19.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsAdjustProductionCapitalAndBankAccount");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,18.0);
+		Context.schedule.schedule(scheduleParameters,this,"computeInvestments");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,17.0);
+		Context.schedule.schedule(scheduleParameters,this,"allocateInvestments");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,16.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsJettisoningCurricula");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,15.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleOfficeForLaborJettisoningCurricula");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,14.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsLaborForceDownwardAdjustment");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,13.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersSendJobApplications");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,12.0);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsLaborForceUpwardAdjustment");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,11.0);
+		Context.schedule.schedule(scheduleParameters,this,"activateLaborMarket");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.0);
+		Context.schedule.schedule(scheduleParameters,this,"performConsumersTurnover");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
+		Context.schedule.schedule(scheduleParameters,this,"performFirmsTurnover");
+
+		if(Context.verboseFlag){
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);
+			Context.schedule.schedule(scheduleParameters,this,"scheduleEndOfSimulationStepMessage");
+		}
+	}
+
+	public void scheduleFirmsMakeProduction(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: MAKE PRODUCTION");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"makeProduction",false);
+		statAction.execute();
+	}
+
+	public void scheduleFirmsSetWage(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: SET WAGE");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"setWorkersWage",false);
+		statAction.execute();
+	}
+	public void scheduleBanksUpdateConsumersAccounts(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: UPDATE CONSUMERS ACCOUNTS (INTEREST AND ASK FOR REFUNDING)");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"updateConsumersAccounts",false);
+		statAction.execute();
+	}
+	public void scheduleConsumersPayBackBankDebt(){
+		if(Context.verboseFlag){
+			System.out.println("CONSUMERS: PAY BACK BANK DEBT");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"payBackBankDebt",false);
+		statAction.execute();
+	}
+	public void scheduleBanksResetConsumersDemandedAndAllowedCredit(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: RESET CONSUMERS DEMANDED AND ALLOWED CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"resetConsumersDemandedAndAllowedCredit",false);
+		statAction.execute();
+	}
+	public void scheduleStepStudentState(){
+		if(Context.verboseFlag){
+			System.out.println("STUDENTS: STEP STATE");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"stepStudentState",false);
+		statAction.execute();
+	}
+	public void scheduleConsumersStepConsumption(){
+		System.out.println("CONSUMERS: STEP CONSUMPTION");
+		if(Context.verboseFlag){
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
+		statAction.execute();
+	}
+	public void scheduleBanksSetAllowedConsumersCredit(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: EXTEND CONSUMER CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"setAllowedConsumersCredit",false);
+		statAction.execute();
+	}
+	public void scheduleConsumersAdjustConsumptionAccordingToExtendedCredit(){
+		if(Context.verboseFlag){
+			System.out.println("CONSUMERS: ADJUST CONSUMPTION ACCORDING TO EXTENDED CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"adjustConsumptionAccordingToExtendedCredit",false);
+		statAction.execute();
+	}
+	public void scheduleConsumersUpdateBankAccountAccordingToEffectiveConsumption(){
+		if(Context.verboseFlag){
+			System.out.println("CONSUMERS: UPDATE BANK ACCOUNT ACCORDING TO EFFECTIVE CONSUMPTION");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"updateBankAccountAccordingToEffectiveConsumption",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsComputeEconomicResultAndCapitalDepreciation(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"computeEconomicResultAndCapitalDepreciation",false);
+		statAction.execute();
+	}
+	public void scheduleBanksUpdateFirmsAccounts(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: UPDATE FIRMS ACCOUNTS (INTEREST AND ASK FOR REFUNDING)");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"updateFirmsAccounts",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsPayBackBankDebt(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: PAY BACK BANK DEBT");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"payBackBankDebt",false);
+		statAction.execute();
+	}
+	public void scheduleBanksResetFirmsDemandedAndAllowedCredit(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: RESET FIRMS DEMANDED AND ALLOWED CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"resetFirmsDemandedAndAllowedCredit",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsSetDesiredCredit(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS COMPUTE DESIRED CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"setDesiredCredit",false);
+		statAction.execute();
+	}
+	public void scheduleBanksSetAllowedFirmsCredit(){
+		if(Context.verboseFlag){
+			System.out.println("BANKS: EXTEND FIRM CREDIT");
+		}
+		statAction=statActionFactory.createActionForIterable(banksList,"setAllowedFirmsCredit",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsAdjustProductionCapitalAndBankAccount(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: ADJUST PRODUCTION CAPITAL AND BANK ACCOUNTS");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"adjustProductionCapitalAndBankAccount",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsJettisoningCurricula(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: JETTISONING CURRICULA");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"jettisoningCurricula",false);
+		statAction.execute();
+	}
+	public void scheduleOfficeForLaborJettisoningCurricula(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR LABOR: JETTISONING CURRICULA");
+		}
+		myLaborMarket.jettisoningCurricula();
+	}
+	public void scheduleFirmsLaborForceDownwardAdjustment(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: PERFORM DOWNWARD ADJUSTMENT OF LABOR FORCE");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"laborForceDownwardAdjustment",false);
+		statAction.execute();
+	}
+	public void scheduleConsumersSendJobApplications(){
+		if(Context.verboseFlag){
+			System.out.println("CONSUMERS: SEND CVs");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsLaborForceUpwardAdjustment(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: DIRECT HIRING");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"laborForceUpwardAdjustment",false);
+		statAction.execute();
+	}
+
+
+	public void scheduleEndOfSimulationStepMessage(){
+		System.out.println();
+		System.out.println("===================================================================");
+		System.out.println("END OF SIMULATION TIME STEP: "+RepastEssentials.GetTickCount());
+		System.out.println("====================================================================");
+		System.out.println();
+	}
+
 }

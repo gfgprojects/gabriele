@@ -91,14 +91,19 @@ public class Consumer {
 		myContext=con;
 	}
 
-	public Consumer(int consumerID, repast.simphony.context.Context<Object> con,double W){
+	public Consumer(int consumerID, repast.simphony.context.Context<Object> con,ArrayList<BankAccount> bankAcc){
 		super();
 		identity = consumerID;
 		isStudent=true;
 		isWorking=false;
 		myContext=con;
-		wealth=W;
+		wealth=0;
+		bankAccountsList=bankAcc;
 		age=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			wealth+=aBankAccount.getAccount();
+		}
 	}
 
 	public void initialize(){
@@ -817,6 +822,9 @@ public void stepWorkerState() {
 		}
 		public double getWage(){
 			return wage;
+		}
+		public ArrayList<BankAccount> getBankAccountsList(){
+			return bankAccountsList;
 		}
 
 

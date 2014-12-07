@@ -8,7 +8,10 @@ import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.engine.schedule.DefaultActionFactory;
 import repast.simphony.engine.schedule.IAction;
 import repast.simphony.util.collections.IndexedIterable;
-//import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.engine.schedule.Schedule;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
 import sfcabm.Consumer;
@@ -19,6 +22,7 @@ import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=true;
+	public static boolean schedulingFlag=true;
 		public static int NumConsumers = 10;
 		public static int NumFirms = 3;
 		public static int NumBanks = 1;
@@ -85,6 +89,8 @@ public class Context implements ContextBuilder<Object> {
 	DefaultActionFactory contextActionFactory= new DefaultActionFactory();
 	IAction contextAction;
 	
+	public static ISchedule schedule;
+
 		//public static boolean verbouseFlag=true;
 		public repast.simphony.context.Context<Object> build(
 				repast.simphony.context.Context<Object> context) {
@@ -266,11 +272,21 @@ System.out.println("CHECK BALANCE SHEET CONSISTENCY");
 			// trial cycle to be replaced with scheduled actions
 
 
+		schedule = RunEnvironment.getInstance().getCurrentSchedule();
+
 
 
 		if(verboseFlag){
 System.out.println("END OF INITIAL SETUP");
 System.out.println("==========================================");
+		}
+
+
+if(schedulingFlag){
+		officeForStatistics.scheduleEvents();
+}
+else{
+		if(verboseFlag){
 System.out.println("START OF ITERATION CYCLE");
 System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES (PRODUCT DIFFUSION INDICATOR, PRODUCTIVITIES ...");
 		}
@@ -445,7 +461,7 @@ System.out.println("CONSUMERS SEND CVs");
 			contextAction=contextActionFactory.createActionForIterable(consumersList,"sendJobApplications",false);
 			contextAction.execute();
 		if(verboseFlag){
-System.out.println("DIRECT HIRING");
+System.out.println("FIRMS: DIRECT HIRING");
 		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"laborForceUpwardAdjustment",false);
 			contextAction.execute();
@@ -463,12 +479,14 @@ System.out.println("SET DESIRED CAPITAL");
 			officeForStatistics.performConsumersTurnover();
 			officeForStatistics.performFirmsTurnover();
 
-			/* if (RunEnvironment.getInstance().isBatch())
+
+}
+			 if (RunEnvironment.getInstance().isBatch())
 			   {
-			   RunEnvironment.getInstance().endAt(10);
+			   RunEnvironment.getInstance().endAt(2);
 			   }
 
-*/
+
 			return context;
 			
 			
