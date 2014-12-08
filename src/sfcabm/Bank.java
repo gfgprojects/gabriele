@@ -1,12 +1,14 @@
 package sfcabm;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import repast.simphony.random.RandomHelper;
 
 public class Bank {
 	ArrayList<BankAccount> accountsList=new ArrayList<BankAccount>();
 	BankAccount aBankAccount;
 	repast.simphony.context.Context<Object> myContext;
+	Iterator bankAccountsListIterator;
 	int identity;
 	
 	public double iL;
@@ -328,6 +330,20 @@ public class Bank {
 		if(Context.verboseFlag){
 			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
 		}
+	}
+	
+	public void removeExitedFirmsBankAccounts(){
+		bankAccountsListIterator=accountsList.iterator();
+		while(bankAccountsListIterator.hasNext()){
+			aBankAccount=(BankAccount)bankAccountsListIterator.next();
+			if(aBankAccount.getAccountShutDownFlag()){
+				bankAccountsListIterator.remove();
+		if(Context.verboseFlag){
+			System.out.println("     bank "+identity+" account removed ");
+		}
+			}
+		}
+
 	}
 
 

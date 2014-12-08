@@ -5,10 +5,12 @@ public class BankAccount{
 	double demandedCredit=0;
 	double allowedCredit=0;
 	double unpaidAmount=0;
+	boolean toBeClosed=false;
 	String ownerType;
 	Object owner;
+	Bank hostingBank;
 
-	public BankAccount(double ac,Object ow){
+	public BankAccount(double ac,Object ow,Bank hb){
 		if(ac>0){
 			account=ac;
 			demandedCredit=0;
@@ -21,17 +23,18 @@ public class BankAccount{
 		}
 
 		owner=ow;
+		hostingBank=hb;
 		if(owner instanceof Consumer){
 			ownerType="consumer";
-		if(Context.verboseFlag){
-			System.out.println("     Created bank account "+account+" demanded credit "+demandedCredit+" "+ownerType+" "+((Consumer)owner).getIdentity());
-		}
+			if(Context.verboseFlag){
+				System.out.println("     Created bank account "+account+" demanded credit "+demandedCredit+" "+ownerType+" "+((Consumer)owner).getIdentity());
+			}
 		}
 		if(owner instanceof Firm){
 			ownerType="firm";
-		if(Context.verboseFlag){
-			System.out.println("     Created bank account "+account+" demanded credit "+demandedCredit+" "+ownerType+" "+((Firm)owner).getIdentity());
-		}
+			if(Context.verboseFlag){
+				System.out.println("     Created bank account "+account+" demanded credit "+demandedCredit+" "+ownerType+" "+((Firm)owner).getIdentity());
+			}
 		}
 
 	}
@@ -55,14 +58,14 @@ public class BankAccount{
 	public void setAccount(double ac){
 		account=ac;
 		if(Context.verboseFlag){
-//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+			//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
 			System.out.println("      bank account "+account);
 		}
 	}
 	public void setDemandedCredit(double dc){
 		demandedCredit=dc;
 		if(Context.verboseFlag){
-//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
+			//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" "+ownerType);
 			System.out.println("      demanded credit "+demandedCredit);
 		}
 	}
@@ -84,7 +87,7 @@ public class BankAccount{
 	public void setAllowedCredit(double aC){
 		allowedCredit=aC;
 		if(Context.verboseFlag){
-//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			//			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 			System.out.println("      allowed credit "+allowedCredit);
 		}
 	}
@@ -101,9 +104,9 @@ public class BankAccount{
 	}
 	public void resetAllowedCredit(){
 		allowedCredit=0;
-//		if(Context.verboseFlag){
+		if(Context.verboseFlag){
 			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
-//		}
+		}
 	}
 	public void setUnpaidAmount(double ua){
 		unpaidAmount=ua;
@@ -115,8 +118,27 @@ public class BankAccount{
 		unpaidAmount+=ua;
 		if(Context.verboseFlag){
 			System.out.println("      bank account unpaid amount "+unpaidAmount);
-}
+		}
 	}
 
+	public void setOwner(Consumer ow){
+		owner=ow;
+		if(Context.verboseFlag){
+			System.out.println("     bank account new owner consumer "+ow.getIdentity()+" account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+		}
+
+	}
+
+	public void setAccountShutDown(){
+		toBeClosed=true;
+		if(Context.verboseFlag){
+			System.out.println("     bank account will shut down owner firm "+((Firm)owner).getIdentity()+" account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+		}
+
+	}
+
+	public boolean getAccountShutDownFlag(){
+		return toBeClosed;
+	}
 
 }

@@ -26,6 +26,7 @@ public class OfficeForStatistics{
 
 	Firm aFirm;
 	Consumer aConsumer;
+	Bank aBank;
 	Object anObj;
 	Industry anIndustry;
 	Iterator<Industry> industriesListIterator;
@@ -35,6 +36,7 @@ public class OfficeForStatistics{
 	IAction statAction;
 	ArrayList anOrderList;
 	AProductDemand anOrder;
+	ArrayList<Firm> newFirmsList;
 
 	int[] numberOfWokersInADegree;
 	double[] totalProductivityOfWorkersInADegree;
@@ -492,21 +494,22 @@ public class OfficeForStatistics{
 		// add new consumers to context
 		for(int i=0;i<newConsumersList.size();i++){
 			aConsumer=newConsumersList.get(i);
-			myContext.add(aConsumer);
 			if(Context.verboseFlag){
 				System.out.println("     Entry of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 			}
+			aConsumer.changeBankAccountsOwner();
+			myContext.add(aConsumer);
 		}
 	}
 
-	public void performFirmsTurnover(){
+	public void performFirmsExit(){
 		if(Context.verboseFlag){
-			System.out.println("FIRMS TURNOVER");
+			System.out.println("OFFICE FOR STATISTICS: FIRMS EXIT");
 		}
 
 		// identify firms to be removed
 		ArrayList<Firm> exitingFirmsList = new ArrayList<Firm>();
-		ArrayList<Firm> newFirmsList = new ArrayList<Firm>();
+		newFirmsList = new ArrayList<Firm>();
 		Firm aNewFirm;
 		contextIterator=myContext.iterator();
 		while(contextIterator.hasNext()){
@@ -519,6 +522,7 @@ public class OfficeForStatistics{
 						System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
 					}
 					exitingFirmsList.add(aFirm);
+					aFirm.setBankAccountsShutDown();
 					aNewFirm=new Firm(Context.firmsProgressiveIdentificationNumber,myContext);
 					Context.firmsProgressiveIdentificationNumber++;
 					newFirmsList.add(aNewFirm);
@@ -532,10 +536,56 @@ public class OfficeForStatistics{
 		for(int i=0;i<exitingFirmsList.size();i++){
 			myContext.remove(exitingFirmsList.get(i));
 		}
-		// add new Firms to context
+		try{
+			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+		if(firmsList.size()<1){
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(    SIMULATION STOPPED BECAUSE NO FIRM HAS POSITIVE PRODUCTION: PLEASE VERIFY YOUR PARAMETRIZATION!      :-(   :-(");
+		System.out.println(":-(   :-(                                                                                                         :-(   :-(");
+		System.out.println(":-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(   :-(");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+			System.exit(0);		
+		}
+
+
+
+
+	}
+
+	public void banksRemoveExitedFirmsBankAccounts(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: MAKE BANK REMOVE ACCOUNTS OF ECITED FIRMS");
+		}
+		for(int i=0;i<banksList.size();i++){
+			aBank=(Bank)banksList.get(i);
+			aBank.removeExitedFirmsBankAccounts();
+		}
+	}
+
+
+	public void performFirmsEntry(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: FIRMS ENTRY");
+		}
 		for(int i=0;i<newFirmsList.size();i++){
 			aFirm=newFirmsList.get(i);
 			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+			aFirm.setupBankAccount();
 			myContext.add(aFirm);
 			if(Context.verboseFlag){
 				System.out.println("     Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
@@ -543,9 +593,7 @@ public class OfficeForStatistics{
 		}
 
 
-
 	}
-
 
 	public void publishIndustriesStats(){
 		try{
@@ -569,6 +617,13 @@ public class OfficeForStatistics{
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
+		Context.schedule.schedule(scheduleParameters,this,"performFirmsExit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.2);
+		Context.schedule.schedule(scheduleParameters,this,"banksRemoveExitedFirmsBankAccounts");
+
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
@@ -633,6 +688,9 @@ public class OfficeForStatistics{
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,19.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsAdjustProductionCapitalAndBankAccount");
 
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,18.5);
+		Context.schedule.schedule(scheduleParameters,this,"performFirmsEntry");
+
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,18.0);
 		Context.schedule.schedule(scheduleParameters,this,"computeInvestments");
 
@@ -660,8 +718,8 @@ public class OfficeForStatistics{
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.0);
 		Context.schedule.schedule(scheduleParameters,this,"performConsumersTurnover");
 
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
-		Context.schedule.schedule(scheduleParameters,this,"performFirmsTurnover");
+//		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
+//		Context.schedule.schedule(scheduleParameters,this,"performFirmsEntry");
 
 		if(Context.verboseFlag){
 			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);

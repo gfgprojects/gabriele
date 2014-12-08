@@ -176,7 +176,7 @@ public void setupBankAccount(){
 		if(Context.verboseFlag){
 			System.out.println("       open account");
 		}
-	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(-500,500),this);
+	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(-500,500),this,aBank);
 	bankAccountsList.add(aBankAccount);
 	aBank.addAccount(aBankAccount);
 
@@ -825,6 +825,12 @@ public void stepWorkerState() {
 		}
 		public ArrayList<BankAccount> getBankAccountsList(){
 			return bankAccountsList;
+		}
+		public void changeBankAccountsOwner(){
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				aBankAccount.setOwner(this);
+			}
 		}
 
 

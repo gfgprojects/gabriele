@@ -238,7 +238,7 @@ System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
 			if(verboseFlag){
 System.out.println("FIRMS SETUP BANK ACCOUNTS");
 		}
-			contextAction=contextActionFactory.createActionForIterable(firmsList,"setupBankAccount",false);
+			contextAction=contextActionFactory.createActionForIterable(firmsList,"setupBankAccountInInitialization",false);
 			contextAction.execute();
 
 			if(verboseFlag){
@@ -299,6 +299,7 @@ System.out.println("FIRMS: MAKE PRODUCTION");
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"makeProduction",false);
 			contextAction.execute();
 
+			officeForStatistics.performFirmsExit();
 
 	
 		if(verboseFlag){
@@ -477,13 +478,13 @@ System.out.println("SET DESIRED CAPITAL");
 */
 
 			officeForStatistics.performConsumersTurnover();
-			officeForStatistics.performFirmsTurnover();
+			officeForStatistics.performFirmsEntry();
 
 
 }
 			 if (RunEnvironment.getInstance().isBatch())
 			   {
-			   RunEnvironment.getInstance().endAt(2);
+			   RunEnvironment.getInstance().endAt(4);
 			   }
 
 

@@ -147,7 +147,7 @@ public class Firm {
 		}
 	}
 
-	public void setupBankAccount(){
+	public void setupBankAccountInInitialization(){
 		productionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
 		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
 		debt=productionCapital-equity;
@@ -171,7 +171,7 @@ public class Firm {
 			if(Context.verboseFlag){
 				System.out.println("       open account");
 			}
-			aBankAccount=new BankAccount(-debt,this);
+			aBankAccount=new BankAccount(-debt,this,aBank);
 			bankAccountsList.add(aBankAccount);
 			aBank.addAccount(aBankAccount);
 
@@ -179,6 +179,45 @@ public class Firm {
 
 
 	}
+
+	public void setupBankAccount(){
+		productionCapital=Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		firmInvestment=productionCapital;
+		desiredProductionCapital=productionCapital;
+		desiredDemand=Context.parameterOfProductivityInProductionFuncion;
+		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
+		debt=productionCapital-equity;
+		if(Context.verboseFlag){
+		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
+		}
+		try{
+			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		ArrayList<Integer> banksPositions=new ArrayList<Integer>();
+		int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAFirmCanBeCustumerOf,banksList.size());
+		for(int i=0;i<banksList.size();i++){
+			banksPositions.add(new Integer(i));
+		}
+		for(int i=0;i<numberOfBanksToBeCustomerOf;i++){
+			int position=banksPositions.remove(RandomHelper.nextIntFromTo(0,(banksPositions.size()-1)));
+			aBank=(Bank)banksList.get(position);
+			if(Context.verboseFlag){
+				System.out.println("       open account");
+			}
+			aBankAccount=new BankAccount(-debt,this,aBank);
+			aBankAccount.setAccount(-debt);
+			aBankAccount.setAllowedCredit(-debt);
+			bankAccountsList.add(aBankAccount);
+			aBank.addAccount(aBankAccount);
+
+		}
+
+
+	}
+
 
 	public void makeProduction(){
 		System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
@@ -409,117 +448,117 @@ System.out.println("      ----------------");
 
 		}
 
-	public void hire(Consumer newWorker){
-				workersList.add(newWorker);
-				newWorker.receiveHiredNew(this);
-	}
-
-	public void computeEconomicResultAndCapitalDepreciation(){
-		firmWageSum=0;
-		cashOnHand=0;
-		for(int i =0; i<workersList.size();i++){
-			aConsumer=(Consumer)workersList.get(i);
-			firmWageSum+=aConsumer.getWage();
-		}
-		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
-		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
-		if(Context.verboseFlag){
-			System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
+		public void hire(Consumer newWorker){
+			workersList.add(newWorker);
+			newWorker.receiveHiredNew(this);
 		}
 
-		productionCapital+=-capitalDepreciation;
-		if(Context.verboseFlag){
-			System.out.println(" productionCapital "+productionCapital);
-		}
+		public void computeEconomicResultAndCapitalDepreciation(){
+			firmWageSum=0;
+			cashOnHand=0;
+			for(int i =0; i<workersList.size();i++){
+				aConsumer=(Consumer)workersList.get(i);
+				firmWageSum+=aConsumer.getWage();
+			}
+			cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
+			capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
+			if(Context.verboseFlag){
+				System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
+			}
 
-	}
+			productionCapital+=-capitalDepreciation;
+			if(Context.verboseFlag){
+				System.out.println(" productionCapital "+productionCapital);
+			}
+
+		}
 
 
 		public void payBackBankDebt(){
-		double amountOfThisBankAccount,resourcesAvailableToRefund;
-		double totalAmountToRefund=0;
-		financialResourcesInBankAccounts=0;
-		for(int i=0;i<bankAccountsList.size();i++){
-			aBankAccount=(BankAccount)bankAccountsList.get(i);
-			amountOfThisBankAccount=aBankAccount.getAccount();
-			if(amountOfThisBankAccount<0){
-				totalAmountToRefund+=-(amountOfThisBankAccount-aBankAccount.getAllowedCredit());
+			double amountOfThisBankAccount,resourcesAvailableToRefund;
+			double totalAmountToRefund=0;
+			financialResourcesInBankAccounts=0;
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				amountOfThisBankAccount=aBankAccount.getAccount();
+				if(amountOfThisBankAccount<0){
+					totalAmountToRefund+=-(amountOfThisBankAccount-aBankAccount.getAllowedCredit());
+				}
+				else{
+					financialResourcesInBankAccounts+=amountOfThisBankAccount;
+				}
 			}
-			else{
-				financialResourcesInBankAccounts+=amountOfThisBankAccount;
-			}
-		}
-		if(totalAmountToRefund>0){
-//		if(Context.verboseFlag){
-			System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
-//		}
-			resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
-			if(resourcesAvailableToRefund>=totalAmountToRefund){
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					amountOfThisBankAccount=aBankAccount.getAccount();
-					if(amountOfThisBankAccount<0){
-						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
-					}
-				}
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					amountOfThisBankAccount=aBankAccount.getAccount();
-					if(amountOfThisBankAccount>0){
-						if(totalAmountToRefund>=amountOfThisBankAccount){
-							totalAmountToRefund+=-amountOfThisBankAccount;
-							aBankAccount.setAccount(0);
-						}
-						else{
-							aBankAccount.setAccount(amountOfThisBankAccount-totalAmountToRefund);
-							totalAmountToRefund=0;
-						}
-					}
-				}
-				if(totalAmountToRefund>0){
-					cashOnHand+=-totalAmountToRefund;
-				}
-
-
-			}
-			else{
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					amountOfThisBankAccount=aBankAccount.getAccount();
-					if(amountOfThisBankAccount>0){
-						aBankAccount.setAccount(0);
-					}
-				}
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					amountOfThisBankAccount=aBankAccount.getAccount();
-					if(amountOfThisBankAccount<0){
-						double toPayBakToThisBankAccount=-(aBankAccount.getAccount()-aBankAccount.getAllowedCredit());
-						if(resourcesAvailableToRefund>toPayBakToThisBankAccount){
-							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+			if(totalAmountToRefund>0){
+				//		if(Context.verboseFlag){
+				System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
+				//		}
+				resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
+				if(resourcesAvailableToRefund>=totalAmountToRefund){
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						amountOfThisBankAccount=aBankAccount.getAccount();
+						if(amountOfThisBankAccount<0){
 							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 						}
-						else{ 
-							//		if(Context.verboseFlag){
-							System.out.println("      insolvency: occunting delayed to next method");
-							//		}
-//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
-//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
-							//							resourcesAvailableToRefund=0;
-							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+					}
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						amountOfThisBankAccount=aBankAccount.getAccount();
+						if(amountOfThisBankAccount>0){
+							if(totalAmountToRefund>=amountOfThisBankAccount){
+								totalAmountToRefund+=-amountOfThisBankAccount;
+								aBankAccount.setAccount(0);
+							}
+							else{
+								aBankAccount.setAccount(amountOfThisBankAccount-totalAmountToRefund);
+								totalAmountToRefund=0;
+							}
+						}
+					}
+					if(totalAmountToRefund>0){
+						cashOnHand+=-totalAmountToRefund;
+					}
+
+
+				}
+				else{
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						amountOfThisBankAccount=aBankAccount.getAccount();
+						if(amountOfThisBankAccount>0){
+							aBankAccount.setAccount(0);
+						}
+					}
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						amountOfThisBankAccount=aBankAccount.getAccount();
+						if(amountOfThisBankAccount<0){
+							double toPayBakToThisBankAccount=-(aBankAccount.getAccount()-aBankAccount.getAllowedCredit());
+							if(resourcesAvailableToRefund>toPayBakToThisBankAccount){
+								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+								aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+							}
+							else{ 
+								//		if(Context.verboseFlag){
+								System.out.println("      insolvency: occunting delayed to next method");
+								//		}
+								//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+								//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+								//							resourcesAvailableToRefund=0;
+								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+							}
 						}
 					}
 				}
+				//		if(Context.verboseFlag){
+				System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
+				//		}
 			}
-//		if(Context.verboseFlag){
-			System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
-//		}
 		}
-}
 
 
 		//compute average productivity for each degree of education
-	public void computeAverageProductivityForEachDegreeOfEducation(){
+		public void computeAverageProductivityForEachDegreeOfEducation(){
 			numberOfWokersInADegree=new int[7];
 			totalProductivityOfWorkersInADegree=new double[7];
 			averageProductivityOfWorkersInADegree=new double[7];
@@ -537,11 +576,11 @@ System.out.println("      ----------------");
 			}
 		}
 
-/**
- * This method cycles on the list of workers and sets the worker's wage according to your parametrization.
- * <p> 
- * According to the parametrization you have chosen for your model, the wage is proportional to the worker's productivity; the average productivity of workers employed by the firm and having the same education degree; the average productivity of workers having the same education degree in the whole economy.
- */
+		/**
+		 * This method cycles on the list of workers and sets the worker's wage according to your parametrization.
+		 * <p> 
+		 * According to the parametrization you have chosen for your model, the wage is proportional to the worker's productivity; the average productivity of workers employed by the firm and having the same education degree; the average productivity of workers having the same education degree in the whole economy.
+		 */
 		public void setWorkersWage(){
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
@@ -636,16 +675,16 @@ System.out.println("      ----------------");
 
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
-						if(Context.verboseFlag){
-			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
-						}
+			if(Context.verboseFlag){
+				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+			}
 		}
 
-public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
+		public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
 			ordersOfProductsForInvestmentPurpose=(int)Math.round(production/industryProduction*industryInvest);
-						if(Context.verboseFlag){
-			System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" products ordered for investments "+ordersOfProductsForInvestmentPurpose);
-						}
+			if(Context.verboseFlag){
+				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" products ordered for investments "+ordersOfProductsForInvestmentPurpose);
+			}
 		}
 
 
@@ -657,12 +696,12 @@ public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,do
 				System.out.println("     Firm "+identity+" jettisoning curricula ");
 			}
 		}
-/*
-		public void setDesiredProductionCapital(){
-			desiredProductionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
-			System.out.println("     Firm "+identity+" desired production capital "+desiredProductionCapital);
-		}
-*/
+		/*
+		   public void setDesiredProductionCapital(){
+		   desiredProductionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		   System.out.println("     Firm "+identity+" desired production capital "+desiredProductionCapital);
+		   }
+		   */
 		public int getProductAbsoluteRank(){
 			return productAbsoluteRank;
 		}
@@ -683,8 +722,12 @@ public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,do
 		public double getInvestment(){
 			return firmInvestment;
 		}
-
-
+		public void setBankAccountsShutDown(){
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				aBankAccount.setAccountShutDown();	
+			}
+		}
 
 
 
