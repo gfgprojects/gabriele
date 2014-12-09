@@ -108,7 +108,7 @@ public class Consumer {
 
 	public void initialize(){
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
-		age=RandomHelper.nextIntFromTo(40,60);
+		age=RandomHelper.nextIntFromTo(1,50);
 		int iterations=0;
 		int maxIterations=Math.min(age,22);
 		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
@@ -625,7 +625,7 @@ public void stepWorkerState() {
 				}
 			}
 			else{
-				if(RandomHelper.nextDouble()<0.5){
+				if(RandomHelper.nextDouble()<0.2){
 					if(Context.verboseFlag){
 						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 					}

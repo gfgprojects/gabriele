@@ -517,7 +517,7 @@ public class OfficeForStatistics{
 			//check firms
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
-				if(aFirm.getProduction()<10){
+				if(aFirm.getDemand()<20){
 					if(Context.verboseFlag){
 						System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
 					}
@@ -584,7 +584,8 @@ public class OfficeForStatistics{
 		}
 		for(int i=0;i<newFirmsList.size();i++){
 			aFirm=newFirmsList.get(i);
-			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+//			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+			aFirm.setProductAbsoluteRank((int)maximumAbsoluteRank);
 			aFirm.setupBankAccount();
 			myContext.add(aFirm);
 			if(Context.verboseFlag){
@@ -617,13 +618,6 @@ public class OfficeForStatistics{
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
-
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
-		Context.schedule.schedule(scheduleParameters,this,"performFirmsExit");
-
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.2);
-		Context.schedule.schedule(scheduleParameters,this,"banksRemoveExitedFirmsBankAccounts");
-
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
@@ -669,6 +663,13 @@ public class OfficeForStatistics{
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsComputeEconomicResultAndCapitalDepreciation");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,33.5);
+		Context.schedule.schedule(scheduleParameters,this,"performFirmsExit");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,33.2);
+		Context.schedule.schedule(scheduleParameters,this,"banksRemoveExitedFirmsBankAccounts");
+
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,33.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksUpdateFirmsAccounts");

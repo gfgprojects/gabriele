@@ -239,7 +239,14 @@ public class Firm {
 	}
 
 	public void setDesiredCredit(){
-		desiredProductionCapital=Math.round((desiredDemand*(productionCapital+capitalDepreciation)/production)+ordersOfProductsForInvestmentPurpose);
+		double desiredProductionCapitalMultiplier=desiredDemand/production;
+		if(desiredProductionCapitalMultiplier>1.1){
+			desiredProductionCapitalMultiplier=1.1;
+		}
+		if(desiredProductionCapitalMultiplier<0.9){
+			desiredProductionCapitalMultiplier=0.9;
+		}
+		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation))+ordersOfProductsForInvestmentPurpose);
 		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size()-1;i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -727,6 +734,10 @@ System.out.println("      ----------------");
 				aBankAccount=(BankAccount)bankAccountsList.get(i);
 				aBankAccount.setAccountShutDown();	
 			}
+		}
+
+		public double getDemand(){
+			return demand;
 		}
 
 

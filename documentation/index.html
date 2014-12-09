@@ -17,6 +17,11 @@
 	<td>Firms make production. </td>
 </tr>
 <tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performFirmsExit.html">performFirmsExit</a> </td>
+	<td>performConsumersExit </td>
+</tr>
+<tr>
 	<td><b>Firms</b>: </td>
 	<td><a href="setWorkersWage.html"> setWorkersWage</a></td>
 	<td>Firms pay wage to workers. Productivities computed in the previous step can be used to set the wage. </td>
@@ -33,7 +38,7 @@
 </tr>
 <tr>
 	<td><b>Bank</b>: </td>
-	<td>resetDemandedAndAllowedCredit</td>
+	<td><a href="resetConsumersDemandedAndAllowedCredit.html">resetConsumersDemandedAndAllowedCredit</a></td>
 	<td>code: demandedCredit=0;allowedCredit=0 </td>
 </tr>
 <tr>
@@ -95,7 +100,7 @@
 	<td><b>Banks</b> </td>
 	<td><a href="updateFirmsAccounts.html">updateFirmsAccounts</a> </td>
 	<td>interest and refund. </td>
-</tr>
+</tr> 
 <tr>
 	<td><b>Firms</b> </td>
 	<td><a href="firms_payBackBankDebt.html">payBackBankDebt</a> </td>
@@ -110,6 +115,11 @@
 	<td><b>(TBD) Banks</b> </td>
 	<td><a href="setBalanceSheetStrategy.html">setBalanceSheetStrategy</a> </td>
 	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="resetFirmsDemandedAndAllowedCredit.html">resetFirmsDemandedAndAllowedCredit</a></td>
+	<td>code: demandedCredit=0;allowedCredit=0 </td>
 </tr>
 <tr>
 	<td><b>Firms</b> </td>
@@ -127,9 +137,19 @@
 	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
 </tr>
 <tr>
-	<td><b>Firms </b> </td>
-	<td><a href="buyNewProductionCapital.html">buyNewProductionCapital</a> </td>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performFirmsEntry.html">performFirmsEntry</a> </td>
+	<td>performConsumersEntry </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics </b> </td>
+	<td><a href="computeInvestments.html">computeInvestments</a> </td>
 	<td></td>
+</tr>
+<tr>
+	<td><b> </b> </td>
+	<td><a href="allocateInvestments.html">allocateInvestments</a> </td>
+	<td> </td>
 </tr>
 <tr>
 	<td><b>Firms</b> </td>
@@ -164,11 +184,6 @@
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performConsumersTurnover.html">performConsumersTurnover</a> </td>
-	<td>performConsumersTurnover </td>
-</tr>
-<tr>
-	<td><b>OfficeForStatistics</b> </td>
-	<td><a href="performFirmsTurnover.html">performFirmsTurnover</a> </td>
 	<td>performConsumersTurnover </td>
 </tr>
 

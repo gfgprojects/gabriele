@@ -6,13 +6,13 @@
       <x>20</x>
       <y>0</y>
       <w>1168</w>
-      <h>899</h>
+      <h>947</h>
     </coordinates>
     <panel_attributes>title:Firm.setDesiredCredit()
 Start
 desiredProductionCapital =\desiredDemand/production*\(productionCapital+capitalDepreciation)
 financialResourceInBankAccounts =\sum of bankAccounts with positive\account
-identify the bankAccount with bestPosition\as the one to which credit will be asked
+identify the bankAccount with bestPosition\as the one to which credit will be asked\and the bankAccount with the worst position\as the one where positive cash influx will be\deposited
 If
 	[if\desiredCapital\&gt; capital]
 	creditToAsk=\desiredProductionCapital-\productionCapital-\cashOnHand-\financialResourcesInBankAccounts;

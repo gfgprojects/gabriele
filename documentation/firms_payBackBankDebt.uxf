@@ -4,8 +4,8 @@
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
       <x>0</x>
-      <y>20</y>
-      <w>2570</w>
+      <y>0</y>
+      <w>2600</w>
       <h>2043</h>
     </coordinates>
     <panel_attributes>title:Firm.payBackBankDebt()
@@ -59,19 +59,36 @@ If
 					setBankAccount to allowedCredit
 
 					[if\totalAmountToRefund&lt;\thisAccountAmount]
-					increase\thisAccountAmount by\resourcesAvailableToRefund
+					increase\thisAccountUnpaidAmount by\-amount+allowedCredit
+					set thisAccountDemandedCredit to\amount+resoucesAvailableToRefund
 					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
 
 				EndIf
 
 				[else]
 			EndIf
-		set disposableIncome\to unemploymentDole
 
 	EndIf
 
 End
 </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.Text</type>
+    <coordinates>
+      <x>2310</x>
+      <y>1580</y>
+      <w>220</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>resourceAvailableToRefund
+are negative while 
+cashOnHand negative 
+or positive???
+bankrupt if asked credit 
+will not extended
+in the next step</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

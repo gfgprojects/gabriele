@@ -5,8 +5,8 @@
     <coordinates>
       <x>0</x>
       <y>0</y>
-      <w>2570</w>
-      <h>2105</h>
+      <w>2600</w>
+      <h>2167</h>
     </coordinates>
     <panel_attributes>title:Consumer.payBackBankDebt()
 Start
@@ -60,7 +60,8 @@ If
 					setBankAccount to allowedCredit
 
 					[if\totalAmountToRefund&lt;\thisAccountAmount]
-					increase\thisAccountAmount by\resourcesAvailableToRefund
+					increase\thisAccountUnpaidAmount by\-amount+allowedCredit
+					set thisAccountDemandedCredit to\amount+resoucesAvailableToRefund
 					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
 
 				EndIf

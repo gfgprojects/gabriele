@@ -484,7 +484,7 @@ System.out.println("SET DESIRED CAPITAL");
 }
 			 if (RunEnvironment.getInstance().isBatch())
 			   {
-			   RunEnvironment.getInstance().endAt(4);
+			   RunEnvironment.getInstance().endAt(10);
 			   }
 
 
