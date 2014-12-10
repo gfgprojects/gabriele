@@ -132,7 +132,7 @@ public class BankAccount{
 	public void setAccountShutDown(){
 		toBeClosed=true;
 		if(Context.verboseFlag){
-			System.out.println("     bank account will shut down owner firm "+((Firm)owner).getIdentity()+" account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			System.out.println("     bank account will shut down: owner firm "+((Firm)owner).getIdentity()+" account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
 		}
 
 	}

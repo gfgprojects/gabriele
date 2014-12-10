@@ -518,11 +518,9 @@ public class OfficeForStatistics{
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
 				if(aFirm.getDemand()<20){
-					if(Context.verboseFlag){
-						System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
-					}
 					exitingFirmsList.add(aFirm);
 					aFirm.setBankAccountsShutDown();
+					aFirm.sendWorkersShutDownNew();
 					aNewFirm=new Firm(Context.firmsProgressiveIdentificationNumber,myContext);
 					Context.firmsProgressiveIdentificationNumber++;
 					newFirmsList.add(aNewFirm);
@@ -531,10 +529,14 @@ public class OfficeForStatistics{
 			}
 
 		}
-
+System.out.println("numero di imprese "+firmsList.size());
 		// remove
 		for(int i=0;i<exitingFirmsList.size();i++){
-			myContext.remove(exitingFirmsList.get(i));
+			aFirm=exitingFirmsList.get(i);
+			if(Context.verboseFlag){
+				System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
+			}
+			myContext.remove(aFirm);
 		}
 		try{
 			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
@@ -542,6 +544,7 @@ public class OfficeForStatistics{
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
+System.out.println("numero di imprese "+firmsList.size());
 
 		if(firmsList.size()<1){
 		System.out.println();
@@ -569,7 +572,7 @@ public class OfficeForStatistics{
 
 	public void banksRemoveExitedFirmsBankAccounts(){
 		if(Context.verboseFlag){
-			System.out.println("OFFICE FOR STATISTICS: MAKE BANK REMOVE ACCOUNTS OF ECITED FIRMS");
+			System.out.println("OFFICE FOR STATISTICS: MAKE BANK REMOVE ACCOUNTS OF EXITED FIRMS");
 		}
 		for(int i=0;i<banksList.size();i++){
 			aBank=(Bank)banksList.get(i);

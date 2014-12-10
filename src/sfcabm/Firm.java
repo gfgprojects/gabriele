@@ -32,6 +32,7 @@ public class Firm {
 	double firmInvestment=0;
 	double ordersOfProductsForInvestmentPurpose;
 	double productionPlusOrdersForInvestments=0;
+	boolean hadFired=false;
 		/*
 	   public double desiredOutput;
 	   public double expectedSales;
@@ -148,7 +149,7 @@ public class Firm {
 	}
 
 	public void setupBankAccountInInitialization(){
-		productionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		productionCapital=production;//workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
 		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
 		debt=productionCapital-equity;
 		if(Context.verboseFlag){
@@ -239,14 +240,20 @@ public class Firm {
 	}
 
 	public void setDesiredCredit(){
-		double desiredProductionCapitalMultiplier=desiredDemand/production;
+//		double desiredProductionCapitalMultiplier=desiredDemand/production;
+//		double desiredProductionCapitalMultiplier=(desiredDemand+ordersOfProductsForInvestmentPurpose)/production;
+//		System.out.println("     desiredProductionCapitalMultiplier "+desiredProductionCapitalMultiplier+" production "+production);
+		/*
 		if(desiredProductionCapitalMultiplier>1.1){
 			desiredProductionCapitalMultiplier=1.1;
 		}
 		if(desiredProductionCapitalMultiplier<0.9){
 			desiredProductionCapitalMultiplier=0.9;
 		}
-		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation))+ordersOfProductsForInvestmentPurpose);
+		*/
+//		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation))+ordersOfProductsForInvestmentPurpose);
+//		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation)));
+desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
 		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size()-1;i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -296,7 +303,7 @@ public class Firm {
 			}
 		}
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" production Capital "+productionCapital+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
+			System.out.println("     Firm "+identity+" production Capital "+(productionCapital+capitalDepreciation)+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
 System.out.println("      ----------------");
 		}
 	
@@ -393,21 +400,26 @@ System.out.println("      ----------------");
 			}
 		}
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of for investments "+ordersOfProductsForInvestmentPurpose);
+			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterRetirements "+productionCapacityAfterWorkforceAdjustment);
 		}
 //		if((productionCapacityAfterWorkersRetire-demand)>(OfficeForStatistics.averageProductivity*Context.parameterOfProductivityInProductionFuncion)){
-		if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
-			while(productionCapacityAfterWorkforceAdjustment>(desiredDemand+ordersOfProductsForInvestmentPurpose)){
-				int latestWorkerPosition=workersList.size()-1;
-				aConsumer=workersList.get(latestWorkerPosition);
-				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
-				aConsumer.receiveFiredNew();
-				workersList.remove(latestWorkerPosition);
-			}
-		}
+		hadFired=false;
+			if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
+				while(productionCapacityAfterWorkforceAdjustment>(desiredDemand+ordersOfProductsForInvestmentPurpose)){
+					int latestWorkerPosition=workersList.size()-1;
+					aConsumer=workersList.get(latestWorkerPosition);
+					productionCapacityAfterWorkforceAdjustment+=-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+					if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
+						aConsumer.receiveFiredNew();
+						workersList.remove(latestWorkerPosition);
+						hadFired=true;
+					}
+				}
+				productionCapacityAfterWorkforceAdjustment+=aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
 
 	}
-
+}
 
 	public void laborForceUpwardAdjustment(){
 			switch(Context.firmsWorkersMatching){
@@ -429,29 +441,32 @@ System.out.println("      ----------------");
 	public void hireUsingReceivedCV(){
 		applicationListIterator=applicationList.iterator();
 		if(Context.verboseFlag){
-			System.out.println("     firm "+identity+" application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" desired demand "+(desiredDemand*productionCapital/desiredProductionCapital)+" orders for investments "+ordersOfProductsForInvestmentPurpose);
+			System.out.println("     firm "+identity+" application list size "+applicationList.size()+" productionCapacity "+productionCapacityAfterWorkforceAdjustment+" desired demand + investment "+(desiredDemand+ordersOfProductsForInvestmentPurpose));
 		}
-		while(productionCapacityAfterWorkforceAdjustment<((desiredDemand*productionCapital/desiredProductionCapital)+ordersOfProductsForInvestmentPurpose) && applicationListIterator.hasNext()){
-			//		while(applicationListIterator.hasNext()){
-			aCurriculum=applicationListIterator.next();
-			aConsumer=aCurriculum.getSender();
-			if(aConsumer.getIsWorkingFlag()){
-				applicationListIterator.remove();
+		if(hadFired){
+			System.out.println("     I am not hiring because I have just fired");
+		}
+		else{
+			while(productionCapacityAfterWorkforceAdjustment<(desiredDemand+ordersOfProductsForInvestmentPurpose) && applicationListIterator.hasNext()){
+				aCurriculum=applicationListIterator.next();
+				aConsumer=aCurriculum.getSender();
+				if(aConsumer.getIsWorkingFlag()){
+					applicationListIterator.remove();
+					if(Context.verboseFlag){
+						System.out.println("     the sender was hired by another firm");
+					}
+				}
+				else{
+					aConsumer.receiveHiredNew(this);
+					productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+					workersList.add(aConsumer);
+					applicationListIterator.remove();
+				}
 				if(Context.verboseFlag){
-					System.out.println("     the sender was hired by another firm");
+					System.out.println("     firm "+identity+" application list size "+applicationList.size()+" productionCapacityAfterHiring "+productionCapacityAfterWorkforceAdjustment+" desired demand + investment "+(desiredDemand+ordersOfProductsForInvestmentPurpose));
 				}
 			}
-			else{
-				aConsumer.receiveHiredNew(this);
-				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
-				workersList.add(aConsumer);
-				applicationListIterator.remove();
-			}
-			if(Context.verboseFlag){
-				System.out.println("     firm "+identity+" application list size "+applicationList.size()+" prodcap "+productionCapacityAfterWorkforceAdjustment+" dem "+demand);
-			}
-			}
-
+		}
 
 		}
 
@@ -609,16 +624,20 @@ System.out.println("      ----------------");
 		// SEND LABOR DEMAND TO LABOR MARKET
 
 		public void sendVacancies(){
-			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
-				myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
-				try{
-					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
-				}
-				catch(ClassNotFoundException e){
-					System.out.println("Class not found");
-				}
+			if(hadFired){
+			}
+			else{
+				if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
+					myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
+					try{
+						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+					}
+					catch(ClassNotFoundException e){
+						System.out.println("Class not found");
+					}
 
-				myLaborMarket.receiveVacancies(myOffer);
+					myLaborMarket.receiveVacancies(myOffer);
+				}
 			}
 		}
 
@@ -735,6 +754,14 @@ System.out.println("      ----------------");
 				aBankAccount.setAccountShutDown();	
 			}
 		}
+		public void sendWorkersShutDownNew(){
+			for(int i=0;i<workersList.size();i++){
+				aConsumer=(Consumer)workersList.get(i);
+				aConsumer.receiveFiredNew();	
+			}
+		}
+
+
 
 		public double getDemand(){
 			return demand;
