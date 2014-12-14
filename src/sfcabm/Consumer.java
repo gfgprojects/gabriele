@@ -16,8 +16,7 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.util.collections.IndexedIterable;
 public class Consumer {
 	int identity,age;
-	boolean isStudent;
-	boolean isWorking;
+	boolean isStudent,isWorking,isRetired;
 	Firm myEmployer=null;
 	//public double disposableIncome,desiredConsumption,consumption,desiredChangeInWealth,desiredWealth;
 	// double saving;
@@ -81,6 +80,7 @@ public class Consumer {
 		identity = consumerID;
 		isStudent=true;
 		isWorking=false;
+		isRetired=false;
 		
 	}
 	public Consumer(int consumerID, repast.simphony.context.Context<Object> con){
@@ -88,6 +88,7 @@ public class Consumer {
 		identity = consumerID;
 		isStudent=true;
 		isWorking=false;
+		isRetired=false;
 		myContext=con;
 	}
 
@@ -96,6 +97,7 @@ public class Consumer {
 		identity = consumerID;
 		isStudent=true;
 		isWorking=false;
+		isRetired=false;
 		myContext=con;
 		wealth=0;
 		bankAccountsList=bankAcc;
@@ -108,7 +110,7 @@ public class Consumer {
 
 	public void initialize(){
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
-		age=RandomHelper.nextIntFromTo(1,50);
+		age=RandomHelper.nextIntFromTo(0,Context.consumerExitAge-1);
 		int iterations=0;
 		int maxIterations=Math.min(age,22);
 		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
@@ -621,7 +623,7 @@ public void stepWorkerState() {
 		public void sendInitialJobApplication(){
 			if(isStudent){
 				if(Context.verboseFlag){
-					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" non spedisco CV perche' sono uno studente");
+					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am nor sending CV because I am a student");
 				}
 			}
 			else{
@@ -661,63 +663,77 @@ public void stepWorkerState() {
 			}
 			else{
 				if(isWorking){
+					if(isRetired){
+						if(Context.verboseFlag){
+							System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I retired");
+						}
+					}
 				}
 				else{
 					if(Context.verboseFlag){
 						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" titolo "+degree+" produttivita "+productivity+" abilityStud "+abilityStudent);
 					}
-					myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
-					try{
-						firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+
+
+					if(isRetired){
+						if(Context.verboseFlag){
+							System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I retired");
+						}
 					}
-					catch(ClassNotFoundException e){
-						System.out.println("Class not found");
-					}
+					else{
+						myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
+						try{
+							firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+							myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+						}
+						catch(ClassNotFoundException e){
+							System.out.println("Class not found");
+						}
 
-					ArrayList<Integer> firmsPositions=new ArrayList<Integer>();
-					int numberOfApplicationsToSend=Math.min(Context.numberOfJobApplicationAnUneployedSends,firmsList.size());
-					switch(Context.firmsWorkersMatching){
-						case 0:
-							for(int i=0;i<firmsList.size();i++){
-								firmsPositions.add(new Integer(i));
-							}
-							for(int i=0;i<numberOfApplicationsToSend;i++){
-								int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
-
-								aFirm=(Firm)firmsList.get(position);
-								if(Context.verboseFlag){
-									System.out.println("       sending application to firm "+aFirm.getID());
+						ArrayList<Integer> firmsPositions=new ArrayList<Integer>();
+						int numberOfApplicationsToSend=Math.min(Context.numberOfJobApplicationAnUneployedSends,firmsList.size());
+						switch(Context.firmsWorkersMatching){
+							case 0:
+								for(int i=0;i<firmsList.size();i++){
+									firmsPositions.add(new Integer(i));
 								}
-								aFirm.receiveCurriculum(myCurriculum);
-							}
-							break;
-						case 1: 
-							for(int i=0;i<firmsList.size();i++){
-								firmsPositions.add(new Integer(i));
-							}
-							for(int i=0;i<numberOfApplicationsToSend;i++){
-								int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+								for(int i=0;i<numberOfApplicationsToSend;i++){
+									int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
 
-								aFirm=(Firm)firmsList.get(position);
-								if(Context.verboseFlag){
-									System.out.println("  sending application to firm "+aFirm.getID());
+									aFirm=(Firm)firmsList.get(position);
+									if(Context.verboseFlag){
+										System.out.println("       sending application to firm "+aFirm.getID());
+									}
+									aFirm.receiveCurriculum(myCurriculum);
 								}
-								aFirm.receiveCurriculum(myCurriculum);
-							}
-							if(Context.verboseFlag){
-								System.out.println("  sending application to office for labor ");
-							}
-							myLaborMarket.receiveCurriculum(myCurriculum);
-							break;
-						case 2:
-							if(Context.verboseFlag){
-								System.out.println("  sending application to office for labor ");
-							}
-							myLaborMarket.receiveCurriculum(myCurriculum);
-							break;
-						default: System.out.println("Unknown workers firms matching mechanism");
-							 break;
+								break;
+							case 1: 
+								for(int i=0;i<firmsList.size();i++){
+									firmsPositions.add(new Integer(i));
+								}
+								for(int i=0;i<numberOfApplicationsToSend;i++){
+									int position=firmsPositions.remove(RandomHelper.nextIntFromTo(0,(firmsPositions.size()-1)));
+
+									aFirm=(Firm)firmsList.get(position);
+									if(Context.verboseFlag){
+										System.out.println("  sending application to firm "+aFirm.getID());
+									}
+									aFirm.receiveCurriculum(myCurriculum);
+								}
+								if(Context.verboseFlag){
+									System.out.println("  sending application to office for labor ");
+								}
+								myLaborMarket.receiveCurriculum(myCurriculum);
+								break;
+							case 2:
+								if(Context.verboseFlag){
+									System.out.println("  sending application to office for labor ");
+								}
+								myLaborMarket.receiveCurriculum(myCurriculum);
+								break;
+							default: System.out.println("Unknown workers firms matching mechanism");
+								 break;
+						}
 					}
 				}
 
@@ -744,6 +760,7 @@ public void stepWorkerState() {
 		}
 		public void receiveRetirementNew(){
 			isWorking=false;
+			isRetired=true;
 			if(Context.verboseFlag){
 				System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" retire me age "+age);
 			}
@@ -816,6 +833,9 @@ public void stepWorkerState() {
 		}
 		public boolean getIsWorkingFlag(){
 			return isWorking;
+		}
+		public boolean getIsRetiredFlag(){
+			return isRetired;
 		}
 		public boolean getIsStudentFlag(){
 			return isStudent;

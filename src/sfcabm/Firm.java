@@ -30,7 +30,7 @@ public class Firm {
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
 	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts;	
 	double firmInvestment=0;
-	double ordersOfProductsForInvestmentPurpose;
+	double ordersOfProductsForInvestmentPurpose=0;
 	double productionPlusOrdersForInvestments=0;
 	boolean hadFired=false;
 		/*
@@ -50,6 +50,8 @@ public class Firm {
 	public double initialCapitalStock;
 	public double firmTech=1;
 	public double averageAbilityFirm=0.8;
+
+	Industry myIndustry;
 	
 
 
@@ -84,6 +86,9 @@ public class Firm {
 		super();
 		identity = FirmID;
 		myContext=con;
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" created");
+		}
 	}
 
 	public int getID(){
@@ -104,6 +109,7 @@ public class Firm {
 	}
 
 	public void setInitialWorkers(){
+		sumOfWorkersProductivity=0;
 		if(applicationList.size()>0){
 			/*
 			   try{
@@ -141,6 +147,7 @@ public class Firm {
 			}
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
+		demand=(int)production;
 		//	productAbsoluteRank=1;
 		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verboseFlag){
@@ -182,10 +189,12 @@ public class Firm {
 	}
 
 	public void setupBankAccount(){
-		productionCapital=Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+//		productionCapital=Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		productionCapital=Context.productionOfNewEnteringFirm;
 		firmInvestment=productionCapital;
 		desiredProductionCapital=productionCapital;
-		desiredDemand=Context.parameterOfProductivityInProductionFuncion;
+//		desiredDemand=Context.parameterOfProductivityInProductionFuncion;
+		desiredDemand=(int)productionCapital;
 		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
 		debt=productionCapital-equity;
 		if(Context.verboseFlag){
@@ -221,7 +230,7 @@ public class Firm {
 
 
 	public void makeProduction(){
-		System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
+			System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
 			sumOfWorkersProductivity=0;
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
@@ -229,15 +238,16 @@ public class Firm {
 			}
 
 		int workersPotentialProduction=(int)Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
-		int capitalPotentialProduction=(int)Math.round(productionCapital/Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion*Context.parameterOfProductivityInProductionFuncion);
+//		int capitalPotentialProduction=(int)Math.round(productionCapital/Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion*Context.parameterOfProductivityInProductionFuncion);
+		int capitalPotentialProduction=(int)productionCapital;
 		productionPlusOrdersForInvestments=Math.min(workersPotentialProduction,capitalPotentialProduction);
 		production=(int)(productionPlusOrdersForInvestments-ordersOfProductsForInvestmentPurpose);
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" workers Potential Production "+workersPotentialProduction+" capital potential Production "+capitalPotentialProduction+" production plus Investments "+productionPlusOrdersForInvestments+" production "+production);
+			System.out.println("     Firm "+identity+" workers Potential Production "+workersPotentialProduction+" capital potential Production "+capitalPotentialProduction+" production plus Investments "+productionPlusOrdersForInvestments+" production for howseholds "+production);
 		}
 	
 
-	}
+}
 
 	public void setDesiredCredit(){
 //		double desiredProductionCapitalMultiplier=desiredDemand/production;
@@ -253,7 +263,8 @@ public class Firm {
 		*/
 //		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation))+ordersOfProductsForInvestmentPurpose);
 //		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation)));
-desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
+
+		desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
 		financialResourcesInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size()-1;i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -303,7 +314,7 @@ desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
 			}
 		}
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" production Capital "+(productionCapital+capitalDepreciation)+" demand "+demand+" desiredDemand "+desiredDemand+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
+			System.out.println("     Firm "+identity+" depreciated production Capital "+productionCapital+" demand from household +firms "+(demand+ordersOfProductsForInvestmentPurpose)+" desiredDemand from household + firms "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
 System.out.println("      ----------------");
 		}
 	
@@ -419,6 +430,9 @@ System.out.println("      ----------------");
 				System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
 
 	}
+	else{
+				System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
+	}
 }
 
 	public void laborForceUpwardAdjustment(){
@@ -485,7 +499,7 @@ System.out.println("      ----------------");
 			cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
 			capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
 			if(Context.verboseFlag){
-				System.out.print("     firm "+identity+" demand "+demand+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
+				System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 			}
 
 			productionCapital+=-capitalDepreciation;
@@ -694,7 +708,8 @@ System.out.println("      ----------------");
 			demand=(int)Math.round(production/industryProduction*industryDemand);
 			desiredDemand=demand;
 			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+				System.out.println("         Firm "+identity+" calcolo "+production+"/"+industryProduction+"*"+industryDemand);
+				System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
 			}
 		}
 
@@ -702,14 +717,15 @@ System.out.println("      ----------------");
 		public void setDemand(double industryProduction,double industryDemand){
 			demand=(int)Math.round(production/industryProduction*industryDemand);
 			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
+				System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
+//				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
 			}
 		}
 
 		public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
 			ordersOfProductsForInvestmentPurpose=(int)Math.round(production/industryProduction*industryInvest);
 			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" products ordered for investments "+ordersOfProductsForInvestmentPurpose);
+				System.out.println("         Firm "+identity+" production "+production+" demand from houseld "+demand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
 			}
 		}
 
@@ -766,8 +782,24 @@ System.out.println("      ----------------");
 		public double getDemand(){
 			return demand;
 		}
+public void setIndustry(Industry myI){
+	myIndustry=myI;
+}
+public Industry getIndustry(){
+	return myIndustry;
+}
 
+public void setProductionAndDemandIfNewEntry(){
+	production=desiredDemand;
+	demand=(int)production;
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" demand "+demand+" production "+production+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose));
+		}
+}
 
+public double getOrdersOfProductsForInvestmentPurpose(){
+	return ordersOfProductsForInvestmentPurpose;
+}
 
 
 		//reset the firm each time step 

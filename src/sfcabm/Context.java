@@ -29,6 +29,7 @@ public class Context implements ContextBuilder<Object> {
 		public static int consumerExitAge=50;
 		public static int parameterOfProductivityInProductionFuncion=100;
 		public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
+		public static int productionOfNewEnteringFirm=50;
 		public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 		public static double percentageOfCapitalDepreciation=0.05;
 		public static double laborMarketStateToSetWage=0.5;
@@ -225,10 +226,6 @@ System.out.println("CONTEXT: REMOVING FIRMS WITH ZERO PRODUCTION");
 
 
 
-
-
-
-
 			if(verboseFlag){
 System.out.println("CONSUMERS SETUP BANK ACCOUNTS");
 		}
@@ -264,6 +261,11 @@ System.out.println("CHECK BALANCE SHEET CONSISTENCY");
 			contextAction.execute();
 
 			
+			if(verboseFlag){
+System.out.println("OFFICE FOR STATISTICS: LOAD AGENTS");
+}
+
+officeForStatistics.loadAgents();
 			
 			
 			

@@ -18,6 +18,9 @@ public class Industry{
 	public void increaseNumberOfFirms(){
 		numberOfFirms++;
 	}
+	public void decreaseNumberOfFirms(){
+		numberOfFirms--;
+	}
 	public void increaseProduction(double fp){
 		production=production+fp;
 	}
@@ -26,7 +29,7 @@ public class Industry{
 	}
 	public void allocateDesiredDemand(){
 		if(Context.verboseFlag){
-			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand from howsehold "+demand+" demand from firms "+investments);
 		}
 		for(int i=0;i<theIndustryFirmsList.size();i++){
 			aFirm=theIndustryFirmsList.get(i);
@@ -36,7 +39,8 @@ public class Industry{
 
 	public void allocateDemand(){
 		if(Context.verboseFlag){
-			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand from howsehold "+demand+" demand from firms "+investments);
+//			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand);
 		}
 		for(int i=0;i<theIndustryFirmsList.size();i++){
 			aFirm=theIndustryFirmsList.get(i);
@@ -46,7 +50,7 @@ public class Industry{
 
 	public void allocateInvestments(){
 		if(Context.verboseFlag){
-			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand "+demand+" investments "+investments);
+			System.out.println("       Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size()+" production "+production+" demand from household "+demand+" demand from firms "+investments);
 		}
 		for(int i=0;i<theIndustryFirmsList.size();i++){
 			aFirm=theIndustryFirmsList.get(i);
@@ -61,19 +65,39 @@ public class Industry{
 
 
 	public void addFirm(Firm af){
+		af.setIndustry(this);
 		theIndustryFirmsList.add(af);
+		if(Context.verboseFlag){
+			if(relativeRank<1){
+			System.out.println("       Added Firm in Industry with Absolute Rank "+absoluteRank+" Relative Rank not yet computed  number of firms "+theIndustryFirmsList.size());
+			}
+			else{
+			System.out.println("       Added Firm in Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size());
+			}
+		}
 	}
 
+	public void removeFirm(Firm rf){
+		theIndustryFirmsList.remove(rf);
+		if(theIndustryFirmsList.size()<1){
+			production=0;
+			demand=0;
+		}
+		if(Context.verboseFlag){
+			System.out.println("       Removed Firm in Industry with Absolute Rank "+absoluteRank+" Relative Rank "+relativeRank+" number of firms "+theIndustryFirmsList.size());
+		}
+	}
 
 	public void setRelativeRank(int mar){
 		relativeRank=absoluteRank-mar+1;
 	}
 	public void setMarketShare(double ap){
-		marketShare=production/ap;
-		weightedProduction=relativeRank*production;
+		marketShare=demand/ap;
+		weightedProduction=relativeRank*demand;
 	}
 	public void setProductDiffusionIndicator(double twp){
-		productAttractivenesIndicator=production*relativeRank/twp;
+//		productAttractivenesIndicator=production*relativeRank/twp;
+		productAttractivenesIndicator=demand*relativeRank/twp;
 		if(Context.verboseFlag){
 			System.out.println("     Industry with AR "+absoluteRank+" RR "+relativeRank+" market share "+marketShare+" product attractiveness indicator "+productAttractivenesIndicator);
 		}

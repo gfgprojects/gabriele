@@ -57,13 +57,31 @@ public class OfficeForStatistics{
 		statActionFactory = new DefaultActionFactory();
 	}
 
+public void loadAgents(){
+		try{
+			firmsList=myContext.getObjects(Firm.class);
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+		if(Context.verboseFlag){
+			System.out.println("     office for statistics: agents loaded");
+		}
+}
+
 	public void computeVariables(){
 		if(Context.verboseFlag){
+/*
 			System.out.println();
 			System.out.println("===================================================================");
 			System.out.println("SIMULATION TIME STEP: "+RepastEssentials.GetTickCount());
 			System.out.println("====================================================================");
 			System.out.println();
+*/
 			System.out.println("OFFICE FOR STATISTICS: COMPUTE VARIABLES (PRODUCT DIFFUSION INDICATOR, PRODUCTIVITIES ...");
 		}
 		/*
@@ -110,7 +128,7 @@ public class OfficeForStatistics{
 			System.out.println("Class not found");
 		}
 		if(Context.verboseFlag){
-			System.out.println("     maximum absolute rank "+maximumAbsoluteRank+" minimum Ansolute Rank "+minimumAbsoluteRank);
+			System.out.println("     maximum absolute rank "+maximumAbsoluteRank+" minimum Absolute Rank "+minimumAbsoluteRank);
 		}
 
 
@@ -121,13 +139,16 @@ public class OfficeForStatistics{
 
 		//compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
 		aggregateProduction=0;
+		aggregateDemand=0;
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
 			aggregateProduction=aggregateProduction+aFirm.getProduction();
+			aggregateDemand+=aFirm.getDemand();
 			int position=(int)(aFirm.getProductAbsoluteRank()-minimumAbsoluteRank);
 			anIndustry=industriesList.get(position);
 			anIndustry.increaseNumberOfFirms();
 			anIndustry.increaseProduction(aFirm.getProduction());
+			anIndustry.increaseDemand(aFirm.getDemand());
 			anIndustry.addFirm(aFirm);
 		}
 		//delete from the industries list those with zero production
@@ -146,12 +167,12 @@ public class OfficeForStatistics{
 			while(industriesListIterator.hasNext()){
 				anIndustry=industriesListIterator.next();
 				if(Context.verboseFlag){
-					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction());
+					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand Of previous period "+anIndustry.getDemand());
 				}
 			}
 
 			if(Context.verboseFlag){
-				System.out.println("     aggregate production "+aggregateProduction);
+				System.out.println("     aggregate production "+aggregateProduction+" aggregate demand of previous period "+aggregateDemand);
 			}
 		}
 
@@ -161,7 +182,7 @@ public class OfficeForStatistics{
 		for(int i=0;i<industriesList.size();i++){
 			anIndustry=industriesList.get(i);
 			anIndustry.setRelativeRank(minimumAbsoluteRankOfFirmsWithPositiveProduction);
-			anIndustry.setMarketShare(aggregateProduction);
+			anIndustry.setMarketShare(aggregateDemand);
 		}
 
 		//compute totalWeightedProduction
@@ -215,6 +236,29 @@ public class OfficeForStatistics{
 
 	}
 
+	public void resetProducAttractiveness(){
+		try{
+			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		//compute totalWeightedProduction
+		totalWeightedProduction=0;
+		for(int i=0;i<industriesList.size();i++){
+			anIndustry=industriesList.get(i);
+			anIndustry.setMarketShare(aggregateDemand);
+			totalWeightedProduction=totalWeightedProduction+anIndustry.getWeightedProduction();
+		}
+		//set product diffusion indicator for each industry
+		for(int i=0;i<industriesList.size();i++){
+			anIndustry=industriesList.get(i);
+			anIndustry.setProductDiffusionIndicator(totalWeightedProduction);
+		}
+	}
+
 	/**
 	 * The difference with the computeDemand method is that this method accounts for imperfection in the goods market 
 	 */
@@ -253,12 +297,12 @@ public class OfficeForStatistics{
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
 			if(Context.verboseFlag){
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand from hosehold "+anIndustry.getDemand()+" demand from firms "+anIndustry.getInvestments());
 			}
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
+			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production "+aggregateProduction);
 		}
 	}
 
@@ -304,12 +348,14 @@ public class OfficeForStatistics{
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
 			if(Context.verboseFlag){
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand from hosehold "+anIndustry.getDemand()+" demand from firms "+anIndustry.getInvestments());
+//				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand());
 			}
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
+			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production "+aggregateProduction);
+//			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
 		}
 	}
 
@@ -354,7 +400,7 @@ public class OfficeForStatistics{
 			anIndustry=industriesListIterator.next();
 			anIndustry.setInvestments(anIndustry.getProductAttractiveness()*aggregateInvestments);
 			if(Context.verboseFlag){
-				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand "+anIndustry.getDemand()+" investments "+anIndustry.getInvestments());
+				System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand from household "+anIndustry.getDemand()+" demand from firms "+anIndustry.getInvestments());
 			}
 		}
 
@@ -472,7 +518,8 @@ public class OfficeForStatistics{
 			//check consumers
 			if(anObj instanceof Consumer){
 				aConsumer=(Consumer)anObj;
-				if(aConsumer.getAge()>Context.consumerExitAge){
+//				if(aConsumer.getAge()>Context.consumerExitAge){
+				if(aConsumer.getIsRetiredFlag()){
 					aConsumer.computeWealth();
 					if(Context.verboseFlag){
 						System.out.println("     Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
@@ -517,7 +564,7 @@ public class OfficeForStatistics{
 			//check firms
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
-				if(aFirm.getDemand()<20){
+				if((aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose())<20){
 					exitingFirmsList.add(aFirm);
 					aFirm.setBankAccountsShutDown();
 					aFirm.sendWorkersShutDownNew();
@@ -529,22 +576,30 @@ public class OfficeForStatistics{
 			}
 
 		}
-System.out.println("numero di imprese "+firmsList.size());
-		// remove
+System.out.println("     number of firms "+firmsList.size());
+		// remove from context
 		for(int i=0;i<exitingFirmsList.size();i++){
 			aFirm=exitingFirmsList.get(i);
 			if(Context.verboseFlag){
-				System.out.println("     Exit  of Firm "+aFirm.getID()+" production "+aFirm.getProduction());
+				System.out.println("     Exit of Firm "+aFirm.getID()+" demand from howsehold "+aFirm.getDemand()+" demand from Firms "+aFirm.getOrdersOfProductsForInvestmentPurpose()+" absolute Rank "+aFirm.getProductAbsoluteRank());
 			}
+			Industry tmpIndustry=aFirm.getIndustry();
+			tmpIndustry.removeFirm(aFirm);
+			tmpIndustry.decreaseNumberOfFirms();
 			myContext.remove(aFirm);
 		}
+
+
+
+
+
 		try{
 			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
-System.out.println("numero di imprese "+firmsList.size());
+System.out.println("     number of firms "+firmsList.size());
 
 		if(firmsList.size()<1){
 		System.out.println();
@@ -584,20 +639,58 @@ System.out.println("numero di imprese "+firmsList.size());
 	public void performFirmsEntry(){
 		if(Context.verboseFlag){
 			System.out.println("OFFICE FOR STATISTICS: FIRMS ENTRY");
+			System.out.println("     number of firms "+firmsList.size());
 		}
+		if(newFirmsList.size()>0){
 		for(int i=0;i<newFirmsList.size();i++){
 			aFirm=newFirmsList.get(i);
-//			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
-			aFirm.setProductAbsoluteRank((int)maximumAbsoluteRank);
+			//			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+			int tmpAbsoluteRank=(int)maximumAbsoluteRank;
+			aFirm.setProductAbsoluteRank(tmpAbsoluteRank);
 			aFirm.setupBankAccount();
+			for(int j=0;j<industriesList.size();j++){
+				anIndustry=(Industry)industriesList.get(j);
+				if(anIndustry.getAbsoluteRank()==tmpAbsoluteRank){
+					anIndustry.addFirm(aFirm);
+					anIndustry.increaseNumberOfFirms();
+				}
+			}
 			myContext.add(aFirm);
 			if(Context.verboseFlag){
 				System.out.println("     Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
 			}
 		}
-
+		resetProducAttractiveness();
 
 	}
+
+		try{
+			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		if(Context.verboseFlag){
+			System.out.println("     number of firms "+firmsList.size());
+		}
+
+	}
+
+	public void setupNewFirmsToComputeProductAttractiveness(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: SETUP NEW FIRMS VARIABLE TO COMPUTE PRODUCT ATTACTIVENESS");
+		}
+		if(newFirmsList.size()>0){
+			for(int i=0;i<newFirmsList.size();i++){
+				aFirm=newFirmsList.get(i);
+				aFirm.setProductionAndDemandIfNewEntry();
+			}
+		}
+	}
+
+
 
 	public void publishIndustriesStats(){
 		try{
@@ -616,11 +709,14 @@ System.out.println("numero di imprese "+firmsList.size());
 	public void scheduleEvents(){
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,50.0);
-		Context.schedule.schedule(scheduleParameters,this,"computeVariables");
-
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
+		Context.schedule.schedule(scheduleParameters,this,"computeVariables");
+
+//		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
+//		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
@@ -722,8 +818,8 @@ System.out.println("numero di imprese "+firmsList.size());
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.0);
 		Context.schedule.schedule(scheduleParameters,this,"performConsumersTurnover");
 
-//		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
-//		Context.schedule.schedule(scheduleParameters,this,"performFirmsEntry");
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
+		Context.schedule.schedule(scheduleParameters,this,"setupNewFirmsToComputeProductAttractiveness");
 
 		if(Context.verboseFlag){
 			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);
@@ -733,6 +829,11 @@ System.out.println("numero di imprese "+firmsList.size());
 
 	public void scheduleFirmsMakeProduction(){
 		if(Context.verboseFlag){
+			System.out.println();
+			System.out.println("===================================================================");
+			System.out.println("SIMULATION TIME STEP: "+RepastEssentials.GetTickCount());
+			System.out.println("====================================================================");
+			System.out.println();
 			System.out.println("FIRMS: MAKE PRODUCTION");
 		}
 		statAction=statActionFactory.createActionForIterable(firmsList,"makeProduction",false);
