@@ -1,5 +1,10 @@
 package sfcabm;
 
+import java.util.Date;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import repast.simphony.data2.AggregateDSCreator;
@@ -12,6 +17,7 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.essentials.RepastEssentials;
+import repast.simphony.engine.environment.RunState;
 
 import sfcabm.Firm;
 
@@ -46,7 +52,7 @@ public class OfficeForStatistics{
 	public static double averageProductivity=0;
 
 	ScheduleParameters scheduleParameters;
-
+	public static FileWriter macroDataWriter;
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -55,6 +61,42 @@ public class OfficeForStatistics{
 		minimumAbsoluteRankDataSource= absoluteRankDScreator.createMinSource("minimum absolute rank");
 
 		statActionFactory = new DefaultActionFactory();
+
+		int thisRunNumber=(int)RunState.getInstance().getRunInfo().getRunNumber();
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd'h'HHmmss");
+		Date date = new Date();
+		String timeStamp =dateFormat.format(date);
+		//		String microDataOutputFileNamePis,microDataOutputFileNameId,microDataOutputFileNameAccruedInt,microDataOutputFileNameRefunding;
+		String macroDataOutputFileName;
+		//		String parametersDataOutputFileName;
+		if(Context.timeStampInFileName){
+			//			microDataOutputFileNamePis="zdata_micro_pis_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+			macroDataOutputFileName="zdata_macro_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+			//			parametersDataOutputFileName="zdata_params_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+		}
+		else{
+			//			microDataOutputFileNamePis="zdata_micro_pis_run_"+thisRunNumber+".csv";
+			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+".csv";
+			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+".csv";
+			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+".csv";
+			macroDataOutputFileName="zdata_macro_run_"+thisRunNumber+".csv";
+			//			parametersDataOutputFileName="zdata_params_run_"+thisRunNumber+".csv";
+		}
+		if(Context.saveMacroData){
+
+			try{
+				macroDataWriter=new FileWriter(macroDataOutputFileName);
+				macroDataWriter.append("AC;AI;AS\n");
+				macroDataWriter.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
 	}
 
 public void loadAgents(){
@@ -167,7 +209,7 @@ public void loadAgents(){
 			while(industriesListIterator.hasNext()){
 				anIndustry=industriesListIterator.next();
 				if(Context.verboseFlag){
-					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production "+anIndustry.getProduction()+" demand Of previous period "+anIndustry.getDemand());
+					System.out.println("     absolute Rank "+anIndustry.getAbsoluteRank()+" number of firms "+anIndustry.getNumberOfFirms()+" production for howsehold "+anIndustry.getProduction()+" demand Of previous period + new entry expected demand "+anIndustry.getDemand());
 				}
 			}
 
@@ -302,7 +344,7 @@ public void loadAgents(){
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production "+aggregateProduction);
+			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" Aggregate production for household "+aggregateProduction);
 		}
 	}
 
@@ -357,6 +399,16 @@ public void loadAgents(){
 			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production "+aggregateProduction);
 //			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
 		}
+
+		if(Context.saveMacroData){
+			try{
+				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+"\n");
+				macroDataWriter.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
 	}
 
 	public void allocateDemand(){
