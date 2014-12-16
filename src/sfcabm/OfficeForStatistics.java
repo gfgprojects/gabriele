@@ -27,7 +27,7 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateLoans,aggregateDeposits;
 	public IndexedIterable firmsList,consumersList,banksList;
 
 	Firm aFirm;
@@ -48,6 +48,8 @@ public class OfficeForStatistics{
 	double[] totalProductivityOfWorkersInADegree;
 	public static double[] averageProductivityOfWorkersInADegree;
 	int numberOfWorkers=0;
+	int numberOfFirms,numberOfConsumers,numberOfStudents,numberOfFirmExits;
+	int numberOfRetirements=0;
 	double totalProductivity=0;
 	public static double averageProductivity=0;
 
@@ -85,11 +87,27 @@ public class OfficeForStatistics{
 			macroDataOutputFileName="zdata_macro_run_"+thisRunNumber+".csv";
 			//			parametersDataOutputFileName="zdata_params_run_"+thisRunNumber+".csv";
 		}
+
+/*
+AC Aggregate Comsumption
+AI Aggregate Investment
+AS Aggregate Supply
+L Loans
+D deposits
+NF Number of Firms
+NC Number of Consumers
+NW Number of Worker
+NS Number of Students
+NR Number of Retirements
+NFE Number of Firm Exits
+*/
+
+
 		if(Context.saveMacroData){
 
 			try{
 				macroDataWriter=new FileWriter(macroDataOutputFileName);
-				macroDataWriter.append("AC;AI;AS\n");
+				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE\n");
 				macroDataWriter.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
@@ -157,6 +175,8 @@ public void loadAgents(){
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
+		numberOfFirms=firmsList.size();
+		numberOfConsumers=consumersList.size();
 
 		//Absolute Ranks
 		maximumAbsoluteRankDataSource.reset();
@@ -275,7 +295,23 @@ public void loadAgents(){
 			}
 			System.out.println("     system: number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
 		}
-
+	//compute aggregate loans and Deposits	
+		aggregateLoans=0;
+		aggregateDeposits=0;
+		for(int i=0;i<banksList.size();i++){
+			aBank=(Bank)banksList.get(i);
+			aBank.computeBalanceVariables();
+			aggregateLoans+=aBank.getLoans();
+			aggregateDeposits+=aBank.getDeposits();
+		}
+	//compute number of students
+		numberOfStudents=0;
+		for(int i=0;i<consumersList.size();i++){
+			aConsumer=(Consumer)consumersList.get(i);
+			if(aConsumer.getIsStudentFlag()){
+				numberOfStudents++;
+			}
+		}
 	}
 
 	public void resetProducAttractiveness(){
@@ -402,7 +438,7 @@ public void loadAgents(){
 
 		if(Context.saveMacroData){
 			try{
-				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+"\n");
+				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+";"+aggregateLoans+";"+aggregateDeposits+";"+numberOfFirms+";"+numberOfConsumers+";"+numberOfWorkers+";"+numberOfStudents+";");
 				macroDataWriter.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
@@ -570,8 +606,8 @@ public void loadAgents(){
 			//check consumers
 			if(anObj instanceof Consumer){
 				aConsumer=(Consumer)anObj;
-//				if(aConsumer.getAge()>Context.consumerExitAge){
-				if(aConsumer.getIsRetiredFlag()){
+				if(aConsumer.getAge()>=Context.consumerExitAge){
+//				if(aConsumer.getIsRetiredFlag()){
 					aConsumer.computeWealth();
 					if(Context.verboseFlag){
 						System.out.println("     Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
@@ -583,6 +619,14 @@ public void loadAgents(){
 					newConsumersList.add(aNewConsumer);
 				}
 			}
+		}
+		numberOfRetirements=consumersToRemoveList.size();
+		if(Context.saveMacroData){
+			try{
+			macroDataWriter.append(""+numberOfRetirements+";"+numberOfFirmExits+"\n");
+			macroDataWriter.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
 		}
 
 		// remove
@@ -628,6 +672,7 @@ public void loadAgents(){
 			}
 
 		}
+		numberOfFirmExits=exitingFirmsList.size();
 System.out.println("     number of firms "+firmsList.size());
 		// remove from context
 		for(int i=0;i<exitingFirmsList.size();i++){

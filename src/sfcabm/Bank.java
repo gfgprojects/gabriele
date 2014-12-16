@@ -345,7 +345,12 @@ public class Bank {
 		}
 
 	}
-
+	public double getLoans(){
+		return loans;
+	}
+	public double getDeposits(){
+		return deposits;
+	}
 
 /*
 	public void setAllowedFirmsCredit(){
