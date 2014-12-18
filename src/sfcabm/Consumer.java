@@ -305,7 +305,7 @@ public void stepState(){
 	
 	
 	private void stepWorkerConsumption() {
-		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
+		double preferenceParameter=RandomHelper.nextDoubleFromTo(Context.minPreferenceParameter,Context.maxPreferenceParameter);
 		financialResourcesInBankAccounts=0;
 		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
 		int positionOfBestAccount,positionOfWorstAccount;
@@ -627,7 +627,7 @@ public void stepWorkerState() {
 				}
 			}
 			else{
-				if(RandomHelper.nextDouble()<0.2){
+				if(RandomHelper.nextDouble()<0.05){
 					if(Context.verboseFlag){
 						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 					}

@@ -10,7 +10,8 @@ public class Bank {
 	repast.simphony.context.Context<Object> myContext;
 	Iterator bankAccountsListIterator;
 	int identity;
-	
+	double sumOfHouseholdDesiredChangeInCredit=0;
+	double sumOfHouseholdAllowedChangeInCredit=0;
 	public double iL;
 	double deposits,loans,demandedCredit,allowedCredit,equity;
 	Consumer aConsumer;
@@ -193,7 +194,9 @@ public class Bank {
 	}
 
 
-
+/**
+ *Desired credit and allowed credit are set to zero if the consumer was able to pay back what asked by bank in the Consumer.payBackBankDebt() method; Otherwise only the allowed credit is set to zero.
+*/
 	public void resetConsumersDemandedAndAllowedCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
@@ -233,11 +236,13 @@ public class Bank {
 
 
 /**
- *Bank decides if credit demanded by consumers is extended; outstanding credit cannot be reduced here; Credit reduction was performed by bank in the updateConsumersAccounts method  
+ *The bank decides if credit demanded by consumers is extended; the current level of credit cannot be reduced here; Recall that credit reduction was asked by bank in the updateConsumersAccounts method and consumers pay back if they have enough resources in the Consumer.payBackBankDebt() method; the desiredCredit and allowedCredit of consumers who satisfied banks requests in the Consumer.payBackBankDebt() method were put to zero in the resetConsumersDemandedAndAllowedCredit() method; So, the desired credit is different from zero for consumers who were not able to refund the bank. 
  */
 	public void setAllowedConsumersCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
+		sumOfHouseholdDesiredChangeInCredit=0;
+		sumOfHouseholdAllowedChangeInCredit=0;
 		double anAccountAmount,anAccountDesiredCredit,anAccounAllowedCredit,multiplier;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
@@ -247,32 +252,46 @@ public class Bank {
 				anAccountDesiredCredit=aBankAccount.getDemandedCredit();
 				demandedCredit+=-anAccountDesiredCredit;
 				if(anAccountAmount>=0){
-					if(RandomHelper.nextDouble()>0.5){
+					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
 						multiplier=0.5;
 					}
 					else{
 						multiplier=1.0;
 					}
+
 					if(aConsumer.getIsStudentFlag()){
 						multiplier=1.0;
 					}
+
 					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
+					if(anAccountDesiredCredit<anAccountAmount){
+					sumOfHouseholdDesiredChangeInCredit+=anAccountDesiredCredit;
+					sumOfHouseholdAllowedChangeInCredit+=anAccounAllowedCredit;
+					System.out.println(" account positivo "+anAccountAmount+" desired "+anAccountDesiredCredit+ " concesso "+anAccounAllowedCredit);
+					}
 				}
 				else{
-					if(RandomHelper.nextDouble()>0.5){
+					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
 						multiplier=0.5;
 					}
 					else{
 						multiplier=1.0;
 					}
+
 					if(aConsumer.getIsStudentFlag()){
 						multiplier=1.0;
 					}
+
 					if(anAccountDesiredCredit<0){
 						anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
 					}
 					else{
 						anAccounAllowedCredit=0;
+					}
+					if(anAccountDesiredCredit<anAccountAmount){
+					sumOfHouseholdDesiredChangeInCredit+=(anAccountDesiredCredit-anAccountAmount);
+					sumOfHouseholdAllowedChangeInCredit+=(anAccounAllowedCredit-anAccountAmount);
+					System.out.println(" account negativo "+anAccountAmount+" desired "+anAccountDesiredCredit+ " concesso "+anAccounAllowedCredit+" new asked "+(anAccounAllowedCredit-anAccountAmount));
 					}
 
 
@@ -350,6 +369,15 @@ public class Bank {
 	}
 	public double getDeposits(){
 		return deposits;
+	}
+
+	public double getSumOfHouseholdDesiredChangeInCredit(){
+		System.out.println("sum of new desired credit"+sumOfHouseholdDesiredChangeInCredit);
+		return sumOfHouseholdDesiredChangeInCredit;
+	}
+	public double getSumOfHouseholdAllowedChangeInCredit(){
+		System.out.println("sum of new allowed credit"+sumOfHouseholdAllowedChangeInCredit);
+		return sumOfHouseholdAllowedChangeInCredit;
 	}
 
 /*

@@ -12,6 +12,7 @@ import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.Schedule;
+import repast.simphony.random.RandomHelper;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
 import sfcabm.Consumer;
@@ -21,17 +22,20 @@ import sfcabm.OfficeForStatistics;
 import sfcabm.Bank;
 
 public class Context implements ContextBuilder<Object> {
-	public static boolean verboseFlag=true;
+	public static boolean verboseFlag=false;
 	public static boolean schedulingFlag=true;
 
 	public static boolean saveMacroData=true;
 	public static boolean timeStampInFileName=false;
 
+	public static double minPreferenceParameter=0.5;
+	public static double maxPreferenceParameter=1.5;
+	public static double consumersProbabilityToGetFunded=0.5;
 
-	public static int NumConsumers = 10;
-	public static int NumFirms = 3;
+	public static int NumConsumers = 100;
+	public static int NumFirms = 30;
 	public static int NumBanks = 1;
-	public static int consumerExitAge=50;
+	public static int consumerExitAge=70;
 	public static int parameterOfProductivityInProductionFuncion=100;
 	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 	public static int productionOfNewEnteringFirm=50;
@@ -102,6 +106,8 @@ public class Context implements ContextBuilder<Object> {
 			repast.simphony.context.Context<Object> context) {
 
 		//int maxIter=30;
+
+//		RandomHelper.setSeed(1469873);
 
 		if(verboseFlag){
 			System.out.println("");
@@ -491,7 +497,7 @@ public class Context implements ContextBuilder<Object> {
 		}
 		if (RunEnvironment.getInstance().isBatch())
 		{
-			RunEnvironment.getInstance().endAt(20);
+			RunEnvironment.getInstance().endAt(520);
 		}
 
 

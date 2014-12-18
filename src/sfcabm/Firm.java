@@ -148,8 +148,8 @@ public class Firm {
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 		demand=(int)production;
-		//	productAbsoluteRank=1;
-		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
+			productAbsoluteRank=1;
+//		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
@@ -799,6 +799,10 @@ public void setProductionAndDemandIfNewEntry(){
 
 public double getOrdersOfProductsForInvestmentPurpose(){
 	return ordersOfProductsForInvestmentPurpose;
+}
+
+public void innovate(){
+	productAbsoluteRank++;
 }
 
 

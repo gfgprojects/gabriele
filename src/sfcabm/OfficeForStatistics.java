@@ -27,7 +27,7 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateLoans,aggregateDeposits;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateLoans,aggregateDeposits,aggregateHouseholdDesiredChangeInCredit,aggregateHouseholdAllowedChangeInCredit;
 	public IndexedIterable firmsList,consumersList,banksList;
 
 	Firm aFirm;
@@ -100,6 +100,8 @@ NW Number of Worker
 NS Number of Students
 NR Number of Retirements
 NFE Number of Firm Exits
+LHd aggregateHouseholdDesiredChangeInCredit
+LHs aggregateHouseholdAllowedChangeInCredit
 */
 
 
@@ -107,7 +109,7 @@ NFE Number of Firm Exits
 
 			try{
 				macroDataWriter=new FileWriter(macroDataOutputFileName);
-				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE\n");
+				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs\n");
 				macroDataWriter.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
@@ -623,7 +625,7 @@ public void loadAgents(){
 		numberOfRetirements=consumersToRemoveList.size();
 		if(Context.saveMacroData){
 			try{
-			macroDataWriter.append(""+numberOfRetirements+";"+numberOfFirmExits+"\n");
+			macroDataWriter.append(""+numberOfRetirements+";"+numberOfFirmExits+";"+(-aggregateHouseholdDesiredChangeInCredit)+";"+(-aggregateHouseholdAllowedChangeInCredit)+"\n");
 			macroDataWriter.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
@@ -805,6 +807,22 @@ System.out.println("     number of firms "+firmsList.size());
 
 	public void scheduleEvents(){
 
+		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+		Context.schedule.schedule(scheduleParameters,this,"introduceInnovation");
+
+//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+//		Context.schedule.schedule(scheduleParameters,this,"increaseUnemploymentDole");
+
+//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithBankBehaviorUnchanged");
+
+//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithRestrictiveBankBehavior");
+
+
+
+
+
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,50.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
@@ -985,6 +1003,13 @@ System.out.println("     number of firms "+firmsList.size());
 		}
 		statAction=statActionFactory.createActionForIterable(banksList,"setAllowedConsumersCredit",false);
 		statAction.execute();
+		aggregateHouseholdDesiredChangeInCredit=0;
+		aggregateHouseholdAllowedChangeInCredit=0;
+		for(int i=0;i<banksList.size();i++){
+			aBank=(Bank)banksList.get(i);
+			aggregateHouseholdDesiredChangeInCredit+=aBank.getSumOfHouseholdDesiredChangeInCredit();
+			aggregateHouseholdAllowedChangeInCredit+=aBank.getSumOfHouseholdAllowedChangeInCredit();
+		}
 	}
 	public void scheduleConsumersAdjustConsumptionAccordingToExtendedCredit(){
 		if(Context.verboseFlag){
@@ -1084,6 +1109,21 @@ System.out.println("     number of firms "+firmsList.size());
 		statAction.execute();
 	}
 
+	public void increaseHouseholdDebtPropensityWithBankBehaviorUnchanged(){
+		Context.maxPreferenceParameter=2.0;
+	}
+	public void increaseHouseholdDebtPropensityWithRestrictiveBankBehavior(){
+		Context.maxPreferenceParameter=2.0;
+		Context.consumersProbabilityToGetFunded=0.0;
+	}
+	public void increaseUnemploymentDole(){
+		Context.unemploymentDole=20;
+		Context.costEdu=20;
+	}
+	public void introduceInnovation(){
+		aFirm=(Firm)firmsList.get(0);
+		aFirm.innovate();
+	}
 
 	public void scheduleEndOfSimulationStepMessage(){
 		System.out.println();
