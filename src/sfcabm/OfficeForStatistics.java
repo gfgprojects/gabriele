@@ -807,8 +807,8 @@ System.out.println("     number of firms "+firmsList.size());
 
 	public void scheduleEvents(){
 
-		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
-		Context.schedule.schedule(scheduleParameters,this,"introduceInnovation");
+//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+//		Context.schedule.schedule(scheduleParameters,this,"introduceInnovation");
 
 //		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
 //		Context.schedule.schedule(scheduleParameters,this,"increaseUnemploymentDole");
@@ -1009,6 +1009,10 @@ System.out.println("     number of firms "+firmsList.size());
 			aBank=(Bank)banksList.get(i);
 			aggregateHouseholdDesiredChangeInCredit+=aBank.getSumOfHouseholdDesiredChangeInCredit();
 			aggregateHouseholdAllowedChangeInCredit+=aBank.getSumOfHouseholdAllowedChangeInCredit();
+		}
+		if(Context.verboseFlag){
+			System.out.println("     aggregateHouseholdDesiredChangeInCredit "+aggregateHouseholdDesiredChangeInCredit);
+			System.out.println("     aggregateHouseholdAllowedChangeInCredit "+aggregateHouseholdAllowedChangeInCredit);
 		}
 	}
 	public void scheduleConsumersAdjustConsumptionAccordingToExtendedCredit(){

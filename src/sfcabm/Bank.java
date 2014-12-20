@@ -253,7 +253,7 @@ public class Bank {
 				demandedCredit+=-anAccountDesiredCredit;
 				if(anAccountAmount>=0){
 					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
-						multiplier=0.5;
+						multiplier=0.0;
 					}
 					else{
 						multiplier=1.0;
@@ -272,7 +272,7 @@ public class Bank {
 				}
 				else{
 					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
-						multiplier=0.5;
+						multiplier=0.0;
 					}
 					else{
 						multiplier=1.0;
@@ -372,11 +372,11 @@ public class Bank {
 	}
 
 	public double getSumOfHouseholdDesiredChangeInCredit(){
-		System.out.println("sum of new desired credit"+sumOfHouseholdDesiredChangeInCredit);
+		System.out.println("     bank "+identity+" sum of new desired credit "+sumOfHouseholdDesiredChangeInCredit);
 		return sumOfHouseholdDesiredChangeInCredit;
 	}
 	public double getSumOfHouseholdAllowedChangeInCredit(){
-		System.out.println("sum of new allowed credit"+sumOfHouseholdAllowedChangeInCredit);
+		System.out.println("     bank "+identity+" sum of new allowed credit "+sumOfHouseholdAllowedChangeInCredit);
 		return sumOfHouseholdAllowedChangeInCredit;
 	}
 
