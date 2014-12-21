@@ -4,6 +4,7 @@ package sfcabm;
 //import sfcabm.LaborMkt; 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 import sfcabm.Firm;
 import sfcabm.Curriculum;
@@ -14,12 +15,13 @@ import repast.simphony.random.RandomHelper;
 import repast.simphony.engine.schedule.ScheduledMethod;
 //import repast.simphony.context.Context;
 import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.essentials.RepastEssentials;
 public class Consumer {
 	int identity,age;
 	boolean isStudent,isWorking,isRetired;
 	Firm myEmployer=null;
 	//public double disposableIncome,desiredConsumption,consumption,desiredChangeInWealth,desiredWealth;
-	// double saving;
+	 double saving=0;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
 	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.35,0.5);
@@ -53,7 +55,7 @@ public class Consumer {
 	 boolean InvestEducation;
 	 double studentSpending;
 
-	 double consumption,desiredDemand,financialResourcesInBankAccounts;
+	 double consumption,desiredDemand,financialResourcesInBankAccounts,effectiveConsumption,disposableIncomewhenConsuming;
 	 
 	repast.simphony.context.Context<Object> myContext;
 	IndexedIterable<Object> firmsList,banksList;
@@ -576,6 +578,14 @@ public void stepWorkerState() {
 				aProductDemand=demandsList.get(j);
 				consumption+=aProductDemand.getDemand();
 			}
+			effectiveConsumption=consumption;
+			disposableIncomewhenConsuming=disposableIncome;
+			if(disposableIncomewhenConsuming>effectiveConsumption){
+				saving=disposableIncomewhenConsuming-effectiveConsumption;
+			}
+			else{
+				saving=0;
+			}
 
 					System.out.println("      consumer "+getIdentity()+" consumption "+consumption+" disposableIncome "+disposableIncome);
 			if(disposableIncome>=consumption){
@@ -612,7 +622,15 @@ public void stepWorkerState() {
 
 		}
 
+public void saveDataToFile(){
+			try{
+//				microDataWriterForConsumers.append("t;id;ec;di2\n");
+				OfficeForStatistics.microDataWriterForConsumers.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+isStudent+";"+isWorking+";"+effectiveConsumption+";"+disposableIncomewhenConsuming+"\n");
+				OfficeForStatistics.microDataWriterForConsumers.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
 
+}
 
 
 		public void adjustConsumtionToMatchDemandAndSupply(int rankPosition, double multiplier){

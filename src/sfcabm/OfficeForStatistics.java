@@ -54,7 +54,7 @@ public class OfficeForStatistics{
 	public static double averageProductivity=0;
 
 	ScheduleParameters scheduleParameters;
-	public static FileWriter macroDataWriter;
+	public static FileWriter macroDataWriter,microDataWriterForConsumers;
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -69,10 +69,10 @@ public class OfficeForStatistics{
 		Date date = new Date();
 		String timeStamp =dateFormat.format(date);
 		//		String microDataOutputFileNamePis,microDataOutputFileNameId,microDataOutputFileNameAccruedInt,microDataOutputFileNameRefunding;
-		String macroDataOutputFileName;
+		String macroDataOutputFileName,microDataOutputFileNameForConsumers;
 		//		String parametersDataOutputFileName;
 		if(Context.timeStampInFileName){
-			//			microDataOutputFileNamePis="zdata_micro_pis_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
@@ -80,7 +80,7 @@ public class OfficeForStatistics{
 			//			parametersDataOutputFileName="zdata_params_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 		}
 		else{
-			//			microDataOutputFileNamePis="zdata_micro_pis_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+".csv";
@@ -114,6 +114,27 @@ LHs aggregateHouseholdAllowedChangeInCredit
 			}
 			catch(IOException e) {System.out.println("IOException");}
 		}
+
+/*
+t time
+id identification number
+age age
+student true if student false if worker
+employed true if employed, false for students and unemployed
+ec effective consumption
+di2 disposable income for consumption
+*/
+
+		if(Context.saveMicroData){
+
+			try{
+				microDataWriterForConsumers=new FileWriter(microDataOutputFileNameForConsumers);
+				microDataWriterForConsumers.append("t;id;age;student;employed;ec;di2\n");
+				microDataWriterForConsumers.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
 
 
 
@@ -874,6 +895,10 @@ System.out.println("     number of firms "+firmsList.size());
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,35.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersUpdateBankAccountAccordingToEffectiveConsumption");
+if(Context.saveMicroData){
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.5);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleSaveConsumersData");
+}
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsComputeEconomicResultAndCapitalDepreciation");
@@ -1022,6 +1047,11 @@ System.out.println("     number of firms "+firmsList.size());
 		statAction=statActionFactory.createActionForIterable(consumersList,"adjustConsumptionAccordingToExtendedCredit",false);
 		statAction.execute();
 	}
+public void scheduleSaveConsumersData(){
+		statAction=statActionFactory.createActionForIterable(consumersList,"saveDataToFile",false);
+		statAction.execute();
+}
+
 	public void scheduleConsumersUpdateBankAccountAccordingToEffectiveConsumption(){
 		if(Context.verboseFlag){
 			System.out.println("CONSUMERS: UPDATE BANK ACCOUNT ACCORDING TO EFFECTIVE CONSUMPTION");

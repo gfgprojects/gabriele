@@ -1,0 +1,61 @@
+prologues:=3;
+
+verbatimtex
+%&latex 
+\documentclass[10pt]{article}
+\begin{document}
+etex
+
+beginfig(0);
+
+picture ah;
+
+fill(0,1mm)--(-1mm,2mm)--(0,-2mm)--(1mm,2mm)--cycle;
+
+ah=currentpicture;
+currentpicture:=nullpicture;
+
+label(btex \begin{tabular}{l} The\\Agent-based\\Stock-flow \\Macroeconomic \\Model \end{tabular} etex scaled 2, (0,0));
+
+path c[],l[],pp;
+
+c1 = fullcircle scaled 10cm;
+c2 = fullcircle scaled 7cm;
+
+draw c1;
+
+for i=0 step length(c1)/8 until length(c1):
+draw ah rotated (i*45-3) shifted (5cm*dir (i*45-3));
+%    draw point i of c1 withpen pencircle scaled 4bp;
+  endfor;
+
+%draw c2;
+
+l1 = (1cm*dir 45)--(6cm*dir 45);
+l2 = (1cm*dir 80)--(6cm*dir 80);
+
+%draw l1;
+%draw l2;
+
+pp = buildcycle(l1,c1,l2,c2);
+%fill pp withcolor blue;%0.7white;
+
+picture lab;
+lab=thelabel(btex demand side etex,origin) rotated -45 shifted (4.0cm*dir 45);
+%unfill bbox lab;
+
+fill fullcircle scaled 3mm shifted (0cm,11.25cm);
+
+draw fullcircle scaled 4mm shifted (0cm,11.25cm);
+
+picture tl;
+
+tl=thelabel("initialization",(0cm,10cm));
+
+draw (0cm,11cm)--(0cm,5.2cm){dir -90}..{dir 0}(2mm,5cm);
+
+unfill bbox tl;
+draw tl;
+draw bbox tl;
+
+

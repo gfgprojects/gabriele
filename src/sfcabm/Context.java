@@ -26,6 +26,7 @@ public class Context implements ContextBuilder<Object> {
 	public static boolean schedulingFlag=true;
 
 	public static boolean saveMacroData=true;
+	public static boolean saveMicroData=true;
 	public static boolean timeStampInFileName=false;
 
 	public static double minPreferenceParameter=0.5;
