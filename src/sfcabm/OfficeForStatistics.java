@@ -54,7 +54,7 @@ public class OfficeForStatistics{
 	public static double averageProductivity=0;
 
 	ScheduleParameters scheduleParameters;
-	public static FileWriter macroDataWriter,microDataWriterForConsumers;
+	public static FileWriter dataReadmeWriter,macroDataWriter,microDataWriterForConsumers,microDataWriterForConsumersBankAccounts01,microDataWriterForConsumersBankAccounts02,microDataWriterForConsumersBankAccounts03,microDataWriterForConsumersBankAccounts04,microDataWriterForConsumersBankAccounts05,microDataWriterForConsumersBankAccounts06;
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -69,10 +69,17 @@ public class OfficeForStatistics{
 		Date date = new Date();
 		String timeStamp =dateFormat.format(date);
 		//		String microDataOutputFileNamePis,microDataOutputFileNameId,microDataOutputFileNameAccruedInt,microDataOutputFileNameRefunding;
-		String macroDataOutputFileName,microDataOutputFileNameForConsumers;
+		String readmeDataOutputFileName,macroDataOutputFileName,microDataOutputFileNameForConsumers,microDataOutputFileNameForConsumersBankAccounts01,microDataOutputFileNameForConsumersBankAccounts02,microDataOutputFileNameForConsumersBankAccounts03,microDataOutputFileNameForConsumersBankAccounts04,microDataOutputFileNameForConsumersBankAccounts05,microDataOutputFileNameForConsumersBankAccounts06;
 		//		String parametersDataOutputFileName;
+		readmeDataOutputFileName="zdata_aaa_readme.txt";
 		if(Context.timeStampInFileName){
 						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts01="zdata_micro_consumersbankaccounts01_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts02="zdata_micro_consumersbankaccounts02_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts03="zdata_micro_consumersbankaccounts03_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts04="zdata_micro_consumersbankaccounts04_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts05="zdata_micro_consumersbankaccounts05_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForConsumersBankAccounts06="zdata_micro_consumersbankaccounts06_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
@@ -81,6 +88,12 @@ public class OfficeForStatistics{
 		}
 		else{
 						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts01="zdata_micro_consumersbankaccounts01_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts02="zdata_micro_consumersbankaccounts02_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts03="zdata_micro_consumersbankaccounts03_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts04="zdata_micro_consumersbankaccounts04_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts05="zdata_micro_consumersbankaccounts05_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForConsumersBankAccounts06="zdata_micro_consumersbankaccounts06_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+".csv";
@@ -108,29 +121,37 @@ LHs aggregateHouseholdAllowedChangeInCredit
 		if(Context.saveMacroData){
 
 			try{
+				dataReadmeWriter=new FileWriter(readmeDataOutputFileName);
+				dataReadmeWriter.append("Contents of\n========================\nzdata_macro . . . file\n========================\n\nAC Aggregate Comsumption\nAI Aggregate Investment\nAS Aggregate Supply\nL Loans\nD deposits\nNF Number of Firms\nNC Number of Consumers\nNW Number of Worker\nNS Number of Students\nNR Number of Retirements\nNFE Number of Firm Exits\nLHd aggregateHouseholdDesiredChangeInCredit\nLHs aggregateHouseholdAllowedChangeInCredit\n");
+				dataReadmeWriter.flush();
+
+
+
+
 				macroDataWriter=new FileWriter(macroDataOutputFileName);
 				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs\n");
 				macroDataWriter.flush();
-			}
-			catch(IOException e) {System.out.println("IOException");}
-		}
 
-/*
-t time
-id identification number
-age age
-student true if student false if worker
-employed true if employed, false for students and unemployed
-ec effective consumption
-di2 disposable income for consumption
-*/
+					dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_consumers_run . . . file\n========================\n\nt time\nid identification number\nage age\nstudent true if student false if worker\nemployed true if employed, false for students and unemployed\nedu_successes numberOfSuccesfulPeriodsOfEducation\nedu_failures numberOfFailedPeriodsOfEducation\nproductivity consumers productivity\nec effective consumption\ndi1 disposable income when deciding desired consumption\ndi2 disposable income for consumption\n");
+				dataReadmeWriter.flush();
+				   
 
-		if(Context.saveMicroData){
 
-			try{
 				microDataWriterForConsumers=new FileWriter(microDataOutputFileNameForConsumers);
-				microDataWriterForConsumers.append("t;id;age;student;employed;ec;di2\n");
+				microDataWriterForConsumers.append("t;id;age;student;employed;edu_successes;edu_failures;degree;productivity;di1;di2;ec\n");
 				microDataWriterForConsumers.flush();
+
+				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_consumersbankaccounts<n>_run . . . file\n========================\n\nThese files record info on each consumer bank accounts in the format\naccount 1 data|account 2 data|...\nwhere\naccount i data = tickCount,consumer id,bank id,account amount,demanded credit,allowed credit\n\nThe various files give this information in different moment of the timetick:\n\nzdata_micro_consumersbankaccounts01  situation at the beginning of method Concumer.payBackBankDebt\nzdata_micro_consumersbankaccounts02  situation at the end of method Concumer.payBackBankDebt\nzdata_micro_consumersbankaccounts03  situation at the beginning of method Concumer.stepConsumption()\nzdata_micro_consumersbankaccounts04  situation at the end of method Concumer.stepConsumption()\nzdata_micro_consumersbankaccounts05  situation at the beginning of method Concumer.adjustConsumptionAccordingToExtendedCredit()\nzdata_micro_consumersbankaccounts06  situation at the end of method Concumer.updateBankAccountAccordingToEffectiveConsumption()");
+				dataReadmeWriter.flush();
+
+				microDataWriterForConsumersBankAccounts01=new FileWriter(microDataOutputFileNameForConsumersBankAccounts01);
+				microDataWriterForConsumersBankAccounts02=new FileWriter(microDataOutputFileNameForConsumersBankAccounts02);
+				microDataWriterForConsumersBankAccounts03=new FileWriter(microDataOutputFileNameForConsumersBankAccounts03);
+				microDataWriterForConsumersBankAccounts04=new FileWriter(microDataOutputFileNameForConsumersBankAccounts04);
+				microDataWriterForConsumersBankAccounts05=new FileWriter(microDataOutputFileNameForConsumersBankAccounts05);
+				microDataWriterForConsumersBankAccounts06=new FileWriter(microDataOutputFileNameForConsumersBankAccounts06);
+				//				microDataWriterForConsumers.append("t;\n");
+				//				microDataWriterForConsumers.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
 		}

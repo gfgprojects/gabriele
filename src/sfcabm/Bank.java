@@ -380,6 +380,10 @@ public class Bank {
 		return sumOfHouseholdAllowedChangeInCredit;
 	}
 
+	public int getIdentity(){
+		return identity;
+	}
+
 /*
 	public void setAllowedFirmsCredit(){
 		demandedCredit=0;

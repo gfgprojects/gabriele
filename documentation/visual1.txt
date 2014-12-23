@@ -3,6 +3,7 @@ prologues:=3;
 verbatimtex
 %&latex 
 \documentclass[10pt]{article}
+\usepackage{color}
 \begin{document}
 etex
 

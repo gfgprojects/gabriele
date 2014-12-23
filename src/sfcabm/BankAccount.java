@@ -141,4 +141,8 @@ public class BankAccount{
 		return toBeClosed;
 	}
 
+	public Bank getHostingBank(){
+		return hostingBank;
+	}
+
 }

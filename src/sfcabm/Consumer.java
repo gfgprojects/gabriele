@@ -55,7 +55,7 @@ public class Consumer {
 	 boolean InvestEducation;
 	 double studentSpending;
 
-	 double consumption,desiredDemand,financialResourcesInBankAccounts,effectiveConsumption,disposableIncomewhenConsuming;
+	 double consumption,desiredDemand,financialResourcesInBankAccounts,effectiveConsumption,disposableIncomeWhenDecidingDesiredConsumption,disposableIncomewhenConsuming;
 	 
 	repast.simphony.context.Context<Object> myContext;
 	IndexedIterable<Object> firmsList,banksList;
@@ -114,7 +114,7 @@ public class Consumer {
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
 		age=RandomHelper.nextIntFromTo(0,Context.consumerExitAge-1);
 		int iterations=0;
-		int maxIterations=Math.min(age,22);
+		int maxIterations=Math.min(age,23);
 		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
 			if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 				numberOfSuccessfulPeriodsOfEducation++;
@@ -125,6 +125,9 @@ public class Consumer {
 				numberOfConsecutiveFailedPeriodsOfEducation++;
 			}
 			iterations++;
+		}
+		if(numberOfSuccessfulPeriodsOfEducation>21){
+			numberOfSuccessfulPeriodsOfEducation=21;
 		}
 		if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation==21){
 			isStudent=false;
@@ -205,6 +208,21 @@ public void stepState(){
 */	    
 
 	public void payBackBankDebt(){
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts01.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+				}
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts01.append("\n");
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts01.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
 		double amountOfThisBankAccount,resourcesAvailableToRefund;
 		double totalAmountToRefund=0;
 		financialResourcesInBankAccounts=0;
@@ -220,9 +238,9 @@ public void stepState(){
 		}
 		disposableIncome=wage;
 		if(totalAmountToRefund>0){
-		if(Context.verboseFlag){
-			System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" wage "+disposableIncome);
-		}
+			if(Context.verboseFlag){
+				System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" wage "+disposableIncome);
+			}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.unemploymentDole;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
 				for(int i=0;i<bankAccountsList.size();i++){
@@ -279,17 +297,46 @@ public void stepState(){
 				}
 				disposableIncome=Context.unemploymentDole;
 			}
-		if(Context.verboseFlag){
-			System.out.println("     totalAmountToRefund "+totalAmountToRefund+" wage "+wage+" resourcesAvailableToRefund (wage+deposits-minimumConsumption) "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome);
+			if(Context.verboseFlag){
+				System.out.println("     totalAmountToRefund "+totalAmountToRefund+" wage "+wage+" resourcesAvailableToRefund (wage+deposits-minimumConsumption) "+resourcesAvailableToRefund+" disposableIncome "+disposableIncome);
+			}
 		}
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts02.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+				}
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts02.append("\n");
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts02.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
 		}
-}
+
+
+	
+	}
+
 		
 
 
 	
 
 	public void stepConsumption(){
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts03.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+				}
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts03.append("\n");
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts03.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
 	    if(isStudent){
 	        stepStudentConsumption();
 	    }
@@ -299,6 +346,23 @@ public void stepState(){
 	   age++; 
 	//    disposableIncome=workerWage+saving-iL*workerLoan-iL*studentLoan;
 	    //-taxes
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts04.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+				}
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts04.append("\n");
+				OfficeForStatistics.microDataWriterForConsumersBankAccounts04.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
+
+
 	}
 
 
@@ -318,6 +382,11 @@ public void stepState(){
 			wage=(double)Context.unemploymentDole;
 			disposableIncome=wage;
 		}
+
+		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
+
+
+
 		wealth=0;
 		for(int i=0;i<bankAccountsList.size();i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -430,6 +499,7 @@ public void stepWorkerState() {
 
 		wage=0;
 		disposableIncome=0;
+		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
 		
 		wealth=0;
 		for(int i=0;i<bankAccountsList.size();i++){
@@ -548,17 +618,30 @@ public void stepWorkerState() {
 		}
 
 		public void adjustConsumptionAccordingToExtendedCredit(){
+			if(Context.saveMicroData){
+				try{
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						OfficeForStatistics.microDataWriterForConsumersBankAccounts05.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					}
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts05.append("\n");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts05.flush();
+				}
+				catch(IOException e) {System.out.println("IOException");}
+			}
+
+
 			double askedCredit=aBankAccount.getDemandedCredit();
 			double allowedCredit=aBankAccount.getAllowedCredit();
 			double allowedDemand=0;
 			if(allowedCredit>askedCredit){
 				allowedDemand=desiredDemand-(allowedCredit-askedCredit);
-/*
-				if(allowedDemand<Context.unemploymentDole){
-					allowedDemand=Context.unemploymentDole;
-					System.out.println("             CONSUMER CANNOT PAY BACK");
-				}
-*/
+				/*
+				   if(allowedDemand<Context.unemploymentDole){
+				   allowedDemand=Context.unemploymentDole;
+				   System.out.println("             CONSUMER CANNOT PAY BACK");
+				   }
+				   */
 			}
 			else{
 				allowedDemand=desiredDemand;
@@ -587,7 +670,7 @@ public void stepWorkerState() {
 				saving=0;
 			}
 
-					System.out.println("      consumer "+getIdentity()+" consumption "+consumption+" disposableIncome "+disposableIncome);
+			System.out.println("      consumer "+getIdentity()+" consumption "+consumption+" disposableIncome "+disposableIncome);
 			if(disposableIncome>=consumption){
 				worstBankAccount.receiveDeposits(disposableIncome-consumption);
 			}
@@ -601,12 +684,12 @@ public void stepWorkerState() {
 							consumption+=-tmpAccount;
 							aBankAccount.setAccount(0);
 							if(Context.verboseFlag){
-							System.out.println("       deposits in this account are lower than residual desired consumption. All deposits are withdrawn to buy consumption goods and the residual desired consumption is "+consumption);      
+								System.out.println("       deposits in this account are lower than residual desired consumption. All deposits are withdrawn to buy consumption goods and the residual desired consumption is "+consumption);      
 							}
 						}
 						else{
 							if(Context.verboseFlag){
-							System.out.println("       deposits in this account are higher than residual desired consumption. Deposits are thus reduced by "+consumption);      
+								System.out.println("       deposits in this account are higher than residual desired consumption. Deposits are thus reduced by "+consumption);      
 							}
 							aBankAccount.setAccount(tmpAccount-consumption);
 							consumption=0;
@@ -614,18 +697,33 @@ public void stepWorkerState() {
 					}
 				}
 				if(consumption>0){
-//					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit())+"    "+(-bestBankAccount.getAccount()));
+					//					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit())+"    "+(-bestBankAccount.getAccount()));
 					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount()));
 					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
 				}
 			}
+
+
+
+			if(Context.saveMicroData){
+				try{
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						OfficeForStatistics.microDataWriterForConsumersBankAccounts06.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					}
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts06.append("\n");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts06.flush();
+				}
+				catch(IOException e) {System.out.println("IOException");}
+			}
+
 
 		}
 
 public void saveDataToFile(){
 			try{
 //				microDataWriterForConsumers.append("t;id;ec;di2\n");
-				OfficeForStatistics.microDataWriterForConsumers.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+isStudent+";"+isWorking+";"+effectiveConsumption+";"+disposableIncomewhenConsuming+"\n");
+				OfficeForStatistics.microDataWriterForConsumers.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+effectiveConsumption+"\n");
 				OfficeForStatistics.microDataWriterForConsumers.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}

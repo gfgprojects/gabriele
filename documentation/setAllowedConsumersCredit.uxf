@@ -5,8 +5,8 @@
     <coordinates>
       <x>0</x>
       <y>0</y>
-      <w>983</w>
-      <h>1217</h>
+      <w>1143</w>
+      <h>1449</h>
     </coordinates>
     <panel_attributes>title:Bank.setAllowedConsumerCredit()
 Start
@@ -25,6 +25,7 @@ While[while\bankAccountsList.\hasNext()]
 			[if\uniform&lt;=0.5]
 			multiplier=1.0
 		EndIf
+		set multiplier=1 if student
 		allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
 
 		[if\amount&lt;0]
@@ -35,8 +36,14 @@ While[while\bankAccountsList.\hasNext()]
 			[if\uniform&lt;=0.5]
 			multiplier=1.0
 		EndIf
-		allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+		set multiplier=1 if student
+		If
+			[if desiredCredit&lt;0]
+			allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
 
+			[else]
+			allowedCredit=0
+		EndIf
 	allowedCredit =\multiplier*demandedCredit
 	set this account's \allowedCredit to\allowedCredit
 	increase totalAllowedCredit\by allowedCredit
