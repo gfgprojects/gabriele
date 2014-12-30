@@ -203,6 +203,9 @@ public class Bank {
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
 			if(aBankAccount.getOwnerType()=="consumer"){
+				aBankAccount.resetDemandedCredit();
+				aBankAccount.resetAllowedCredit();
+/*
 				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
 					aBankAccount.resetAllowedCredit();
 				}
@@ -210,6 +213,7 @@ public class Bank {
 					aBankAccount.resetDemandedCredit();
 					aBankAccount.resetAllowedCredit();
 				}
+*/
 			}
 		}
 	}

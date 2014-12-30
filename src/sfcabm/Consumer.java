@@ -209,11 +209,18 @@ public void stepState(){
 
 	public void payBackBankDebt(){
 
+	//reset unpaid amount of bank accounts
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			aBankAccount.setUnpaidAmount(0);
+		}
+
+
 		if(Context.saveMicroData){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					OfficeForStatistics.microDataWriterForConsumersBankAccounts01.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts01.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 				}
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts01.append("\n");
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts01.flush();
@@ -288,7 +295,8 @@ public void stepState(){
 							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 						}
 						else{
-							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
 							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 							//							resourcesAvailableToRefund=0;
 							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
@@ -306,7 +314,7 @@ public void stepState(){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					OfficeForStatistics.microDataWriterForConsumersBankAccounts02.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts02.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 				}
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts02.append("\n");
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts02.flush();
@@ -328,7 +336,7 @@ public void stepState(){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					OfficeForStatistics.microDataWriterForConsumersBankAccounts03.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts03.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 				}
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts03.append("\n");
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts03.flush();
@@ -351,7 +359,7 @@ public void stepState(){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					OfficeForStatistics.microDataWriterForConsumersBankAccounts04.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+					OfficeForStatistics.microDataWriterForConsumersBankAccounts04.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 				}
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts04.append("\n");
 				OfficeForStatistics.microDataWriterForConsumersBankAccounts04.flush();
@@ -381,6 +389,9 @@ public void stepState(){
 		if(!isWorking){
 			wage=(double)Context.unemploymentDole;
 			disposableIncome=wage;
+			if(preferenceParameter<1){
+				preferenceParameter=1;
+			}
 		}
 
 		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
@@ -489,8 +500,10 @@ public void stepWorkerState() {
 
 
 	private void stepStudentConsumption() {
-
-		double preferenceParameter=RandomHelper.nextDoubleFromTo(0.5,1.5);
+		double preferenceParameter=RandomHelper.nextDoubleFromTo(Context.minPreferenceParameter,Context.maxPreferenceParameter);
+		if(preferenceParameter<1){
+			preferenceParameter=1;
+		}
 		financialResourcesInBankAccounts=0;
 		double amountOfThisBankAccount,amountOfBestBankAccount,amountOfWorstBankAccount;
 		int positionOfBestAccount,positionOfWorstAccount;
@@ -622,7 +635,7 @@ public void stepWorkerState() {
 				try{
 					for(int i=0;i<bankAccountsList.size();i++){
 						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						OfficeForStatistics.microDataWriterForConsumersBankAccounts05.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+						OfficeForStatistics.microDataWriterForConsumersBankAccounts05.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 					}
 					OfficeForStatistics.microDataWriterForConsumersBankAccounts05.append("\n");
 					OfficeForStatistics.microDataWriterForConsumersBankAccounts05.flush();
@@ -709,7 +722,7 @@ public void stepWorkerState() {
 				try{
 					for(int i=0;i<bankAccountsList.size();i++){
 						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						OfficeForStatistics.microDataWriterForConsumersBankAccounts06.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+"|");
+						OfficeForStatistics.microDataWriterForConsumersBankAccounts06.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
 					}
 					OfficeForStatistics.microDataWriterForConsumersBankAccounts06.append("\n");
 					OfficeForStatistics.microDataWriterForConsumersBankAccounts06.flush();
@@ -723,7 +736,7 @@ public void stepWorkerState() {
 public void saveDataToFile(){
 			try{
 //				microDataWriterForConsumers.append("t;id;ec;di2\n");
-				OfficeForStatistics.microDataWriterForConsumers.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+effectiveConsumption+"\n");
+				OfficeForStatistics.microDataWriterForConsumers.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+wage+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+desiredDemand+";"+effectiveConsumption+"\n");
 				OfficeForStatistics.microDataWriterForConsumers.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
