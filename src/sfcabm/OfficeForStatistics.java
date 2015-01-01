@@ -54,7 +54,7 @@ public class OfficeForStatistics{
 	public static double averageProductivity=0;
 
 	ScheduleParameters scheduleParameters;
-	public static FileWriter dataReadmeWriter,macroDataWriter,microDataWriterForConsumers,microDataWriterForConsumersBankAccounts01,microDataWriterForConsumersBankAccounts02,microDataWriterForConsumersBankAccounts03,microDataWriterForConsumersBankAccounts04,microDataWriterForConsumersBankAccounts05,microDataWriterForConsumersBankAccounts06;
+	public static FileWriter dataReadmeWriter,macroDataWriter,microDataWriterForConsumers,microDataWriterForFirms,microDataWriterForConsumersBankAccounts01,microDataWriterForConsumersBankAccounts02,microDataWriterForConsumersBankAccounts03,microDataWriterForConsumersBankAccounts04,microDataWriterForConsumersBankAccounts05,microDataWriterForConsumersBankAccounts06;
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -69,11 +69,12 @@ public class OfficeForStatistics{
 		Date date = new Date();
 		String timeStamp =dateFormat.format(date);
 		//		String microDataOutputFileNamePis,microDataOutputFileNameId,microDataOutputFileNameAccruedInt,microDataOutputFileNameRefunding;
-		String readmeDataOutputFileName,macroDataOutputFileName,microDataOutputFileNameForConsumers,microDataOutputFileNameForConsumersBankAccounts01,microDataOutputFileNameForConsumersBankAccounts02,microDataOutputFileNameForConsumersBankAccounts03,microDataOutputFileNameForConsumersBankAccounts04,microDataOutputFileNameForConsumersBankAccounts05,microDataOutputFileNameForConsumersBankAccounts06;
+		String readmeDataOutputFileName,macroDataOutputFileName,microDataOutputFileNameForConsumers,microDataOutputFileNameForFirms,microDataOutputFileNameForConsumersBankAccounts01,microDataOutputFileNameForConsumersBankAccounts02,microDataOutputFileNameForConsumersBankAccounts03,microDataOutputFileNameForConsumersBankAccounts04,microDataOutputFileNameForConsumersBankAccounts05,microDataOutputFileNameForConsumersBankAccounts06;
 		//		String parametersDataOutputFileName;
 		readmeDataOutputFileName="zdata_aaa_readme.txt";
 		if(Context.timeStampInFileName){
 						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirms="zdata_micro_firms_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 						microDataOutputFileNameForConsumersBankAccounts01="zdata_micro_consumersbankaccounts01_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 						microDataOutputFileNameForConsumersBankAccounts02="zdata_micro_consumersbankaccounts02_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 						microDataOutputFileNameForConsumersBankAccounts03="zdata_micro_consumersbankaccounts03_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
@@ -88,6 +89,7 @@ public class OfficeForStatistics{
 		}
 		else{
 						microDataOutputFileNameForConsumers="zdata_micro_consumers_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirms="zdata_micro_firms_run_"+thisRunNumber+".csv";
 						microDataOutputFileNameForConsumersBankAccounts01="zdata_micro_consumersbankaccounts01_run_"+thisRunNumber+".csv";
 						microDataOutputFileNameForConsumersBankAccounts02="zdata_micro_consumersbankaccounts02_run_"+thisRunNumber+".csv";
 						microDataOutputFileNameForConsumersBankAccounts03="zdata_micro_consumersbankaccounts03_run_"+thisRunNumber+".csv";
@@ -140,6 +142,16 @@ LHs aggregateHouseholdAllowedChangeInCredit
 				microDataWriterForConsumers=new FileWriter(microDataOutputFileNameForConsumers);
 				microDataWriterForConsumers.append("t;id;age;student;employed;edu_successes;edu_failures;degree;productivity;wage;di1;di2;dc;ec\n");
 				microDataWriterForConsumers.flush();
+
+
+				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_firms_run . . . file\n========================\n\nt time\nid identification number\nage age\nne number of employee\nwpp workers potential production\ncpp capital potential production\nddc desired demand from consumers \ndc demand from consumers\ndi demand from firms\nsw sum of payed wages\n");
+				dataReadmeWriter.flush();
+
+				microDataWriterForFirms=new FileWriter(microDataOutputFileNameForFirms);
+				microDataWriterForFirms.append("t;id;age;ne;wpp;cpp;ddc;dc;di;sw\n");
+				microDataWriterForFirms.flush();
+
+
 
 				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_consumersbankaccounts<n>_run . . . file\n========================\n\nThese files record info on each consumer bank accounts in the format\naccount 1 data|account 2 data|...\nwhere\naccount i data = tickCount,consumer id,bank id,account amount,demanded credit,allowed credit,unpaid amount\n\nThe various files give this information in different moment of the timetick:\n\nzdata_micro_consumersbankaccounts01  situation at the beginning of method Consumer.payBackBankDebt()\nzdata_micro_consumersbankaccounts02  situation at the end of method Consumer.payBackBankDebt()\nzdata_micro_consumersbankaccounts03  situation at the beginning of method Consumer.stepConsumption()\nzdata_micro_consumersbankaccounts04  situation at the end of method Consumer.stepConsumption()\nzdata_micro_consumersbankaccounts05  situation at the beginning of method Consumer.adjustConsumptionAccordingToExtendedCredit()\nzdata_micro_consumersbankaccounts06  situation at the end of method Consumer.updateBankAccountAccordingToEffectiveConsumption()");
 				dataReadmeWriter.flush();
@@ -849,17 +861,17 @@ System.out.println("     number of firms "+firmsList.size());
 
 	public void scheduleEvents(){
 
-//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
-//		Context.schedule.schedule(scheduleParameters,this,"introduceInnovation");
+		//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+		//		Context.schedule.schedule(scheduleParameters,this,"introduceInnovation");
 
-//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
-//		Context.schedule.schedule(scheduleParameters,this,"increaseUnemploymentDole");
+		//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+		//		Context.schedule.schedule(scheduleParameters,this,"increaseUnemploymentDole");
 
-//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
-//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithBankBehaviorUnchanged");
+		//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+		//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithBankBehaviorUnchanged");
 
-//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
-//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithRestrictiveBankBehavior");
+		//		scheduleParameters=ScheduleParameters.createOneTime(120,51.0);
+		//		Context.schedule.schedule(scheduleParameters,this,"increaseHouseholdDebtPropensityWithRestrictiveBankBehavior");
 
 
 
@@ -872,8 +884,8 @@ System.out.println("     number of firms "+firmsList.size());
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
 		Context.schedule.schedule(scheduleParameters,this,"computeVariables");
 
-//		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
-//		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
+		//		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
+		//		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
@@ -916,10 +928,10 @@ System.out.println("     number of firms "+firmsList.size());
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,35.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersUpdateBankAccountAccordingToEffectiveConsumption");
-if(Context.saveMicroData){
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.5);
-		Context.schedule.schedule(scheduleParameters,this,"scheduleSaveConsumersData");
-}
+		if(Context.saveMicroData){
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,34.5);
+			Context.schedule.schedule(scheduleParameters,this,"scheduleSaveConsumersData");
+		}
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,34.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsComputeEconomicResultAndCapitalDepreciation");
@@ -985,6 +997,10 @@ if(Context.saveMicroData){
 		if(Context.verboseFlag){
 			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);
 			Context.schedule.schedule(scheduleParameters,this,"scheduleEndOfSimulationStepMessage");
+		}
+		if(Context.saveMicroData){
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.0);
+			Context.schedule.schedule(scheduleParameters,this,"scheduleSaveFirmsData");
 		}
 	}
 
@@ -1070,6 +1086,10 @@ if(Context.saveMicroData){
 	}
 public void scheduleSaveConsumersData(){
 		statAction=statActionFactory.createActionForIterable(consumersList,"saveDataToFile",false);
+		statAction.execute();
+}
+public void scheduleSaveFirmsData(){
+		statAction=statActionFactory.createActionForIterable(firmsList,"saveDataToFile",false);
 		statAction.execute();
 }
 

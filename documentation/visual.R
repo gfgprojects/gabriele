@@ -45,9 +45,9 @@ for(i in 1:(items)){
 direction<-(start+i*delta)%%360
 #cat("draw ah rotated ",direction," shifted (",radius_in_cm,"cm*dir ",direction,");\n",sep="")
 if(direction>90 && direction<270){
-write(paste("draw thelabel.lft(btex ",steps[i]," $\\triangleright$ etex,origin) rotated ",(direction+180)," shifted (",radius_in_cm,"cm*dir ",direction,");\n",sep=""),file="visual.mp",append=T)
+write(paste("draw thelabel.lft(btex ",steps[i]," $\\triangleright$ etex scaled scalefactor,origin) rotated ",(direction+180)," shifted (",radius_in_cm,"cm*dir ",direction,");\n",sep=""),file="visual.mp",append=T)
 }else{
-write(paste("draw thelabel.rt(btex $\\triangleleft$ ",steps[i]," etex,origin) rotated ",direction," shifted (",radius_in_cm,"cm*dir ",direction,");\n",sep=""),file="visual.mp",append=T)
+write(paste("draw thelabel.rt(btex $\\triangleleft$ ",steps[i]," etex scaled scalefactor,origin) rotated ",direction," shifted (",radius_in_cm,"cm*dir ",direction,");\n",sep=""),file="visual.mp",append=T)
 }
 }
 

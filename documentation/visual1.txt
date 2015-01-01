@@ -9,6 +9,8 @@ etex
 
 beginfig(0);
 
+scalefactor:=1.0;
+
 picture ah;
 
 fill(0,1mm)--(-1mm,2mm)--(0,-2mm)--(1mm,2mm)--cycle;
@@ -16,7 +18,7 @@ fill(0,1mm)--(-1mm,2mm)--(0,-2mm)--(1mm,2mm)--cycle;
 ah=currentpicture;
 currentpicture:=nullpicture;
 
-label(btex \begin{tabular}{l} The\\Agent-based\\Stock-flow \\Macroeconomic \\Model \end{tabular} etex scaled 2, (0,0));
+label(btex \begin{tabular}{l} The\\Agent-based\\Stock-flow Consistent\\Macroeconomic \\Model \end{tabular} etex scaled 2, (0,0));
 
 path c[],l[],pp;
 
@@ -45,15 +47,15 @@ picture lab;
 lab=thelabel(btex demand side etex,origin) rotated -45 shifted (4.0cm*dir 45);
 %unfill bbox lab;
 
-fill fullcircle scaled 3mm shifted (0cm,11.25cm);
+fill fullcircle scaled 3mm shifted (0cm,13.25cm);
 
-draw fullcircle scaled 4mm shifted (0cm,11.25cm);
+draw fullcircle scaled 4mm shifted (0cm,13.25cm);
 
 picture tl;
 
-tl=thelabel("initialization",(0cm,10cm));
+tl=thelabel(btex initialization etex scaled scalefactor,(0cm,12cm));
 
-draw (0cm,11cm)--(0cm,5.2cm){dir -90}..{dir 0}(2mm,5cm);
+draw (0cm,13cm)--(0cm,5.2cm){dir -90}..{dir 0}(2mm,5cm);
 
 unfill bbox tl;
 draw tl;

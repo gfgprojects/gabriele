@@ -2,9 +2,11 @@ package sfcabm;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.io.IOException;
 
 import repast.simphony.random.RandomHelper;
 import repast.simphony.util.collections.IndexedIterable;
+import repast.simphony.essentials.RepastEssentials;
 
 //import java.util.ArrayList;
 //import sfcabm.LaborMkt;
@@ -15,17 +17,9 @@ import sfcabm.Context;
 
 public class Firm {
 	long production;
-	int FirmID;
-	int identity;
-	double reservationWageFirmSum;
-	int vacancySum;
-	int totalJobs;
-	double firmWageSum;
-	int numVacancy;
-	int numJobs;
+	int FirmID,identity,age,vacancySum,totalJobs,numVacancy,numJobs,productAbsoluteRank,demand,desiredDemand,numberOfEmployees,workersPotentialProduction,capitalPotentialProduction;
+	double reservationWageFirmSum,firmWageSum;
 	double sumOfWorkersProductivity=0;
-	int productAbsoluteRank;
-	int demand,desiredDemand;
 	double productionCapacityAfterWorkforceAdjustment;
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
 	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts;	
@@ -80,12 +74,14 @@ public class Firm {
 	public Firm(int FirmID) {
 		super();
 		identity = FirmID;
+		age=0;
 	}
 
 	public Firm(int FirmID,repast.simphony.context.Context<Object> con) {
 		super();
 		identity = FirmID;
 		myContext=con;
+		age=0;
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" created");
 		}
@@ -231,17 +227,19 @@ public class Firm {
 
 	public void makeProduction(){
 			System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
+			numberOfEmployees=workersList.size();
 			sumOfWorkersProductivity=0;
 			for(int i=0;i<workersList.size();i++){
 				aConsumer=workersList.get(i);
 				sumOfWorkersProductivity+=aConsumer.getProductivity();
 			}
 
-		int workersPotentialProduction=(int)Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
+		workersPotentialProduction=(int)Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 //		int capitalPotentialProduction=(int)Math.round(productionCapital/Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion*Context.parameterOfProductivityInProductionFuncion);
-		int capitalPotentialProduction=(int)productionCapital;
+		capitalPotentialProduction=(int)productionCapital;
 		productionPlusOrdersForInvestments=Math.min(workersPotentialProduction,capitalPotentialProduction);
 		production=(int)(productionPlusOrdersForInvestments-ordersOfProductsForInvestmentPurpose);
+		age++;
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" workers Potential Production "+workersPotentialProduction+" capital potential Production "+capitalPotentialProduction+" production plus Investments "+productionPlusOrdersForInvestments+" production for howseholds "+production);
 		}
@@ -413,43 +411,43 @@ System.out.println("      ----------------");
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterRetirements "+productionCapacityAfterWorkforceAdjustment);
 		}
-//		if((productionCapacityAfterWorkersRetire-demand)>(OfficeForStatistics.averageProductivity*Context.parameterOfProductivityInProductionFuncion)){
+		//		if((productionCapacityAfterWorkersRetire-demand)>(OfficeForStatistics.averageProductivity*Context.parameterOfProductivityInProductionFuncion)){
 		hadFired=false;
-			if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
-				while(productionCapacityAfterWorkforceAdjustment>(desiredDemand+ordersOfProductsForInvestmentPurpose)){
-					int latestWorkerPosition=workersList.size()-1;
-					aConsumer=workersList.get(latestWorkerPosition);
-					productionCapacityAfterWorkforceAdjustment+=-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
-					if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
-						aConsumer.receiveFiredNew();
-						workersList.remove(latestWorkerPosition);
-						hadFired=true;
-					}
+		if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
+			while(productionCapacityAfterWorkforceAdjustment>(desiredDemand+ordersOfProductsForInvestmentPurpose)){
+				int latestWorkerPosition=workersList.size()-1;
+				aConsumer=workersList.get(latestWorkerPosition);
+				productionCapacityAfterWorkforceAdjustment+=-aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				if(productionCapacityAfterWorkforceAdjustment-(desiredDemand+ordersOfProductsForInvestmentPurpose)>0){
+					aConsumer.receiveFiredNew();
+					workersList.remove(latestWorkerPosition);
+					hadFired=true;
 				}
-				productionCapacityAfterWorkforceAdjustment+=aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
-				System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
+			}
+			productionCapacityAfterWorkforceAdjustment+=aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
 
-	}
-	else{
-				System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
-	}
-}
+		}
+		else{
+			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
+		}
+		}
 
 	public void laborForceUpwardAdjustment(){
-			switch(Context.firmsWorkersMatching){
-				case 0:
-					hireUsingReceivedCV();
-					break;
-				case 1:
-					hireUsingReceivedCV();
-					sendVacancies();
-					break;
-				case 2:
-					sendVacancies();
-					break;
-				default: System.out.println("Unknown workers firms matching mechanism");
-					 break;
-			}
+		switch(Context.firmsWorkersMatching){
+			case 0:
+				hireUsingReceivedCV();
+				break;
+			case 1:
+				hireUsingReceivedCV();
+				sendVacancies();
+				break;
+			case 2:
+				sendVacancies();
+				break;
+			default: System.out.println("Unknown workers firms matching mechanism");
+				 break;
+		}
 	}
 
 	public void hireUsingReceivedCV(){
@@ -482,336 +480,346 @@ System.out.println("      ----------------");
 			}
 		}
 
+	}
+
+	public void hire(Consumer newWorker){
+		workersList.add(newWorker);
+		newWorker.receiveHiredNew(this);
+	}
+
+	public void computeEconomicResultAndCapitalDepreciation(){
+		firmWageSum=0;
+		cashOnHand=0;
+		for(int i =0; i<workersList.size();i++){
+			aConsumer=(Consumer)workersList.get(i);
+			firmWageSum+=aConsumer.getWage();
+		}
+		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
+		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
+		if(Context.verboseFlag){
+			System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 		}
 
-		public void hire(Consumer newWorker){
-			workersList.add(newWorker);
-			newWorker.receiveHiredNew(this);
+		productionCapital+=-capitalDepreciation;
+		if(Context.verboseFlag){
+			System.out.println(" productionCapital "+productionCapital);
 		}
 
-		public void computeEconomicResultAndCapitalDepreciation(){
-			firmWageSum=0;
-			cashOnHand=0;
-			for(int i =0; i<workersList.size();i++){
-				aConsumer=(Consumer)workersList.get(i);
-				firmWageSum+=aConsumer.getWage();
-			}
-			cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
-			capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
-			if(Context.verboseFlag){
-				System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
-			}
-
-			productionCapital+=-capitalDepreciation;
-			if(Context.verboseFlag){
-				System.out.println(" productionCapital "+productionCapital);
-			}
-
-		}
+	}
 
 
-		public void payBackBankDebt(){
-			double amountOfThisBankAccount,resourcesAvailableToRefund;
-			double totalAmountToRefund=0;
-			financialResourcesInBankAccounts=0;
-			for(int i=0;i<bankAccountsList.size();i++){
-				aBankAccount=(BankAccount)bankAccountsList.get(i);
-				amountOfThisBankAccount=aBankAccount.getAccount();
-				if(amountOfThisBankAccount<0){
-					totalAmountToRefund+=-(amountOfThisBankAccount-aBankAccount.getAllowedCredit());
-				}
-				else{
-					financialResourcesInBankAccounts+=amountOfThisBankAccount;
-				}
-			}
-			if(totalAmountToRefund>0){
-				//		if(Context.verboseFlag){
-				System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
-				//		}
-				resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
-				if(resourcesAvailableToRefund>=totalAmountToRefund){
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						amountOfThisBankAccount=aBankAccount.getAccount();
-						if(amountOfThisBankAccount<0){
-							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
-						}
-					}
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						amountOfThisBankAccount=aBankAccount.getAccount();
-						if(amountOfThisBankAccount>0){
-							if(totalAmountToRefund>=amountOfThisBankAccount){
-								totalAmountToRefund+=-amountOfThisBankAccount;
-								aBankAccount.setAccount(0);
-							}
-							else{
-								aBankAccount.setAccount(amountOfThisBankAccount-totalAmountToRefund);
-								totalAmountToRefund=0;
-							}
-						}
-					}
-					if(totalAmountToRefund>0){
-						cashOnHand+=-totalAmountToRefund;
-					}
-
-
-				}
-				else{
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						amountOfThisBankAccount=aBankAccount.getAccount();
-						if(amountOfThisBankAccount>0){
-							aBankAccount.setAccount(0);
-						}
-					}
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						amountOfThisBankAccount=aBankAccount.getAccount();
-						if(amountOfThisBankAccount<0){
-							double toPayBakToThisBankAccount=-(aBankAccount.getAccount()-aBankAccount.getAllowedCredit());
-							if(resourcesAvailableToRefund>toPayBakToThisBankAccount){
-								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
-								aBankAccount.setAccount(aBankAccount.getAllowedCredit());
-							}
-							else{ 
-								//		if(Context.verboseFlag){
-								System.out.println("      insolvency: occunting delayed to next method");
-								//		}
-								//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
-								//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
-								//							resourcesAvailableToRefund=0;
-								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
-							}
-						}
-					}
-				}
-				//		if(Context.verboseFlag){
-				System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
-				//		}
-			}
-		}
-
-
-		//compute average productivity for each degree of education
-		public void computeAverageProductivityForEachDegreeOfEducation(){
-			numberOfWokersInADegree=new int[7];
-			totalProductivityOfWorkersInADegree=new double[7];
-			averageProductivityOfWorkersInADegree=new double[7];
-			for(int i=0;i<workersList.size();i++){
-				aConsumer=(Consumer)workersList.get(i);
-				int degree=aConsumer.getDegree();
-				numberOfWokersInADegree[degree]++;
-				totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
-				averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
-			}
-			if(Context.verboseFlag){
-				for(int j=0;j<7;j++){
-					System.out.println("     Firm "+identity+" degree "+j+" n. of employed workers "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
-				}
-			}
-		}
-
-		/**
-		 * This method cycles on the list of workers and sets the worker's wage according to your parametrization.
-		 * <p> 
-		 * According to the parametrization you have chosen for your model, the wage is proportional to the worker's productivity; the average productivity of workers employed by the firm and having the same education degree; the average productivity of workers having the same education degree in the whole economy.
-		 */
-		public void setWorkersWage(){
-			for(int i=0;i<workersList.size();i++){
-				aConsumer=workersList.get(i);
-				int degree=aConsumer.getDegree();
-				//double aWage;
-				switch(Context.wageSettingRule){
-					case 0: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
-						break;
-					case 1: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
-						break;
-					case 2: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
-						break;
-					default: System.out.println("Unknown wage setting rule");
-						 break;
-				}
-			}
-		}
-
-		// SEND LABOR DEMAND TO LABOR MARKET
-
-		public void sendVacancies(){
-			if(hadFired){
+	public void payBackBankDebt(){
+		double amountOfThisBankAccount,resourcesAvailableToRefund;
+		double totalAmountToRefund=0;
+		financialResourcesInBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			amountOfThisBankAccount=aBankAccount.getAccount();
+			if(amountOfThisBankAccount<0){
+				totalAmountToRefund+=-(amountOfThisBankAccount-aBankAccount.getAllowedCredit());
 			}
 			else{
-				if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
-					myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
-					try{
-						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+				financialResourcesInBankAccounts+=amountOfThisBankAccount;
+			}
+		}
+		if(totalAmountToRefund>0){
+			//		if(Context.verboseFlag){
+			System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
+			//		}
+			resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
+			if(resourcesAvailableToRefund>=totalAmountToRefund){
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount<0){
+						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 					}
-					catch(ClassNotFoundException e){
-						System.out.println("Class not found");
+				}
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount>0){
+						if(totalAmountToRefund>=amountOfThisBankAccount){
+							totalAmountToRefund+=-amountOfThisBankAccount;
+							aBankAccount.setAccount(0);
+						}
+						else{
+							aBankAccount.setAccount(amountOfThisBankAccount-totalAmountToRefund);
+							totalAmountToRefund=0;
+						}
 					}
+				}
+				if(totalAmountToRefund>0){
+					cashOnHand+=-totalAmountToRefund;
+				}
 
-					myLaborMarket.receiveVacancies(myOffer);
+
+			}
+			else{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount>0){
+						aBankAccount.setAccount(0);
+					}
+				}
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					amountOfThisBankAccount=aBankAccount.getAccount();
+					if(amountOfThisBankAccount<0){
+						double toPayBakToThisBankAccount=-(aBankAccount.getAccount()-aBankAccount.getAllowedCredit());
+						if(resourcesAvailableToRefund>toPayBakToThisBankAccount){
+							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
+						}
+						else{ 
+							//		if(Context.verboseFlag){
+							System.out.println("      insolvency: occunting delayed to next method");
+							//		}
+							//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
+							//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+							//							resourcesAvailableToRefund=0;
+							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+						}
+					}
 				}
 			}
+			//		if(Context.verboseFlag){
+			System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
+			//		}
 		}
-
-		/*
-		   public void hire(){
-
-		   }
-		   questo viene dopo
-		   */
+	}
 
 
-		//INIZIALIZZARE OUTPUT LEVEL:
-		//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
-		/*
-		   public void setInitialProduction(){
-		   initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
-		   initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
-		   }
+	//compute average productivity for each degree of education
+	public void computeAverageProductivityForEachDegreeOfEducation(){
+		numberOfWokersInADegree=new int[7];
+		totalProductivityOfWorkersInADegree=new double[7];
+		averageProductivityOfWorkersInADegree=new double[7];
+		for(int i=0;i<workersList.size();i++){
+			aConsumer=(Consumer)workersList.get(i);
+			int degree=aConsumer.getDegree();
+			numberOfWokersInADegree[degree]++;
+			totalProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]+aConsumer.getProductivity();
+			averageProductivityOfWorkersInADegree[degree]=totalProductivityOfWorkersInADegree[degree]/numberOfWokersInADegree[degree];
+		}
+		if(Context.verboseFlag){
+			for(int j=0;j<7;j++){
+				System.out.println("     Firm "+identity+" degree "+j+" n. of employed workers "+numberOfWokersInADegree[j]+" tot. poductivity "+totalProductivityOfWorkersInADegree[j]+" average productivity "+averageProductivityOfWorkersInADegree[j]);
+			}
+		}
+	}
 
-		//non so calcolare il numero dei workers di ogni firm
-		//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
-		 * 
-		 * 
-		 public void productionDecision(){
-		 potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
-		 expectedSales=???
-		 desiredOutput=expectedSales;
+	/**
+	 * This method cycles on the list of workers and sets the worker's wage according to your parametrization.
+	 * <p> 
+	 * According to the parametrization you have chosen for your model, the wage is proportional to the worker's productivity; the average productivity of workers employed by the firm and having the same education degree; the average productivity of workers having the same education degree in the whole economy.
+	 */
+	public void setWorkersWage(){
+		for(int i=0;i<workersList.size();i++){
+			aConsumer=workersList.get(i);
+			int degree=aConsumer.getDegree();
+			//double aWage;
+			switch(Context.wageSettingRule){
+				case 0: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+					break;
+				case 1: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+					break;
+				case 2: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+					break;
+				default: System.out.println("Unknown wage setting rule");
+					 break;
+			}
+		}
+	}
 
-		 if (potentialOutput<desiredOutput){
-		 laborDemand++;
-		 }
-		 else laborDemand=0;
-		 }
+	// SEND LABOR DEMAND TO LABOR MARKET
+
+	public void sendVacancies(){
+		if(hadFired){
+		}
+		else{
+			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
+				myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
+				try{
+					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+				}
+				catch(ClassNotFoundException e){
+					System.out.println("Class not found");
+				}
+
+				myLaborMarket.receiveVacancies(myOffer);
+			}
+		}
+	}
+
+	/*
+	   public void hire(){
+
+	   }
+	   questo viene dopo
+	   */
+
+
+	//INIZIALIZZARE OUTPUT LEVEL:
+	//PUO SERVIRE PER QUANDO SI INTRODUCE IL CAPITALE? SERVE UNA COMBINAZIONE DI K ED L?
+	/*
+	   public void setInitialProduction(){
+	   initialOutput=(Context.NumConsumers/Context.NumFirms)*Math.min(firmTech,averageAbilityFirm);
+	   initialCapitalStock=initialOutput/Math.min(firmTech,averageAbilityFirm);
+	   }
+
+	//non so calcolare il numero dei workers di ogni firm
+	//si deve inizializzare past sales: si inizia con un valore a caso e poi si lega al consumo dei worker? 
+	 * 
+	 * 
+	 public void productionDecision(){
+	 potentialOutput=(1-sigma)*ActualCapital*Math.min(sumOfWorkersProductivity,averageAbilityFirm);
+	 expectedSales=???
+	 desiredOutput=expectedSales;
+
+	 if (potentialOutput<desiredOutput){
+	 laborDemand++;
+	 }
+	 else laborDemand=0;
+	 }
 
 */
-		public void computeSumOfBankAccounts(){
-			sumOfBankAccounts=0;
-			for(int i=0;i<bankAccountsList.size();i++){
-				aBankAccount=(BankAccount)bankAccountsList.get(i);
-				sumOfBankAccounts+=aBankAccount.getAccount();
-			}
-			if(Context.verboseFlag){
-				System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
-			}
-
+	public void computeSumOfBankAccounts(){
+		sumOfBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			sumOfBankAccounts+=aBankAccount.getAccount();
+		}
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
 		}
 
-		public void setProductAbsoluteRank(int pab){
-			productAbsoluteRank=pab;
+	}
+
+	public void setProductAbsoluteRank(int pab){
+		productAbsoluteRank=pab;
+	}
+
+
+	public void setDesiredDemand(double industryProduction,double industryDemand){
+		demand=(int)Math.round(production/industryProduction*industryDemand);
+		desiredDemand=demand;
+		if(Context.verboseFlag){
+			System.out.println("         Firm "+identity+" calcolo "+production+"/"+industryProduction+"*"+industryDemand);
+			System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
 		}
+	}
 
 
-		public void setDesiredDemand(double industryProduction,double industryDemand){
-			demand=(int)Math.round(production/industryProduction*industryDemand);
-			desiredDemand=demand;
-			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" calcolo "+production+"/"+industryProduction+"*"+industryDemand);
-				System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
-			}
+	public void setDemand(double industryProduction,double industryDemand){
+		demand=(int)Math.round(production/industryProduction*industryDemand);
+		if(Context.verboseFlag){
+			System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
+			//				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
 		}
+	}
 
-
-		public void setDemand(double industryProduction,double industryDemand){
-			demand=(int)Math.round(production/industryProduction*industryDemand);
-			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production for howsehold "+production+" demand from howsehold "+demand+" desired demand from howsehold "+desiredDemand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
-//				System.out.println("         Firm "+identity+" production "+production+" demand "+demand+" desired demand "+desiredDemand);
-			}
+	public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
+		ordersOfProductsForInvestmentPurpose=(int)Math.round(production/industryProduction*industryInvest);
+		if(Context.verboseFlag){
+			System.out.println("         Firm "+identity+" production "+production+" demand from houseld "+demand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
 		}
-
-		public void setOrdersOfProductsForInvestmentPurpose(double industryProduction,double industryInvest){
-			ordersOfProductsForInvestmentPurpose=(int)Math.round(production/industryProduction*industryInvest);
-			if(Context.verboseFlag){
-				System.out.println("         Firm "+identity+" production "+production+" demand from houseld "+demand+" demand from firms "+ordersOfProductsForInvestmentPurpose);
-			}
-		}
+	}
 
 
 
 
-		public void jettisoningCurricula(){
-			applicationList = new ArrayList<Curriculum>();
-			if(Context.verboseFlag){
-				System.out.println("     Firm "+identity+" jettisoning curricula ");
-			}
+	public void jettisoningCurricula(){
+		applicationList = new ArrayList<Curriculum>();
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" jettisoning curricula ");
 		}
-		/*
-		   public void setDesiredProductionCapital(){
-		   desiredProductionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
-		   System.out.println("     Firm "+identity+" desired production capital "+desiredProductionCapital);
-		   }
-		   */
-		public int getProductAbsoluteRank(){
-			return productAbsoluteRank;
-		}
+	}
+	/*
+	   public void setDesiredProductionCapital(){
+	   desiredProductionCapital=workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+	   System.out.println("     Firm "+identity+" desired production capital "+desiredProductionCapital);
+	   }
+	   */
+	public int getProductAbsoluteRank(){
+		return productAbsoluteRank;
+	}
 
-		public long getProduction(){
-			return production;
-		}
-		public int[] getnumberOfWokersInADegree(){
-			return numberOfWokersInADegree;
-		}
-		public double[] getTotalProductivityOfWorkersInADegree(){
-			return totalProductivityOfWorkersInADegree;
-		}
+	public long getProduction(){
+		return production;
+	}
+	public int[] getnumberOfWokersInADegree(){
+		return numberOfWokersInADegree;
+	}
+	public double[] getTotalProductivityOfWorkersInADegree(){
+		return totalProductivityOfWorkersInADegree;
+	}
 
-		public int getNumberOfWorkers(){
-			return workersList.size();
+	public int getNumberOfWorkers(){
+		return workersList.size();
+	}
+	public double getInvestment(){
+		return firmInvestment;
+	}
+	public void setBankAccountsShutDown(){
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			aBankAccount.setAccountShutDown();	
 		}
-		public double getInvestment(){
-			return firmInvestment;
+	}
+	public void sendWorkersShutDownNew(){
+		for(int i=0;i<workersList.size();i++){
+			aConsumer=(Consumer)workersList.get(i);
+			aConsumer.receiveFiredNew();	
 		}
-		public void setBankAccountsShutDown(){
-			for(int i=0;i<bankAccountsList.size();i++){
-				aBankAccount=(BankAccount)bankAccountsList.get(i);
-				aBankAccount.setAccountShutDown();	
-			}
-		}
-		public void sendWorkersShutDownNew(){
-			for(int i=0;i<workersList.size();i++){
-				aConsumer=(Consumer)workersList.get(i);
-				aConsumer.receiveFiredNew();	
-			}
-		}
+	}
 
 
 
-		public double getDemand(){
-			return demand;
-		}
-public void setIndustry(Industry myI){
-	myIndustry=myI;
-}
-public Industry getIndustry(){
-	return myIndustry;
-}
+	public double getDemand(){
+		return demand;
+	}
+	public void setIndustry(Industry myI){
+		myIndustry=myI;
+	}
+	public Industry getIndustry(){
+		return myIndustry;
+	}
 
-public void setProductionAndDemandIfNewEntry(){
-	production=desiredDemand;
-	demand=(int)production;
+	public void setProductionAndDemandIfNewEntry(){
+		production=desiredDemand;
+		demand=(int)production;
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" demand "+demand+" production "+production+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose));
 		}
-}
+	}
 
-public double getOrdersOfProductsForInvestmentPurpose(){
-	return ordersOfProductsForInvestmentPurpose;
-}
+	public double getOrdersOfProductsForInvestmentPurpose(){
+		return ordersOfProductsForInvestmentPurpose;
+	}
 
-public void innovate(){
-	productAbsoluteRank++;
-}
+	public void innovate(){
+		productAbsoluteRank++;
+	}
 
-
-		//reset the firm each time step 
-		/*public void reset(){
-		  numJobs=0;
-		  firmWageSum=0;
-		  applicationList.clear();
-		  jobList.clear();
+	public void saveDataToFile(){
+		try{
+			OfficeForStatistics.microDataWriterForFirms.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+numberOfEmployees+";"+workersPotentialProduction+";"+capitalPotentialProduction+";"+desiredDemand+";"+demand+";"+ordersOfProductsForInvestmentPurpose+";"+firmWageSum+"\n");//+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+wage+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+desiredDemand+";"+effectiveConsumption+"\n");
+			OfficeForStatistics.microDataWriterForFirms.flush();
 		}
-		*/
+		catch(IOException e) {System.out.println("IOException");}
+
+	}
+
+
+
+	//reset the firm each time step 
+	/*public void reset(){
+	  numJobs=0;
+	  firmWageSum=0;
+	  applicationList.clear();
+	  jobList.clear();
+	}
+	*/  
 }

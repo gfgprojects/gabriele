@@ -1,4 +1,5 @@
 dati<-read.csv(file="zdata_micro_consumers_run_1.csv", header = TRUE, sep = ";",as.is=T)
+datif<-read.csv(file="zdata_micro_firms_run_1.csv", header = TRUE, sep = ";",as.is=T)
 ba1<-read.csv(file="zdata_micro_consumersbankaccounts01_run_1.csv", header = F, sep = "|",as.is=T)
 ba2<-read.csv(file="zdata_micro_consumersbankaccounts02_run_1.csv", header = F, sep = "|",as.is=T)
 ba3<-read.csv(file="zdata_micro_consumersbankaccounts03_run_1.csv", header = F, sep = "|",as.is=T)
