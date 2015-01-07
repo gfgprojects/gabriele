@@ -69,8 +69,8 @@ AProductDemand (max relative rank)</panel_attributes>
     <coordinates>
       <x>30</x>
       <y>260</y>
-      <w>899</w>
-      <h>1639</h>
+      <w>938</w>
+      <h>1765</h>
     </coordinates>
     <panel_attributes>title:Consumer.stepWorkerConsumption()
 Start
@@ -81,26 +81,27 @@ While[for each product type:\while\OfficeForStatistics.\industriesList.\hasNext(
 	create a new AproductDemand having the computed demand
 	add the productDemand to the demandsList
 	increase desiredDemand\by this product desiredDemand
-(end computation of desiredDemand)\\(startComputation of financialResources)\financialResourcesInBankAccounts=0\outstandingDebtInBankAcounts=0
+(end computation of desiredDemand)\\(startComputation of financialResources)\financialResourcesInBankAccounts=0\debtInBankAcounts=0\unpaidAmountInBankAccounts=0
 While[while\bankAccountsList.\hasNext()]
 	get bankAccount
+	increase unpaidAmountInBankAccounts\by this account unpaidAmount
 	If
 		[if\account&gt;0]
 		increase financialResourcesInBankAccounts\by account
 
 		[if\account&lt;=0]
-		increase outstandingDebtInBankAccounts\by account
+		increase debtInBankAccounts\by account
 	EndIf
 (end computation of financialResources)
 
 identification of\bestBankAccount\and\worstBankAccount
 
 If
-	[if\desiredDemand&lt;=\disposableIncome+\financialResources]
+	[if\desiredDemand+\unpaidAmountInBankAccounts\&lt;=\disposableIncome+\financialResources]
 
 
-	[if\desiredDemand&gt;\disposableIncome+\financialResources]
-	set the desired credit in\the bestBankAccount\as the account+\(desiredDemand -\disposableIncome -\financialResources)
+	[if\desiredDemand+\unpaidAmountInBankAccounts\&gt;\disposableIncome+\financialResources]
+	set the desired credit in\the bestBankAccount as\account+\(desiredDemand +\unpaidAmountInBankAccounts-\disposableIncome -\financialResources)
 
 End
 </panel_attributes>
@@ -164,8 +165,8 @@ End
   <element>
     <type>com.umlet.element.custom.Text</type>
     <coordinates>
-      <x>960</x>
-      <y>1690</y>
+      <x>980</x>
+      <y>1800</y>
       <w>170</w>
       <h>100</h>
     </coordinates>
@@ -178,12 +179,12 @@ account</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>750</x>
-      <y>1700</y>
-      <w>230</w>
+      <x>810</x>
+      <y>1810</y>
+      <w>180</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>30;30;210;30</additional_attributes>
+    <additional_attributes>30;30;160;30</additional_attributes>
   </element>
 </diagram>

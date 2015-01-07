@@ -5,8 +5,8 @@
     <coordinates>
       <x>20</x>
       <y>0</y>
-      <w>507</w>
-      <h>817</h>
+      <w>603</w>
+      <h>879</h>
     </coordinates>
     <panel_attributes>title:Consumer.adjustConsumptionAccordingToExtendedCredit()
 Start
@@ -16,6 +16,7 @@ allowedDemand=0
 If
 	[if\allowedCredit\&gt; askedCredit\(note: the two\amounts are\negative)]
 	allowedDemand=\desiredDemand-\(-askedCredit-(-allowedCredit))
+	if allowedDemand&lt;subsistenceConsumption\allowedDemand=subsistenceConsumption
 
 	[if\allowedCredit\&lt;= askedCredit]
 	allowedDemand=\desiredDemand

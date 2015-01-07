@@ -3,17 +3,17 @@
   <element>
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
-      <x>20</x>
-      <y>50</y>
-      <w>1146</w>
-      <h>1447</h>
+      <x>0</x>
+      <y>0</y>
+      <w>1624</w>
+      <h>1785</h>
     </coordinates>
     <panel_attributes>title:Consumer.updateBankAccountAccordingToEffectiveConsumption()
 Start
 compute consumption\summing over the\demandsList
 If
 	[if\disposableIncome&gt;=\consumption]
-	deposit savings in\the worstBankAccount
+	compute available amount\after consuming
 
 
 	[if\disposableIncome&lt;\consumption]
@@ -35,9 +35,29 @@ If
 			[if\amount&lt;0]
 		EndIf
 
+	the variable consumption\now contains the consumption\to be payed
+
+determine additional credit\available in the bestBankAccount
+If
+	[if unpaidAmountInBankAccounts&gt;0]
 	If
-		[if\consumption&gt;0]
-		set best bankAccount\equal to allowedCredit\in the same account
+		[if consumption&gt;0]
+		resources available for unpaid accounts\= additionalCreditAvailable in bestBankAccount\- consumption
+
+		[if consumption=0]
+		resources available for unpaid accounts\= additionalCreditAvailable in bestBankAccount\+ residual resources
+	EndIf
+	decrease unpaid amounts and accounts
+
+
+	[if unpaidAmountInBankAccounts=0]
+	If
+		[if consumption&gt;0]
+		set best bankAccount\equal to\account-consumption
+
+		[if consumption=0]
+		set worst bankAccount\equal to\account+residual resources
+	EndIf
 
 End
 </panel_attributes>

@@ -5,11 +5,12 @@
     <coordinates>
       <x>0</x>
       <y>0</y>
-      <w>2600</w>
-      <h>2167</h>
+      <w>2639</w>
+      <h>2261</h>
     </coordinates>
     <panel_attributes>title:Consumer.payBackBankDebt()
 Start
+set unpaidAmounto to zero\in all bank accounts
 totalAmountToRefund=0\financialResourcesInBankAccounts=0
 While[while\bankAccountsList.\hasNext()]
 	get account
@@ -19,14 +20,14 @@ While[while\bankAccountsList.\hasNext()]
 		totalAmountToRefund\is increased by\allowed-amount
 
 		[if\amount&gt;=0]
-		financialResources\is increased by\ammount
+		financialResourcesInBankAccounts\is increased by\ammount
 	EndIf
 disposableIncome=wage
 If
 	[if\totalAmountToRefund=0]
 
 	[if\totalAmountToRefund&gt;0]
-	resourcesAvailableToRefund=\financiaResources+disposableIncome-\unemploymentDole
+	resourcesAvailableToRefund=\financiaResourcesInBankAccounts+\disposableIncome-subsistenceConsumption
 	If
 		[if\resourcesAvailabeToRefund&gt;=\totalAmountToRefund]
 		put all the accounts\with negative amount\to allowed credit
@@ -59,16 +60,16 @@ If
 					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
 					setBankAccount to allowedCredit
 
-					[if\totalAmountToRefund&lt;\thisAccountAmount]
-					increase\thisAccountUnpaidAmount by\-amount+allowedCredit
-					set thisAccountDemandedCredit to\amount+resoucesAvailableToRefund
-					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
+					[if\resourceAvailableToRefund&lt;\toPayBackToThisAcount]
+					set thisAccount to\amount+resoucesAvailableToRefund
+					increase\thisAccountUnpaidAmount by\-amount+allowedCredit-\resourcesAvailableToRefund
+					set\resourceAvailableToRefund\to zero
 
 				EndIf
 
 				[else]
 			EndIf
-		set disposableIncome\to unemploymentDole
+		set disposableIncome\to subsistenceConsumption
 
 	EndIf
 

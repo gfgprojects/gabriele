@@ -21,10 +21,12 @@ public class Firm {
 	double reservationWageFirmSum,firmWageSum;
 	double sumOfWorkersProductivity=0;
 	double productionCapacityAfterWorkforceAdjustment;
-	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts;
-	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts;	
+	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts,productionCapitalBeforeDepreciation,productionCapitalAfterDepreciation;
+	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts,creditToAskInSetDesiredCredit,cashOnHandWhenComputingEconomicResult,cashOnHandAfterRefundingBank;
+	double unpaidAmountInBankAccounts=0;	
 	double firmInvestment=0;
 	double ordersOfProductsForInvestmentPurpose=0;
+	double previousPeriodOrdersOfProductsForInvestmentPurpose=0;
 	double productionPlusOrdersForInvestments=0;
 	boolean hadFired=false;
 		/*
@@ -262,10 +264,26 @@ public class Firm {
 //		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation))+ordersOfProductsForInvestmentPurpose);
 //		desiredProductionCapital=Math.round((desiredProductionCapitalMultiplier*(productionCapital+capitalDepreciation)));
 
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts03.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts03.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts03.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
 		desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
 		financialResourcesInBankAccounts=0;
-		for(int i=0;i<bankAccountsList.size()-1;i++){
+		unpaidAmountInBankAccounts=0;
+		for(int i=0;i<bankAccountsList.size();i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			unpaidAmountInBankAccounts=unpaidAmountInBankAccounts+aBankAccount.getUnpaidAmount();
 			if(aBankAccount.getAccount()>0){
 				financialResourcesInBankAccounts+=aBankAccount.getAccount();
 				aBankAccount.setAccount(0);
@@ -293,45 +311,114 @@ public class Firm {
 		aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
 
 		if(desiredProductionCapital>productionCapital){
-			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts-unpaidAmountInBankAccounts;
+			creditToAskInSetDesiredCredit=creditToAsk;
 
 			if(creditToAsk>0){
 				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
 			}
 			else{
 				creditToAsk=0;
+				creditToAskInSetDesiredCredit=creditToAsk;
 			}
 		}
 		else{
 			if(cashOnHand+financialResourcesInBankAccounts<0){
-				creditToAsk=cashOnHand+financialResourcesInBankAccounts;
+				creditToAsk=cashOnHand+financialResourcesInBankAccounts-unpaidAmountInBankAccounts;
+				creditToAskInSetDesiredCredit=creditToAsk;
 				bestBankAccount.setDesiredCredit(0.0,-creditToAsk);
 			}
 			else{
 				creditToAsk=0;
+				creditToAskInSetDesiredCredit=creditToAsk;
 			}
 		}
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" depreciated production Capital "+productionCapital+" demand from household +firms "+(demand+ordersOfProductsForInvestmentPurpose)+" desiredDemand from household + firms "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
 System.out.println("      ----------------");
 		}
-	
+
+
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts04.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts04.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts04.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
 
 	}
 
 	public void adjustProductionCapitalAndBankAccount(){
+
+	if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts05.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts05.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts05.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
 		double creditToAsk;
 		if(desiredProductionCapital>productionCapital){
-			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts;
+				System.out.println("     increasing capital");
+			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
 
 			if(creditToAsk>0){
-				if(aBankAccount.getAllowedCredit()<aBankAccount.getAccount()){
+				System.out.println("     asked credit");
+				double amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						aBankAccount.setUnpaidAmount(0);
+					}
+					amountAvailableFromBestBank+=-unpaidAmountInBankAccounts;
+					if(cashOnHand<0){
+						if(amountAvailableFromBestBank>(-cashOnHand)){
+							amountAvailableFromBestBank+=cashOnHand;
+							firmInvestment=amountAvailableFromBestBank;
+						}
+						else{
+							cashOnHand+=amountAvailableFromBestBank;
+							amountAvailableFromBestBank=0;
+							firmInvestment=amountAvailableFromBestBank;
+						}
+							productionCapital+=firmInvestment;
+							bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					}
+				}
+				else{
+					double multiplier=1-(amountAvailableFromBestBank/unpaidAmountInBankAccounts);
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
+					}
+					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+				}
+
+
+			/*
+
+				if(bestBankAccount.getAllowedCredit()<=bestBankAccount.getDemandedCredit()){
 					double tmpProductionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts-aBankAccount.getAllowedCredit()+aBankAccount.getAccount();
 					if(tmpProductionCapital>=desiredProductionCapital){
 						System.out.println("      asked credit; totally allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
 						firmInvestment=desiredProductionCapital-productionCapital;
 						productionCapital=desiredProductionCapital;
-						aBankAccount.setAccount(aBankAccount.getDemandedCredit());
+						bestBankAccount.setAccount(aBankAccount.getDemandedCredit());
 					}
 					else{
 						System.out.println("      asked credit; partially allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
@@ -340,6 +427,7 @@ System.out.println("      ----------------");
 						productionCapital=tmpProductionCapital;
 					}
 				}
+				//if refund is asked (however, this is performed in one of the previous step and excluded here: the program will never enter in this if) 
 				else{
 						System.out.println("      asked credit; refund asked");
 					if(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts>aBankAccount.getAllowedCredit()){
@@ -353,6 +441,8 @@ System.out.println("      ----------------");
 						firmInvestment=0;
 					}
 				}
+
+		*/
 			}
 			else{
 						System.out.println("      available funds are enough to finance new investment; the excess is deposited");
@@ -361,32 +451,103 @@ System.out.println("      ----------------");
 				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
 			}
+			
 		}
 		else{
-			firmInvestment=desiredProductionCapital-productionCapital;
-			productionCapital=desiredProductionCapital;
-			if(cashOnHand+financialResourcesInBankAccounts<0){
-				if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
-						System.out.println("      capital reduction; refund asked but not enough internal funds");
-					System.out.println("      Firm cannot refund");
-					aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+				System.out.println("     decreasing capital");
+			   firmInvestment=desiredProductionCapital-productionCapital;
+			   productionCapital=desiredProductionCapital;
+			creditToAsk=-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
+
+			if(creditToAsk>0){
+				System.out.println("     credit asked "+creditToAsk);
+				double amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						if(aBankAccount.getUnpaidAmount()>0){
+							aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
+							aBankAccount.setUnpaidAmount(0);
+						}
+					}
+					amountAvailableFromBestBank+=-unpaidAmountInBankAccounts;
+					if(cashOnHand<0){
+						if(amountAvailableFromBestBank>(-cashOnHand)){
+							amountAvailableFromBestBank+=cashOnHand;
+							cashOnHand=0;
+						}
+						else{
+							cashOnHand+=amountAvailableFromBestBank;
+							amountAvailableFromBestBank=0;
+						}
+							bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					}
 				}
 				else{
-					aBankAccount.setAccount(aBankAccount.getDemandedCredit());
-						System.out.println("      capital reduction; allowed credit is enough to cover negative internal funds");
+					double multiplier=1-(amountAvailableFromBestBank/unpaidAmountInBankAccounts);
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						if(aBankAccount.getUnpaidAmount()>0){
+							aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount()*(1-multiplier));
+							aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
+						}
+					}
+					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
 				}
 			}
 			else{
-				aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
-						System.out.println("      capital reduction; positive internal funds that are deposited");
+				System.out.println("      credit not asked "+creditToAsk);
+				firmInvestment=desiredProductionCapital-productionCapital;
+				productionCapital=desiredProductionCapital;
+				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
 			}
+
+
+			/*
+			   firmInvestment=desiredProductionCapital-productionCapital;
+			   productionCapital=desiredProductionCapital;
+			   if(cashOnHand+financialResourcesInBankAccounts<0){
+			   if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
+			   System.out.println("      capital reduction; refund asked but not enough internal funds");
+			   System.out.println("      Firm cannot refund");
+			   aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+			   }
+			   else{
+			   aBankAccount.setAccount(aBankAccount.getDemandedCredit());
+			   System.out.println("      capital reduction; allowed credit is enough to cover negative internal funds");
+			   }
+			   }
+			   else{
+			   aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
+			   System.out.println("      capital reduction; positive internal funds that are deposited");
+			   creditToAsk=0;
+			   }
+			   */
 		}
+
+		cashOnHandAfterRefundingBank=cashOnHand;
 
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" investment "+firmInvestment+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
 			System.out.println("     -----------");
 		}
+
+	if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts06.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts06.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts06.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
+
 
 	}
 
@@ -494,13 +655,20 @@ System.out.println("      ----------------");
 			aConsumer=(Consumer)workersList.get(i);
 			firmWageSum+=aConsumer.getWage();
 		}
+		previousPeriodOrdersOfProductsForInvestmentPurpose=ordersOfProductsForInvestmentPurpose;
 		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
+		cashOnHandWhenComputingEconomicResult=cashOnHand;
 		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
 		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 		}
 
+		productionCapitalBeforeDepreciation=productionCapital;
+
 		productionCapital+=-capitalDepreciation;
+
+		productionCapitalAfterDepreciation=productionCapital;
+
 		if(Context.verboseFlag){
 			System.out.println(" productionCapital "+productionCapital);
 		}
@@ -509,6 +677,29 @@ System.out.println("      ----------------");
 
 
 	public void payBackBankDebt(){
+
+	//reset unpaid amount of bank accounts
+		for(int i=0;i<bankAccountsList.size();i++){
+			aBankAccount=(BankAccount)bankAccountsList.get(i);
+			aBankAccount.setUnpaidAmount(0);
+		}
+
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts01.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts01.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts01.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
+
 		double amountOfThisBankAccount,resourcesAvailableToRefund;
 		double totalAmountToRefund=0;
 		financialResourcesInBankAccounts=0;
@@ -572,14 +763,16 @@ System.out.println("      ----------------");
 							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
 							aBankAccount.setAccount(aBankAccount.getAllowedCredit());
 						}
-						else{ 
-							//		if(Context.verboseFlag){
-							System.out.println("      insolvency: occunting delayed to next method");
-							//		}
-							//							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
-							//							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
-							//							resourcesAvailableToRefund=0;
-							resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+						else{
+							if(resourcesAvailableToRefund>=0){	
+								aBankAccount.setAccount(amountOfThisBankAccount+resourcesAvailableToRefund);
+								aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+						       }
+						       else{
+								aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
+								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
+						       }
 						}
 					}
 				}
@@ -588,6 +781,27 @@ System.out.println("      ----------------");
 			System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
 			//		}
 		}
+
+
+		cashOnHandAfterRefundingBank=cashOnHand;
+
+
+		if(Context.saveMicroData){
+			try{
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					OfficeForStatistics.microDataWriterForFirmsBankAccounts02.append(""+RepastEssentials.GetTickCount()+","+identity+","+aBankAccount.getHostingBank().getIdentity()+","+aBankAccount.getAccount()+","+aBankAccount.getDemandedCredit()+","+aBankAccount.getAllowedCredit()+","+aBankAccount.getUnpaidAmount()+"|");
+				}
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts02.append("\n");
+				OfficeForStatistics.microDataWriterForFirmsBankAccounts02.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+		}
+
+
+
+
+
 	}
 
 
@@ -805,7 +1019,7 @@ System.out.println("      ----------------");
 
 	public void saveDataToFile(){
 		try{
-			OfficeForStatistics.microDataWriterForFirms.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+numberOfEmployees+";"+workersPotentialProduction+";"+capitalPotentialProduction+";"+desiredDemand+";"+demand+";"+ordersOfProductsForInvestmentPurpose+";"+firmWageSum+"\n");//+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+wage+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+desiredDemand+";"+effectiveConsumption+"\n");
+			OfficeForStatistics.microDataWriterForFirms.append(""+RepastEssentials.GetTickCount()+";"+identity+";"+age+";"+numberOfEmployees+";"+workersPotentialProduction+";"+capitalPotentialProduction+";"+desiredDemand+";"+demand+";"+previousPeriodOrdersOfProductsForInvestmentPurpose+";"+firmWageSum+";"+productionCapitalBeforeDepreciation+";"+productionCapitalAfterDepreciation+";"+cashOnHandWhenComputingEconomicResult+";"+cashOnHandAfterRefundingBank+";"+ creditToAskInSetDesiredCredit+";"+unpaidAmountInBankAccounts+";"+desiredProductionCapital+";"+productionCapital+"\n");//+";"+isStudent+";"+isWorking+";"+numberOfSuccessfulPeriodsOfEducation+";"+numberOfFailedPeriodsOfEducation+";"+degree+";"+productivity+";"+wage+";"+disposableIncomeWhenDecidingDesiredConsumption+";"+disposableIncomewhenConsuming+";"+desiredDemand+";"+effectiveConsumption+"\n");
 			OfficeForStatistics.microDataWriterForFirms.flush();
 		}
 		catch(IOException e) {System.out.println("IOException");}

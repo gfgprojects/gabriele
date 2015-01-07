@@ -105,7 +105,7 @@ public class BankAccount{
 	public void resetAllowedCredit(){
 		allowedCredit=0;
 		if(Context.verboseFlag){
-			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" "+ownerType);
+			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" unpaid "+unpaidAmount+" "+ownerType);
 		}
 	}
 	public void setUnpaidAmount(double ua){
@@ -115,9 +115,12 @@ public class BankAccount{
 		return unpaidAmount;
 	}
 	public void increaseUnpaidAmount(double ua){
+		if(Context.verboseFlag){
+			System.out.print("      bank account unpaid amount before increase "+unpaidAmount);
+		}
 		unpaidAmount+=ua;
 		if(Context.verboseFlag){
-			System.out.println("      bank account unpaid amount "+unpaidAmount);
+			System.out.println(" after increase "+unpaidAmount);
 		}
 	}
 

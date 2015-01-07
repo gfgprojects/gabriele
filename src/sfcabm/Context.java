@@ -47,6 +47,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double interestRateOnLoans=0.05;
 	public static double interestRateOnSubsidizedLoans=0.01;
 	public static int unemploymentDole=10;
+	public static int subsistenceConsumption=10;
 	public static int costEdu=10;
 	// set the wageSettingRule variable to
 	//	0 if you want the wage depend on the worker productivity

@@ -54,7 +54,7 @@ public class OfficeForStatistics{
 	public static double averageProductivity=0;
 
 	ScheduleParameters scheduleParameters;
-	public static FileWriter dataReadmeWriter,macroDataWriter,microDataWriterForConsumers,microDataWriterForFirms,microDataWriterForConsumersBankAccounts01,microDataWriterForConsumersBankAccounts02,microDataWriterForConsumersBankAccounts03,microDataWriterForConsumersBankAccounts04,microDataWriterForConsumersBankAccounts05,microDataWriterForConsumersBankAccounts06;
+	public static FileWriter dataReadmeWriter,macroDataWriter,microDataWriterForConsumers,microDataWriterForFirms,microDataWriterForConsumersBankAccounts01,microDataWriterForConsumersBankAccounts02,microDataWriterForConsumersBankAccounts03,microDataWriterForConsumersBankAccounts04,microDataWriterForConsumersBankAccounts05,microDataWriterForConsumersBankAccounts06,microDataWriterForFirmsBankAccounts01,microDataWriterForFirmsBankAccounts02,microDataWriterForFirmsBankAccounts03,microDataWriterForFirmsBankAccounts04,microDataWriterForFirmsBankAccounts05,microDataWriterForFirmsBankAccounts06;
 	public OfficeForStatistics(repast.simphony.context.Context<Object> con){
 		myContext=con;
 
@@ -69,7 +69,7 @@ public class OfficeForStatistics{
 		Date date = new Date();
 		String timeStamp =dateFormat.format(date);
 		//		String microDataOutputFileNamePis,microDataOutputFileNameId,microDataOutputFileNameAccruedInt,microDataOutputFileNameRefunding;
-		String readmeDataOutputFileName,macroDataOutputFileName,microDataOutputFileNameForConsumers,microDataOutputFileNameForFirms,microDataOutputFileNameForConsumersBankAccounts01,microDataOutputFileNameForConsumersBankAccounts02,microDataOutputFileNameForConsumersBankAccounts03,microDataOutputFileNameForConsumersBankAccounts04,microDataOutputFileNameForConsumersBankAccounts05,microDataOutputFileNameForConsumersBankAccounts06;
+		String readmeDataOutputFileName,macroDataOutputFileName,microDataOutputFileNameForConsumers,microDataOutputFileNameForFirms,microDataOutputFileNameForConsumersBankAccounts01,microDataOutputFileNameForConsumersBankAccounts02,microDataOutputFileNameForConsumersBankAccounts03,microDataOutputFileNameForConsumersBankAccounts04,microDataOutputFileNameForConsumersBankAccounts05,microDataOutputFileNameForConsumersBankAccounts06,microDataOutputFileNameForFirmsBankAccounts01,microDataOutputFileNameForFirmsBankAccounts02,microDataOutputFileNameForFirmsBankAccounts03,microDataOutputFileNameForFirmsBankAccounts04,microDataOutputFileNameForFirmsBankAccounts05,microDataOutputFileNameForFirmsBankAccounts06;
 		//		String parametersDataOutputFileName;
 		readmeDataOutputFileName="zdata_aaa_readme.txt";
 		if(Context.timeStampInFileName){
@@ -81,6 +81,12 @@ public class OfficeForStatistics{
 						microDataOutputFileNameForConsumersBankAccounts04="zdata_micro_consumersbankaccounts04_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 						microDataOutputFileNameForConsumersBankAccounts05="zdata_micro_consumersbankaccounts05_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 						microDataOutputFileNameForConsumersBankAccounts06="zdata_micro_consumersbankaccounts06_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts01="zdata_micro_firmsbankaccounts01_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts02="zdata_micro_firmsbankaccounts02_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts03="zdata_micro_firmsbankaccounts03_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts04="zdata_micro_firmsbankaccounts04_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts05="zdata_micro_firmsbankaccounts05_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
+						microDataOutputFileNameForFirmsBankAccounts06="zdata_micro_firmsbankaccounts06_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+"_time_"+timeStamp+".csv";
@@ -96,6 +102,12 @@ public class OfficeForStatistics{
 						microDataOutputFileNameForConsumersBankAccounts04="zdata_micro_consumersbankaccounts04_run_"+thisRunNumber+".csv";
 						microDataOutputFileNameForConsumersBankAccounts05="zdata_micro_consumersbankaccounts05_run_"+thisRunNumber+".csv";
 						microDataOutputFileNameForConsumersBankAccounts06="zdata_micro_consumersbankaccounts06_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts01="zdata_micro_firmsbankaccounts01_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts02="zdata_micro_firmsbankaccounts02_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts03="zdata_micro_firmsbankaccounts03_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts04="zdata_micro_firmsbankaccounts04_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts05="zdata_micro_firmsbankaccounts05_run_"+thisRunNumber+".csv";
+						microDataOutputFileNameForFirmsBankAccounts06="zdata_micro_firmsbankaccounts06_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameId="zdata_micro_ids_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameAccruedInt="zdata_micro_accrued_run_"+thisRunNumber+".csv";
 			//			microDataOutputFileNameRefunding="zdata_micro_refund_run_"+thisRunNumber+".csv";
@@ -144,11 +156,11 @@ LHs aggregateHouseholdAllowedChangeInCredit
 				microDataWriterForConsumers.flush();
 
 
-				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_firms_run . . . file\n========================\n\nt time\nid identification number\nage age\nne number of employee\nwpp workers potential production\ncpp capital potential production\nddc desired demand from consumers \ndc demand from consumers\ndi demand from firms\nsw sum of payed wages\n");
+				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_firms_run . . . file\n========================\n\nt time\nid identification number\nage age\nne number of employee\nwpp workers potential production\ncpp capital potential production\nddc desired demand from consumers \ndc demand from consumers\ndi demand from firms\nsw sum of payed wages\npcbd production capital before depreciation\npcad production capital after depreciation\ncoher cash on hand when computing economic result\ncoharb cash on hand after refunding banks\nctaisdc credit to ask in setDesiredCreditMethod\nuaiba unpaid amounts in bank accounts\ndpc desired production capital\npc production capital");
 				dataReadmeWriter.flush();
 
 				microDataWriterForFirms=new FileWriter(microDataOutputFileNameForFirms);
-				microDataWriterForFirms.append("t;id;age;ne;wpp;cpp;ddc;dc;di;sw\n");
+				microDataWriterForFirms.append("t;id;age;ne;wpp;cpp;ddc;dc;di;sw;pcbd;pcad;coher;coharb;ctaisdc;uaiba;dpc;pc\n");
 				microDataWriterForFirms.flush();
 
 
@@ -162,6 +174,19 @@ LHs aggregateHouseholdAllowedChangeInCredit
 				microDataWriterForConsumersBankAccounts04=new FileWriter(microDataOutputFileNameForConsumersBankAccounts04);
 				microDataWriterForConsumersBankAccounts05=new FileWriter(microDataOutputFileNameForConsumersBankAccounts05);
 				microDataWriterForConsumersBankAccounts06=new FileWriter(microDataOutputFileNameForConsumersBankAccounts06);
+
+
+				dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_firmsbankaccounts<n>_run . . . file\n========================\n\nThese files record info on each firm bank accounts in the format\naccount 1 data|account 2 data|...\nwhere\naccount i data = tickCount,firm id,bank id,account amount,demanded credit,allowed credit,unpaid amount\n\nThe various files give this information in different moment of the timetick:\n\nzdata_micro_firmsbankaccounts01  situation at the beginning of method Firm.payBackBankDebt()\nzdata_micro_firmsbankaccounts02  situation at the end of method Firm.payBackBankDebt()\nzdata_micro_firmsbankaccounts03  situation at the beginning of method Firm.stepDesiredCredit()\nzdata_micro_firmsbankaccounts04  situation at the end of method Firm.stepDesiredCredit()\nzdata_micro_firmsbankaccounts05  situation at the beginning of method Firm.adjustProductionCapitalAndBankAccount()\nzdata_micro_firmsbankaccounts06  situation at the end of method Firm.adjustProductionCapitalAndBankAccount()");
+				dataReadmeWriter.flush();
+
+
+
+				microDataWriterForFirmsBankAccounts01=new FileWriter(microDataOutputFileNameForFirmsBankAccounts01);
+				microDataWriterForFirmsBankAccounts02=new FileWriter(microDataOutputFileNameForFirmsBankAccounts02);
+				microDataWriterForFirmsBankAccounts03=new FileWriter(microDataOutputFileNameForFirmsBankAccounts03);
+				microDataWriterForFirmsBankAccounts04=new FileWriter(microDataOutputFileNameForFirmsBankAccounts04);
+				microDataWriterForFirmsBankAccounts05=new FileWriter(microDataOutputFileNameForFirmsBankAccounts05);
+				microDataWriterForFirmsBankAccounts06=new FileWriter(microDataOutputFileNameForFirmsBankAccounts06);
 				//				microDataWriterForConsumers.append("t;\n");
 				//				microDataWriterForConsumers.flush();
 			}
