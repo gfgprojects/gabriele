@@ -1,5 +1,7 @@
 \documentclass{article}
 \usepackage{graphicx}
+\usepackage{fancyvrb}
+
 \begin{document}
 
 \includegraphics[scale=0.5]{visual.pdf}
@@ -94,26 +96,26 @@ The resources available to refund the bank account (the sum of positive amounts 
 
 They are not enough to satisfy banks' requests, so unpaid amounts are recorded and disposable income is set to allow the subsistence consumption:
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    {\bf0}  demanded credit =    0 allowed credit =    0 unpaid =  0
 bank 2: account = -135  demanded credit = -150 allowed credit = -130 unpaid =  5
 bank 3: account =  -50  demanded credit =  -50 allowed credit =  -45 unpaid =  5
 
-disposableIncome = 10
-\end{verbatim}
+disposableIncome = {\bf10}
+\end{Verbatim}
 
 \subsubsection*{Step 3: account resetting}
 In this step, banks set the demanded and allowed credit to zero.
 
 The new situation is:
 
-\begin{verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
 bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
-bank 2: account = -135  demanded credit =  0 allowed credit = 0 unpaid =  5
-bank 3: account =  -50  demanded credit =  0 allowed credit = 0 unpaid =  5
+bank 2: account = -135  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
+bank 3: account =  -50  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
 
 disposableIncome = 10
-\end{verbatim}
+\end{Verbatim}
 
 
 
@@ -127,13 +129,13 @@ She asks for additional financial resources both to finance consumption (10) and
 
 The additional credit amount of 20 is asked to one bank. In particular, the bank with the ``best'' account (bank 1) is chosen. 
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit = -20 allowed credit = 0 unpaid =  0
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = {\bf-20} allowed credit = 0 unpaid =  0
 bank 2: account = -135  demanded credit =   0 allowed credit = 0 unpaid =  5
 bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  5
 
 disposableIncome = 10  desiredConsumption = 20
-\end{verbatim}
+\end{Verbatim}
 
 
 \subsubsection*{Step 5: credit supply}
@@ -143,13 +145,13 @@ disposableIncome = 10  desiredConsumption = 20
 The bank decides about the amount of loans to give out.
 Suppose allowed credit is 18
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = -20 allowed credit = {\bf-18} unpaid =  0
 bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
 bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
 
 disposableIncome = 10  desiredConsumption = 20
-\end{verbatim}
+\end{Verbatim}
 
 \subsubsection*{step 6: adjust consumption according to allowed credit}
 
@@ -157,13 +159,13 @@ In this step, the desired consumption is reduced by the difference between the d
 
 In the example we have
 
-\begin{verbatim}
+\begin{Verbatim}[commandchars=\\\{\}]
 bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
 bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
 bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
 
-disposableIncome = 10  desiredConsumption = 18
-\end{verbatim}
+disposableIncome = 10  desiredConsumption = {\bf18}
+\end{Verbatim}
 
 Now, the consumer goes in the goods market trying to satisfy her desires. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
 
@@ -173,13 +175,13 @@ The consumer can thus consume 15. 10 of them are payed with disposable income an
 
 Bank 1 is also willing to lend additional resources (18-5=13), so the consumer uses them to satisfy bank 2 and 3 refunding requests:
 
-\begin{verbatim}
-bank 1: account =  -15  demanded credit = -20 allowed credit = -18 unpaid =  0
-bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  0
-bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  0
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =  {\bf-15}  demanded credit = -20 allowed credit = -18 unpaid =  0
+bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
 
-disposableIncome = 0  desiredConsumption = 18 effectiveConsumption = 15
-\end{verbatim}
+disposableIncome = {\bf0}  desiredConsumption = 18 effectiveConsumption = 15
+\end{Verbatim}
 
 
 
