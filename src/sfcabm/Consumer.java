@@ -910,8 +910,6 @@ public void saveDataToFile(){
 		}
 
 
-
-
 		public void jobObtained(Firm employer){
 			isWorking=true;
 			myEmployer=employer;

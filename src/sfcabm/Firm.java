@@ -14,6 +14,7 @@ import sfcabm.Curriculum;
 import sfcabm.LaborOffer;
 import sfcabm.LaborMarket;
 import sfcabm.Context;
+import sfcabm.BankAccount;
 
 public class Firm {
 	long production;
