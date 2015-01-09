@@ -5,7 +5,7 @@
     <coordinates>
       <x>20</x>
       <y>0</y>
-      <w>1168</w>
+      <w>1180</w>
       <h>947</h>
     </coordinates>
     <panel_attributes>title:Firm.setDesiredCredit()
@@ -25,7 +25,7 @@ If
 
 	[if\desiredCapital\&lt;= capital]
 	If
-		[if\cashOnHand+\finalcialResourceIBA&lt;0]
+		[if\cashOnHand+\finalcialResourceIBA&lt;=0]
 		creditToAsk =\cashOnHand+\finalcialResourceIBA
 		bestAccount.setDesiredCredit(0,-creditToAsk)
 

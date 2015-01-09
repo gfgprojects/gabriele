@@ -517,13 +517,6 @@ public void loadAgents(){
 //			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
 		}
 
-		if(Context.saveMacroData){
-			try{
-				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+";"+aggregateLoans+";"+aggregateDeposits+";"+numberOfFirms+";"+numberOfConsumers+";"+numberOfWorkers+";"+numberOfStudents+";");
-				macroDataWriter.flush();
-			}
-			catch(IOException e) {System.out.println("IOException");}
-		}
 
 
 	}
@@ -702,13 +695,6 @@ public void loadAgents(){
 			}
 		}
 		numberOfRetirements=consumersToRemoveList.size();
-		if(Context.saveMacroData){
-			try{
-			macroDataWriter.append(""+numberOfRetirements+";"+numberOfFirmExits+";"+(-aggregateHouseholdDesiredChangeInCredit)+";"+(-aggregateHouseholdAllowedChangeInCredit)+"\n");
-			macroDataWriter.flush();
-			}
-			catch(IOException e) {System.out.println("IOException");}
-		}
 
 		// remove
 		for(int i=0;i<consumersToRemoveList.size();i++){
@@ -1019,13 +1005,17 @@ System.out.println("     number of firms "+firmsList.size());
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,9.0);
 		Context.schedule.schedule(scheduleParameters,this,"setupNewFirmsToComputeProductAttractiveness");
 
-		if(Context.verboseFlag){
-			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);
-			Context.schedule.schedule(scheduleParameters,this,"scheduleEndOfSimulationStepMessage");
-		}
 		if(Context.saveMicroData){
-			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.0);
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.5);
 			Context.schedule.schedule(scheduleParameters,this,"scheduleSaveFirmsData");
+		}
+		if(Context.saveMacroData){
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,8.0);
+			Context.schedule.schedule(scheduleParameters,this,"scheduleSaveMacroData");
+		}
+		if(Context.verboseFlag){
+			scheduleParameters=ScheduleParameters.createRepeating(1,1,7.5);
+			Context.schedule.schedule(scheduleParameters,this,"scheduleEndOfSimulationStepMessage");
 		}
 	}
 
@@ -1224,6 +1214,25 @@ public void scheduleSaveFirmsData(){
 		aFirm=(Firm)firmsList.get(0);
 		aFirm.innovate();
 	}
+
+	public void scheduleSaveMacroData(){
+	//compute aggregate loans and Deposits	
+		aggregateLoans=0;
+		aggregateDeposits=0;
+		for(int i=0;i<banksList.size();i++){
+			aBank=(Bank)banksList.get(i);
+			aBank.computeBalanceVariables();
+			aggregateLoans+=aBank.getLoans();
+			aggregateDeposits+=aBank.getDeposits();
+		}
+
+			try{
+				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+";"+aggregateLoans+";"+aggregateDeposits+";"+numberOfFirms+";"+numberOfConsumers+";"+numberOfWorkers+";"+numberOfStudents+";"+numberOfRetirements+";"+numberOfFirmExits+";"+(-aggregateHouseholdDesiredChangeInCredit)+";"+(-aggregateHouseholdAllowedChangeInCredit)+"\n");
+				macroDataWriter.flush();
+			}
+			catch(IOException e) {System.out.println("IOException");}
+	}
+
 
 	public void scheduleEndOfSimulationStepMessage(){
 		System.out.println();

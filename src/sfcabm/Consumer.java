@@ -297,8 +297,8 @@ public void stepState(){
 						}
 						else{
 //							aBankAccount.setDemandedCredit(aBankAccount.getAccount()+resourcesAvailableToRefund);
-							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
 							aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit()-resourcesAvailableToRefund);
+							aBankAccount.setAccount(aBankAccount.getAccount()+resourcesAvailableToRefund);
 							//							resourcesAvailableToRefund=0;
 							resourcesAvailableToRefund=0;
 						}
@@ -395,6 +395,10 @@ public void stepState(){
 			if(preferenceParameter<1){
 				preferenceParameter=1;
 			}
+		}
+
+		if(disposableIncome<=Context.subsistenceConsumption && preferenceParameter<1){
+			preferenceParameter=1;
 		}
 
 		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
@@ -734,24 +738,25 @@ public void stepWorkerState() {
 			double additinalCreditAvailableInBestBankAccount=bestBankAccount.getAccount()-bestBankAccount.getAllowedCredit();
 			double resourcesAvailableForUnpaidAmounts;
 			if(unpaidAmountInBankAccounts>0){
-				if(consumption>0){
-					resourcesAvailableForUnpaidAmounts=additinalCreditAvailableInBestBankAccount-consumption;
-				}
-				else{
+				if(residualResourcesAfterConsuming>=0){
 					resourcesAvailableForUnpaidAmounts=additinalCreditAvailableInBestBankAccount+residualResourcesAfterConsuming;
 				}
+				else{
+					resourcesAvailableForUnpaidAmounts=additinalCreditAvailableInBestBankAccount-consumption;
+				}
+
 				double multiplier=1-resourcesAvailableForUnpaidAmounts/unpaidAmountInBankAccounts;
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
 					aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount()*(1-multiplier));
 					aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
+					if(aBankAccount.getUnpaidAmount()<0){
+						aBankAccount.setUnpaidAmount(0);
+					}
 				}
 			}
 			else{
-				if(consumption>0){
-					bestBankAccount.setAccount(bestBankAccount.getAccount()-consumption);
-				}
-				else{
+				if(residualResourcesAfterConsuming>=0){
 					worstBankAccount.setAccount(worstBankAccount.getAccount()+residualResourcesAfterConsuming);
 				}
 			}

@@ -3,10 +3,10 @@
   <element>
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
-      <x>0</x>
+      <x>40</x>
       <y>0</y>
       <w>2639</w>
-      <h>2261</h>
+      <h>2245</h>
     </coordinates>
     <panel_attributes>title:Consumer.payBackBankDebt()
 Start
@@ -61,8 +61,8 @@ If
 					setBankAccount to allowedCredit
 
 					[if\resourceAvailableToRefund&lt;\toPayBackToThisAcount]
-					set thisAccount to\amount+resoucesAvailableToRefund
 					increase\thisAccountUnpaidAmount by\-amount+allowedCredit-\resourcesAvailableToRefund
+					set thisAccount to\amount+resoucesAvailableToRefund
 					set\resourceAvailableToRefund\to zero
 
 				EndIf

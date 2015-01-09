@@ -1,41 +1,57 @@
-dati<-read.csv(file="zdata_micro_consumers_run_1.csv", header = TRUE, sep = ";",as.is=T)
+datic<-read.csv(file="zdata_micro_consumers_run_1.csv", header = TRUE, sep = ";",as.is=T)
 datif<-read.csv(file="zdata_micro_firms_run_1.csv", header = TRUE, sep = ";",as.is=T)
-ba1<-read.csv(file="zdata_micro_consumersbankaccounts01_run_1.csv", header = F, sep = "|",as.is=T)
-ba2<-read.csv(file="zdata_micro_consumersbankaccounts02_run_1.csv", header = F, sep = "|",as.is=T)
-ba3<-read.csv(file="zdata_micro_consumersbankaccounts03_run_1.csv", header = F, sep = "|",as.is=T)
-ba4<-read.csv(file="zdata_micro_consumersbankaccounts04_run_1.csv", header = F, sep = "|",as.is=T)
-ba5<-read.csv(file="zdata_micro_consumersbankaccounts05_run_1.csv", header = F, sep = "|",as.is=T)
-ba6<-read.csv(file="zdata_micro_consumersbankaccounts06_run_1.csv", header = F, sep = "|",as.is=T)
+
+bac1<-read.csv(file="zdata_micro_consumersbankaccounts01_run_1.csv", header = F, sep = "|",as.is=T)
+bac1m<-matrix(as.numeric(unlist(strsplit(bac1[,1],","))),ncol=7,byrow=T)
+bac2<-read.csv(file="zdata_micro_consumersbankaccounts02_run_1.csv", header = F, sep = "|",as.is=T)
+bac3<-read.csv(file="zdata_micro_consumersbankaccounts03_run_1.csv", header = F, sep = "|",as.is=T)
+bac4<-read.csv(file="zdata_micro_consumersbankaccounts04_run_1.csv", header = F, sep = "|",as.is=T)
+bac5<-read.csv(file="zdata_micro_consumersbankaccounts05_run_1.csv", header = F, sep = "|",as.is=T)
+bac6<-read.csv(file="zdata_micro_consumersbankaccounts06_run_1.csv", header = F, sep = "|",as.is=T)
+bac6m<-matrix(as.numeric(unlist(strsplit(bac6[,1],","))),ncol=7,byrow=T)
 
 baf1<-read.csv(file="zdata_micro_firmsbankaccounts01_run_1.csv", header = F, sep = "|",as.is=T)
+baf1m<-matrix(as.numeric(unlist(strsplit(baf1[,1],","))),ncol=7,byrow=T)
 baf2<-read.csv(file="zdata_micro_firmsbankaccounts02_run_1.csv", header = F, sep = "|",as.is=T)
 baf3<-read.csv(file="zdata_micro_firmsbankaccounts03_run_1.csv", header = F, sep = "|",as.is=T)
 baf4<-read.csv(file="zdata_micro_firmsbankaccounts04_run_1.csv", header = F, sep = "|",as.is=T)
 baf5<-read.csv(file="zdata_micro_firmsbankaccounts05_run_1.csv", header = F, sep = "|",as.is=T)
 baf6<-read.csv(file="zdata_micro_firmsbankaccounts06_run_1.csv", header = F, sep = "|",as.is=T)
+baf6m<-matrix(as.numeric(unlist(strsplit(baf6[,1],","))),ncol=7,byrow=T)
 
+ba6m<-rbind(bac6m,baf6m)
 
-consumersFlag=T
-firmsFlag=F
+#periodo<-3
+for(periodo in 1:10){
+selba6m<-ba6m[which(ba6m[,1]==periodo),]
+borrowers<-which(selba6m[,4]<=0)
+depositants<-which(selba6m[,4]>0)
 
-#startp<-2
+#print(selba6m)
+#print(paste("periodo",periodo,"prestiti",sum(selba6m[borrowers,4]),"depositi",sum(selba6m[depositants,4])))
+}
+
+consumersFlag=F
+firmsFlag=T
+
+startp<-3
 #endp<-5
 endp<-startp
 
 if(consumersFlag){
-print(dati[startp:endp,])
+print(datic[startp:endp,])
 print("begin of payback")
-print(matrix(as.numeric(unlist(strsplit(ba1[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac1[startp:endp,1],","))),ncol=7,byrow=T))
 print("end of payback")
-print(matrix(as.numeric(unlist(strsplit(ba2[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac2[startp:endp,1],","))),ncol=7,byrow=T))
 print("begin stepDesiredConsumption")
-print(matrix(as.numeric(unlist(strsplit(ba3[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac3[startp:endp,1],","))),ncol=7,byrow=T))
 print("end stepDesiredConsumption")
-print(matrix(as.numeric(unlist(strsplit(ba4[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac4[startp:endp,1],","))),ncol=7,byrow=T))
 print("begin adjustConsumptionAccordingTo extendedCredit")
-print(matrix(as.numeric(unlist(strsplit(ba5[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac5[startp:endp,1],","))),ncol=7,byrow=T))
 print("end of updateBankAccountAccordingToEffectiveConsumption")
-print(matrix(as.numeric(unlist(strsplit(ba6[startp:endp,1],","))),ncol=7,byrow=T))
+print(matrix(as.numeric(unlist(strsplit(bac6[startp:endp,1],","))),ncol=7,byrow=T))
 }
 
 if(firmsFlag){

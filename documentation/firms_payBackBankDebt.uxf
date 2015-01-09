@@ -6,7 +6,7 @@
       <x>0</x>
       <y>0</y>
       <w>2600</w>
-      <h>2043</h>
+      <h>2123</h>
     </coordinates>
     <panel_attributes>title:Firm.payBackBankDebt()
 Start
@@ -49,6 +49,7 @@ If
 
 		[if\resourcesAvailabeToRefund&lt;\totalAmountToRefund]
 		put all the accounts\with positive amount\to zero
+		cashOnHand=0
 		While[while\bankAccountList.\hasNext()]
 			If
 				[if\amount&lt;0]
@@ -72,23 +73,6 @@ If
 
 End
 </panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.custom.Text</type>
-    <coordinates>
-      <x>2310</x>
-      <y>1580</y>
-      <w>220</w>
-      <h>150</h>
-    </coordinates>
-    <panel_attributes>resourceAvailableToRefund
-are negative while 
-cashOnHand negative 
-or positive???
-bankrupt if asked credit 
-will not extended
-in the next step</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

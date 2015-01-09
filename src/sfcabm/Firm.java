@@ -312,7 +312,7 @@ public class Firm {
 		aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
 
 		if(desiredProductionCapital>productionCapital){
-			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts-unpaidAmountInBankAccounts;
+			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
 			creditToAskInSetDesiredCredit=creditToAsk;
 
 			if(creditToAsk>0){
@@ -324,10 +324,10 @@ public class Firm {
 			}
 		}
 		else{
-			if(cashOnHand+financialResourcesInBankAccounts<0){
-				creditToAsk=cashOnHand+financialResourcesInBankAccounts-unpaidAmountInBankAccounts;
+			if(cashOnHand+financialResourcesInBankAccounts<=0){
+				creditToAsk=-(cashOnHand+financialResourcesInBankAccounts)+unpaidAmountInBankAccounts;
 				creditToAskInSetDesiredCredit=creditToAsk;
-				bestBankAccount.setDesiredCredit(0.0,-creditToAsk);
+				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
 			}
 			else{
 				creditToAsk=0;
@@ -755,6 +755,10 @@ System.out.println("      ----------------");
 						aBankAccount.setAccount(0);
 					}
 				}
+				if(cashOnHand>0){
+					cashOnHand=0;
+				}
+
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
 					amountOfThisBankAccount=aBankAccount.getAccount();
