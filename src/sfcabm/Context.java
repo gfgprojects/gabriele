@@ -42,6 +42,7 @@ public class Context implements ContextBuilder<Object> {
 	public static int productionOfNewEnteringFirm=50;
 	public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 	public static double percentageOfCapitalDepreciation=0.004;
+	public static double percentageOfRealizedUnusedProductionCapital=0.9;
 	public static double laborMarketStateToSetWage=0.5;
 	public static double interestRateOnDeposits=0.001;
 	public static double interestRateOnLoans=0.004;

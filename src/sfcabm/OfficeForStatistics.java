@@ -27,7 +27,7 @@ public class OfficeForStatistics{
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateLoans,aggregateDeposits,aggregateHouseholdDesiredChangeInCredit,aggregateHouseholdAllowedChangeInCredit;
+	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateInvestmentsBeforeExchangingExistingCapital,aggregateUnusedProductionCapital,aggregateUnusedProductionCapitalForSale,aggregateLoans,aggregateDeposits,aggregateHouseholdDesiredChangeInCredit,aggregateHouseholdAllowedChangeInCredit;
 	public IndexedIterable firmsList,consumersList,banksList;
 
 	Firm aFirm;
@@ -534,6 +534,7 @@ public void loadAgents(){
 			System.out.println("OFFICE FOR STATISTICS: COMPUTE AGGREGATE INVESTMENTS AND SET INDUSTRIES' INVESTMENTS");
 		}
 		aggregateInvestments=0;
+		aggregateUnusedProductionCapital=0;
 		//		statAction=statActionFactory.createActionForIterable(industriesList,"resetDemand",false);
 		//		statAction.execute();
 
@@ -549,10 +550,40 @@ public void loadAgents(){
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
 			double tmpInvestment=aFirm.getInvestment();
-			if(tmpInvestment>0){
+			if(tmpInvestment>=0){
 				aggregateInvestments+=tmpInvestment;
 			}
+			else{
+				aggregateUnusedProductionCapital+=-tmpInvestment;
+			}
 		}
+
+		aggregateInvestmentsBeforeExchangingExistingCapital=aggregateInvestments;
+
+		if(aggregateInvestments>0 && aggregateUnusedProductionCapital>0){
+			aggregateUnusedProductionCapitalForSale=aggregateUnusedProductionCapital*Context.percentageOfRealizedUnusedProductionCapital;
+
+			double shareOfUnusedCapitalSold;
+
+			if(aggregateUnusedProductionCapitalForSale>aggregateInvestments){
+				shareOfUnusedCapitalSold=aggregateInvestments/aggregateUnusedProductionCapitalForSale;
+				aggregateInvestments=0;
+			}
+			else{
+				shareOfUnusedCapitalSold=1;
+				aggregateInvestments+=-aggregateUnusedProductionCapitalForSale;
+			}
+
+			for(int i=0;i<firmsList.size();i++){
+				aFirm=(Firm)firmsList.get(i);
+				double tmpInvestment=aFirm.getInvestment();
+				if(tmpInvestment<0){
+					aFirm.sellUnusedCapital(shareOfUnusedCapitalSold);
+				}
+			}
+		}
+
+
 
 		//		if(Context.verboseFlag){
 		//			System.out.println("OFFICE FOR STATISTICS: COMPUTE INVESTMENTS ");
@@ -567,7 +598,7 @@ public void loadAgents(){
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction+" aggregate Investments "+aggregateInvestments);
+			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction+" aggregate investment before exchangin existing capital "+aggregateInvestmentsBeforeExchangingExistingCapital+" aggregate Investments "+aggregateInvestments+" unused capital "+aggregateUnusedProductionCapital+" unused capital for sale "+aggregateUnusedProductionCapitalForSale);
 		}
 	}
 

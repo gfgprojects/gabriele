@@ -457,7 +457,7 @@ System.out.println("      ----------------");
 		else{
 				System.out.println("     decreasing capital");
 			   firmInvestment=desiredProductionCapital-productionCapital;
-			   productionCapital=desiredProductionCapital;
+//			   productionCapital=desiredProductionCapital;
 			creditToAsk=-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
 
 			if(creditToAsk>0){
@@ -659,7 +659,8 @@ System.out.println("      ----------------");
 		previousPeriodOrdersOfProductsForInvestmentPurpose=ordersOfProductsForInvestmentPurpose;
 		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
 		cashOnHandWhenComputingEconomicResult=cashOnHand;
-		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
+		//		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
+		capitalDepreciation=demand*Context.percentageOfCapitalDepreciation;
 		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 		}
@@ -679,7 +680,7 @@ System.out.println("      ----------------");
 
 	public void payBackBankDebt(){
 
-	//reset unpaid amount of bank accounts
+		//reset unpaid amount of bank accounts
 		for(int i=0;i<bankAccountsList.size();i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			aBankAccount.setUnpaidAmount(0);
@@ -773,11 +774,11 @@ System.out.println("      ----------------");
 								aBankAccount.setAccount(amountOfThisBankAccount+resourcesAvailableToRefund);
 								aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
-						       }
-						       else{
+							}
+							else{
 								aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
 								resourcesAvailableToRefund+=-toPayBakToThisBankAccount;
-						       }
+							}
 						}
 					}
 				}
@@ -1030,7 +1031,13 @@ System.out.println("      ----------------");
 		catch(IOException e) {System.out.println("IOException");}
 
 	}
-
+	public void sellUnusedCapital(double shareOfUnusedCapitalSold){
+		productionCapital+=firmInvestment*shareOfUnusedCapitalSold;
+		worstBankAccount.setAccount(worstBankAccount.getAccount()-firmInvestment*shareOfUnusedCapitalSold*Context.percentageOfRealizedUnusedProductionCapital);
+		if(Context.verboseFlag){
+			System.out.println("     Firm "+identity+" sold capital "+(-firmInvestment*shareOfUnusedCapitalSold)+" realizing "+(-firmInvestment*shareOfUnusedCapitalSold*Context.percentageOfRealizedUnusedProductionCapital));
+		}
+	}
 
 
 	//reset the firm each time step 

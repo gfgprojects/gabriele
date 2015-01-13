@@ -402,4 +402,38 @@ cashOnHand = 0 financialResourcesInBankAccounts = 0
 
 
 
+\section{Unused capital and investments}
+
+It can happen that a number of firms in the economy want to increase their production capital while other have an excess of it.
+
+In this model, there is a market for exchanging existing unused production capital.
+
+First of all, there is a parameter that transforms unused production capital into reusable production capital.
+This parameter $\in[0,1]$.
+
+The sequence of events in the adjustment of production capital is as follows
+\begin{itemize}
+	\item computation of aggregate investments and aggregate unused capital;
+	\item unused capital is transformed in reusable production capital;
+	\item reusable production capital is used to satisfy aggregate investments;
+	\item firms that sold unused capital reduce their available production capital and increase their worst bank account;
+	\item if aggregate investments are higher than reusable production capital, the difference increases the demanded in the goods market. 
+\end{itemize}
+
+The reuse of existing production capital is relevant for credit creation and aggregate demand.
+
+Let discuss the two extreme cases.
+
+If existing capital is not reusable (the parameter is 0), the increase of production capital increase lending or reduce deposits of the firm who made this increase. The balancesheet of the banking sector changes
+
+If existing capital is reusable (the parameter is 1), the balance sheet of the banking sector does not change provided the reusable production capital in the economy is enough.
+
+Consider two firms having both a debt of 100. One of them want to increase its production capital by 10, while the other one has 10 unit of unused capital. 
+
+If the second firm can sell the unused capital to the first one, the total amount of lending is unchanged (200) because the debt of the first firm increase to 110 while that of the second firm decrease to 90.
+In the other case bank lending increase to 210.
+
+However, in the second case the first firm buys new production goods and the aggregate demand is higher than in the first case. 
+
+
 \end{document}
