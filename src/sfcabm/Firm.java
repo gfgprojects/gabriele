@@ -23,7 +23,7 @@ public class Firm {
 	double sumOfWorkersProductivity=0;
 	double productionCapacityAfterWorkforceAdjustment;
 	public double desiredProductionCapital,productionCapital,debt,equity,sumOfBankAccounts,productionCapitalBeforeDepreciation,productionCapitalAfterDepreciation;
-	double cashOnHand,capitalDepreciation,financialResourcesInBankAccounts,creditToAskInSetDesiredCredit,cashOnHandWhenComputingEconomicResult,cashOnHandAfterRefundingBank;
+	double cashOnHand,depreciationOfUsedCapital,depreciationOfUnusedCapital,capitalDepreciation,financialResourcesInBankAccounts,creditToAskInSetDesiredCredit,cashOnHandWhenComputingEconomicResult,cashOnHandAfterRefundingBank;
 	double unpaidAmountInBankAccounts=0;	
 	double firmInvestment=0;
 	double ordersOfProductsForInvestmentPurpose=0;
@@ -499,7 +499,7 @@ System.out.println("      ----------------");
 			else{
 				System.out.println("      credit not asked "+creditToAsk);
 				firmInvestment=desiredProductionCapital-productionCapital;
-				productionCapital=desiredProductionCapital;
+//				productionCapital=desiredProductionCapital;
 				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
 			}
@@ -660,7 +660,9 @@ System.out.println("      ----------------");
 		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
 		cashOnHandWhenComputingEconomicResult=cashOnHand;
 		//		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
-		capitalDepreciation=demand*Context.percentageOfCapitalDepreciation;
+		depreciationOfUsedCapital=demand*Context.percentageOfUsedCapitalDepreciation;
+		depreciationOfUnusedCapital=(productionCapital-demand)*Context.percentageOfUnusedCapitalDepreciation;
+		capitalDepreciation=depreciationOfUsedCapital+depreciationOfUnusedCapital;
 		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
 		}

@@ -136,14 +136,14 @@ LHs aggregateHouseholdAllowedChangeInCredit
 
 			try{
 				dataReadmeWriter=new FileWriter(readmeDataOutputFileName);
-				dataReadmeWriter.append("Contents of\n========================\nzdata_macro . . . file\n========================\n\nAC Aggregate Comsumption\nAI Aggregate Investment\nAS Aggregate Supply\nL Loans\nD deposits\nNF Number of Firms\nNC Number of Consumers\nNW Number of Worker\nNS Number of Students\nNR Number of Retirements\nNFE Number of Firm Exits\nLHd aggregateHouseholdDesiredChangeInCredit\nLHs aggregateHouseholdAllowedChangeInCredit\n");
+				dataReadmeWriter.append("Contents of\n========================\nzdata_macro . . . file\n========================\n\nAC Aggregate Comsumption\nAI Aggregate Investment\nAS Aggregate Supply\nL Loans\nD deposits\nNF Number of Firms\nNC Number of Consumers\nNW Number of Worker\nNS Number of Students\nNR Number of Retirements\nNFE Number of Firm Exits\nLHd aggregateHouseholdDesiredChangeInCredit\nLHs aggregateHouseholdAllowedChangeInCredit\nAIB Aggegate investments before exchanging unused production capital\nUPCFS Unused production Capital For sale\n");
 				dataReadmeWriter.flush();
 
 
 
 
 				macroDataWriter=new FileWriter(macroDataOutputFileName);
-				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs\n");
+				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs;AIB;UPCFS\n");
 				macroDataWriter.flush();
 
 					dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_consumers_run . . . file\n========================\n\nt time\nid identification number\nage age\nstudent true if student false if worker\nemployed true if employed, false for students and unemployed\nedu_successes numberOfSuccesfulPeriodsOfEducation\nedu_failures numberOfFailedPeriodsOfEducation\nproductivity consumers productivity\nec effective consumption\nwage wage\ndi1 disposable income when deciding desired consumption\ndi2 disposable income for consumption\ndc desired consumption\nec effective consumption");
@@ -550,6 +550,7 @@ public void loadAgents(){
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
 			double tmpInvestment=aFirm.getInvestment();
+			System.out.println("     Firm "+aFirm.getIdentity()+" invest "+tmpInvestment);
 			if(tmpInvestment>=0){
 				aggregateInvestments+=tmpInvestment;
 			}
@@ -559,9 +560,9 @@ public void loadAgents(){
 		}
 
 		aggregateInvestmentsBeforeExchangingExistingCapital=aggregateInvestments;
+		aggregateUnusedProductionCapitalForSale=aggregateUnusedProductionCapital*Context.percentageOfRealizedUnusedProductionCapital;
 
 		if(aggregateInvestments>0 && aggregateUnusedProductionCapital>0){
-			aggregateUnusedProductionCapitalForSale=aggregateUnusedProductionCapital*Context.percentageOfRealizedUnusedProductionCapital;
 
 			double shareOfUnusedCapitalSold;
 
@@ -1258,7 +1259,7 @@ public void scheduleSaveFirmsData(){
 		}
 
 			try{
-				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+";"+aggregateLoans+";"+aggregateDeposits+";"+numberOfFirms+";"+numberOfConsumers+";"+numberOfWorkers+";"+numberOfStudents+";"+numberOfRetirements+";"+numberOfFirmExits+";"+(-aggregateHouseholdDesiredChangeInCredit)+";"+(-aggregateHouseholdAllowedChangeInCredit)+"\n");
+				macroDataWriter.append(""+aggregateDemand+";"+aggregateInvestments+";"+aggregateProduction+";"+aggregateLoans+";"+aggregateDeposits+";"+numberOfFirms+";"+numberOfConsumers+";"+numberOfWorkers+";"+numberOfStudents+";"+numberOfRetirements+";"+numberOfFirmExits+";"+(-aggregateHouseholdDesiredChangeInCredit)+";"+(-aggregateHouseholdAllowedChangeInCredit)+";"+aggregateInvestmentsBeforeExchangingExistingCapital+";"+aggregateUnusedProductionCapitalForSale+"\n");
 				macroDataWriter.flush();
 			}
 			catch(IOException e) {System.out.println("IOException");}
