@@ -34,6 +34,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double maxPreferenceParameter=1.5;
 	public static double consumersProbabilityToGetFunded=0.0;
 
+
 	public static int NumConsumers = 10;
 	public static int NumFirms = 3;
 	public static int NumBanks = 1;
