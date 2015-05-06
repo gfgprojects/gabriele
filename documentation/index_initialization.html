@@ -1,0 +1,215 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY LANG="it-IT">
+
+<h1>InitInitialization</h1>
+
+<table border=1>
+<tr>
+	<td><b>Context</b>: </td>
+	<td>load parameters</td>
+	<td>Parameters are loaded from the batch_parameters.xml file situated in the scenario folder </td>
+</tr>
+<tr>
+	<td><b>Context</b>:</td> 
+	<td>create consumers<br>create firms<br>create banks<br>create office for labor<br>create office for statistics</td>
+	<td> all the agents are created</td>
+</tr>
+<tr>
+	<td><b>Initial employment</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Consumers</b>: </td>
+	<td>sed a CV</td>
+	<td>Non students send a CV to a randomly chosen firms. </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="updateConsumersAccounts.html">updateConsumersAccounts </a></td>
+	<td>Interest and ask for refund. </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="payBackBankDebt.html">payBackBankDebt </a></td>
+	<td>In the previus steps banks can ask to reduce debt. Now, consumers pay back with their income or their positive bank account. Consumers that have no enough resouces are bailouted. </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="resetConsumersDemandedAndAllowedCredit.html">resetConsumersDemandedAndAllowedCredit</a></td>
+	<td>code: demandedCredit=0;allowedCredit=0 </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="stepStudentState.html"> stepStudentState</a></td>
+	<td> studens evolve their position. </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="stepWorkerConsumption.html"> stepConsumption</a></td>
+	<td>compute the desired consumption. Consumers with a negative bank account or those with a positive bank account but who want to consume more than their bank account set the desired credit accordingly.</td>
+</tr>
+<tr>
+	<td><b>Bank</b>:</td> 
+	<td><a href="setAllowedConsumersCredit.html">setAllowedConsumersCredit</a></td>
+	<td> set maximum credit consumers can have </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="adjustConsumptionAccordingToExtendedCredit.html">adjustConsumptionAccordingToExtendedCredit</a></td>
+	<td>Those consumers who are credit constrained revise their desired consumption. Those who have negative desired consumption activate the <b>bailout procedure</b></td>
+</tr>
+<tr>
+	<td><b>Office for statistics</b>:</td> 
+	<td><a href="computeDesiredDemand.html">computeDesiredDemand</a></td>
+	<td>Compute the <b>desired demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="allocateDesiredDemand.html">allocateDesiredDemand</a></td>
+	<td>Each industry allocates <b>desired demand</b> to firms. Firms will use this figure to set production inputs for the next period</td>
+</tr>
+<tr>
+	<td> </td>
+	<td><a href="matchDemandAndSupply.html">matchDemandAndSupply</a> </td>
+	<td>This mimic the good market functioning. Consumers who cannot find the desired product redirect their demand to other type of product. The desired demand of each consumer is thus revised and becomes <b>effective demand</b>.</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="computeDemand.html">computeDemand</a></td>
+	<td>Compute the <b>effective demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td> </td>
+	<td><a href="allocateDemand.html">allocateDemand</a> </td>
+	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to set production inputs for the next period. </td>
+</tr>
+<tr>
+	<td><b>Consumers</b></td> 
+	<td><a href="updateBankAccountAccordingToEffectiveConsumption.html">updateBankAccountAccordingToEffectiveConsumption</a></td>
+	<td>Each consumers withraw what needed or deposits what saved.</td>
+</tr>
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="computeEconomicResultAndCapitalDepreciation.html">computeEconomicResultAndCapitalDepreciation</a> </td>
+	<td>compute cashOnHand as the difference of production an wages. </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performFirmsExit.html">performFirmsExit</a> </td>
+	<td>performConsumersExit </td>
+</tr>
+<tr>
+	<td><b>Banks</b> </td>
+	<td><a href="updateFirmsAccounts.html">updateFirmsAccounts</a> </td>
+	<td>interest and refund. </td>
+</tr> 
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="firms_payBackBankDebt.html">payBackBankDebt</a> </td>
+	<td>firms refund debt. </td>
+</tr>
+<tr>
+	<td><b>(TBD) Firms</b> </td>
+	<td><a href="stepAbsoluteRank.html">stepAbsoluteRank</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>(TBD) Banks</b> </td>
+	<td><a href="setBalanceSheetStrategy.html">setBalanceSheetStrategy</a> </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="resetFirmsDemandedAndAllowedCredit.html">resetFirmsDemandedAndAllowedCredit</a></td>
+	<td>code: demandedCredit=0;allowedCredit=0 </td>
+</tr>
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="setDesiredCredit.html">setDesiredCredit</a> </td>
+	<td>Credit can be asked to increase production capital or to restore a negative cash flow</td>
+</tr>
+<tr>
+	<td><b>Banks </b> </td>
+	<td><a href="setAllowedFirmsCredit.html">setAllowedFirmsCredit</a> </td>
+	<td>random for now</td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="adjustProductionCapitalAndBankAccount.html">adjustProductionCapitalAndBankAccount</a> </td>
+	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performFirmsEntry.html">performFirmsEntry</a> </td>
+	<td>performConsumersEntry </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics </b> </td>
+	<td><a href="computeInvestments.html">computeInvestments</a> </td>
+	<td></td>
+</tr>
+<tr>
+	<td><b> </b> </td>
+	<td><a href="allocateInvestments.html">allocateInvestments</a> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
+	<td>jettisoningCurricula </td>
+</tr>
+<tr>
+	<td><b>OfficeForLabor</b> </td>
+	<td><a href="jettisoningCurricula.html">jettisoningCurricula</a> </td>
+	<td>jettisoningCurricula </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="laborForceDownwardAdjustment.html">laborForceDownwardAdjustment</a> </td>
+	<td>Account for retired workers and fire if needed. Fired workers set the isWorking flag to false. </td>
+</tr>
+<tr>
+	<td><b>Consumers </b> </td>
+	<td><a href="sendJobApplications.html">sendJobApplications</a> </td>
+	<td>Unemployed consumers (those with isWorking=flalse) send curricula to firms and to office for labor </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="laborForceUpwardAdjustment.html">laborForceUpwardAdjustment</a> </td>
+	<td>The execution of this action depends on the model parametrization. If active, firms hire new workers directly according to their needs. Some firms could not find all the desired workers and some workers could not find a job. Unsatified position could be fulfilled if the following action is active in the simulation parametrization.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="activateLaborMarket.html">activateOfficeForLabor</a> </td>
+	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="performConsumersTurnover.html">performConsumersTurnover</a> </td>
+	<td>performConsumersTurnover </td>
+</tr>
+
+</table>
+
+</BODY>
+
+<tr>
+	<td><b> </b> </td>
+	<td><a href=""></a> </td>
+	<td> </td>
+</tr>
+
+
+
+<tr>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+<a href=""></a>
+
