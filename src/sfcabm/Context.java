@@ -12,6 +12,7 @@ import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.schedule.Schedule;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 //import repast.simphony.random.RandomHelper;
 //import sfcabm.LaborMkt;
@@ -105,6 +106,9 @@ public class Context implements ContextBuilder<Object> {
 
 	public static ISchedule schedule;
 
+//	public boolean debtCancelledOnfinancialDifficulty;
+//	public double betaStud,betaWorker;
+
 	//public static boolean verbouseFlag=true;
 	public repast.simphony.context.Context<Object> build(
 			repast.simphony.context.Context<Object> context) {
@@ -121,6 +125,18 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("");
 			System.out.println("");
 		}
+	Parameters params = RunEnvironment.getInstance().getParameters();
+        NumConsumers = (Integer)params.getValue("NumConsumers");
+        NumFirms = (Integer)params.getValue("NumFirms");
+        parameterOfProductivityInProductionFuncion = (Integer)params.getValue("parameterOfProductivityInProductionFuncion");
+//        debtCancelledOnfinancialDifficulty = (Boolean)params.getValue("debtCancelledOnfinancialDifficulty");
+//        betaStud = (Double)params.getValue("betaStud");
+//        betaWorker = (Double)params.getValue("betaWorker");
+        unemploymentDole=(Integer)params.getValue("unemploymentDole");
+        subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
+        int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        //			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
+        //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
+  
 
 
 		if(verboseFlag){

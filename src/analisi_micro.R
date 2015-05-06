@@ -31,10 +31,10 @@ depositants<-which(selba6m[,4]>0)
 #print(paste("periodo",periodo,"prestiti",sum(selba6m[borrowers,4]),"depositi",sum(selba6m[depositants,4])))
 }
 
-consumersFlag=F
-firmsFlag=T
+consumersFlag=T
+firmsFlag=F
 
-startp<-3
+#startp<-2
 #endp<-5
 endp<-startp
 

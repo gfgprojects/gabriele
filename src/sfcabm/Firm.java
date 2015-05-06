@@ -57,6 +57,7 @@ public class Firm {
 	ArrayList<Curriculum> applicationList = new ArrayList<Curriculum>();
 	ArrayList<Consumer> workersList = new ArrayList<Consumer>();
 	ArrayList<BankAccount> bankAccountsList = new ArrayList<BankAccount>();
+	ArrayList<BankAccount> bankAccountsListWithNoUnpaidAmount = new ArrayList<BankAccount>();
 
 	Curriculum aCurriculum;
 	Consumer aConsumer;
@@ -280,6 +281,7 @@ public class Firm {
 
 
 		desiredProductionCapital=desiredDemand+ordersOfProductsForInvestmentPurpose;
+//compute financial resources and unpaid amounts in bank accounts
 		financialResourcesInBankAccounts=0;
 		unpaidAmountInBankAccounts=0;
 		for(int i=0;i<bankAccountsList.size();i++){
@@ -290,33 +292,62 @@ public class Firm {
 				aBankAccount.setAccount(0);
 			}
 		}
-//identify the bank account with the best position
-		int positionOfBestBankAccount=0;
+//identify the bank account where resources are deposited and accounts with no unpaid amount
 		int positionOfWorstBankAccount=0;
-		double creditToAsk;
 		aBankAccount=(BankAccount)bankAccountsList.get(0);
-		double bestAccount=aBankAccount.getAccount();
 		double worstAccount=aBankAccount.getAccount();
-		for(int j=1;j<bankAccountsList.size()-1;j++){
-			aBankAccount=(BankAccount)bankAccountsList.get(j);
-			if(aBankAccount.getAccount()>bestAccount){
-				positionOfBestBankAccount=j;
-			}
-			if(aBankAccount.getAccount()<worstAccount){
-				positionOfWorstBankAccount=j;
-			}
+		bankAccountsListWithNoUnpaidAmount = new ArrayList<BankAccount>();
+		if(aBankAccount.getUnpaidAmount()>0){
+		}
+		else{
+			bankAccountsListWithNoUnpaidAmount.add(aBankAccount);
 		}
 
-		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
+		for(int j=1;j<bankAccountsList.size();j++){
+			aBankAccount=(BankAccount)bankAccountsList.get(j);
+			if(aBankAccount.getAccount()<worstAccount){
+				worstAccount=aBankAccount.getAccount();
+				positionOfWorstBankAccount=j;
+			}
+			if(aBankAccount.getUnpaidAmount()>0){
+			}
+			else{
+				bankAccountsListWithNoUnpaidAmount.add(aBankAccount);
+			}
+		}
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstBankAccount);
-		aBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
 
+//identify the bank account where asking new credit (the one with best position among them with no unpaid amount)
+		
+		if(bankAccountsListWithNoUnpaidAmount.size()>0){
+			int positionOfBestBankAccount=0;
+			aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(0);
+			double bestAccount=aBankAccount.getAccount();
+			for(int j=1;j<bankAccountsListWithNoUnpaidAmount.size();j++){
+				aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(j);
+				if(aBankAccount.getAccount()>bestAccount){
+					bestAccount=aBankAccount.getAccount();
+					positionOfBestBankAccount=j;
+				}
+			}
+			bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestBankAccount);
+		}
+		else{
+			bestBankAccount=null;
+		}
+
+		System.out.println("     Firm "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
+
+//computation and requests of new credit
+		double creditToAsk;
 		if(desiredProductionCapital>productionCapital){
 			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
 			creditToAskInSetDesiredCredit=creditToAsk;
 
 			if(creditToAsk>0){
-				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
+				if(bankAccountsListWithNoUnpaidAmount.size()>0){
+					bestBankAccount.setDesiredCredit(0.0,creditToAsk);
+				}
 			}
 			else{
 				creditToAsk=0;
@@ -327,7 +358,9 @@ public class Firm {
 			if(cashOnHand+financialResourcesInBankAccounts<=0){
 				creditToAsk=-(cashOnHand+financialResourcesInBankAccounts)+unpaidAmountInBankAccounts;
 				creditToAskInSetDesiredCredit=creditToAsk;
-				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
+				if(bankAccountsListWithNoUnpaidAmount.size()>0){
+					bestBankAccount.setDesiredCredit(0.0,creditToAsk);
+				}
 			}
 			else{
 				creditToAsk=0;
@@ -380,7 +413,10 @@ System.out.println("      ----------------");
 
 			if(creditToAsk>0){
 				System.out.println("     asked credit");
-				double amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				double amountAvailableFromBestBank=0;
+				if(bankAccountsListWithNoUnpaidAmount.size()>0){
+					amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				}
 				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
 					for(int i=0;i<bankAccountsList.size();i++){
 						aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -446,11 +482,18 @@ System.out.println("      ----------------");
 		*/
 			}
 			else{
-						System.out.println("      available funds are enough to finance new investment; the excess is deposited");
+						System.out.println("      available funds are enough to finance new investment and repay unpaid credit; the excess is deposited");
 				firmInvestment=desiredProductionCapital-productionCapital;
 				productionCapital=desiredProductionCapital;
-				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
+				worstBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					if(aBankAccount.getUnpaidAmount()>0){
+						aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
+						aBankAccount.setUnpaidAmount(0);
+					}
+				}
 			}
 			
 		}
@@ -462,7 +505,10 @@ System.out.println("      ----------------");
 
 			if(creditToAsk>0){
 				System.out.println("     credit asked "+creditToAsk);
-				double amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				double amountAvailableFromBestBank=0;
+				if(bankAccountsListWithNoUnpaidAmount.size()>0){
+					amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				}
 				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
 					for(int i=0;i<bankAccountsList.size();i++){
 						aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -493,15 +539,24 @@ System.out.println("      ----------------");
 							aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
 						}
 					}
-					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					if(bankAccountsListWithNoUnpaidAmount.size()>0){
+						bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					}
 				}
 			}
 			else{
 				System.out.println("      credit not asked "+creditToAsk);
 				firmInvestment=desiredProductionCapital-productionCapital;
 //				productionCapital=desiredProductionCapital;
-				aBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
+				worstBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
 				creditToAsk=0;
+				for(int i=0;i<bankAccountsList.size();i++){
+					aBankAccount=(BankAccount)bankAccountsList.get(i);
+					if(aBankAccount.getUnpaidAmount()>0){
+						aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
+						aBankAccount.setUnpaidAmount(0);
+					}
+				}creditToAsk=0;
 			}
 
 

@@ -63,6 +63,7 @@ public class Consumer {
 	ArrayList<LaborOffer> laborOfferList = new ArrayList<LaborOffer>();
 	ArrayList<AProductDemand> demandsList = new ArrayList<AProductDemand>();
 	ArrayList<BankAccount> bankAccountsList = new ArrayList<BankAccount>();
+	ArrayList<BankAccount> bankAccountsListWithNoUnpaidAmount = new ArrayList<BankAccount>();
 	AProductDemand aProductDemand;
 	Curriculum myCurriculum;
 	Firm aFirm;	
@@ -416,11 +417,13 @@ public void stepState(){
 			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
+		desiredDemand=preferenceParameter*disposableIncome;
+
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
-			int tmpDemand=(int)Math.round(preferenceParameter*disposableIncome*anIndustry.getProductAttractiveness());
-			desiredDemand+=tmpDemand;
+			int tmpDemand=(int)Math.round(desiredDemand*anIndustry.getProductAttractiveness());
+//			desiredDemand+=tmpDemand;
 			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
 			aProductDemand.inform(identity);
 			demandsList.add(aProductDemand);
@@ -438,31 +441,56 @@ public void stepState(){
 			}
 		}
 
-		positionOfBestAccount=0;
+//identify the bank account where resources are deposited and accounts with no unpaid amount
 		positionOfWorstAccount=0;
 		aBankAccount=(BankAccount)bankAccountsList.get(0);
-		amountOfBestBankAccount=aBankAccount.getAccount();
 		amountOfWorstBankAccount=aBankAccount.getAccount();
+		bankAccountsListWithNoUnpaidAmount = new ArrayList<BankAccount>();
+		if(aBankAccount.getUnpaidAmount()>0){
+		}
+		else{
+			bankAccountsListWithNoUnpaidAmount.add(aBankAccount);
+		}
 
-		for(int j=0;j<bankAccountsList.size();j++){
+		for(int j=1;j<bankAccountsList.size();j++){
 			aBankAccount=(BankAccount)bankAccountsList.get(j);
 			amountOfThisBankAccount=aBankAccount.getAccount();
-			if(amountOfThisBankAccount>amountOfBestBankAccount){
-				amountOfBestBankAccount=amountOfThisBankAccount;
-				positionOfBestAccount=j;
-			}
 			if(amountOfThisBankAccount<amountOfWorstBankAccount){
 				amountOfWorstBankAccount=amountOfThisBankAccount;
 				positionOfWorstAccount=j;
 			}
 
 		}
-
-		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
+//identify the bank account where asking new credit (the one with best position among them with no unpaid amount)
+
+		if(bankAccountsListWithNoUnpaidAmount.size()>0){
+			positionOfBestAccount=0;
+			aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(0);
+			amountOfBestBankAccount=aBankAccount.getAccount();
+			for(int j=1;j<bankAccountsListWithNoUnpaidAmount.size();j++){
+				aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(j);
+				amountOfThisBankAccount=aBankAccount.getAccount();
+				if(amountOfThisBankAccount>amountOfBestBankAccount){
+					amountOfBestBankAccount=amountOfThisBankAccount;
+					positionOfBestAccount=j;
+				}
+			}
+			bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
+		}
+		else{
+			bestBankAccount=null;
+		}
+
+		System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
+
+
+//ask for new credit
 		if(desiredDemand+unpaidAmountInBankAccounts>disposableIncome+financialResourcesInBankAccounts){
-			bestBankAccount.setDesiredCredit(0.0,desiredDemand+unpaidAmountInBankAccounts-disposableIncome-financialResourcesInBankAccounts);
+			if(bankAccountsListWithNoUnpaidAmount.size()>0){
+				bestBankAccount.setDesiredCredit(0.0,desiredDemand+unpaidAmountInBankAccounts-disposableIncome-financialResourcesInBankAccounts);
+			}
 		}
 	}
 	
@@ -526,23 +554,24 @@ public void stepWorkerState() {
 		wage=0;
 		disposableIncome=0;
 		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
-		
+
 		wealth=0;
 		for(int i=0;i<bankAccountsList.size();i++){
 			aBankAccount=(BankAccount)bankAccountsList.get(i);
 			amountOfThisBankAccount=aBankAccount.getAccount();
-				wealth+=amountOfThisBankAccount;
+			wealth+=amountOfThisBankAccount;
 		}
 
 		if(Context.verboseFlag){
 			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
+		desiredDemand=Context.costEdu;
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
 			anIndustry=industriesListIterator.next();
-			int tmpDemand=(int)Math.round(Context.costEdu*anIndustry.getProductAttractiveness());
-			desiredDemand+=tmpDemand;
+			int tmpDemand=(int)Math.round(desiredDemand*anIndustry.getProductAttractiveness());
+//			desiredDemand+=tmpDemand;
 			aProductDemand=new AProductDemand(anIndustry.getAbsoluteRank(),anIndustry.getRelativeRank(),tmpDemand);
 			aProductDemand.inform(identity);
 			demandsList.add(aProductDemand);
@@ -560,37 +589,58 @@ public void stepWorkerState() {
 			}
 		}
 
-		positionOfBestAccount=0;
+
+		//identify the bank account where resources are deposited and accounts with no unpaid amount
 		positionOfWorstAccount=0;
 		aBankAccount=(BankAccount)bankAccountsList.get(0);
-		amountOfBestBankAccount=aBankAccount.getAccount();
 		amountOfWorstBankAccount=aBankAccount.getAccount();
+		bankAccountsListWithNoUnpaidAmount = new ArrayList<BankAccount>();
+		if(aBankAccount.getUnpaidAmount()>0){
+		}
+		else{
+			bankAccountsListWithNoUnpaidAmount.add(aBankAccount);
+		}
 
-		for(int j=0;j<bankAccountsList.size();j++){
+		for(int j=1;j<bankAccountsList.size();j++){
 			aBankAccount=(BankAccount)bankAccountsList.get(j);
 			amountOfThisBankAccount=aBankAccount.getAccount();
-			if(amountOfThisBankAccount>amountOfBestBankAccount){
-				amountOfBestBankAccount=amountOfThisBankAccount;
-				positionOfBestAccount=j;
-			}
 			if(amountOfThisBankAccount<amountOfWorstBankAccount){
 				amountOfWorstBankAccount=amountOfThisBankAccount;
 				positionOfWorstAccount=j;
 			}
 
 		}
-
-		bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
 		worstBankAccount=(BankAccount)bankAccountsList.get(positionOfWorstAccount);
 
-		if(desiredDemand+unpaidAmountInBankAccounts>wage+financialResourcesInBankAccounts){
-			bestBankAccount.setDesiredCredit(0.0,desiredDemand+unpaidAmountInBankAccounts-wage-financialResourcesInBankAccounts);
+		//identify the bank account where asking new credit (the one with best position among them with no unpaid amount)
+
+		if(bankAccountsListWithNoUnpaidAmount.size()>0){
+			positionOfBestAccount=0;
+			aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(0);
+			amountOfBestBankAccount=aBankAccount.getAccount();
+			for(int j=1;j<bankAccountsListWithNoUnpaidAmount.size();j++){
+				aBankAccount=(BankAccount)bankAccountsListWithNoUnpaidAmount.get(j);
+				amountOfThisBankAccount=aBankAccount.getAccount();
+				if(amountOfThisBankAccount>amountOfBestBankAccount){
+					amountOfBestBankAccount=amountOfThisBankAccount;
+					positionOfBestAccount=j;
+				}
+			}
+			bestBankAccount=(BankAccount)bankAccountsList.get(positionOfBestAccount);
+		}
+		else{
+			bestBankAccount=null;
 		}
 
+		System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
 
 
-
-
+		//ask for new credit
+			if(desiredDemand+unpaidAmountInBankAccounts>disposableIncome+financialResourcesInBankAccounts){
+				if(desiredDemand+unpaidAmountInBankAccounts>wage+financialResourcesInBankAccounts){
+					bestBankAccount.setDesiredCredit(0.0,desiredDemand+unpaidAmountInBankAccounts-wage-financialResourcesInBankAccounts);
+				}
+		}
 	}
 	
 
@@ -661,19 +711,34 @@ public void stepWorkerState() {
 			}
 
 
-			double askedCredit=aBankAccount.getDemandedCredit();
-			double allowedCredit=aBankAccount.getAllowedCredit();
 			double allowedDemand=0;
+			double askedCredit=0;
+			double allowedCredit=0;
 			residualResourcesAfterConsuming=0;
-			if(allowedCredit>askedCredit){
-				allowedDemand=desiredDemand-(allowedCredit-askedCredit);
-				   if(allowedDemand<Context.subsistenceConsumption){
-				   allowedDemand=Context.subsistenceConsumption;
-				   }
+			if(bankAccountsListWithNoUnpaidAmount.size()>0){
+				askedCredit=bestBankAccount.getDemandedCredit();
+				allowedCredit=bestBankAccount.getAllowedCredit();
+				if(allowedCredit>askedCredit){
+					allowedDemand=desiredDemand-(allowedCredit-askedCredit);
+					if(allowedDemand<Context.subsistenceConsumption){
+						allowedDemand=Context.subsistenceConsumption;
+					}
+				}
+				else{
+					allowedDemand=desiredDemand;
+				}
+		}
+		else{
+			if(desiredDemand>(disposableIncome+financialResourcesInBankAccounts)){
+				allowedDemand=disposableIncome+financialResourcesInBankAccounts;
 			}
 			else{
 				allowedDemand=desiredDemand;
 			}
+		}
+
+
+
 			if(Context.verboseFlag){
 				System.out.println("     Consumer "+identity+" askedCred "+askedCredit+" allow "+allowedCredit+" wage "+wage+" desired Demand "+desiredDemand+" allowed Demand "+allowedDemand);
 			}
@@ -720,22 +785,25 @@ public void stepWorkerState() {
 							if(Context.verboseFlag){
 								System.out.println("       deposits in this account are higher than residual desired consumption. Deposits are thus reduced by "+consumption);      
 							}
-							aBankAccount.setAccount(tmpAccount-consumption);
+							bestBankAccount.setAccount(tmpAccount-consumption);
 							consumption=0;
 						}
 					}
 				}
-/*
+
 				if(consumption>0){
 					//					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit())+"    "+(-bestBankAccount.getAccount()));
 					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount()));
 					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
 				}
-*/
+
 			}
 
 
-			double additinalCreditAvailableInBestBankAccount=bestBankAccount.getAccount()-bestBankAccount.getAllowedCredit();
+			double additinalCreditAvailableInBestBankAccount=0;
+				if(bankAccountsListWithNoUnpaidAmount.size()>0){
+					additinalCreditAvailableInBestBankAccount=bestBankAccount.getAccount()-bestBankAccount.getAllowedCredit();
+				}
 			double resourcesAvailableForUnpaidAmounts;
 			if(unpaidAmountInBankAccounts>0){
 				if(residualResourcesAfterConsuming>=0){
