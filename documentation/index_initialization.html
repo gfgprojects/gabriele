@@ -33,10 +33,31 @@ Back to <a href="index.html"> home </a>
 	<td>All the received job applications are accepted, the sum of workers' productivity is computed and the production is computed as a function of the sum of productivities. </td>
 </tr>
 <tr>
-	<td><b>Consumers</b>: </td>
-	<td><a href="payBackBankDebt.html">payBackBankDebt </a></td>
-	<td>In the previus steps banks can ask to reduce debt. Now, consumers pay back with their income or their positive bank account. Consumers that have no enough resouces are bailouted. </td>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Context</b>: </td>
+	<td>remove firms with no workers</td>
+	<td>It may happen that a firm does not receive job applications. These firms are removed for the firmsList.</td>
 </tr>
+<tr bgcolor="lightgray">
+	<td ><b>Initial balance sheets</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Consumers</b>: </td>
+	<!--	<td><a href="init_consumers_setupBankAccount.html">setupBankAccount()</a></td> -->
+	<td>setupBankAccount()</td>
+	<td> Each consumer select randomly a number of banks equal to Context.numberOfBanksAConsumerCanBeCustumerOf and open a bank account in each of them. The amount of the bank account is randomly drawn from a uniform distribution U(Context.minConsumerInitialBankAccount,Context.maxConsumerInitialBankAccount). </td>
+</tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Firms</b>: </td>
+	<td><a href="init_firms_setupBankAccountInInitialization.html">setupBankAccountInInitialization()</a></td>
+	<td> Each Firm setup its balance sheet ant thus determine the level of debt.<br> Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanBeCustumerOf and open a bank account in each of them. The amount of the bank account is equal to the debt divided by the number of banks the firm is customer of. </td>
+</tr>
+
+
+
+
+
 <tr>
 	<td><b>Bank</b>: </td>
 	<td><a href="resetConsumersDemandedAndAllowedCredit.html">resetConsumersDemandedAndAllowedCredit</a></td>
