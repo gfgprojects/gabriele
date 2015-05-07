@@ -867,7 +867,7 @@ public void saveDataToFile(){
 				if(Context.verboseFlag){
 					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am nor sending CV because I am a student");
 				}
-			}
+			} 
 			else{
 				if(RandomHelper.nextDouble()<Context.probabilityToBeUnemployedAtTheBeginning){
 					if(Context.verboseFlag){
