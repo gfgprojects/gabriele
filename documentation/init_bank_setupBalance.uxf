@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>670</w>
+      <h>663</h>
+    </coordinates>
+    <panel_attributes>title:start
+Start
+equityRatio=U(Context.minBankInitialEquityRatio,\Context.minBankInitialEquityRatio)
+equity=demandedCredit*equityRatio
+adjustmentFactor=demandedCredit*\(1-equityRatio)/deposits
+While[for\each\bank account]
+	If
+		[if\account&gt;0]
+		bankAccount=bankAccount*\adjustmentFactor
+
+		[else]
+		bankAccount=demandedCredit
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
