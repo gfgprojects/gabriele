@@ -34,11 +34,12 @@ public class Context implements ContextBuilder<Object> {
 	public static double maxPreferenceParameter=1.5;
 	public static double consumersProbabilityToGetFunded=0.0;
 
-
-	public static int NumConsumers = 10;
-	public static int NumFirms = 3;
-	public static int NumBanks = 1;
+	public static int numConsumers = 10;
+	public static int numFirms = 3;
+	public static int numBanks = 1;
 	public static int consumerExitAge=70;
+	public static int maxNumberOfFailedPeriodsOfEducation=2;
+	public static double probabilityToBeUnemployedAtTheBeginning=0.05;
 	public static int parameterOfProductivityInProductionFuncion=100;
 	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 	public static int productionOfNewEnteringFirm=50;
@@ -127,8 +128,8 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("");
 		}
 	Parameters params = RunEnvironment.getInstance().getParameters();
-        NumConsumers = (Integer)params.getValue("NumConsumers");
-        NumFirms = (Integer)params.getValue("NumFirms");
+        numConsumers = (Integer)params.getValue("numConsumers");
+        numFirms = (Integer)params.getValue("numFirms");
         parameterOfProductivityInProductionFuncion = (Integer)params.getValue("parameterOfProductivityInProductionFuncion");
 //        debtCancelledOnfinancialDifficulty = (Boolean)params.getValue("debtCancelledOnfinancialDifficulty");
 //        betaStud = (Double)params.getValue("betaStud");
@@ -143,7 +144,7 @@ public class Context implements ContextBuilder<Object> {
 		if(verboseFlag){
 			System.out.println("CREATING CONSUMERS");
 		}
-		for (int i = 0; i< NumConsumers; i++){
+		for (int i = 0; i< numConsumers; i++){
 			aConsumer=new Consumer(consumersProgressiveIdentificationNumber,context);
 			consumersProgressiveIdentificationNumber++;
 			aConsumer.initialize();
@@ -154,7 +155,7 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("CREATING FIRMS");
 		}
 
-		for (int f = 0; f<NumFirms; f++){
+		for (int f = 0; f<numFirms; f++){
 			context.add(new Firm(firmsProgressiveIdentificationNumber,context));
 			firmsProgressiveIdentificationNumber++;
 		}
@@ -163,7 +164,7 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("CREATING BANKS");
 		}
 
-		for (int b = 0; b<NumBanks; b++){
+		for (int b = 0; b<numBanks; b++){
 			context.add(new Bank(banksProgressiveIdentificationNumber,context));
 			banksProgressiveIdentificationNumber++;
 		}
@@ -518,7 +519,7 @@ public class Context implements ContextBuilder<Object> {
 		}
 		if (RunEnvironment.getInstance().isBatch())
 		{
-			RunEnvironment.getInstance().endAt(10);
+			RunEnvironment.getInstance().endAt(batchStoppingTime);
 		}
 
 

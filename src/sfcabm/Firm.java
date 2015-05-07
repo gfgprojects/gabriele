@@ -86,8 +86,10 @@ public class Firm {
 		identity = FirmID;
 		myContext=con;
 		age=0;
+		productAbsoluteRank=1;
+//		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" created");
+			System.out.println("     Firm "+identity+" created with productAbsoluteRank "+productAbsoluteRank);
 		}
 	}
 
@@ -148,8 +150,6 @@ public class Firm {
 		}
 		production=Math.round(sumOfWorkersProductivity*Context.parameterOfProductivityInProductionFuncion);
 		demand=(int)production;
-			productAbsoluteRank=1;
-//		productAbsoluteRank=RandomHelper.nextIntFromTo(1,10);
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}

@@ -2,8 +2,9 @@
 <HEAD>
 </HEAD>
 <BODY LANG="it-IT">
-
-<h1>InitInitialization</h1>
+Back to <a href="index.html"> home </a>
+<p><p>
+<h1>Initialization</h1>
 
 <table border=1>
 <tr>
@@ -13,23 +14,23 @@
 </tr>
 <tr>
 	<td><b>Context</b>:</td> 
-	<td>create consumers<br>create firms<br>create banks<br>create office for labor<br>create office for statistics</td>
-	<td> all the agents are created</td>
+	<td><a href="init_create_consumers.html">create consumers</a><br>create firms<br>create banks<br>create office for labor<br>create office for statistics</td>
+	<td>set consumer identification number, age,  if student or non student, level of education and productivity.<br>set firm identification number, age and product absolute rank.<br>set bank identification number.<br>office for labor created<br>set up for relative rank computation and data storage<br></td>
 </tr>
-<tr>
-	<td><b>Initial employment</b></td>
+<tr bgcolor="lightgray">
+	<td ><b>Initial employment</b></td>
 	<td> </td>
 	<td> </td>
 </tr>
 <tr>
 	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Consumers</b>: </td>
-	<td>sed a CV</td>
-	<td>Non students send a CV to a randomly chosen firms. </td>
+	<td><a href="init_sendInitialJobApplication.html">sendInitialJobApplication()</a></td>
+	<td>Non students send a job application to a randomly chosen firms with probability Context.probabilityToBeUnemployedAtTheBeginning. </td>
 </tr>
 <tr>
-	<td><b>Bank</b>: </td>
-	<td><a href="updateConsumersAccounts.html">updateConsumersAccounts </a></td>
-	<td>Interest and ask for refund. </td>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Firm</b>: </td>
+	<td><a href="updateConsumersAccounts.html">setInitialWorkers()</a></td>
+	<td>All the received job applications are accepted, the sum of workers productivity is computed and the production is computed as a function of the sum of productivities. </td>
 </tr>
 <tr>
 	<td><b>Consumers</b>: </td>

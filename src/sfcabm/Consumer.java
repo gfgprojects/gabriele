@@ -117,7 +117,7 @@ public class Consumer {
 		age=RandomHelper.nextIntFromTo(0,Context.consumerExitAge-1);
 		int iterations=0;
 		int maxIterations=Math.min(age,23);
-		while(numberOfFailedPeriodsOfEducation<3 && iterations<maxIterations){
+		while(numberOfFailedPeriodsOfEducation<(Context.maxNumberOfFailedPeriodsOfEducation+1) && iterations<maxIterations){
 			if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 				numberOfSuccessfulPeriodsOfEducation++;
 				numberOfConsecutiveFailedPeriodsOfEducation=0;
@@ -131,7 +131,7 @@ public class Consumer {
 		if(numberOfSuccessfulPeriodsOfEducation>21){
 			numberOfSuccessfulPeriodsOfEducation=21;
 		}
-		if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation==21){
+		if(numberOfFailedPeriodsOfEducation>Context.maxNumberOfFailedPeriodsOfEducation || numberOfSuccessfulPeriodsOfEducation==21){
 			isStudent=false;
 			//calcolare qui titolo di studio e produttivit da lavoratore
 			//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
@@ -159,7 +159,7 @@ public class Consumer {
 
 
 		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" age "+(age+5)+" isStudent "+isStudent+" promozioni "+numberOfSuccessfulPeriodsOfEducation+" bocciature "+numberOfFailedPeriodsOfEducation+" cons "+numberOfConsecutiveFailedPeriodsOfEducation+" titolo "+degree+" productivity "+productivity+" abilityStudent "+abilityStudent);
+			System.out.println("     Consumer "+identity+" age "+(age+5)+" isStudent "+isStudent+" successes "+numberOfSuccessfulPeriodsOfEducation+" failures "+numberOfFailedPeriodsOfEducation+" consecutive failures "+numberOfConsecutiveFailedPeriodsOfEducation+" degree "+degree+" productivity "+productivity+" abilityStudent "+abilityStudent);
 			//		System.out.println("ID " +identity+ " ability " +abilityStudent+  " investe in Edu " +InvestEducation+ " updateAbility " +sumAbilityStudent+  " wealth " +wealth);
 
 		}
@@ -661,7 +661,7 @@ public void stepWorkerState() {
 			//ora decide se continuare diventare worker
 			//pensare la condizione per terminare gli studi. Adesso ho messo che dopo tre bocciature si va a lavorare  
 			//	  if(numberOfConsecutiveFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
-			if(numberOfFailedPeriodsOfEducation>2 || numberOfSuccessfulPeriodsOfEducation>21){
+			if(numberOfFailedPeriodsOfEducation>Context.maxNumberOfFailedPeriodsOfEducation || numberOfSuccessfulPeriodsOfEducation>21){
 				isStudent=false;
 				//calcolare qui titolo di studio e produttivit da lavoratore
 				//		  sumAbilityStudent=numberOfSuccessfulPeriodsOfEducation;
@@ -869,7 +869,7 @@ public void saveDataToFile(){
 				}
 			}
 			else{
-				if(RandomHelper.nextDouble()<0.05){
+				if(RandomHelper.nextDouble()<Context.probabilityToBeUnemployedAtTheBeginning){
 					if(Context.verboseFlag){
 						System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" no CV sent ");
 					}
