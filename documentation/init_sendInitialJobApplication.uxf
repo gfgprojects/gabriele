@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>529</w>
+      <h>677</h>
+    </coordinates>
+    <panel_attributes>title:Consumer.sendInitialJobApplication()
+Start
+If
+	[if\student]
+
+	[if\non student]
+	If
+		[if\random &lt; Context.\probabilityToBe\UnemployedAt\TheBeginning]
+
+		[else]
+		create a Curriculum
+		select a firm randomly
+		send the curriculum to\the selected firm
+	
+EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

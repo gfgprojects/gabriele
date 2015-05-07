@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>807</w>
+      <h>445</h>
+    </coordinates>
+    <panel_attributes>title:create Consumers
+Start
+While[for(i=0;\i&lt;numConsumers;\i++)]
+	aConsumer=new Consumer(consumersProgressiveIdentificationNumber,context)\(set identification number)
+	consumersProgressiveIdentificationNumber++;
+	aConsumer.initialize();
+	context.add(aConsumer);
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>460</y>
+      <w>488</w>
+      <h>355</h>
+    </coordinates>
+    <panel_attributes>title:Consumer.initialize()
+Start
+age=U[0,ContextConsumerExitAge-1]
+run school years\use abilityStudent to establish successes\   if failures&lt;Context.maxNumberOfFailedPeriodsOfEducation\       isStudent=false (will participate in the job labor market)
+set degree
+set productivity\according to degree
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>260</y>
+      <w>310</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;200.0;10.0;10.0;290.0;10.0</additional_attributes>
+  </element>
+</diagram>

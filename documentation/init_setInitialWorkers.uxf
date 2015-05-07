@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>40</y>
+      <w>502</w>
+      <h>631</h>
+    </coordinates>
+    <panel_attributes>title:Firm.setInitialWorkers()
+Start
+sumOfWorkersProductivity=0
+If
+	[if\applicationList\is empty]
+
+	[else]
+	add application sender\to workerList
+	inform sender to set\her state as employed
+	inscrease sumOfWorkersProductivity
+production=sumOfWorkersProductivity*Context.\parameterOfProductivityInProductionFuncion
+demand=production
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
