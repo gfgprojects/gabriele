@@ -185,7 +185,7 @@ public void setupBankAccount(){
 		if(Context.verboseFlag){
 			System.out.println("       open account");
 		}
-	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(-500,500),this,aBank);
+	aBankAccount=new BankAccount(RandomHelper.nextIntFromTo(Context.minConsumerInitialBankAccount,Context.maxConsumerInitialBankAccount),this,aBank);
 	bankAccountsList.add(aBankAccount);
 	aBank.addAccount(aBankAccount);
 

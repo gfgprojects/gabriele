@@ -42,6 +42,12 @@ public class Context implements ContextBuilder<Object> {
 	public static double probabilityToBeUnemployedAtTheBeginning=0.05;
 	public static int parameterOfProductivityInProductionFuncion=100;
 	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
+	public static int minConsumerInitialBankAccount=-500;
+	public static int maxConsumerInitialBankAccount=500;
+	public static double minFirmInitialEquityRatio=0.1;
+	public static double maxFirmInitialEquityRatio=0.3;
+	public static double minBankInitialEquityRatio=0.1;
+	public static double maxBankInitialEquityRatio=0.3;
 	public static int productionOfNewEnteringFirm=50;
 	public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 	public static double percentageOfUsedCapitalDepreciation=0.004;
@@ -99,6 +105,7 @@ public class Context implements ContextBuilder<Object> {
 
 	Consumer aConsumer;
 	Firm aFirm;
+	Bank aBank;
 
 	IndexedIterable consumersList,firmsList,banksList;
 	OfficeForStatistics officeForStatistics;
@@ -293,8 +300,39 @@ public class Context implements ContextBuilder<Object> {
 		contextAction=contextActionFactory.createActionForIterable(firmsList,"computeSumOfBankAccounts",false);
 		contextAction.execute();
 
+		try{
+			consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
+			firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
+			banksList=context.getObjects(Class.forName("sfcabm.Bank"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+		double sumOfConsumersAndFirmsFinancialBalances=0;
+
+		for(int i=0;i<consumersList.size();i++){
+			aConsumer=(Consumer)consumersList.get(i);
+			sumOfConsumersAndFirmsFinancialBalances+=aConsumer.getWealth();
+		}
+		for(int i=0;i<firmsList.size();i++){
+			aFirm=(Firm)firmsList.get(i);
+			sumOfConsumersAndFirmsFinancialBalances+=aFirm.getSumOfBankAccounts();
+		}
+		double sumOfBanksEquity=0;
+		for(int i=0;i<banksList.size();i++){
+			aBank=(Bank)banksList.get(i);
+			sumOfBanksEquity+=aBank.getEquity();
+		}
+
+
 
 		if(verboseFlag){
+			System.out.println("");
+			System.out.println("     sumOfConsumersAndFirmsFinancialBalances "+sumOfConsumersAndFirmsFinancialBalances);
+			System.out.println("     sumOfBanksEquity                        "+sumOfBanksEquity);
+			System.out.println("");
+
 			System.out.println("OFFICE FOR STATISTICS: LOAD AGENTS");
 		}
 

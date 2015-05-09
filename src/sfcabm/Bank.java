@@ -54,8 +54,9 @@ public class Bank {
 
 	}
 	public void setupBalance(){
-		equity=demandedCredit*0.1;
-		double adjustmentFactor=demandedCredit*0.9/deposits;
+		double initialEquityRatio=RandomHelper.nextDoubleFromTo(Context.minBankInitialEquityRatio,Context.minBankInitialEquityRatio);
+		equity=demandedCredit*initialEquityRatio;
+		double adjustmentFactor=demandedCredit*(1-initialEquityRatio)/deposits;
 		for(int i=0;i<accountsList.size();i++){
 			aBankAccount=(BankAccount)accountsList.get(i);
 			if(aBankAccount.getAccount()>0){
@@ -373,6 +374,9 @@ public class Bank {
 	}
 	public double getDeposits(){
 		return deposits;
+	}
+	public double getEquity(){
+		return equity;
 	}
 
 	public double getSumOfHouseholdDesiredChangeInCredit(){

@@ -157,7 +157,7 @@ public class Firm {
 
 	public void setupBankAccountInInitialization(){
 		productionCapital=production;//workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
-		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
+		equity=productionCapital*RandomHelper.nextDoubleFromTo(Context.minFirmInitialEquityRatio,Context.minFirmInitialEquityRatio);
 		debt=productionCapital-equity;
 		if(Context.verboseFlag){
 		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
@@ -179,7 +179,7 @@ public class Firm {
 			if(Context.verboseFlag){
 				System.out.println("       open account");
 			}
-			aBankAccount=new BankAccount(-debt,this,aBank);
+			aBankAccount=new BankAccount(-debt/numberOfBanksToBeCustomerOf,this,aBank);
 			bankAccountsList.add(aBankAccount);
 			aBank.addAccount(aBankAccount);
 
@@ -972,6 +972,9 @@ System.out.println("      ----------------");
 			System.out.println("     Firm "+identity+" account "+sumOfBankAccounts);
 		}
 
+	}
+	public double getSumOfBankAccounts(){
+		return sumOfBankAccounts;
 	}
 
 	public void setProductAbsoluteRank(int pab){
