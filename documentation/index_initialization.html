@@ -18,7 +18,7 @@ Back to <a href="index.html"> home </a>
 	<td>set consumer identification number, age,  if student or non student, level of education and productivity.<br>set firm identification number, age and product absolute rank.<br>set bank identification number.<br>office for labor created<br>set up for relative rank computation and data storage<br></td>
 </tr>
 <tr bgcolor="lightgray">
-	<td ><b>Initial employment</b></td>
+	<td ><b>Initial<br>employment</b></td>
 	<td> </td>
 	<td> </td>
 </tr>
@@ -58,11 +58,27 @@ Back to <a href="index.html"> home </a>
 	<td>ComputeDemandedCredit()<br>computeDeposits()<br><a href="init_bank_setupBalance.html">setupBalance()</a><br>computeBalanceVariables()</td>
 	<td>sum of credit asked by firms and households in the previous steps<br>sum of the bank accounts with positive amounts<br>setup bank balance sheet and resize deposits<br>deposits=sum of positive bank accounts; loans=sum of negative bank accounts<br> </td>
 </tr>
-<tr>
-	<td><b>Context</b>: </td>
-	<td><a href="stepStudentState.html"> ceck balance sheet consistency</a></td>
+<tr bgcolor="lightgray">
+	<td ><b>ceck balance sheet consistency</b></td>
+	<td> </td>
 	<td> </td>
 </tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Consumers</b>: </td>
+	<td>computeWealth()</td>
+	<td>compute the sum of the bank accounts</td>
+</tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Firms</b>: </td>
+	<td>computeSumOfBankAccounts()</td>
+	<td>compute the sum of the bank accounts</td>
+</tr>
+<tr>
+	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Context</b> </td>
+	<td>sum wealth of all consumers (A)<br>sum bank accounts of all firms (B)<br>sum the equity of all banks (C)</td>
+	<td>check that A + B = -C</td>
+</tr>
+
 <tr bgcolor="lightgray">
 	<td ><b>Load<br>agents</b></td>
 	<td> </td>
@@ -70,8 +86,8 @@ Back to <a href="index.html"> home </a>
 </tr>
 <tr>
 	<td><b>OfficeForStatistics</b>: </td>
-	<td><a href="stepWorkerConsumption.html"> loadAgents</a></td>
-	<td></td>
+	<td>loadAgents()</td>
+	<td>fill OfficeForStatistics lists with collections of agents retrieved from the context.</td>
 </tr>
 </table>
 

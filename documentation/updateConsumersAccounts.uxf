@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
   <zoom_level>10</zoom_level>
   <element>
-    <type>com.umlet.element.ActivityDiagramText</type>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>0</x>
+      <x>80</x>
       <y>0</y>
-      <w>1159</w>
-      <h>1171</h>
+      <w>1276</w>
+      <h>1203</h>
     </coordinates>
     <panel_attributes>title:Bank.updateConsumersAccounts()
 Start
@@ -32,7 +33,7 @@ While[while\accountsList.\hasNext]
 				[if\consumer isWorking]
 				increase amount by\interest at loans rate
 				set demandedCredit to account
-				set allowedCredit to account*0.9\or to account\with probability 0.5,0.5
+				set allowedCredit to account*(1-Context.percentageOfLoan\ToRefundForIndebtedWorkersIfAsked)\with probability Context.probability\ToBeAskedToRefundForIndebtedWorkers\or to account with the complement probability
 			EndIf
 		EndIf
 

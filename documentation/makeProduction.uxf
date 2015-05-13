@@ -1,19 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
   <zoom_level>10</zoom_level>
   <element>
-    <type>com.umlet.element.ActivityDiagramText</type>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
       <x>20</x>
       <y>20</y>
-      <w>614</w>
-      <h>339</h>
+      <w>474</w>
+      <h>433</h>
     </coordinates>
     <panel_attributes>title:Firm.makeProduction()
 Start
 compute\sumOfworkersProductivity
-workersPotentialProduction =sumOfWorkersProductivities*\parameterOfProductivityInProductionFunction
-capitalPotentialProduction =productionCapital/capitalNeededForEachWorker*\parameterOfProductivityInProductionFunction
-production=min(workerPotentialProduction,capitalPotentialProduction)
+workersPotentialProduction = sumOfWorkersProductivities*\Context.parameterOfProductivityInProductionFunction
+capitalPotentialProduction = productionCapital
+productionPlusOrdersForInvestments=\min(capitalPotentialProduction,\workersPotentialProduction)
+production=productionPlusOrdersForInvestments -\ordersOfProductsForInvestmentPurpose\(production available to households)
 
 End
 </panel_attributes>
