@@ -231,7 +231,7 @@ public void stepState(){
 		}
 
 
-
+//compute totalSmountoToRefund and FinancialResourcesInBankAccounts
 		double amountOfThisBankAccount,resourcesAvailableToRefund;
 		double totalAmountToRefund=0;
 		financialResourcesInBankAccounts=0;
@@ -245,7 +245,9 @@ public void stepState(){
 				financialResourcesInBankAccounts+=amountOfThisBankAccount;
 			}
 		}
+//assign disposableIncome
 		disposableIncome=wage;
+//resize disposableIncome
 		if(totalAmountToRefund>0){
 			if(Context.verboseFlag){
 				System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" wage "+disposableIncome);
@@ -865,7 +867,7 @@ public void saveDataToFile(){
 		public void sendInitialJobApplication(){
 			if(isStudent){
 				if(Context.verboseFlag){
-					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am nor sending CV because I am a student");
+					System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" I am not sending CV because I am a student");
 				}
 			} 
 			else{

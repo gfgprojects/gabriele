@@ -48,6 +48,8 @@ public class Context implements ContextBuilder<Object> {
 	public static double maxFirmInitialEquityRatio=0.3;
 	public static double minBankInitialEquityRatio=0.1;
 	public static double maxBankInitialEquityRatio=0.3;
+	public static double probabilityToBeAskedToRefundForIndebtedWorkers=0.5;
+	public static double percentageOfLoanToRefundForIndebtedWorkersIfAsked=0.1;
 	public static int productionOfNewEnteringFirm=50;
 	public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 	public static double percentageOfUsedCapitalDepreciation=0.004;
@@ -125,16 +127,8 @@ public class Context implements ContextBuilder<Object> {
 		//int maxIter=30;
 
 //		RandomHelper.setSeed(1469873);
-
-		if(verboseFlag){
-			System.out.println("");
-			System.out.println("");
-			System.out.println("BEGINNING OF INITIAL SETUP");
-			System.out.println("==========================================");
-			System.out.println("");
-			System.out.println("");
-		}
 	Parameters params = RunEnvironment.getInstance().getParameters();
+	verboseFlag=(boolean)params.getValue("verboseFlag");
         numConsumers = (Integer)params.getValue("numConsumers");
         numFirms = (Integer)params.getValue("numFirms");
         parameterOfProductivityInProductionFuncion = (Integer)params.getValue("parameterOfProductivityInProductionFuncion");
@@ -146,6 +140,15 @@ public class Context implements ContextBuilder<Object> {
         int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        //			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
         //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
   
+
+		if(verboseFlag){
+			System.out.println("");
+			System.out.println("");
+			System.out.println("BEGINNING OF INITIAL SETUP");
+			System.out.println("==========================================");
+			System.out.println("");
+			System.out.println("");
+		}
 
 
 		if(verboseFlag){

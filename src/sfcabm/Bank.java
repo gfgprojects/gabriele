@@ -120,7 +120,7 @@ public class Bank {
 						}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
 							aBankAccount.setDemandedCredit(aBankAccount.getAccount());
-							if(RandomHelper.nextDouble()>0.5){
+							if(RandomHelper.nextDouble()>Context.probabilityToBeAskedToRefundForIndebtedWorkers){
 								if(Context.verboseFlag){
 									System.out.println("      refund not asked");
 								}
@@ -130,7 +130,7 @@ public class Bank {
 								if(Context.verboseFlag){
 									System.out.println("      refund asked");
 								}
-								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*(1-Context.percentageOfLoanToRefundForIndebtedWorkersIfAsked));
 							}
 						}
 						else{
@@ -194,10 +194,11 @@ public class Bank {
 
 	}
 
+//Desired credit and allowed credit are set to zero if the consumer was able to pay back what asked by bank in the Consumer.payBackBankDebt() method; Otherwise only the allowed credit is set to zero.
 
 /**
- *Desired credit and allowed credit are set to zero if the consumer was able to pay back what asked by bank in the Consumer.payBackBankDebt() method; Otherwise only the allowed credit is set to zero.
-*/
+ *Set desired credit and allowed credit to zero if the account owner is a consumer.
+ */
 	public void resetConsumersDemandedAndAllowedCredit(){
 		demandedCredit=0;
 		allowedCredit=0;
@@ -272,7 +273,7 @@ public class Bank {
 					if(anAccountDesiredCredit<anAccountAmount){
 					sumOfHouseholdDesiredChangeInCredit+=anAccountDesiredCredit;
 					sumOfHouseholdAllowedChangeInCredit+=anAccounAllowedCredit;
-					System.out.println(" account positivo "+anAccountAmount+" desired "+anAccountDesiredCredit+ " concesso "+anAccounAllowedCredit);
+					System.out.println(" positive account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit);
 					}
 				}
 				else{

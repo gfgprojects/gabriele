@@ -280,12 +280,12 @@ public void loadAgents(){
 			industriesList.add(new Industry((int)(i+minimumAbsoluteRank)));
 		}
 
-		//compute 1) aggregate production 2) number of firms in each industry and 3) production for each industry
+		//compute 1) aggregate production and demand 2) number of firms in each industry and 3) production and demand for each industry
 		aggregateProduction=0;
 		aggregateDemand=0;
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
-			aggregateProduction=aggregateProduction+aFirm.getProduction();
+			aggregateProduction+=aFirm.getProduction();
 			aggregateDemand+=aFirm.getDemand();
 			int position=(int)(aFirm.getProductAbsoluteRank()-minimumAbsoluteRank);
 			anIndustry=industriesList.get(position);

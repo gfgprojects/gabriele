@@ -230,7 +230,9 @@ public class Firm {
 
 
 	public void makeProduction(){
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" production capital "+productionCapital+" numberOfWorkers "+workersList.size());
+		}
 			numberOfEmployees=workersList.size();
 			sumOfWorkersProductivity=0;
 			for(int i=0;i<workersList.size();i++){
