@@ -900,11 +900,11 @@ System.out.println("      ----------------");
 			int degree=aConsumer.getDegree();
 			//double aWage;
 			switch(Context.wageSettingRule){
-				case 0: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
+				case 0: aConsumer.setWage(Context.unemploymentDole+Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*aConsumer.getProductivity()); 
 					break;
-				case 1: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
+				case 1: aConsumer.setWage(Context.unemploymentDole+Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[degree]);
 					break;
-				case 2: aConsumer.setWage(Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
+				case 2: aConsumer.setWage(Context.unemploymentDole+Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*OfficeForStatistics.averageProductivityOfWorkersInADegree[degree]);
 					break;
 				default: System.out.println("Unknown wage setting rule");
 					 break;

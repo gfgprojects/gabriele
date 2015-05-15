@@ -105,7 +105,7 @@ public class BankAccount{
 	public void resetAllowedCredit(){
 		allowedCredit=0;
 		if(Context.verboseFlag){
-			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" unpaid "+unpaidAmount+" "+ownerType);
+			System.out.println("     bank account "+account+" demanded credit "+demandedCredit+" allowed "+allowedCredit+" unpaid "+unpaidAmount+" owner type "+ownerType);
 		}
 	}
 	public void setUnpaidAmount(double ua){
