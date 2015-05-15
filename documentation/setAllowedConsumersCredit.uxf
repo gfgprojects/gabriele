@@ -5,48 +5,45 @@
     <coordinates>
       <x>0</x>
       <y>0</y>
-      <w>1143</w>
-      <h>1449</h>
+      <w>1039</w>
+      <h>1729</h>
     </coordinates>
     <panel_attributes>title:Bank.setAllowedConsumerCredit()
 Start
 totalDemandedCredit=0
 totalAllowedCredit=0
 While[while\bankAccountsList.\hasNext()]
-	get this account's\demanded credit
-	get this account's amount
-	increase totalDemandedCredit\by this account's demanded credit
+	get account
+	get account owner
 	If
-		[if\amount&gt;=0]
+		[if\owner=consumer]
+		get this account\demanded credit
+		get this account amount
+		increase totalDemandedCredit\by this account's demanded credit
 		If
-			[if\uniform&gt;0.5]
-			multiplier=0.5
-
-			[if\uniform&lt;=0.5]
-			multiplier=1.0
-		EndIf
-		set multiplier=1 if student
-		allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
-
-		[if\amount&lt;0]
-		If
-			[if\uniform&gt;0.5]
-			multiplier=0.5
-
-			[if\uniform&lt;=0.5]
-			multiplier=1.0
-		EndIf
-		set multiplier=1 if student
-		If
-			[if desiredCredit&lt;0]
-			allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+			[if\uniform&gt;Context.\consumersProbability\ToGetFunded]
+			multiplier=Context.\percentageOfCredit\AllowedToConsumers\WhenCreditIsNot\TotallyFunded
 
 			[else]
-			allowedCredit=0
+			multiplier=1.0
 		EndIf
-	allowedCredit =\multiplier*demandedCredit
-	set this account's \allowedCredit to\allowedCredit
-	increase totalAllowedCredit\by allowedCredit
+		set multiplier=1 if student
+		If
+			[if\account\amount &gt;0]
+			allowedCredit=multiplier*desiredCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+
+			[else]
+			If
+				[if\desired\Credit&lt;0]
+				allowedCredit=amount+\multiplier*\(desiredCredit-amount)
+
+				[else]
+				allowedCredit=0
+			EndIf
+		EndIf
+		increase totalAllowedCredit\by allowedCredit
+
+		[else]
 
 End
 </panel_attributes>

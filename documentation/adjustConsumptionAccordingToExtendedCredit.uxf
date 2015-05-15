@@ -3,25 +3,38 @@
   <element>
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
-      <x>20</x>
-      <y>0</y>
-      <w>603</w>
-      <h>879</h>
+      <x>0</x>
+      <y>20</y>
+      <w>1138</w>
+      <h>1209</h>
     </coordinates>
     <panel_attributes>title:Consumer.adjustConsumptionAccordingToExtendedCredit()
 Start
-get askedCredit from\the selected bank
-get allowedCredit from\the selected bank
-allowedDemand=0
 If
-	[if\allowedCredit\&gt; askedCredit\(note: the two\amounts are\negative)]
-	allowedDemand=\desiredDemand-\(-askedCredit-(-allowedCredit))
-	if allowedDemand&lt;subsistenceConsumption\allowedDemand=subsistenceConsumption
+	[if\a bank\with no unpaid\amount doesn't\exists]
+	If
+		[if\desiredDemand&gt;\(disposableIncome+\financialResources\InBankAccounts)]
+		allowedDemand=\disposableIncome+\financialResources\InBankAccounts;
 
-	[if\allowedCredit\&lt;= askedCredit]
-	allowedDemand=\desiredDemand
-While[while\demandsList.\hasNext()]
-	adjust demand:\demand=demand*\allowedDemand/\desiredDemand
+		[else]
+		allowedDemand=desiredDemand
+	EndIf
+
+	[else]
+	get askedCredit from\the best bank
+	get allowedCredit from\the best bank
+	allowedDemand=0
+	If
+		[if\allowedCredit\&gt; askedCredit\(note: the two\amounts are\negative)]
+		allowedDemand=\desiredDemand-\(-askedCredit-(-allowedCredit))
+		if allowedDemand&lt;subsistenceConsumption\allowedDemand=subsistenceConsumption
+
+		[if\allowedCredit\&lt;= askedCredit]
+		allowedDemand=\desiredDemand
+	EndIf
+	While[while\demandsList.\hasNext()]
+		adjust demand:\demand=demand*\allowedDemand/\desiredDemand
+
 End
 </panel_attributes>
     <additional_attributes/>

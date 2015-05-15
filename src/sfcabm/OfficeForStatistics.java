@@ -946,7 +946,7 @@ System.out.println("     number of firms "+firmsList.size());
 		Context.schedule.schedule(scheduleParameters,this,"scheduleStepStudentState");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,43.0);
-		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersStepConsumption");
+		Context.schedule.schedule(scheduleParameters,this,"scheduleConsumersStepDesiredConsumption");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,42.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksSetAllowedConsumersCredit");
@@ -1099,11 +1099,11 @@ System.out.println("     number of firms "+firmsList.size());
 		statAction=statActionFactory.createActionForIterable(consumersList,"stepStudentState",false);
 		statAction.execute();
 	}
-	public void scheduleConsumersStepConsumption(){
+	public void scheduleConsumersStepDesiredConsumption(){
 		System.out.println("CONSUMERS: STEP CONSUMPTION");
 		if(Context.verboseFlag){
 		}
-		statAction=statActionFactory.createActionForIterable(consumersList,"stepConsumption",false);
+		statAction=statActionFactory.createActionForIterable(consumersList,"stepDesiredConsumption",false);
 		statAction.execute();
 	}
 	public void scheduleBanksSetAllowedConsumersCredit(){

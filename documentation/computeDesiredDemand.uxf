@@ -5,10 +5,10 @@
     <coordinates>
       <x>20</x>
       <y>0</y>
-      <w>966</w>
-      <h>939</h>
+      <w>716</w>
+      <h>955</h>
     </coordinates>
-    <panel_attributes>title:OfficeForStatistics.computeDemand()
+    <panel_attributes>title:OfficeForStatistics.computeDesiredDemand()
 Start
 aggregateDemand=0
 set\each industry\demand=0
@@ -19,7 +19,7 @@ While[while\consumersList.\hasNext()]
 	While[for\i=0;\i&lt;ordersList.size();\i++]
 		anOrder=ordersList.get(i)
 		anIndustry=industriesList.get(i)
-		tmpDem=anOrder.getDemand()*(1-\Context.percentageOfDemandMissedBecauseOfGoodsMarketsInperfections)
+		tmpDem=anOrder.getDemand()*(1-\Context.percentageOfDemandMissed\BecauseOfGoodsMarketsInperfections)
 		anIndustry.increaseDemand by tmpDem
 		increase aggregateDemand by tmpDem
 		

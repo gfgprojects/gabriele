@@ -4,17 +4,18 @@
     <type>com.umlet.element.ActivityDiagramText</type>
     <coordinates>
       <x>0</x>
-      <y>0</y>
-      <w>1624</w>
-      <h>1785</h>
+      <y>20</y>
+      <w>1165</w>
+      <h>1439</h>
     </coordinates>
     <panel_attributes>title:Consumer.updateBankAccountAccordingToEffectiveConsumption()
 Start
 compute consumption\summing over the\demandsList
 If
 	[if\disposableIncome&gt;=\consumption]
-	compute available amount\after consuming
-
+	compute available resource\after consuming (saving)
+	if unpaidAmounts exist\use saving to repay
+	if there is residual saving\increase the amount of\the worst bank account
 
 	[if\disposableIncome&lt;\consumption]
 	decrease consumption by disposableIncome
@@ -30,34 +31,14 @@ If
 
 				[if\amount\&gt;=consumption]
 				set this bankAccount\to (amount-consumption)
+				consumption=0
 			EndIf
 
 			[if\amount&lt;0]
 		EndIf
 
-	the variable consumption\now contains the consumption\to be payed
-
-determine additional credit\available in the bestBankAccount
-If
-	[if unpaidAmountInBankAccounts&gt;0]
-	If
-		[if consumption&gt;0]
-		resources available for unpaid accounts\= additionalCreditAvailable in bestBankAccount\- consumption
-
-		[if consumption=0]
-		resources available for unpaid accounts\= additionalCreditAvailable in bestBankAccount\+ residual resources
-	EndIf
-	decrease unpaid amounts and accounts
-
-
-	[if unpaidAmountInBankAccounts=0]
-	If
-		[if consumption&gt;0]
-		set best bankAccount\equal to\account-consumption
-
-		[if consumption=0]
-		set worst bankAccount\equal to\account+residual resources
-	EndIf
+	the variable consumption\now contains the consumption\to be financed by debt\consumption is not negative
+	if consumption is positive\and bestBank exists\use credit allowed by best bank\to consume\\if residual allowed credit is present\in bestBankAccount, it is used to\reduce unpaid amount if it exists
 
 End
 </panel_attributes>

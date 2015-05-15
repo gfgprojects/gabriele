@@ -257,37 +257,28 @@ public class Bank {
 				anAccountAmount=aBankAccount.getAccount();
 				anAccountDesiredCredit=aBankAccount.getDemandedCredit();
 				demandedCredit+=-anAccountDesiredCredit;
-				if(anAccountAmount>=0){
-					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
-						multiplier=0.0;
-					}
-					else{
-						multiplier=1.0;
-					}
 
-					if(aConsumer.getIsStudentFlag()){
-						multiplier=1.0;
-					}
-
-					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
-					if(anAccountDesiredCredit<anAccountAmount){
-					sumOfHouseholdDesiredChangeInCredit+=anAccountDesiredCredit;
-					sumOfHouseholdAllowedChangeInCredit+=anAccounAllowedCredit;
-					System.out.println(" positive account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit);
-					}
+				if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
+					multiplier=Context.percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded;
 				}
 				else{
-					if(RandomHelper.nextDouble()>Context.consumersProbabilityToGetFunded){
-						multiplier=0.0;
-					}
-					else{
-						multiplier=1.0;
-					}
+					multiplier=1.0;
+				}
 
-					if(aConsumer.getIsStudentFlag()){
-						multiplier=1.0;
-					}
+				if(aConsumer.getIsStudentFlag()){
+					multiplier=1.0;
+				}
 
+
+				if(anAccountAmount>=0){
+					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
+					if(anAccountDesiredCredit<anAccountAmount){
+						sumOfHouseholdDesiredChangeInCredit+=anAccountDesiredCredit;
+						sumOfHouseholdAllowedChangeInCredit+=anAccounAllowedCredit;
+					}
+					System.out.println(" positive account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit);
+				}
+				else{
 					if(anAccountDesiredCredit<0){
 						anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
 					}
@@ -295,12 +286,10 @@ public class Bank {
 						anAccounAllowedCredit=0;
 					}
 					if(anAccountDesiredCredit<anAccountAmount){
-					sumOfHouseholdDesiredChangeInCredit+=(anAccountDesiredCredit-anAccountAmount);
-					sumOfHouseholdAllowedChangeInCredit+=(anAccounAllowedCredit-anAccountAmount);
-					System.out.println(" account negativo "+anAccountAmount+" desired "+anAccountDesiredCredit+ " concesso "+anAccounAllowedCredit+" new asked "+(anAccounAllowedCredit-anAccountAmount));
+						sumOfHouseholdDesiredChangeInCredit+=(anAccountDesiredCredit-anAccountAmount);
+						sumOfHouseholdAllowedChangeInCredit+=(anAccounAllowedCredit-anAccountAmount);
 					}
-
-
+						System.out.println(" negative account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit+" new allowed "+(anAccounAllowedCredit-anAccountAmount));
 				}
 				allowedCredit+=-anAccounAllowedCredit;
 				System.out.println("      askedCredit "+aBankAccount.getDemandedCredit());
