@@ -1,56 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
   <zoom_level>10</zoom_level>
   <element>
-    <type>com.umlet.element.ActivityDiagramText</type>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>20</x>
-      <y>20</y>
-      <w>983</w>
-      <h>1217</h>
+      <x>0</x>
+      <y>0</y>
+      <w>1142</w>
+      <h>1701</h>
     </coordinates>
     <panel_attributes>title:Bank.setAllowedFirmsCredit()
 Start
 totalDemandedCredit=0
 totalAllowedCredit=0
 While[while\bankAccountsList.\hasNext()]
-	get this account's\demanded credit
-	get this account's amount
-	increase totalDemandedCredit\by this account's demanded credit
+	get account
 	If
-		[if\amount&gt;=0]
+		[if\acccount\owner=\firm]
+		get this account's amount
+		get this account's\demanded credit
+		increase totalDemandedCredit\by this account's demanded credit
 		If
-			[if\uniform&gt;0.5]
-			multiplier=0.5
+			[if\uniform&lt;Context.\firmsProbability\ToHaveNew\DemandedCredit\CompletelyAllowed]
+			multiplier=1
 
-			[if\uniform&lt;=0.5]
-			multiplier=1.0
+			[else]
+			multiplier=Context.\percentageOfNew\DemandedCredit\AllowedToFirms\WhenCreditIsNot\CompletelyAllowed
 		EndIf
-		allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
-
-		[if\amount&lt;0]
 		If
-			[if\uniform&gt;0.5]
-			multiplier=0.5
+			[if\amount&gt;=0]
+			allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
 
-			[if\uniform&lt;=0.5]
-			multiplier=1.0
-		EndIf
-		allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+			[else]
+			If
+				[if\desiredCredit&gt;0]
+				allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
 
-	allowedCredit =\multiplier*demandedCredit
-	set this account's \allowedCredit to\allowedCredit
-	increase totalAllowedCredit\by allowedCredit
+				[else]
+				allowedCredit=0
 
+			EndIf
+		increase totalAllowedCredit\by allowedCredit
+
+		[else]
+
+	EndIf
 End
 
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.custom.Text</type>
+    <type>com.baselet.element.old.element.Text</type>
     <coordinates>
-      <x>160</x>
-      <y>60</y>
+      <x>140</x>
+      <y>40</y>
       <w>230</w>
       <h>100</h>
     </coordinates>

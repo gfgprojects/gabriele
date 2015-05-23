@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
   <zoom_level>10</zoom_level>
   <element>
-    <type>com.umlet.element.ActivityDiagramText</type>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>0</x>
+      <x>40</x>
       <y>0</y>
-      <w>2600</w>
-      <h>2123</h>
+      <w>2710</w>
+      <h>2401</h>
     </coordinates>
     <panel_attributes>title:Firm.payBackBankDebt()
 Start
+set unpaid amount to 0 in bank accounts
 totalAmountToRefund=0\financialResourcesInBankAccounts=0
 While[while\bankAccountsList.\hasNext()]
 	get account
@@ -55,15 +57,22 @@ If
 				[if\amount&lt;0]
 				toPayBackToThisAccount=\-(thisBankAccountAmount-\allowedCredit)
 				If
-					[if\resourceAvailableToRefund&gt;=\toPayBackToThisAcount]
+					[if\resourceAvailableToRefund&gt;=\toPayBackToThisAccount]
 					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
 					setBankAccount to allowedCredit
 
-					[if\totalAmountToRefund&lt;\thisAccountAmount]
-					increase\thisAccountUnpaidAmount by\-amount+allowedCredit
-					set thisAccountDemandedCredit to\amount+resoucesAvailableToRefund
-					decrease\resourceAvailableToRefund\by toPayBackToThisAcount
+					[if\resourceAvailableToRefund&lt;\toPayBackToThisAccount]
+					If
+						[if\resoucesAvailable\ToRefund&gt;0]
+						set account to account +\ resourcesAvailableToRefund
+						increase\thisAccountUnpaidAmount by\-amount+allowedCredit
+						decrease\resourceAvailableToRefund\by toPayBackToThisAcount
 
+						[else]
+						increase\thisAccountUnpaidAmount by\-amount+allowedCredit
+						decrease\resourceAvailableToRefund\by toPayBackToThisAcount
+						
+					EndIf
 				EndIf
 
 				[else]

@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
   <zoom_level>10</zoom_level>
   <element>
-    <type>com.umlet.element.ActivityDiagramText</type>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
       <x>20</x>
       <y>20</y>
-      <w>433</w>
-      <h>615</h>
+      <w>522</w>
+      <h>835</h>
     </coordinates>
     <panel_attributes>title:Firm.computeEconomicResultAndCapitalDepreciation()
 Start
@@ -15,8 +16,10 @@ cashOnHand=0
 While[for\over\workersList]
 	get worker
 	add to firmWageSum\this worker's wage
-cashOnHand=demand-firmsWageSum
-capitalDepreciation=demand*\Context.percentageOfCapitalDepreciation
+cashOnHand=\demand from households+\demand from firms-\firmsWageSum
+depreciationOfUsedCapital=\(demand from household+demand from firms)*\Context.percentageOfUsedCapitalDepreciation
+depreciationOfUnusedCapital=\(productionCapital-demand from household-demand from firms)*\Context.percentageOfUnusedCapitalDepreciation
+capitalDepreciation=\depreciationOfUsedCapital+\depreciationOfUnusedCapital
 productionCapital+=-capitalDepreciation
 End
 </panel_attributes>
