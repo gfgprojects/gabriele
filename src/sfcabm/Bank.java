@@ -172,7 +172,7 @@ public class Bank {
 						}
 							aBankAccount.setAccount(tmpAccount*(1+Context.interestRateOnLoans));
 							aBankAccount.setDemandedCredit(aBankAccount.getAccount());
-							if(RandomHelper.nextDouble()>0.5){
+							if(RandomHelper.nextDouble()<Context.firmsProbabilityToHaveOutstandingDebtCompletelyRenewed){
 								if(Context.verboseFlag){
 									System.out.println("      refund not asked");
 								}
@@ -182,7 +182,7 @@ public class Bank {
 								if(Context.verboseFlag){
 									System.out.println("      refund asked");
 								}
-								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*0.9);
+								aBankAccount.setAllowedCredit(aBankAccount.getAccount()*Context.percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed);
 							}
 				}
 	
@@ -311,22 +311,16 @@ public class Bank {
 				anAccountAmount=aBankAccount.getAccount();
 				anAccountDesiredCredit=aBankAccount.getDemandedCredit();
 				demandedCredit=demandedCredit-anAccountDesiredCredit;
+				if(RandomHelper.nextDouble()<Context.firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed){
+					multiplier=1.0;
+				}
+				else{
+					multiplier=Context.percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed;
+				}
 				if(anAccountAmount>=0){
-					if(RandomHelper.nextDouble()>0.5){
-						multiplier=0.5;
-					}
-					else{
-						multiplier=1.0;
-					}
 					anAccounAllowedCredit=multiplier*anAccountDesiredCredit;
 				}
 				else{
-					if(RandomHelper.nextDouble()>0.5){
-						multiplier=0.5;
-					}
-					else{
-						multiplier=1.0;
-					}
 					if(anAccountDesiredCredit<0){
 						anAccounAllowedCredit=anAccountAmount+multiplier*(anAccountDesiredCredit-anAccountAmount);
 					}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>1142</w>
+      <h>1763</h>
+    </coordinates>
+    <panel_attributes>title:Bank.setAllowedFirmsCredit()
+Start
+totalDemandedCredit=0
+totalAllowedCredit=0
+While[while\bankAccountsList.\hasNext()]
+	get account
+	If
+		[if\acccount\owner=\firm]
+		get this account's amount
+		get this account's\demanded credit
+		increase totalDemandedCredit\by this account's demanded credit
+		If
+			[if\uniform&lt;Context.\firmsProbability\ToHaveNew\DemandedCredit\CompletelyAllowed]
+			multiplier=1
+
+			[else]
+			multiplier=Context.\percentageOfNew\DemandedCredit\AllowedToFirms\WhenCreditIsNot\CompletelyAllowed
+		EndIf
+		If
+			[if\amount&gt;=0]
+			allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+
+			[else]
+			If
+				[if\desiredCredit&gt;0]
+				allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+
+				[else]
+				allowedCredit=0
+
+			EndIf
+		set this account allowed credit\to allowedCredit
+		increase totalAllowedCredit\by allowedCredit
+
+		[else]
+
+	EndIf
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>210</x>
+      <y>1120</y>
+      <w>330</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>540</x>
+      <y>1260</y>
+      <w>480</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>420</x>
+      <y>1480</y>
+      <w>240</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

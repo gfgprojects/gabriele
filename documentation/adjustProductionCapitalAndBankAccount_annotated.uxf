@@ -5,9 +5,9 @@
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
       <x>0</x>
-      <y>20</y>
-      <w>2731</w>
-      <h>2661</h>
+      <y>0</y>
+      <w>2867</w>
+      <h>2797</h>
     </coordinates>
     <panel_attributes>title:Firm.adjustProductionCapitalAndBankAccount()
 Start
@@ -15,11 +15,11 @@ If
 	[if\credit is needed\(creditToAsk&gt;0)]
 	If
 		[if\bestBank\exists]
-		get AvailableCredit\from best bank and\adjust account
+		amountAvailable\FromBestBank=\get availableCredit\from best bank
+		bestBankAccount\setAccount to\allowed credit
 
 		[else]
-		no bank accounts\modified
-		availableCredit=0
+		amountAvailable\FromBestBank=0
 	EndIf
 	While[for cycle\on bank\accounts]
 		getBankAccount
@@ -35,21 +35,21 @@ If
 	If
 		[if\cashOnHand&lt;0]
 		If
-			[if\availableCredit&gt;\(-cashOnHand)]
-			drecrease availableCredit\by cashOnHand
+			[if\amountAvailable\FromBestBank&gt;\(-cashOnHand)]
+			drecrease amountAvailable\FromBestBank by cashOnHand
 			cashOnHand=0
 			If
 				[if\unpaidAmountIn\BankAccounts&gt;0]
 				If
-					[if\availableCredit&gt;\unpaidAmount]
+					[if\amountAvailable\FromBestBank&gt;\unpaidAmount]
 					set unpaid amount\to 0 in all the accounts\and modify the accounts\accordingly
-					decrease availableCredit\by unpaid amount
+					decrease amountAvailable\FromBestBank\by unpaid amount
 					unpaidAmount=0
 
 					[else]
-					multiplier=\availableCredit/\unpaidAmount
-					set the unpaidAmount to\unpaidAmount*multiplier\in all bank accounts\and modify their accounts\accordingly
-					availableCredit=0
+					multiplier=\amountAvailable\FromBestBank/\unpaidAmount
+					set the unpaidAmount to\unpaidAmount*(1-multiplier)\in all bank accounts\and modify their accounts\accordingly
+					amountAvailableFrom\BestBank=0
 
 				EndIf
 
@@ -57,29 +57,29 @@ If
 
 			EndIf
 
-			[else]
-			increase cashOnHand\by available credit
-			available credit=0
+			[if\amountAvailable\FromBestBank&lt;=0]
+			increase cashOnHand by\amountAvailableFromBestBank
+			amountAvailableFromBestBank=0
 			promissory notes = -cashOnHand
 			cashOnHand=0
 		EndIf
-		investment=available credit
-		available credit=0
+		firmInvestment=amountAvailableFromBestBank
+		amountAvailableFromBestBank=0
 
 		[if\cashOnHand&gt;=0]
-		resourcesAvailable=\cashOnHand+\availableCredit
+		resourcesAvailable=\cashOnHand+\creditAvailableFromBestBank
 		If
 			[if\unpaidAmountIn\BankAccounts&gt;0]
 			If
-				[if\resourcesAvailable&gt;\unpaidAmount]
+				[if\resourcesAvailable&gt;\unpaidAmountIn\BankAccounts]
 				set unpaidAmount to zero\in each bankAccount and\modify their accounts\accordingly
-				decrease resourcesAvailable by\unpaidAmount
+				decrease resourcesAvailable by\unpaidAmountInBankAccounts
 				unpaidAmount=0
 				cashOnHand=0
 
 				[else]
-				multiplier=\resurcesAvailable/\unpaidAmount
-				set the unpaidAmount to\npaidAmount*multiplier\in all bank accounts\and modify their accounts\accordingly
+				multiplier=\resurcesAvailable/\unpaidAmountIn\BankAccounts
+				set the unpaidAmount to\unpaidAmount*(1-multiplier)\in all bank accounts\and modify their accounts\accordingly
 				resourcesAvailable=0
 			EndIf
 
@@ -90,68 +90,67 @@ If
 	EndIf
 
 	[if\credit is not needed\(creditToAsk&lt;0)]
-	amountToWithdrawFromBank=0
+	amountToWithdrawFromBanks=0
 	If
 		[if\cashOnHand&lt;0]
-		increase amountToWithdraw\fromBank by -cashOnHand
+		increase amountToWithdraw\fromBanks by -cashOnHand
 		cashOnHand=0
 		If
-			[if\desiredCapital&gt;\productionCapital]
-			investment=desiredCapital-\productionCapital
-			increase amountToWithdraw\fromBank by investment
+			[if\desiredProductionCapital&gt;\productionCapital]
+			firmInvestment=desiredProductionCapital-\productionCapital
+			increase amountToWithdraw\fromBanks by FirmInvestment
 
 			[else]
-			investment=0
+			firmInvestment=0
 		EndIf
 		If
-			[if\unpaidAmount&gt;0]
-			increase amountToWithdraw\fromBank by unpaidAmount
-			set unpaidAmount to 0 in\all banks
+			[if\unpaidAmountIn\BankAccounts&gt;0]
+			increase amountToWithdraw\fromBanks by unpaidAmount\InBankAccounts
+			set unpaidAmountInBank\Accounts to 0 in all banks
 
-			[if\unpaidAmount=0]
+			[if\unpaidAmountIn\bankAccounts=0]
 		EndIf
 
 		[if\cashOnHand&gt;=0]
 		If
-			[if\unpaidAmount&gt;0]
+			[if\unpaidAmountIn\BankAccounts&gt;0]
+			set unpaidAmount to 0\in all banks 
 			If
-				[if\cashOnHand&gt;=\unpaidAmount]
-				decrease cashOnHand\by unpaidAmount
-				unpaidAmount=0
-				set unpaidAmount to 0\in all banks 
+				[if\cashOnHand&gt;=\unpaidAmount\InBankAccounts]
+				decrease cashOnHand\by unpaidAmountIn\BankAccounts
+				unpaidAmountInBankAccounts=0
 
-				[if\cashOnHand&lt;\unpaidAmount]
-				cashOnHand=0
-				increase amountToWithdraw\fromBanks by unpaidAmount-\cashOnHand
-				
+				[if\cashOnHand&lt;\unpaidAmount\InBankAccounts]
+				increase amountToWithdraw\fromBanks by unpaidAmount\InBankAccounts-cashOnHand
+				cashOnHand=0				
 			EndIf
 
-			[if\unpaidAmount=0]
+			[if\unpaidAmountIn\BankAccounts=0]
 		EndIf
 		If
-			[if\desiredCapital&gt;\productionCapital]
-			investment=desireCapital-\productionCapital
+			[if\desiredProductionCapital&gt;\productionCapital]
+			firmInvestment=\desireProductionCapital-productionCapital
 			If
-				[if\cashOnHand-\(desiredCapital-\productionCapital)&gt;=0]
-				decrease\cashOnHand by\(desiredCapital-\productionCapital)
+				[if\cashOnHand-\firmInvestment&gt;=0]
+				decrease\cashOnHand by\firmInvestment
 				increase worstBankAccount\by cashOnHand
 				cashOnHand=0
 
 				[else]
-				increase amountToWithdraw\fromBanks by (desiredCapital-\productionCapital)-cashOnHand
+				increase amountToWithdraw\fromBanks by\firmInvestment-cashOnHand
 				cashOnHand=0
 				
 			EndIf
 
 			[else]
-			investment=0
+			firmInvestment=0
 			increase\worstBankAccount\by cashOnHand
 			cashOnHand=0
 		EndIf
-	multiplier=\(financialResourcesInBankAccounts-\amountToWithdrawFromBanks)/\financialResourcesInBankAccounts
-	multiply positive bank accounts by\multiplier
+	multiplier=\amountToWithdrawFromBanks/\financialResourcesInBankAccounts
+	multiply positive bank accounts by\(1-multiplier)
 EndIf
-increase productionCapital by investment
+increase productionCapital by firmInvestment
 End
 </panel_attributes>
     <additional_attributes/>
@@ -160,7 +159,7 @@ End
     <id>UMLNote</id>
     <coordinates>
       <x>30</x>
-      <y>70</y>
+      <y>50</y>
       <w>200</w>
       <h>30</h>
     </coordinates>
@@ -172,7 +171,7 @@ bg=yellow</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>30</x>
-      <y>110</y>
+      <y>90</y>
       <w>200</w>
       <h>30</h>
     </coordinates>
@@ -183,10 +182,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>710</x>
-      <y>370</y>
+      <x>760</x>
+      <y>350</y>
       <w>330</w>
-      <h>70</h>
+      <h>90</h>
     </coordinates>
     <panel_attributes>
 bg=yellow</panel_attributes>
@@ -195,10 +194,10 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>500</x>
-      <y>2380</y>
-      <w>230</w>
-      <h>50</h>
+      <x>470</x>
+      <y>2500</y>
+      <w>360</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>
 bg=green</panel_attributes>
@@ -207,8 +206,8 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1270</x>
-      <y>2210</y>
+      <x>1340</x>
+      <y>2320</y>
       <w>240</w>
       <h>50</h>
     </coordinates>
@@ -219,10 +218,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1380</x>
-      <y>2590</y>
-      <w>310</w>
-      <h>50</h>
+      <x>1430</x>
+      <y>2710</y>
+      <w>350</w>
+      <h>40</h>
     </coordinates>
     <panel_attributes>
 bg=green</panel_attributes>
@@ -231,8 +230,8 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1840</x>
-      <y>1940</y>
+      <x>2010</x>
+      <y>2050</y>
       <w>280</w>
       <h>180</h>
     </coordinates>
@@ -243,9 +242,9 @@ bg=yellow</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>2170</x>
-      <y>1180</y>
-      <w>510</w>
+      <x>2280</x>
+      <y>1280</y>
+      <w>560</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>
@@ -255,9 +254,9 @@ bg=green</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>1540</x>
-      <y>710</y>
-      <w>390</w>
+      <x>1600</x>
+      <y>760</y>
+      <w>540</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>
@@ -268,7 +267,7 @@ bg=green</panel_attributes>
     <id>UMLNote</id>
     <coordinates>
       <x>30</x>
-      <y>150</y>
+      <y>130</y>
       <w>200</w>
       <h>30</h>
     </coordinates>
@@ -279,8 +278,8 @@ bg=red</panel_attributes>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>620</x>
-      <y>1590</y>
+      <x>650</x>
+      <y>1600</y>
       <w>260</w>
       <h>50</h>
     </coordinates>

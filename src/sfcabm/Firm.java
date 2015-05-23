@@ -294,7 +294,7 @@ public class Firm {
 				aBankAccount.setAccount(0);
 			}
 		}
-//identify the bank account where resources are deposited and accounts with no unpaid amount
+//identify the bank account where resources will be deposited if available and accounts with no unpaid amount
 		int positionOfWorstBankAccount=0;
 		aBankAccount=(BankAccount)bankAccountsList.get(0);
 		double worstAccount=aBankAccount.getAccount();
@@ -341,34 +341,29 @@ public class Firm {
 		System.out.println("     Firm "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
 
 //computation and requests of new credit
+//
+
+
 		double creditToAsk;
 		if(desiredProductionCapital>productionCapital){
-			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
+			creditToAsk=desiredProductionCapital-productionCapital+unpaidAmountInBankAccounts-cashOnHand-financialResourcesInBankAccounts;
 			creditToAskInSetDesiredCredit=creditToAsk;
-
-			if(creditToAsk>0){
-				if(bankAccountsListWithNoUnpaidAmount.size()>0){
-					bestBankAccount.setDesiredCredit(0.0,creditToAsk);
-				}
-			}
-			else{
-				creditToAsk=0;
-				creditToAskInSetDesiredCredit=creditToAsk;
+		}
+		else{
+			creditToAsk=unpaidAmountInBankAccounts-cashOnHand-financialResourcesInBankAccounts;
+			creditToAskInSetDesiredCredit=creditToAsk;
+		}
+		if(creditToAsk>0){
+			if(bankAccountsListWithNoUnpaidAmount.size()>0){
+				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
 			}
 		}
 		else{
-			if(cashOnHand+financialResourcesInBankAccounts<=0){
-				creditToAsk=-(cashOnHand+financialResourcesInBankAccounts)+unpaidAmountInBankAccounts;
-				creditToAskInSetDesiredCredit=creditToAsk;
-				if(bankAccountsListWithNoUnpaidAmount.size()>0){
-					bestBankAccount.setDesiredCredit(0.0,creditToAsk);
-				}
-			}
-			else{
-				creditToAsk=0;
-				creditToAskInSetDesiredCredit=creditToAsk;
-			}
+			creditToAsk=0;
+			creditToAskInSetDesiredCredit=creditToAsk;
 		}
+
+//verboseFlag
 		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" depreciated production Capital "+productionCapital+" demand from household +firms "+(demand+ordersOfProductsForInvestmentPurpose)+" desiredDemand from household + firms "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" desiredProductionCapital "+desiredProductionCapital+" cashOnHand "+cashOnHand+" financialResourcesInBankAccounts "+financialResourcesInBankAccounts+" asked credit "+creditToAsk);
 System.out.println("      ----------------");
@@ -394,7 +389,7 @@ System.out.println("      ----------------");
 
 	public void adjustProductionCapitalAndBankAccount(){
 
-	if(Context.saveMicroData){
+		if(Context.saveMicroData){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -406,183 +401,182 @@ System.out.println("      ----------------");
 			catch(IOException e) {System.out.println("IOException");}
 		}
 
-
-
-		double creditToAsk;
-		if(desiredProductionCapital>productionCapital){
-				System.out.println("     increasing capital");
-			creditToAsk=desiredProductionCapital-productionCapital-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
-
-			if(creditToAsk>0){
-				System.out.println("     asked credit");
-				double amountAvailableFromBestBank=0;
-				if(bankAccountsListWithNoUnpaidAmount.size()>0){
-					amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+		double promissoryNotes=0;
+		//if credit was asked in setDesiredCredit method
+		if(creditToAskInSetDesiredCredit>0){
+			//get new available credit
+			double amountAvailableFromBestBank=0;
+			if(bankAccountsListWithNoUnpaidAmount.size()>0){
+				amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+				bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+			}
+			//withdraw all the deposits and put it in the cashOnHand
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				if(aBankAccount.getAccount()>0){
+					cashOnHand+=aBankAccount.getAccount();
+					aBankAccount.setAccount(0);
 				}
-				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						aBankAccount.setUnpaidAmount(0);
-					}
-					amountAvailableFromBestBank+=-unpaidAmountInBankAccounts;
-					if(cashOnHand<0){
-						if(amountAvailableFromBestBank>(-cashOnHand)){
-							amountAvailableFromBestBank+=cashOnHand;
-							firmInvestment=amountAvailableFromBestBank;
+			}
+			if(cashOnHand<0){
+				if(amountAvailableFromBestBank>(-cashOnHand)){
+					amountAvailableFromBestBank+=cashOnHand;
+					cashOnHand=0;
+					if(unpaidAmountInBankAccounts>0){
+						if(amountAvailableFromBestBank>unpaidAmountInBankAccounts){
+							for(int i=0;i<bankAccountsList.size();i++){
+								aBankAccount=(BankAccount)bankAccountsList.get(i);
+								double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+								if(thisBankUnpaidAmount>0){
+									aBankAccount.setUnpaidAmount(0);
+									aBankAccount.setAccount(aBankAccount.getAccount()-thisBankUnpaidAmount);
+								}
+							}
+							amountAvailableFromBestBank+=-unpaidAmountInBankAccounts;
+							unpaidAmountInBankAccounts=0;
 						}
 						else{
-							cashOnHand+=amountAvailableFromBestBank;
+							double multiplier=amountAvailableFromBestBank/unpaidAmountInBankAccounts;
+							for(int i=0;i<bankAccountsList.size();i++){
+								aBankAccount=(BankAccount)bankAccountsList.get(i);
+								double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+								if(thisBankUnpaidAmount>0){
+									aBankAccount.setUnpaidAmount((1-multiplier)*thisBankUnpaidAmount);
+									aBankAccount.setAccount(aBankAccount.getAccount()-multiplier*thisBankUnpaidAmount);
+								}
+							}
 							amountAvailableFromBestBank=0;
-							firmInvestment=amountAvailableFromBestBank;
 						}
-							productionCapital+=firmInvestment;
-							bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					}
+					else{
 					}
 				}
 				else{
-					double multiplier=1-(amountAvailableFromBestBank/unpaidAmountInBankAccounts);
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
-					}
-					bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					cashOnHand+=amountAvailableFromBestBank;
+					amountAvailableFromBestBank=0;
+					promissoryNotes=cashOnHand;
+					cashOnHand=0;
 				}
-
-
-			/*
-
-				if(bestBankAccount.getAllowedCredit()<=bestBankAccount.getDemandedCredit()){
-					double tmpProductionCapital=productionCapital+cashOnHand+financialResourcesInBankAccounts-aBankAccount.getAllowedCredit()+aBankAccount.getAccount();
-					if(tmpProductionCapital>=desiredProductionCapital){
-						System.out.println("      asked credit; totally allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
-						firmInvestment=desiredProductionCapital-productionCapital;
-						productionCapital=desiredProductionCapital;
-						bestBankAccount.setAccount(aBankAccount.getDemandedCredit());
-					}
-					else{
-						System.out.println("      asked credit; partially allowed    tmpPC "+tmpProductionCapital+" desiredPC "+desiredProductionCapital);
-						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
-						firmInvestment=tmpProductionCapital-productionCapital;
-						productionCapital=tmpProductionCapital;
-					}
-				}
-				//if refund is asked (however, this is performed in one of the previous step and excluded here: the program will never enter in this if) 
-				else{
-						System.out.println("      asked credit; refund asked");
-					if(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts>aBankAccount.getAllowedCredit()){
-						firmInvestment=aBankAccount.getAccount()+aBankAccount.getAllowedCredit()+cashOnHand+financialResourcesInBankAccounts;
-						productionCapital+=(aBankAccount.getAccount()+aBankAccount.getAllowedCredit()+cashOnHand+financialResourcesInBankAccounts);
-						aBankAccount.setAccount(aBankAccount.getAllowedCredit());
-					}
-					else{
-						System.out.println("      Firm cannot refund");
-						aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
-						firmInvestment=0;
-					}
-				}
-
-		*/
+				firmInvestment=amountAvailableFromBestBank;
+				amountAvailableFromBestBank=0;
 			}
+			//if cashOnHand>=0
 			else{
-						System.out.println("      available funds are enough to finance new investment and repay unpaid credit; the excess is deposited");
-				firmInvestment=desiredProductionCapital-productionCapital;
-				productionCapital=desiredProductionCapital;
-				worstBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
-				creditToAsk=0;
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					if(aBankAccount.getUnpaidAmount()>0){
-						aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
-						aBankAccount.setUnpaidAmount(0);
+				double resourcesAvailable=cashOnHand+amountAvailableFromBestBank;
+				if(unpaidAmountInBankAccounts>0){
+					if(resourcesAvailable>unpaidAmountInBankAccounts){
+						for(int i=0;i<bankAccountsList.size();i++){
+							aBankAccount=(BankAccount)bankAccountsList.get(i);
+							double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+							if(thisBankUnpaidAmount>0){
+								aBankAccount.setUnpaidAmount(0);
+								aBankAccount.setAccount(aBankAccount.getAccount()-thisBankUnpaidAmount);
+							}
+						}
+						resourcesAvailable+=-unpaidAmountInBankAccounts;
+						unpaidAmountInBankAccounts=0;
+					}
+					else{
+						double multiplier=resourcesAvailable/unpaidAmountInBankAccounts;
+						for(int i=0;i<bankAccountsList.size();i++){
+							aBankAccount=(BankAccount)bankAccountsList.get(i);
+							double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+							if(thisBankUnpaidAmount>0){
+								aBankAccount.setUnpaidAmount((1-multiplier)*thisBankUnpaidAmount);
+								aBankAccount.setAccount(aBankAccount.getAccount()-multiplier*thisBankUnpaidAmount);
+							}
+						}
+						resourcesAvailable=0;
 					}
 				}
+				else{
+				}
+				firmInvestment=resourcesAvailable;
+				resourcesAvailable=0;
 			}
-			
 		}
+		//if credit was not asked in setDesiredCredit method (creditToAskInSetDesiredCredit=0)
 		else{
-				System.out.println("     decreasing capital");
-			   firmInvestment=desiredProductionCapital-productionCapital;
-//			   productionCapital=desiredProductionCapital;
-			creditToAsk=-cashOnHand-financialResourcesInBankAccounts+unpaidAmountInBankAccounts;
-
-			if(creditToAsk>0){
-				System.out.println("     credit asked "+creditToAsk);
-				double amountAvailableFromBestBank=0;
-				if(bankAccountsListWithNoUnpaidAmount.size()>0){
-					amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
+			double amountTowithdrawFromBanks=0;
+			if(cashOnHand<0){
+				amountTowithdrawFromBanks+=cashOnHand;
+				cashOnHand=0;
+				if(desiredProductionCapital>productionCapital){
+					firmInvestment=desiredProductionCapital-productionCapital;
+					amountTowithdrawFromBanks+=firmInvestment;
 				}
-				if(unpaidAmountInBankAccounts<amountAvailableFromBestBank){
+				else{
+					firmInvestment=0;			
+				}
+				if(unpaidAmountInBankAccounts>0){
+					amountTowithdrawFromBanks+=unpaidAmountInBankAccounts;
 					for(int i=0;i<bankAccountsList.size();i++){
 						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						if(aBankAccount.getUnpaidAmount()>0){
-							aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
+						double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+						if(thisBankUnpaidAmount>0){
 							aBankAccount.setUnpaidAmount(0);
+							aBankAccount.setAccount(aBankAccount.getAccount()-thisBankUnpaidAmount);
 						}
 					}
-					amountAvailableFromBestBank+=-unpaidAmountInBankAccounts;
-					if(cashOnHand<0){
-						if(amountAvailableFromBestBank>(-cashOnHand)){
-							amountAvailableFromBestBank+=cashOnHand;
-							cashOnHand=0;
+
+				}
+				else{
+				}
+
+			}
+			//if cashOnHand >=0
+			else{
+				if(unpaidAmountInBankAccounts>0){
+					for(int i=0;i<bankAccountsList.size();i++){
+						aBankAccount=(BankAccount)bankAccountsList.get(i);
+						double thisBankUnpaidAmount=aBankAccount.getUnpaidAmount();
+						if(thisBankUnpaidAmount>0){
+							aBankAccount.setUnpaidAmount(0);
+							aBankAccount.setAccount(aBankAccount.getAccount()-thisBankUnpaidAmount);
 						}
-						else{
-							cashOnHand+=amountAvailableFromBestBank;
-							amountAvailableFromBestBank=0;
-						}
-							bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					}
+					if(cashOnHand>unpaidAmountInBankAccounts){
+						cashOnHand+=-unpaidAmountInBankAccounts;
+						unpaidAmountInBankAccounts=0;
+					}
+					else{
+						amountTowithdrawFromBanks+=(unpaidAmountInBankAccounts-cashOnHand);
+						cashOnHand=0;
 					}
 				}
 				else{
-					double multiplier=1-(amountAvailableFromBestBank/unpaidAmountInBankAccounts);
-					for(int i=0;i<bankAccountsList.size();i++){
-						aBankAccount=(BankAccount)bankAccountsList.get(i);
-						if(aBankAccount.getUnpaidAmount()>0){
-							aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount()*(1-multiplier));
-							aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
-						}
+				}
+
+				if(desiredProductionCapital>productionCapital){
+					firmInvestment=desiredProductionCapital-productionCapital;
+					if(cashOnHand>firmInvestment){
+						cashOnHand+=-firmInvestment;
+						worstBankAccount.setAccount(worstBankAccount.getAccount()+cashOnHand);
+						cashOnHand=0;
 					}
-					if(bankAccountsListWithNoUnpaidAmount.size()>0){
-						bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
+					else{
+						amountTowithdrawFromBanks+=firmInvestment-cashOnHand;
+						cashOnHand=0;
 					}
 				}
+				else{
+					firmInvestment=0;
+					worstBankAccount.setAccount(worstBankAccount.getAccount()+cashOnHand);
+					cashOnHand=0;
+				}
 			}
-			else{
-				System.out.println("      credit not asked "+creditToAsk);
-				firmInvestment=desiredProductionCapital-productionCapital;
-//				productionCapital=desiredProductionCapital;
-				worstBankAccount.setAccount(aBankAccount.getAccount()-creditToAsk);
-				creditToAsk=0;
-				for(int i=0;i<bankAccountsList.size();i++){
-					aBankAccount=(BankAccount)bankAccountsList.get(i);
-					if(aBankAccount.getUnpaidAmount()>0){
-						aBankAccount.setAccount(aBankAccount.getAccount()+aBankAccount.getUnpaidAmount());
-						aBankAccount.setUnpaidAmount(0);
-					}
-				}creditToAsk=0;
+			double multiplier=amountTowithdrawFromBanks/financialResourcesInBankAccounts;
+			for(int i=0;i<bankAccountsList.size();i++){
+				aBankAccount=(BankAccount)bankAccountsList.get(i);
+				double thisBankAccount=aBankAccount.getAccount();
+				if(thisBankAccount>0){
+					aBankAccount.setAccount(aBankAccount.getAccount()*(1-multiplier));
+				}
 			}
 
-
-			/*
-			   firmInvestment=desiredProductionCapital-productionCapital;
-			   productionCapital=desiredProductionCapital;
-			   if(cashOnHand+financialResourcesInBankAccounts<0){
-			   if(aBankAccount.getDemandedCredit()<aBankAccount.getAllowedCredit()){
-			   System.out.println("      capital reduction; refund asked but not enough internal funds");
-			   System.out.println("      Firm cannot refund");
-			   aBankAccount.increaseUnpaidAmount(-aBankAccount.getAccount()+aBankAccount.getAllowedCredit());
-			   }
-			   else{
-			   aBankAccount.setAccount(aBankAccount.getDemandedCredit());
-			   System.out.println("      capital reduction; allowed credit is enough to cover negative internal funds");
-			   }
-			   }
-			   else{
-			   aBankAccount.setAccount(aBankAccount.getAccount()+cashOnHand+financialResourcesInBankAccounts);
-			   System.out.println("      capital reduction; positive internal funds that are deposited");
-			   creditToAsk=0;
-			   }
-			   */
 		}
+		productionCapital+=firmInvestment;
+
 
 		cashOnHandAfterRefundingBank=cashOnHand;
 
@@ -591,7 +585,7 @@ System.out.println("      ----------------");
 			System.out.println("     -----------");
 		}
 
-	if(Context.saveMicroData){
+		if(Context.saveMicroData){
 			try{
 				for(int i=0;i<bankAccountsList.size();i++){
 					aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -602,10 +596,6 @@ System.out.println("      ----------------");
 			}
 			catch(IOException e) {System.out.println("IOException");}
 		}
-
-
-
-
 
 	}
 
@@ -717,8 +707,8 @@ System.out.println("      ----------------");
 		cashOnHand=demand+ordersOfProductsForInvestmentPurpose-firmWageSum;
 		cashOnHandWhenComputingEconomicResult=cashOnHand;
 		//		capitalDepreciation=productionCapital*Context.percentageOfCapitalDepreciation;
-		depreciationOfUsedCapital=demand*Context.percentageOfUsedCapitalDepreciation;
-		depreciationOfUnusedCapital=(productionCapital-demand)*Context.percentageOfUnusedCapitalDepreciation;
+		depreciationOfUsedCapital=(demand+ordersOfProductsForInvestmentPurpose)*Context.percentageOfUsedCapitalDepreciation;
+		depreciationOfUnusedCapital=(productionCapital-demand-ordersOfProductsForInvestmentPurpose)*Context.percentageOfUnusedCapitalDepreciation;
 		capitalDepreciation=depreciationOfUsedCapital+depreciationOfUnusedCapital;
 		if(Context.verboseFlag){
 			System.out.print("     firm "+identity+" demand "+(demand+ordersOfProductsForInvestmentPurpose)+" payed wages "+firmWageSum+" cashOnHand "+cashOnHand+" productionCapital "+productionCapital+" depreciation "+capitalDepreciation);
