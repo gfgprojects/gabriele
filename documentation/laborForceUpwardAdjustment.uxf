@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>90</x>
+      <y>0</y>
+      <w>662</w>
+      <h>415</h>
+    </coordinates>
+    <panel_attributes>title:Firm.laborForceUpwardAdjustment()
+Start
+If
+	[if\Context.Firms\Workers\Matching=0]
+	hireUsingReceivedCV()
+	
+	[if\Context.Firms\Workers\Matching=1]
+	hireUsingReceivedCV()
+	sendVacancies()
+
+	[if\Context.Firms\Workers\Matching=2]
+	\
+	sendVacancies()
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>470</y>
+      <w>602</w>
+      <h>1103</h>
+    </coordinates>
+    <panel_attributes>title:Firm.hireUsingCV()
+Start
+If
+	[if\hadFired]
+
+	[else]
+	While[while\production\Capacity\After\Workforce\Adjustment\&lt;\(desired\Demand+\ordersOf\Products\For\Investment\Purpose)\&amp;&amp;\applications\List.hasNext()]
+		get curriculum sender
+		If
+			[if\sender is\employed]
+
+			[if\sender is\unemployed]
+			hire the\CV sender
+			increase\Production\Capacity\After\Workforce\Adjustment
+
+EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>640</x>
+      <y>470</y>
+      <w>384</w>
+      <h>743</h>
+    </coordinates>
+    <panel_attributes>title:Firm.sendVacancies()
+Start
+If
+	[if\hadFired]
+	If
+		[production\Capacity\After\Workforce\Adjustment\&lt;\(desired\Demand+\ordersOf\Products\For\Investment\Purpose)]
+		prepare anOffer
+		send the offerr
+
+		[else]
+	EndIf
+
+	[else]
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

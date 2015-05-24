@@ -912,8 +912,8 @@ System.out.println("      ----------------");
 		if(hadFired){
 		}
 		else{
-			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand*productionCapital/desiredProductionCapital)){
-				myOffer = new LaborOffer(this,identity,(demand-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
+			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand+ordersOfProductsForInvestmentPurpose)){
+				myOffer = new LaborOffer(this,identity,((desiredDemand+ordersOfProductsForInvestmentPurpose)-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
 				try{
 					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
 				}
