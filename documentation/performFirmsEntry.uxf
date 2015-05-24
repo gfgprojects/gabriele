@@ -5,9 +5,9 @@
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
       <x>20</x>
-      <y>20</y>
-      <w>476</w>
-      <h>475</h>
+      <y>0</y>
+      <w>485</w>
+      <h>539</h>
     </coordinates>
     <panel_attributes>title:OfficeForStatistics.perforFirmsEntry()
 Start
@@ -17,10 +17,42 @@ While[while\newFirmsList.hasnext()]
 	firm setupBankAccount()
 	add this firm to its industry
 
-resetProductAttractiveness()
+resetProductAttractiveness()\\(entry of new Firms modifies\the competition in the product\market)
 
 End
 </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>610</y>
+      <w>467</w>
+      <h>509</h>
+    </coordinates>
+    <panel_attributes>title:Firm.setupBankAccount()
+Start
+productionCapital=Context.productionOfNewEnteringFirm
+firmInvestiment=productionCapital
+desiredDemand=productionCapital
+equity=productionCapital*uniform(\Context.minFirmInitialEquityRatio,\Context.maxFirmInitialEquityRatio)
+debt=productionCapital-equity
+extract Context.numberOfBanksAFirmCanBeCustumerOf\different banks from the banksList
+open an account in each bank.\The account in each bank is set to\debt/Context.numberOfBanksAFirmCanBeCustumerOf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>40</x>
+      <y>250</y>
+      <w>260</w>
+      <h>380</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;360.0;10.0;10.0;240.0;10.0</additional_attributes>
   </element>
 </diagram>

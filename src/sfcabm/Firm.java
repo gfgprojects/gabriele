@@ -195,7 +195,7 @@ public class Firm {
 		desiredProductionCapital=productionCapital;
 //		desiredDemand=Context.parameterOfProductivityInProductionFuncion;
 		desiredDemand=(int)productionCapital;
-		equity=productionCapital*RandomHelper.nextDoubleFromTo(0.1,0.3);
+		equity=productionCapital*RandomHelper.nextDoubleFromTo(Context.minFirmInitialEquityRatio,Context.maxFirmInitialEquityRatio);
 		debt=productionCapital-equity;
 		if(Context.verboseFlag){
 		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
@@ -217,9 +217,9 @@ public class Firm {
 			if(Context.verboseFlag){
 				System.out.println("       open account");
 			}
-			aBankAccount=new BankAccount(-debt,this,aBank);
-			aBankAccount.setAccount(-debt);
-			aBankAccount.setAllowedCredit(-debt);
+			aBankAccount=new BankAccount(-debt/numberOfBanksToBeCustomerOf,this,aBank);
+			aBankAccount.setAccount(-debt/numberOfBanksToBeCustomerOf);
+			aBankAccount.setAllowedCredit(-debt/numberOfBanksToBeCustomerOf);
 			bankAccountsList.add(aBankAccount);
 			aBank.addAccount(aBankAccount);
 
@@ -576,6 +576,10 @@ System.out.println("      ----------------");
 
 		}
 		productionCapital+=firmInvestment;
+//the following code is needed for the correct functioning of the OfficeForStatistics.computeInvestments()
+		if(desiredProductionCapital<productionCapital){
+			firmInvestment=desiredProductionCapital-productionCapital;
+		}
 
 
 		cashOnHandAfterRefundingBank=cashOnHand;
@@ -610,7 +614,7 @@ System.out.println("      ----------------");
 		while(workersListIterator.hasNext()){
 			aConsumer=workersListIterator.next();
 			if(aConsumer.getAge()<Context.consumerExitAge){
-				productionCapacityAfterWorkforceAdjustment=productionCapacityAfterWorkforceAdjustment+aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+				productionCapacityAfterWorkforceAdjustment+=aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
 			}
 			else{
 				aConsumer.receiveRetirementNew();

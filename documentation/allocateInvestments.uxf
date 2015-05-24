@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>464</w>
+      <h>337</h>
+    </coordinates>
+    <panel_attributes>title:allocateInvestments
+Start
+While[for cycle\on industriesList]
+	get anIndustry
+	anIndustry.allocateInvestments()
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>380</y>
+      <w>547</w>
+      <h>417</h>
+    </coordinates>
+    <panel_attributes>title:Industry.allocateInvestments()
+Start
+While[for cycle\on firmsList]
+	get aFirm
+	aFirm.setOrdersOfProductsForInvestmentPurpose\(industryProduction,industryInvestments)\\this method allocate demand of product\proportionally to the market share\the firm has in the industry
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>30</x>
+      <y>200</y>
+      <w>210</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;180.0;10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+</diagram>

@@ -7,7 +7,7 @@
       <x>0</x>
       <y>0</y>
       <w>2867</w>
-      <h>2797</h>
+      <h>3075</h>
     </coordinates>
     <panel_attributes>title:Firm.adjustProductionCapitalAndBankAccount()
 Start
@@ -151,6 +151,11 @@ If
 	multiply positive bank accounts by\(1-multiplier)
 EndIf
 increase productionCapital by firmInvestment
+If
+	[if\desiredProductionCapital&lt;\productionCapital]
+	firmInvestment=\desiredProductionCapital-\productionCapital
+
+	[else]
 End
 </panel_attributes>
     <additional_attributes/>
@@ -286,5 +291,39 @@ bg=red</panel_attributes>
     <panel_attributes>
 bg=red</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1750</x>
+      <y>2840</y>
+      <w>310</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>code needed  for the correct functioning of the OfficeForStatistics.computeInvestments()
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1660</x>
+      <y>2780</y>
+      <w>110</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;90.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1650</x>
+      <y>2900</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;100.0;100.0;10.0</additional_attributes>
   </element>
 </diagram>

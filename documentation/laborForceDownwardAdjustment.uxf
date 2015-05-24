@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>1071</w>
+      <h>1671</h>
+    </coordinates>
+    <panel_attributes>title:Firm.laborForceDownwardAdjustment()
+Start
+productionCapacityAfterWorkForceAjustment=0
+While[for cycle\on workers]
+	If
+		[worker's age&lt;Context.\consumerExitAge]
+		increase\productionCapacityAfter\WorkForceAjustment by\this worker's productivity
+
+		[worker's age&gt;=Context.\consumerExitAge]
+		remove worker from\workersList
+	EndIf
+hadFired=false
+If
+	[if\productionCapacityAfter\WorkForceAdjustment&gt;\desiredDemand+\ordersOfProductsFor\InvestmentPurpose]
+	While[while\productionCapacity\AfterWorkForceAdjustment\greater than\desiredDemand+\ordersOfProductsFor\InvestmentPurpose]
+		take the last worker in\workersList
+		decrease\productionCapacityAfter\WorkForceAdjustment\by this worket productivity
+		If
+			[if\productionCapacityAfter\WorkForceAdjustment&gt;\desiredDemand+\ordersOfProductsFor\InvestmentPurpose]
+			fire worker
+			remove worker from workersList
+			hadFired=true
+		
+			[else]
+		EndIf
+	increase\productionCapacityAfterWorkForceAdjustment\by the last considered worker's productivity
+
+	[else]
+		
+		
+		
+EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
