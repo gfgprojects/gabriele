@@ -111,6 +111,7 @@ public class LaborMarket {
 
 	public void jettisoningCurricula(){
 		laborDemandsList = new ArrayList<Curriculum>();
+		laborOffersList = new ArrayList<LaborOffer>();
 		if(Context.verboseFlag){
 			System.out.println("     Labor agency jettisoning curricula ");
 		}

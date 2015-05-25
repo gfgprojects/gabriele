@@ -4,10 +4,11 @@ public class LaborOffer {
 //inteso come post vacancy
 	//double senderProductivity;
 	int senderID;
-	double neededProductionCapacity,senderFirmReservationWage;
+	double neededProductionCapacity;
+	double[] senderFirmReservationWage;
 	Firm sender;
 
-	public LaborOffer(Firm send,int id,double npc ,double sfrw){
+	public LaborOffer(Firm send,int id,double npc ,double[] sfrw){
 		sender=send;
 		senderID=id;
 		neededProductionCapacity=npc;
@@ -20,7 +21,7 @@ public class LaborOffer {
 	public int getSenderID(){
 		return senderID;
 	}
-	public double getSenderFirmReservationWage(){
+	public double[] getSenderFirmReservationWage(){
 		return senderFirmReservationWage;
 	}
 	public double getNeededProductionCapacity(){

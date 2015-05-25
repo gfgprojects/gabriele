@@ -40,7 +40,7 @@ public class Firm {
 
 	double senderProductivity;
 	int senderID;
-	double senderFirmReservationWage;
+	double[] senderFirmReservationWage;
 
 
 	public double initialOutput;
@@ -913,6 +913,10 @@ System.out.println("      ----------------");
 		}
 		else{
 			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand+ordersOfProductsForInvestmentPurpose)){
+				for(int i=0;i<averageProductivityOfWorkersInADegree.length;i++){
+					senderFirmReservationWage[i]=Context.unemploymentDole+Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[i];
+				}
+
 				myOffer = new LaborOffer(this,identity,((desiredDemand+ordersOfProductsForInvestmentPurpose)-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
 				try{
 					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
