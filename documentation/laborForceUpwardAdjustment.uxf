@@ -4,7 +4,7 @@
   <element>
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>90</x>
+      <x>80</x>
       <y>0</y>
       <w>662</w>
       <h>415</h>
@@ -60,24 +60,68 @@ End
     <coordinates>
       <x>640</x>
       <y>470</y>
-      <w>384</w>
-      <h>743</h>
+      <w>441</w>
+      <h>807</h>
     </coordinates>
     <panel_attributes>title:Firm.sendVacancies()
 Start
 If
 	[if\hadFired]
+
+	[else]
 	If
 		[production\Capacity\After\Workforce\Adjustment\&lt;\(desired\Demand+\ordersOf\Products\For\Investment\Purpose)]
-		prepare anOffer
-		send the offerr
+		prepare anOffer\cointaining production\capacity needed and\reservation wages
+		send the offer to the\office for labor
 
 		[else]
 	EndIf
-
-	[else]
 End
 </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>650</x>
+      <y>280</y>
+      <w>130</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>110.0;190.0;110.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>40</x>
+      <y>230</y>
+      <w>90</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;240.0;10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>470</x>
+      <y>270</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>_ _ _ _ _ _ </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>270</x>
+      <y>220</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>_ _ _ _ _ </panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
