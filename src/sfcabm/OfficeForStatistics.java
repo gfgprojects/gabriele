@@ -719,8 +719,8 @@ public void loadAgents(){
 						System.out.println("     Exit  of consumer "+aConsumer.getIdentity()+" age "+aConsumer.getAge()+" wealth "+aConsumer.getWealth());
 					}
 					consumersToRemoveList.add(aConsumer);
-					contextIterator.remove();
 					aNewConsumer=new Consumer(Context.consumersProgressiveIdentificationNumber,myContext,aConsumer.getBankAccountsList());
+					contextIterator.remove();
 					Context.consumersProgressiveIdentificationNumber++;
 					newConsumersList.add(aNewConsumer);
 				}
