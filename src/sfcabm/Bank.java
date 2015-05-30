@@ -276,7 +276,9 @@ public class Bank {
 						sumOfHouseholdDesiredChangeInCredit+=anAccountDesiredCredit;
 						sumOfHouseholdAllowedChangeInCredit+=anAccounAllowedCredit;
 					}
-					System.out.println(" positive account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit);
+					if(Context.verboseFlag){
+						System.out.println(" positive account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit);
+					}
 				}
 				else{
 					if(anAccountDesiredCredit<0){
@@ -289,10 +291,15 @@ public class Bank {
 						sumOfHouseholdDesiredChangeInCredit+=(anAccountDesiredCredit-anAccountAmount);
 						sumOfHouseholdAllowedChangeInCredit+=(anAccounAllowedCredit-anAccountAmount);
 					}
+					if(Context.verboseFlag){
 						System.out.println(" negative account "+anAccountAmount+" desired "+anAccountDesiredCredit+ " allowed "+anAccounAllowedCredit+" new allowed "+(anAccounAllowedCredit-anAccountAmount));
+					}
 				}
 				allowedCredit+=-anAccounAllowedCredit;
+
+		if(Context.verboseFlag){
 				System.out.println("      askedCredit "+aBankAccount.getDemandedCredit());
+		}
 				aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 			}
 		}
@@ -331,12 +338,14 @@ public class Bank {
 
 				}
 				allowedCredit+=-anAccounAllowedCredit;
+		if(Context.verboseFlag){
 				System.out.println("      askedCredit "+aBankAccount.getDemandedCredit());
+		}
 				aBankAccount.setAllowedCredit(anAccounAllowedCredit);
 			}
 		}
 		if(Context.verboseFlag){
-			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit);
+			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit+" (only firms that need new credit are considered)");
 		}
 	}
 	
@@ -364,11 +373,15 @@ public class Bank {
 	}
 
 	public double getSumOfHouseholdDesiredChangeInCredit(){
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" sum of new desired credit "+sumOfHouseholdDesiredChangeInCredit);
+		}
 		return sumOfHouseholdDesiredChangeInCredit;
 	}
 	public double getSumOfHouseholdAllowedChangeInCredit(){
+		if(Context.verboseFlag){
 		System.out.println("     bank "+identity+" sum of new allowed credit "+sumOfHouseholdAllowedChangeInCredit);
+		}
 		return sumOfHouseholdAllowedChangeInCredit;
 	}
 

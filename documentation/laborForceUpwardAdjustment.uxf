@@ -33,7 +33,7 @@ End
       <x>0</x>
       <y>470</y>
       <w>602</w>
-      <h>1103</h>
+      <h>1349</h>
     </coordinates>
     <panel_attributes>title:Firm.hireUsingCV()
 Start
@@ -41,7 +41,14 @@ If
 	[if\hadFired]
 
 	[else]
-	While[while\production\Capacity\After\Workforce\Adjustment\&lt;\(desired\Demand+\ordersOf\Products\For\Investment\Purpose)\&amp;&amp;\applications\List.hasNext()]
+	If
+		[if\firmInvestment&gt;=0]
+		targetLevelOf\Workers\Production\Capacity=\productionCapital
+
+		[else]
+		targetLevelOf\Workers\Production\Capacity=\desiredDemand
+	EndIf
+	While[while\production\Capacity\After\Workforce\Adjustment\&lt;\targetLevelOf\Workers\Production\Capacity\&amp;&amp;\applications\List.hasNext()]
 		get curriculum sender
 		If
 			[if\sender is\employed]
@@ -60,8 +67,8 @@ End
     <coordinates>
       <x>640</x>
       <y>470</y>
-      <w>441</w>
-      <h>807</h>
+      <w>538</w>
+      <h>1053</h>
     </coordinates>
     <panel_attributes>title:Firm.sendVacancies()
 Start
@@ -70,7 +77,14 @@ If
 
 	[else]
 	If
-		[production\Capacity\After\Workforce\Adjustment\&lt;\(desired\Demand+\ordersOf\Products\For\Investment\Purpose)]
+		[if\firmInvestment&gt;=0]
+		targetLevelOf\Workers\Production\Capacity=\productionCapital
+		
+		[else]
+		targetLevelOf\Workers\Production\Capacity=\desiredDemand
+	EndIf
+	If
+		[production\Capacity\After\Workforce\Adjustment\&lt;\targetLevelOf\Workers\Production\Capacity]
 		prepare anOffer\cointaining production\capacity needed and\reservation wages
 		send the offer to the\office for labor
 

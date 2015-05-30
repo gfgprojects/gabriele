@@ -1,23 +1,32 @@
 dati<-read.csv(file="zdata_macro_run_1.csv", header = TRUE, sep = ";")
-dati1<-dati[20:520,]
+#dati1<-dati[20:520,]
+dati1<-dati
 
-par(mfrow=c(2,2))
+par(mfrow=c(3,3))
 
-plot(dati1$AC,type="l",xlab="time",ylab="GDP")
+I<-c(0,dati1$AOI[-dim(dati1)[1]])
+C<-dati1$AC
+
+plot(C+I,type="l",xlab="time",ylab="C (red) C+I (black)")
 #plot(dati1$AS,type="o",xlab="time",ylab="Aggregate consumption (red) & production (blue)",col="blue")
-#lines(dati1$AC,col="red")
+lines(C,col="red")
 #points(dati1$AC,col="red")
 
 plot(dati1$LHd,type="l",xlab="time",ylab="consumer credit asked (black) allowed (red)")
 lines(dati1$LHs,col="red")
 
 unemployed<-dati1$NC-dati1$NS-dati1$NW
+u<-(dati1$NC-dati1$NS-dati1$NW)/(dati1$NC-dati1$NS)
 
 max_graph<-max(c(dati1$NW,unemployed,dati1$NS))
 min_graph<-min(c(dati1$NW,unemployed,dati1$NS))
 plot(dati1$NW,type="l",xlab="time",ylab="#W (black) #S (blue)",ylim=c(min_graph,max_graph))
-#lines(unemployed,col="red")
+lines(unemployed,col="red")
 lines(dati1$NS,col="blue")
+
+plot(u,type="l",ylab="u")
+
+plot(dati1$NR,type="l",ylab="retired")
 
 #plot(dati1$NFE,type="l",xlab="time",ylab="# of bailouts")
 
@@ -29,10 +38,13 @@ lines(dati1$NS,col="blue")
 
 unemployed<-dati1$NC-dati1$NS-dati1$NW
 
-dole=c(numeric(length=100)+10,numeric(length=100)+10);
-plot(unemployed*dole,type="l",xlab="time",ylab="public exprenditure",col="red")
+#dole=c(numeric(length=100)+10,numeric(length=100)+10);
+#plot(unemployed*dole,type="l",xlab="time",ylab="public exprenditure",col="red")
 
 #plot(dati1$NS,type="l",xlab="time",ylab="# of students",col="red")
 #plot(dati1$NFE,type="l",xlab="time",ylab="# of bailouts",col="red")
 
+plot(dati1$L,type="l",ylab="L")
+
+plot(dati1$D,type="l",ylab="D")
 

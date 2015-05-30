@@ -8,6 +8,7 @@ Back to <a href="index.html"> home </a>
 <h1>Main loop</h1>
 
 <table border=1>
+
 <tr>
 	<td><b>Firms</b>: </td>
 	<td><a href="makeProduction.html"> makeProduction</a></td>
@@ -43,6 +44,14 @@ Back to <a href="index.html"> home </a>
 	<td><a href="stepStudentState.html"> stepStudentState</a></td>
 	<td> studens evolve their position. </td>
 </tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Consumption<br>goods market</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
 <tr>
 	<td><b>Consumers</b>: </td>
 	<td><a href="stepDesiredConsumption.html"> stepDesiredConsumption</a></td>
@@ -88,6 +97,14 @@ Back to <a href="index.html"> home </a>
 	<td><a href="updateBankAccountAccordingToEffectiveConsumption.html">updateBankAccountAccordingToEffectiveConsumption</a></td>
 	<td>Each consumers withraw what needed or deposits what saved.</td>
 </tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Production<br>goods demand</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
 <tr>
 	<td><b>Firms</b> </td>
 	<td><a href="computeEconomicResultAndCapitalDepreciation.html">computeEconomicResultAndCapitalDepreciation</a> </td>
@@ -146,18 +163,28 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performFirmsEntry.html">performFirmsEntry</a> </td>
-	<td>performConsumersEntry </td>
+	<td>In this model, the number of firm is constant. For each firm exit in the performFirmsExit() method, a new firm is created and added to the context. The program checks if an unemployed exists for each entering firm. If yes, The production capital of the new firm is positive and equal to the parameter in the context, else, the production capital is set to zero. The production capital of new firms is considered as demand for investments.   </td>
 </tr>
 <tr>
 	<td><b>OfficeForStatistics </b> </td>
 	<td><a href="computeInvestments.html">computeInvestments</a> </td>
-	<td></td>
+	<td>Sum of investment of incumbent and new firms.</td>
 </tr>
 <tr>
 	<td><b> </b> </td>
 	<td><a href="allocateInvestments.html">allocateInvestments</a> </td>
+	<td>The market for unused capital is activated. If unused capital exists, the demand for new capital is reduced by the unused capital. The remainder is considered as demand of newly produced goods.</td>
+</tr>
+
+
+<tr bgcolor="lightgray">
+	<td ><b>Labor<br>market</b></td>
+	<td> </td>
 	<td> </td>
 </tr>
+
+
+
 <tr>
 	<td><b>Firms</b> </td>
 	<td>jettisoningCurricula </td>

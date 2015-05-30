@@ -136,14 +136,14 @@ LHs aggregateHouseholdAllowedChangeInCredit
 
 			try{
 				dataReadmeWriter=new FileWriter(readmeDataOutputFileName);
-				dataReadmeWriter.append("Contents of\n========================\nzdata_macro . . . file\n========================\n\nAC Aggregate Comsumption\nAI Aggregate Investment\nAS Aggregate Supply\nL Loans\nD deposits\nNF Number of Firms\nNC Number of Consumers\nNW Number of Worker\nNS Number of Students\nNR Number of Retirements\nNFE Number of Firm Exits\nLHd aggregateHouseholdDesiredChangeInCredit\nLHs aggregateHouseholdAllowedChangeInCredit\nAIB Aggegate investments before exchanging unused production capital\nUPCFS Unused production Capital For sale\n");
+				dataReadmeWriter.append("Contents of\n========================\nzdata_macro . . . file\n========================\n\nAC Aggregate Comsumption\nAOI Aggregate Orders of Investment (these goods will be produced in the following period)\nASH Aggregate Supply of products for consumption (Aggregate Supply is given by ASH plos AOI of the previous period)\nL Loans\nD deposits\nNF Number of Firms\nNC Number of Consumers\nNW Number of Worker\nNS Number of Students\nNR Number of Retirements\nNFE Number of Firm Exits\nLHd aggregateHouseholdDesiredChangeInCredit\nLHs aggregateHouseholdAllowedChangeInCredit\nAIB Aggegate investments before exchanging unused production capital\nUPCFS Unused production Capital For sale\n");
 				dataReadmeWriter.flush();
 
 
 
 
 				macroDataWriter=new FileWriter(macroDataOutputFileName);
-				macroDataWriter.append("AC;AI;AS;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs;AIB;UPCFS\n");
+				macroDataWriter.append("AC;AOI;ASH;L;D;NF;NC;NW;NS;NR;NFE;LHd;LHs;AIB;UPCFS\n");
 				macroDataWriter.flush();
 
 					dataReadmeWriter.append("\n\nContents of\n========================\nzdata_micro_consumers_run . . . file\n========================\n\nt time\nid identification number\nage age\nstudent true if student false if worker\nemployed true if employed, false for students and unemployed\nedu_successes numberOfSuccesfulPeriodsOfEducation\nedu_failures numberOfFailedPeriodsOfEducation\nproductivity consumers productivity\nec effective consumption\nwage wage\ndi1 disposable income when deciding desired consumption\ndi2 disposable income for consumption\ndc desired consumption\nec effective consumption");
@@ -513,7 +513,7 @@ public void loadAgents(){
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production "+aggregateProduction);
+			System.out.println("     Aggregate demand from howsehold "+aggregateDemand+" Aggregate demand from firms "+aggregateInvestments+" aggregate production for consumption "+aggregateProduction);
 //			System.out.println("     Aggregate demand "+aggregateDemand+" aggregate production "+aggregateProduction);
 		}
 
@@ -550,7 +550,9 @@ public void loadAgents(){
 		for(int i=0;i<firmsList.size();i++){
 			aFirm=(Firm)firmsList.get(i);
 			double tmpInvestment=aFirm.getInvestment();
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+aFirm.getIdentity()+" invest "+tmpInvestment);
+		}
 			if(tmpInvestment>=0){
 				aggregateInvestments+=tmpInvestment;
 			}
@@ -760,6 +762,7 @@ public void loadAgents(){
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
 				if((aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose())<20){
+//					System.out.println("   firm Exit "+(aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose()));
 					exitingFirmsList.add(aFirm);
 					aFirm.setBankAccountsShutDown();
 					aFirm.sendWorkersShutDownNew();
@@ -772,7 +775,9 @@ public void loadAgents(){
 
 		}
 		numberOfFirmExits=exitingFirmsList.size();
-System.out.println("     number of firms "+firmsList.size());
+		if(Context.verboseFlag){
+System.out.println("     number of firms before exit "+firmsList.size());
+		}
 		// remove from context
 		for(int i=0;i<exitingFirmsList.size();i++){
 			aFirm=exitingFirmsList.get(i);
@@ -795,7 +800,9 @@ System.out.println("     number of firms "+firmsList.size());
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
 		}
-System.out.println("     number of firms "+firmsList.size());
+		if(Context.verboseFlag){
+System.out.println("     number of firms after exit "+firmsList.size());
+		}
 
 		if(firmsList.size()<1){
 		System.out.println();
@@ -838,12 +845,38 @@ System.out.println("     number of firms "+firmsList.size());
 			System.out.println("     number of firms "+firmsList.size());
 		}
 		if(newFirmsList.size()>0){
+
+		try{
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		int numberOfUnemployed=0;
+		for(int j=0;j<consumersList.size();j++){
+			aConsumer=(Consumer)consumersList.get(j);
+			if(aConsumer.getIsWorkingFlag()){
+			}
+			else{
+				if(!aConsumer.getIsStudentFlag()){
+					numberOfUnemployed++;
+				}
+			}
+		}
+
+
+
 		for(int i=0;i<newFirmsList.size();i++){
 			aFirm=newFirmsList.get(i);
 			//			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
 			int tmpAbsoluteRank=(int)maximumAbsoluteRank;
 			aFirm.setProductAbsoluteRank(tmpAbsoluteRank);
-			aFirm.setupBankAccount();
+			if(i<numberOfUnemployed){
+				aFirm.setupBankAccount();
+			}
+			else{
+				aFirm.setupBankAccountAtFullEmployement();
+			}
 			for(int j=0;j<industriesList.size();j++){
 				anIndustry=(Industry)industriesList.get(j);
 				if(anIndustry.getAbsoluteRank()==tmpAbsoluteRank){
@@ -873,6 +906,8 @@ System.out.println("     number of firms "+firmsList.size());
 		}
 
 	}
+
+
 
 	public void setupNewFirmsToComputeProductAttractiveness(){
 		if(Context.verboseFlag){
@@ -1100,8 +1135,8 @@ System.out.println("     number of firms "+firmsList.size());
 		statAction.execute();
 	}
 	public void scheduleConsumersStepDesiredConsumption(){
-		System.out.println("CONSUMERS: STEP CONSUMPTION");
 		if(Context.verboseFlag){
+			System.out.println("CONSUMERS: STEP CONSUMPTION");
 		}
 		statAction=statActionFactory.createActionForIterable(consumersList,"stepDesiredConsumption",false);
 		statAction.execute();

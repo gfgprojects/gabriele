@@ -228,6 +228,45 @@ public class Firm {
 
 	}
 
+	public void setupBankAccountAtFullEmployement(){
+//		productionCapital=Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
+		productionCapital=0;
+		firmInvestment=productionCapital;
+		desiredProductionCapital=productionCapital;
+//		desiredDemand=Context.parameterOfProductivityInProductionFuncion;
+		desiredDemand=(int)productionCapital;
+		equity=productionCapital*RandomHelper.nextDoubleFromTo(Context.minFirmInitialEquityRatio,Context.maxFirmInitialEquityRatio);
+		debt=productionCapital-equity;
+		if(Context.verboseFlag){
+		System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
+		}
+		try{
+			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+		ArrayList<Integer> banksPositions=new ArrayList<Integer>();
+		int numberOfBanksToBeCustomerOf=Math.min(Context.numberOfBanksAFirmCanBeCustumerOf,banksList.size());
+		for(int i=0;i<banksList.size();i++){
+			banksPositions.add(new Integer(i));
+		}
+		for(int i=0;i<numberOfBanksToBeCustomerOf;i++){
+			int position=banksPositions.remove(RandomHelper.nextIntFromTo(0,(banksPositions.size()-1)));
+			aBank=(Bank)banksList.get(position);
+			if(Context.verboseFlag){
+				System.out.println("       open account");
+			}
+			aBankAccount=new BankAccount(-debt/numberOfBanksToBeCustomerOf,this,aBank);
+			aBankAccount.setAccount(-debt/numberOfBanksToBeCustomerOf);
+			aBankAccount.setAllowedCredit(-debt/numberOfBanksToBeCustomerOf);
+			bankAccountsList.add(aBankAccount);
+			aBank.addAccount(aBankAccount);
+
+		}
+
+
+	}
 
 	public void makeProduction(){
 		if(Context.verboseFlag){
@@ -338,7 +377,9 @@ public class Firm {
 			bestBankAccount=null;
 		}
 
+		if(Context.verboseFlag){
 		System.out.println("     Firm "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
+		}
 
 //computation and requests of new credit
 //
@@ -357,10 +398,18 @@ public class Firm {
 			if(bankAccountsListWithNoUnpaidAmount.size()>0){
 				bestBankAccount.setDesiredCredit(0.0,creditToAsk);
 			}
+			else{
+				if(Context.verboseFlag){
+					System.out.println("       credit needed but not asked because the firm has unpaid amounts in all the banks"); 
+				}
+			}
 		}
 		else{
 			creditToAsk=0;
 			creditToAskInSetDesiredCredit=creditToAsk;
+				if(Context.verboseFlag){
+					System.out.println("       credit not needed"); 
+				}
 		}
 
 //verboseFlag
@@ -407,9 +456,21 @@ System.out.println("      ----------------");
 			//get new available credit
 			double amountAvailableFromBestBank=0;
 			if(bankAccountsListWithNoUnpaidAmount.size()>0){
+				if(Context.verboseFlag){
+					System.out.println("      Best bank account does exists");
+				}
 				amountAvailableFromBestBank=-(bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount());
 				bestBankAccount.setAccount(bestBankAccount.getAllowedCredit());
 			}
+			else{
+				if(Context.verboseFlag){
+					System.out.println("      Best bank account does not exists");
+				}
+			
+			}
+				if(Context.verboseFlag){
+					System.out.println("      amountAvailableFromBestBank "+amountAvailableFromBestBank);
+				}
 			//withdraw all the deposits and put it in the cashOnHand
 			for(int i=0;i<bankAccountsList.size();i++){
 				aBankAccount=(BankAccount)bankAccountsList.get(i);
@@ -419,7 +480,7 @@ System.out.println("      ----------------");
 				}
 			}
 			if(cashOnHand<0){
-				if(amountAvailableFromBestBank>(-cashOnHand)){
+				if(amountAvailableFromBestBank>=(-cashOnHand)){
 					amountAvailableFromBestBank+=cashOnHand;
 					cashOnHand=0;
 					if(unpaidAmountInBankAccounts>0){
@@ -452,10 +513,14 @@ System.out.println("      ----------------");
 					}
 				}
 				else{
+
 					cashOnHand+=amountAvailableFromBestBank;
 					amountAvailableFromBestBank=0;
 					promissoryNotes=cashOnHand;
 					cashOnHand=0;
+					if(Context.verboseFlag){
+						System.out.println("      promissory notes "+promissoryNotes);
+					}
 				}
 				firmInvestment=amountAvailableFromBestBank;
 				amountAvailableFromBestBank=0;
@@ -550,6 +615,9 @@ System.out.println("      ----------------");
 				if(desiredProductionCapital>productionCapital){
 					firmInvestment=desiredProductionCapital-productionCapital;
 					if(cashOnHand>firmInvestment){
+						if(Context.verboseFlag){
+							System.out.println("       cash on hand higher than investments. Residual cashOnHand is deposited");
+						}
 						cashOnHand+=-firmInvestment;
 						worstBankAccount.setAccount(worstBankAccount.getAccount()+cashOnHand);
 						cashOnHand=0;
@@ -560,16 +628,31 @@ System.out.println("      ----------------");
 					}
 				}
 				else{
+					if(Context.verboseFlag){
+						System.out.println("       positive cash on hand and no investments. All cashOnHand is deposited");
+					}
 					firmInvestment=0;
 					worstBankAccount.setAccount(worstBankAccount.getAccount()+cashOnHand);
 					cashOnHand=0;
 				}
 			}
-			double multiplier=amountTowithdrawFromBanks/financialResourcesInBankAccounts;
+			double multiplier;
+			if(financialResourcesInBankAccounts>0){
+				multiplier=amountTowithdrawFromBanks/financialResourcesInBankAccounts;
+			}
+			else{
+				multiplier=0;
+			}
+			if(Context.verboseFlag){
+				System.out.println("      amount to withdraw from bank accounts "+amountTowithdrawFromBanks+" multiplier "+multiplier);
+			}
 			for(int i=0;i<bankAccountsList.size();i++){
 				aBankAccount=(BankAccount)bankAccountsList.get(i);
 				double thisBankAccount=aBankAccount.getAccount();
 				if(thisBankAccount>0){
+					if(Context.verboseFlag){
+						System.out.println("       positive bank Account resized by a factor of "+(1-multiplier));
+					}
 					aBankAccount.setAccount(aBankAccount.getAccount()*(1-multiplier));
 				}
 			}
@@ -638,11 +721,15 @@ System.out.println("      ----------------");
 				}
 			}
 			productionCapacityAfterWorkforceAdjustment+=aConsumer.getProductivity()*Context.parameterOfProductivityInProductionFuncion;
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
+		}
 
 		}
 		else{
+		if(Context.verboseFlag){
 			System.out.println("     Firm "+identity+" desired Demand "+desiredDemand+" orders of products for investments "+ordersOfProductsForInvestmentPurpose+" desired demand + invest goods "+(desiredDemand+ordersOfProductsForInvestmentPurpose)+" productionCapacityAfterFiring "+productionCapacityAfterWorkforceAdjustment);
+		}
 		}
 		}
 
@@ -669,10 +756,19 @@ System.out.println("      ----------------");
 			System.out.println("     firm "+identity+" application list size "+applicationList.size()+" productionCapacity "+productionCapacityAfterWorkforceAdjustment+" desired demand + investment "+(desiredDemand+ordersOfProductsForInvestmentPurpose));
 		}
 		if(hadFired){
+		if(Context.verboseFlag){
 			System.out.println("     I am not hiring because I have just fired");
 		}
+		}
 		else{
-			while(productionCapacityAfterWorkforceAdjustment<(desiredDemand+ordersOfProductsForInvestmentPurpose) && applicationListIterator.hasNext()){
+			double targetLevelOfworkersProductionCapacity;
+			if(firmInvestment>=0){
+				targetLevelOfworkersProductionCapacity=productionCapital;
+			}
+			else{
+				targetLevelOfworkersProductionCapacity=desiredDemand;
+			}
+			while(productionCapacityAfterWorkforceAdjustment<targetLevelOfworkersProductionCapacity && applicationListIterator.hasNext()){
 				aCurriculum=applicationListIterator.next();
 				aConsumer=aCurriculum.getSender();
 				if(aConsumer.getIsWorkingFlag()){
@@ -769,9 +865,9 @@ System.out.println("      ----------------");
 			}
 		}
 		if(totalAmountToRefund>0){
-			//		if(Context.verboseFlag){
+					if(Context.verboseFlag){
 			System.out.println("     Firm "+getIdentity()+": to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" cashOnHand "+cashOnHand);
-			//		}
+					}
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+cashOnHand;
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
 				for(int i=0;i<bankAccountsList.size();i++){
@@ -836,9 +932,9 @@ System.out.println("      ----------------");
 					}
 				}
 			}
-			//		if(Context.verboseFlag){
+					if(Context.verboseFlag){
 			System.out.println("      totalAmountToRefund "+totalAmountToRefund+" resourcesAvailableToRefund "+resourcesAvailableToRefund+" cashOnHand "+cashOnHand);
-			//		}
+			}
 		}
 
 
@@ -911,13 +1007,19 @@ System.out.println("      ----------------");
 	public void sendVacancies(){
 		if(hadFired){
 		}
-		else{
-			if(productionCapacityAfterWorkforceAdjustment<(desiredDemand+ordersOfProductsForInvestmentPurpose)){
+		else{			double targetLevelOfworkersProductionCapacity;
+			if(firmInvestment>=0){
+				targetLevelOfworkersProductionCapacity=productionCapital;
+			}
+			else{
+				targetLevelOfworkersProductionCapacity=desiredDemand;
+			}
+			if(productionCapacityAfterWorkforceAdjustment<targetLevelOfworkersProductionCapacity){
 				for(int i=0;i<averageProductivityOfWorkersInADegree.length;i++){
 					senderFirmReservationWage[i]=Context.unemploymentDole+Context.laborMarketStateToSetWage*Context.parameterOfProductivityInProductionFuncion*averageProductivityOfWorkersInADegree[i];
 				}
 
-				myOffer = new LaborOffer(this,identity,((desiredDemand+ordersOfProductsForInvestmentPurpose)-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
+				myOffer = new LaborOffer(this,identity,(targetLevelOfworkersProductionCapacity-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
 				try{
 					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
 				}

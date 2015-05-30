@@ -34,8 +34,8 @@ depositants<-which(selba6m[,4]>0)
 consumersFlag=T
 firmsFlag=F
 
-#startp<-2
-#endp<-5
+startp<-2
+endp<-5
 endp<-startp
 
 if(consumersFlag){
@@ -69,3 +69,42 @@ print(matrix(as.numeric(unlist(strsplit(baf5[startp:endp,1],","))),ncol=7,byrow=
 print("end of adjustProductionCapitalAndBankAccount")
 print(matrix(as.numeric(unlist(strsplit(baf6[startp:endp,1],","))),ncol=7,byrow=T))
 }
+
+righef<-dim(baf1m)[1]
+endTime<-baf1m[righef,1]
+
+pca<-numeric()
+nca<-numeric()
+pfa<-numeric()
+nfa<-numeric()
+for(periodo in 1:endTime){
+	ca<-bac1m[which(bac1m[,1]==periodo),]
+	pca[periodo]<-sum(ca[which(ca[,4]>=0),4])
+	nca[periodo]<-sum(ca[which(ca[,4]<0),4])
+
+	fa<-baf1m[which(baf1m[,1]==periodo),]
+	if(is.matrix(fa)){
+		pfa[periodo]<-sum(fa[which(fa[,4]>=0),4])
+		nfa[periodo]<-sum(fa[which(fa[,4]<0),4])
+	}
+	else{
+		if(length(which(fa[4]>=0))>0){
+			pfa[periodo]<-fa[which(fa[4]>=0)]
+			}
+		else{
+			pfa[periodo]<-0	
+			}
+		if(length(which(fa[4]<0))>0){
+			nfa[periodo]<-fa[which(fa[4]<0)]
+			}
+		else{
+			nfa[periodo]<-0
+			}
+		}
+}
+#print(cbind(pca+pfa,nca+nfa,pca,pfa,nca,nfa))
+
+#par(mfrow=c(2,2))
+plot(-nca-nfa,type="l",ylab="L")
+plot(pca+pfa,type="l",ylab="D")
+

@@ -494,8 +494,9 @@ public void stepState(){
 			bestBankAccount=null;
 		}
 
-		System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
-
+		if(Context.verboseFlag){
+			System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
+		}
 
 //ask for new credit
 		if(desiredDemand+unpaidAmountInBankAccounts>disposableIncome+financialResourcesInBankAccounts){
@@ -641,8 +642,9 @@ public void stepWorkerState() {
 			bestBankAccount=null;
 		}
 
-		System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
-
+		if(Context.verboseFlag){
+			System.out.println("     Consumer "+identity+" n of banks with no unpaid amount "+bankAccountsListWithNoUnpaidAmount.size());
+		}
 
 		//ask for new credit
 			if(desiredDemand+unpaidAmountInBankAccounts>disposableIncome+financialResourcesInBankAccounts){
@@ -766,7 +768,9 @@ public void stepWorkerState() {
 				aProductDemand=demandsList.get(j);
 				consumption+=aProductDemand.getDemand();
 			}
+		if(Context.verboseFlag){
 			System.out.println("    consumer "+getIdentity()+" consumption "+consumption+" disposableIncome "+disposableIncome);
+		}
 			effectiveConsumption=consumption;
 			disposableIncomewhenConsuming=disposableIncome;
 			if(disposableIncomewhenConsuming>effectiveConsumption){
@@ -797,7 +801,9 @@ public void stepWorkerState() {
 						aBankAccount.setUnpaidAmount(aBankAccount.getUnpaidAmount()*multiplier);
 					}
 				}
+		if(Context.verboseFlag){
 				System.out.println("      updating worstBankAccount by "+residualResourcesAfterConsuming);
+		}
 				worstBankAccount.setAccount(worstBankAccount.getAccount()+residualResourcesAfterConsuming);
 				residualResourcesAfterConsuming=0;
 	
@@ -833,9 +839,13 @@ public void stepWorkerState() {
 					if(bankAccountsListWithNoUnpaidAmount.size()>0){
 						//					System.out.println("      residual desired consumption "+consumption+" covered with new debt "+(bestBankAccount.getAllowedCredit())+"    "+(-bestBankAccount.getAccount()));
 						double newCreditAvailableInBestBankAccount=bestBankAccount.getAllowedCredit()-bestBankAccount.getAccount();
+		if(Context.verboseFlag){
 						System.out.println("       new credit available in bestBankAccount "+newCreditAvailableInBestBankAccount);
+		}
 						if(newCreditAvailableInBestBankAccount<0){
+		if(Context.verboseFlag){
 							System.out.println("       residual desired consumption "+consumption+" covered with new debt "+newCreditAvailableInBestBankAccount);
+		}
 							if(consumption<(-newCreditAvailableInBestBankAccount)){
 								bestBankAccount.setAccount(bestBankAccount.getAccount()-consumption);
 							}
@@ -848,7 +858,9 @@ public void stepWorkerState() {
 						if(bankAccountsListWithNoUnpaidAmount.size()>0){
 							additionalCreditAvailableInBestBankAccount=bestBankAccount.getAccount()-bestBankAccount.getAllowedCredit();
 						}
+		if(Context.verboseFlag){
 						System.out.println("      additional credit available in bestBankAccount "+additionalCreditAvailableInBestBankAccount+" available to reduce unpaid amount if exists");
+		}
 						if(additionalCreditAvailableInBestBankAccount>0 && unpaidAmountInBankAccounts>0){
 							System.out.println("      reducing unpaid amount");
 							double multiplier=1-additionalCreditAvailableInBestBankAccount/unpaidAmountInBankAccounts;
@@ -862,7 +874,9 @@ public void stepWorkerState() {
 							}
 						}
 						else{
+		if(Context.verboseFlag){
 							System.out.println("      no unpaid amount to be reduced");
+		}
 						}
 
 
@@ -1056,7 +1070,7 @@ public void saveDataToFile(){
 		public void receiveFiredNew(){
 			isWorking=false;
 			if(Context.verboseFlag){
-				System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" fired me ");
+				System.out.println("       Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" potential production "+productivity*Context.parameterOfProductivityInProductionFuncion+" my employer firm "+myEmployer.getID()+" fired me ");
 			}
 			myEmployer=null;
 		}

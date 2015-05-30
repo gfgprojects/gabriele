@@ -30,7 +30,7 @@ public class Context implements ContextBuilder<Object> {
 	public static boolean saveMicroData=true;
 	public static boolean timeStampInFileName=false;
 
-	public static double minPreferenceParameter=0.5;
+	public static double minPreferenceParameter=1.0;
 	public static double maxPreferenceParameter=1.5;
 	public static double consumersProbabilityToGetFunded=0.5;
 	public static double percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded=0;
@@ -44,7 +44,7 @@ public class Context implements ContextBuilder<Object> {
 	public static int numBanks = 1;
 	public static int consumerExitAge=70;
 	public static int maxNumberOfFailedPeriodsOfEducation=2;
-	public static double probabilityToBeUnemployedAtTheBeginning=0.05;
+	public static double probabilityToBeUnemployedAtTheBeginning=0.2;
 	public static int parameterOfProductivityInProductionFuncion=100;
 	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 	public static int minConsumerInitialBankAccount=-500;
@@ -57,7 +57,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double percentageOfLoanToRefundForIndebtedWorkersIfAsked=0.1;
 	public static int productionOfNewEnteringFirm=50;
 	public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
-	public static double percentageOfUsedCapitalDepreciation=0.004;
+	public static double percentageOfUsedCapitalDepreciation=0.01;
 	public static double percentageOfUnusedCapitalDepreciation=0.0;
 	public static double percentageOfRealizedUnusedProductionCapital=0.9;
 	public static double laborMarketStateToSetWage=0.5;
@@ -142,6 +142,7 @@ public class Context implements ContextBuilder<Object> {
 //        betaWorker = (Double)params.getValue("betaWorker");
         unemploymentDole=(Integer)params.getValue("unemploymentDole");
         subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
+        costEdu=(Integer)params.getValue("studentConsumption");
         int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        //			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
         //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
   
@@ -237,7 +238,9 @@ public class Context implements ContextBuilder<Object> {
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
 				if(aFirm.getNumberOfWorkers()<1){
-					System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
+					if(verboseFlag){
+						System.out.println("     firm "+aFirm.getIdentity()+" removed because producing "+aFirm.getProduction());
+					}
 					firmsToRemove.add(aFirm);
 				}
 			}
