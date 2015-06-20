@@ -7,12 +7,12 @@ par(mfrow=c(3,3))
 I<-c(0,dati1$AOI[-dim(dati1)[1]])
 C<-dati1$AC
 
-plot(C+I,type="l",xlab="time",ylab="C (red) C+I (black)")
+plot(C+I,type="l",xlab="time",main="aggregate demand\nC (red) C+I (black)",cex.main=0.8,ylab="")
 #plot(dati1$AS,type="o",xlab="time",ylab="Aggregate consumption (red) & production (blue)",col="blue")
 lines(C,col="red")
 #points(dati1$AC,col="red")
 
-plot(dati1$LHd,type="l",xlab="time",ylab="consumer credit asked (black) allowed (red)")
+plot(dati1$LHd,type="l",xlab="time",main="Consumers credit\nasked (black), allowed (red)",cex.main=0.8,ylab="")
 lines(dati1$LHs,col="red")
 
 unemployed<-dati1$NC-dati1$NS-dati1$NW
@@ -20,13 +20,13 @@ u<-(dati1$NC-dati1$NS-dati1$NW)/(dati1$NC-dati1$NS)
 
 max_graph<-max(c(dati1$NW,unemployed,dati1$NS))
 min_graph<-min(c(dati1$NW,unemployed,dati1$NS))
-plot(dati1$NW,type="l",xlab="time",ylab="#W (black) #S (blue)",ylim=c(min_graph,max_graph))
+plot(dati1$NW,type="l",xlab="time",main="workers (black), students (blue)\nunemployed (red)",cex.main=0.8,ylab="",ylim=c(min_graph,max_graph))
 lines(unemployed,col="red")
 lines(dati1$NS,col="blue")
 
-plot(u,type="l",ylab="u")
+plot(u,type="l",main="unemployment rate",cex.main=0.8,ylab="")
 
-plot(dati1$NR,type="l",ylab="retired")
+plot(dati1$NR,type="l",main="retired workers",cex.main=0.8,ylab="")
 
 #plot(dati1$NFE,type="l",xlab="time",ylab="# of bailouts")
 
@@ -44,7 +44,7 @@ unemployed<-dati1$NC-dati1$NS-dati1$NW
 #plot(dati1$NS,type="l",xlab="time",ylab="# of students",col="red")
 #plot(dati1$NFE,type="l",xlab="time",ylab="# of bailouts",col="red")
 
-plot(dati1$L,type="l",ylab="L")
+plot(dati1$L,type="l",main="Loans\ntotal",cex.main=0.8,ylab="")
 
-plot(dati1$D,type="l",ylab="D")
+plot(dati1$D,type="l",main="Deposits\ntotal",cex.main=0.8,ylab="")
 

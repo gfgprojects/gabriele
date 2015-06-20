@@ -88,14 +88,16 @@ for(periodo in 1:endTime){
 		nfa[periodo]<-sum(fa[which(fa[,4]<0),4])
 	}
 	else{
-		if(length(which(fa[4]>=0))>0){
-			pfa[periodo]<-fa[which(fa[4]>=0)]
+#		if(length(which(fa[4]>=0))>0){
+			if(fa[4]>=0){
+			pfa[periodo]<-fa[4]
 			}
 		else{
 			pfa[periodo]<-0	
 			}
-		if(length(which(fa[4]<0))>0){
-			nfa[periodo]<-fa[which(fa[4]<0)]
+#		if(length(which(fa[4]<0))>0){
+		if(fa[4]<0){
+			nfa[periodo]<-fa[4]
 			}
 		else{
 			nfa[periodo]<-0
@@ -105,6 +107,10 @@ for(periodo in 1:endTime){
 #print(cbind(pca+pfa,nca+nfa,pca,pfa,nca,nfa))
 
 #par(mfrow=c(2,2))
-plot(-nca-nfa,type="l",ylab="L")
-plot(pca+pfa,type="l",ylab="D")
+forlims<-c(-nca,-nfa)
+plot(-nca,type="l",main="Loans\nfirms (balck), consumers (red) red",cex.main=0.8,ylab="",xlab="time",ylim=c(min(forlims),max(forlims)),col="red")
+lines(-nfa)
+forlims<-c(pca,pfa)
+plot(pca,type="l",main="Deposits\nfirms (balck), consumers (red) red",cex.main=0.8,ylab="",xlab="time",ylim=c(min(forlims),max(forlims)),col="red")
+lines(pfa)
 
