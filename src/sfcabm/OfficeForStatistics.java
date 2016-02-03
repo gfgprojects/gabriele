@@ -838,7 +838,66 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		}
 	}
 
+	public void performFirmsEntry(){
+		if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS: FIRMS ENTRY");
+			System.out.println("     number of firms "+firmsList.size());
+		}
+		if(newFirmsList.size()>0){
+/*
+		try{
+			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+*/
 
+		for(int i=0;i<newFirmsList.size();i++){
+			aFirm=newFirmsList.get(i);
+			//			aFirm.setProductAbsoluteRank(RandomHelper.nextIntFromTo((int)minimumAbsoluteRank,(int)maximumAbsoluteRank));
+			int tmpAbsoluteRank=(int)maximumAbsoluteRank;
+			aFirm.setProductAbsoluteRank(tmpAbsoluteRank);
+			aFirm.setupBankAccountOfNewEnteringFirm();
+/*
+			if(i<numberOfUnemployed){
+				aFirm.setupBankAccount();
+			}
+			else{
+				aFirm.setupBankAccountAtFullEmployement();
+			}
+*/
+			for(int j=0;j<industriesList.size();j++){
+				anIndustry=(Industry)industriesList.get(j);
+				if(anIndustry.getAbsoluteRank()==tmpAbsoluteRank){
+					anIndustry.addFirm(aFirm);
+					anIndustry.increaseNumberOfFirms();
+				}
+			}
+			myContext.add(aFirm);
+			if(Context.verboseFlag){
+				System.out.println("     Entry of Firm "+aFirm.getID()+" absolute Rank "+aFirm.getProductAbsoluteRank());
+			}
+		}
+		resetProducAttractiveness();
+
+	}
+
+		try{
+			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+		}
+		catch(ClassNotFoundException e){
+			System.out.println("Class not found");
+		}
+
+
+		if(Context.verboseFlag){
+			System.out.println("     number of firms "+firmsList.size());
+		}
+
+	}
+
+/*	
 	public void performFirmsEntry(){
 		if(Context.verboseFlag){
 			System.out.println("OFFICE FOR STATISTICS: FIRMS ENTRY");
@@ -906,7 +965,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		}
 
 	}
-
+*/
 
 
 	public void setupNewFirmsToComputeProductAttractiveness(){
@@ -1037,16 +1096,10 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksSetAllowedFirmsCredit");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,19.0);
-		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsAdjustProductionCapitalAndBankAccount");
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetPossibleInvestment");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,18.5);
 		Context.schedule.schedule(scheduleParameters,this,"performFirmsEntry");
-
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,18.0);
-		Context.schedule.schedule(scheduleParameters,this,"computeInvestments");
-
-		scheduleParameters=ScheduleParameters.createRepeating(1,1,17.0);
-		Context.schedule.schedule(scheduleParameters,this,"allocateInvestments");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,16.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsJettisoningCurricula");
@@ -1065,6 +1118,15 @@ System.out.println("     number of firms after exit "+firmsList.size());
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,11.0);
 		Context.schedule.schedule(scheduleParameters,this,"activateLaborMarket");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.8);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsAdjustProductionCapitalAndBankAccount");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.5);
+		Context.schedule.schedule(scheduleParameters,this,"computeInvestments");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.2);
+		Context.schedule.schedule(scheduleParameters,this,"allocateInvestments");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,10.0);
 		Context.schedule.schedule(scheduleParameters,this,"performConsumersTurnover");
@@ -1222,6 +1284,13 @@ public void scheduleSaveFirmsData(){
 			System.out.println("BANKS: EXTEND FIRM CREDIT");
 		}
 		statAction=statActionFactory.createActionForIterable(banksList,"setAllowedFirmsCredit",false);
+		statAction.execute();
+	}
+	public void scheduleFirmsSetPossibleInvestment(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: SET POSSIBLE INVESTMENT");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"setPossibleInvestment",false);
 		statAction.execute();
 	}
 	public void scheduleFirmsAdjustProductionCapitalAndBankAccount(){

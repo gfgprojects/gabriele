@@ -25,7 +25,7 @@ public class Consumer {
 	 double residualResourcesAfterConsuming=0;
 	 double wealth=RandomHelper.nextDoubleFromTo(0.0, 1000.00);
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
-	  double abilityStudent = RandomHelper.nextDoubleFromTo(0.35,0.5);
+	  double abilityStudent = RandomHelper.nextDoubleFromTo(Context.minAbilityStudent,Context.maxAbilityStudent);
 	 //double taxConsumTot=taxRate*consumption;
 	 double wage=0;
 	 double disposableIncome=0;
@@ -116,7 +116,7 @@ public class Consumer {
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
 		age=RandomHelper.nextIntFromTo(0,Context.consumerExitAge-1);
 		int iterations=0;
-		int maxIterations=Math.min(age,23);
+		int maxIterations=Math.min(age,Context.maxNumberPeriodsOfEducation+Context.maxNumberOfFailedPeriodsOfEducation);
 		while(numberOfFailedPeriodsOfEducation<(Context.maxNumberOfFailedPeriodsOfEducation+1) && iterations<maxIterations){
 			if(RandomHelper.nextDouble()<(abilityStudent/0.5)){
 				numberOfSuccessfulPeriodsOfEducation++;
@@ -128,8 +128,8 @@ public class Consumer {
 			}
 			iterations++;
 		}
-		if(numberOfSuccessfulPeriodsOfEducation>21){
-			numberOfSuccessfulPeriodsOfEducation=21;
+		if(numberOfSuccessfulPeriodsOfEducation>Context.maxNumberPeriodsOfEducation){
+			numberOfSuccessfulPeriodsOfEducation=Context.maxNumberPeriodsOfEducation;
 		}
 		if(numberOfFailedPeriodsOfEducation>Context.maxNumberOfFailedPeriodsOfEducation || numberOfSuccessfulPeriodsOfEducation==21){
 			isStudent=false;

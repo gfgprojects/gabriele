@@ -30,6 +30,8 @@ public class Context implements ContextBuilder<Object> {
 	public static boolean saveMicroData=true;
 	public static boolean timeStampInFileName=false;
 
+	public static double minAbilityStudent=0.35;
+	public static double maxAbilityStudent=0.5;
 	public static double minPreferenceParameter=1.0;
 	public static double maxPreferenceParameter=1.5;
 	public static double consumersProbabilityToGetFunded=0.5;
@@ -44,9 +46,10 @@ public class Context implements ContextBuilder<Object> {
 	public static int numBanks = 1;
 	public static int consumerExitAge=70;
 	public static int maxNumberOfFailedPeriodsOfEducation=2;
+	public static int maxNumberPeriodsOfEducation=21;
 	public static double probabilityToBeUnemployedAtTheBeginning=0.2;
 	public static int parameterOfProductivityInProductionFuncion=100;
-	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
+//	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 	public static int minConsumerInitialBankAccount=-500;
 	public static int maxConsumerInitialBankAccount=500;
 	public static double minFirmInitialEquityRatio=0.1;
@@ -136,7 +139,19 @@ public class Context implements ContextBuilder<Object> {
 	verboseFlag=(boolean)params.getValue("verboseFlag");
         numConsumers = (Integer)params.getValue("numConsumers");
         numFirms = (Integer)params.getValue("numFirms");
+	minAbilityStudent=(Double)params.getValue("minAbilityStudent");
+	maxAbilityStudent=(Double)params.getValue("maxAbilityStudent");
         parameterOfProductivityInProductionFuncion = (Integer)params.getValue("parameterOfProductivityInProductionFuncion");
+	maxNumberOfFailedPeriodsOfEducation=(Integer)params.getValue("maxNumberOfFailedPeriodsOfEducation");
+	probabilityToBeUnemployedAtTheBeginning=(Double)params.getValue("probabilityToBeUnemployedAtTheBeginning");
+	numberOfBanksAConsumerCanBeCustumerOf=(Integer)params.getValue("numberOfBanksAConsumerCanBeCustumerOf");
+	minConsumerInitialBankAccount=(Integer)params.getValue("minConsumerInitialBankAccount");
+	maxConsumerInitialBankAccount=(Integer)params.getValue("maxConsumerInitialBankAccount");
+	numberOfBanksAFirmCanBeCustumerOf=(Integer)params.getValue("numberOfBanksAFirmCanBeCustumerOf");
+	minFirmInitialEquityRatio=(Double)params.getValue("minFirmInitialEquityRatio");
+	maxFirmInitialEquityRatio=(Double)params.getValue("maxFirmInitialEquityRatio");
+	minBankInitialEquityRatio=(Double)params.getValue("minBankInitialEquityRatio");
+	maxBankInitialEquityRatio=(Double)params.getValue("maxBankInitialEquityRatio");
 //        debtCancelledOnfinancialDifficulty = (Boolean)params.getValue("debtCancelledOnfinancialDifficulty");
 //        betaStud = (Double)params.getValue("betaStud");
 //        betaWorker = (Double)params.getValue("betaWorker");

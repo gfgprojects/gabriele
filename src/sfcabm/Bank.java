@@ -1,5 +1,5 @@
 package sfcabm;
-
+ 
 import java.util.ArrayList;
 import java.util.Iterator;
 import repast.simphony.random.RandomHelper;
@@ -345,7 +345,7 @@ public class Bank {
 			}
 		}
 		if(Context.verboseFlag){
-			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit+" (only firms that need new credit are considered)");
+			System.out.println("     bank "+identity+" demanded credit "+demandedCredit+" allowed credit "+allowedCredit+" (only firms that asked new credit are considered)");
 		}
 	}
 	
