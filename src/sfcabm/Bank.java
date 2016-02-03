@@ -3,7 +3,7 @@ package sfcabm;
 import java.util.ArrayList;
 import java.util.Iterator;
 import repast.simphony.random.RandomHelper;
-
+ 
 public class Bank {
 	ArrayList<BankAccount> accountsList=new ArrayList<BankAccount>();
 	BankAccount aBankAccount;
