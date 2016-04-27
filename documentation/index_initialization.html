@@ -1,5 +1,40 @@
 <HTML>
 <HEAD>
+	<style type="text/css">
+	
+		.tooltip{
+   			display: inline;
+    		position: relative;
+		}
+		
+		.tooltip:hover:after{
+    		background: #333;
+    		background: rgba(0,0,0,.8);
+    		border-radius: 5px;
+    		bottom: 26px;
+    		color: #fff;
+    		content: attr(tooltiptext);
+    		left: 20%;
+    		padding: 5px 15px;
+    		position: absolute;
+    		z-index: 98;
+    		width: 220px;
+		}
+		
+		.tooltip:hover:before{
+    		border: solid;
+    		border-color: #333 transparent;
+    		border-width: 6px 6px 0 6px;
+    		bottom: 20px;
+    		content: "";
+    		left: 50%;
+    		position: absolute;
+    		z-index: 99;
+		}
+	
+	</style>
+
+
 </HEAD>
 <BODY LANG="it-IT">
 Back to <a href="index.html"> home </a>
@@ -10,12 +45,12 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>Context</b>: </td>
 	<td>load parameters</td>
-	<td>Parameters are loaded from the batch_parameters.xml file situated in the scenario folder </td>
+	<td>Parameters are loaded from the batch_parameters.xml file placed in the scenario folder </td>
 </tr>
 <tr>
 	<td><b>Context</b>:</td> 
 	<td><a href="init_create_consumers.html">create consumers</a><br>create firms<br>create banks<br>create office for labor<br>create office for statistics</td>
-	<td>set consumer identification number, age,  if student or non student, level of education and productivity.<br>set firm identification number, age and product absolute rank.<br>set bank identification number.<br>office for labor created<br>set up for relative rank computation and data storage<br></td>
+	<td>set consumer's identification number, age, student flag, initial level of education and productivity.<br>set firm identification number, age and product <span  tooltiptext="It is an integer giving the degree of progress embedded in a product. Examples can be found in the real world: iphone 6, Samsung s7, ..." class="tooltip">absolute rank<sup><img src="tooltip-icon.gif" style="width:10px;height:10px;"></sup></span>.<br>set bank identification number.<br>office for labor is created.<br>set up for <span  tooltiptext="It is an integer giving the degree of progress embedded in a product relative to the still demanded most outdated product. Example:  suppose consumers demand ipone 5 and iphone 6, and nobody asks for ipone 4, then iphone 5 relative rank is 1 and iphone 6 relatice rank is 2." class="tooltip">relative rank<sup><img src="tooltip-icon.gif" style="width:10px;height:10px;"></sup></span> computation and data storage.<br></td>
 </tr>
 <tr bgcolor="lightgray">
 	<td ><b>Initial<br>employment</b></td>
@@ -56,10 +91,10 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>&nbsp &nbsp &nbsp &nbsp &nbsp Banks</b>: </td>
 	<td>ComputeDemandedCredit()<br>computeDeposits()<br><a href="init_bank_setupBalance.html">setupBalance()</a><br>computeBalanceVariables()</td>
-	<td>sum of credit asked by firms and households in the previous steps<br>sum of the bank accounts with positive amounts<br>setup bank balance sheet and resize deposits<br>deposits=sum of positive bank accounts; loans=sum of negative bank accounts<br> </td>
+	<td>sum of credit asked by firms and households<br>sum of the bank accounts with positive amounts<br>setup bank balance sheet and resize deposits<br>deposits=sum of positive bank accounts; loans=sum of negative bank accounts<br> </td>
 </tr>
 <tr bgcolor="lightgray">
-	<td ><b>ceck balance sheet consistency</b></td>
+	<td ><b>check balance sheet consistency</b></td>
 	<td> </td>
 	<td> </td>
 </tr>

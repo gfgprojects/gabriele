@@ -6,7 +6,7 @@
 \tableofcontents
 \section{Coding}
 You can try your main loop without scheduling events by setting the \verb+schedulingFlag+ to false.
-\section{Introduction}
+\section{The components of the system}
 This model aims at reproducing the dynamics of an economic systems.
 
 Describing the functioning of a dynamic system implies to know the components of the systems, how they work and how they interact with each other. 
@@ -32,24 +32,27 @@ In the following subsections we will carefully describe these two representation
 \end{figure}
 
 \newpage
-\subsection{System Components}
+%\subsection{System Components}
 We divide systems components in the following categories:
 \begin{itemize}
 	\item agents;
 	\item goods;
 	\item financial assets.
 \end{itemize}
-\subsubsection{Agents}
+\subsection{Agents}
 The characterization of agents is that which is standard in economic modeling:
 \begin{itemize}
 	\item consumers
 	\item firms
 	\item government
 	\item the banking sector
+
+		$f\in \{1, 2, \cdots, F\}$
+
 \end{itemize}
 Beside these agents we have an additional agent that have a global view of the system. It computes aggregate variables, and using this information it supervises the functioning of the models regulating markets and revising agents' individual variables where needed. We call this ``supervisor'' the Office for Statistics.
 
-\subsubsection{Goods}
+\subsection{Goods}
 \begin{itemize}
 	\item consumption goods
 	\item investment goods
@@ -57,7 +60,7 @@ Beside these agents we have an additional agent that have a global view of the s
 
 Goods are exchanged on markets.
 
-\subsubsection{Financial assets}
+\subsection{Financial assets}
 
 In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. This task is not trivial and we perform it by using  
 %A characteristic of our model is the focus on the coherence at the stock level.
@@ -479,6 +482,316 @@ E_b=\sum BA+E_f
 Economic models usually account for the ``normal'' case in which the three variables reported above have positive values. However, it is worth considering ``pathological'' cases in which these variables get negative. This section shed light on how these cases should be treated.  
 
 \newpage 
+\newpage
+\section{Initialization}
+The initialization phase aims allowing firms to determine their initial production reducing exogenous setting to the minimum. 
+
+When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents will be set in a stock flow consistent way.
+
+We will describe the initialization process in a more detailed way hereafter.
+
+To realize production firms need two production input: capital and labor. We use the following Leontief type production function:
+\[
+Y_f=\min(Y_f^{PK},Y_f^{PL})
+\]
+That is, production realized by firm $f$ is the minimum between the firm potential production capital production, $Y_f^{PK}$, and the potential production that can be obtained by the labor force employed by the firm, $Y_f^{PL}$. 
+
+
+The capital potential production is assumed to be equal to the level of capital:
+\[
+	Y^{PK}_f=K_f
+\]
+
+The potential production of labor is more tricky because workers are heterogeneous and has different productivities.
+If we identify a worker's productivity with $wp_{w,f}$, we compute the sum of workers productivities
+\[
+	wp_f=\sum_{w}wp_{w,f}
+\]
+the potential production is thus
+\[
+	Y^{PL}_f=\theta_{YL}wp_f
+\]
+parameter:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+To arrive at the very first $Y_f$ we adopt the following strategy. 
+\begin{itemize}
+	\item compute the potential output from workers
+	\item adjust capital such as the potential output from capital is equal to the potential output from workers 
+\end{itemize}
+
+Note how the first step implies a preliminary setup of consumer state, while the second step allows the setup of firms assets balance sheet item. 
+Following the second step, we can setup firms balance sheet liabilities.
+Once consumers and firms banks accounts are known, we setup banks balance sheets.
+
+So the whole initialization sequence has the following phases:
+\begin{enumerate}
+	\item Create agents
+	\item set consumers working state
+	\item set agents balance sheet
+	\item revise agents balance sheet for stock consistency
+\end{enumerate}
+
+We will now discuss the initialization for each type of agent.
+
+\subsection{Consumers initialization}
+
+\subsubsection{Working situation}
+
+
+\subsubsection*{Students}
+
+In an attempt to reduce the number of parameters to the minimum, it is assumed that each worker is characterized by its fundamental ability. It characterize each consumer performance during the education period. The latter in turn determine the productivity as a worker.
+
+We call this parameter the student ability.\\
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$\theta_{as}$&\verb+abilityStudent+&\verb+U(Context.minAbilityStudent,+\\
+& &\verb+Context.maxAbilityStudent)+\\
+ $\theta_{minas}$&\verb+Context.minAbilityStudent+&$0.35$\\
+ $\theta_{maxas}$&\verb+Context.maxAbilityStudent+&$0.5$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+The most important observation about this parameter is that its upper value is 0.5.
+
+Next important variable is the consumers age, which is initialized as a random number between zero and a parameter denoting the retirement age.\\
+parameter:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{cea}$&\verb+Context.consumerExitAge+&$70$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+Using the \verb+abilityStudent+ and the \verb+consumerAge+ the education history of consumers is inizialized. Each year of education is set to successful if
+\[
+	u<2\theta_{as}
+\]
+and unsuccessful otherwise. $u$ is drawn from a $U(0,1)$. Note that best students has $\theta_{as}=0.5$, so they will be alway successful because $2\theta_{as}=1$. Students with less abilities has lower probability to be successful.\\
+
+To initialize the education history we need the following\\ 
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{mnfpe}$&\verb+maxNumberOfFailedPeriodsOfEducation+&$2$\\
+ $\theta_{mnpe}$&\verb+maxNumberPeriodsOfEducation+&$21$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+Starting from age 0, the process is repeated until 
+\begin{enumerate}
+	\item the maximum number of failures admitted ($\theta_{mnfpe}$) or
+	\item the maximum periods of possible education ($\theta_{mnpe}+\theta_{mnfpe}$) or
+	\item the consumer's age 
+\end{enumerate}
+is reached.
+
+We then count the number of successful periods of education, $n_{sye}$. 
+
+When the process is stopped by conditions 1 or 2, the consumer state is set to non students. At this stage, all non students are unemployed. This state will be revised in the next step. Both the education degree and the productivity as a worker are assigned using $n_{sye}$. 
+
+The degree of education is assigned as follows:
+\[
+	\begin{array}{l l l}
+		n_{sye}& \textnormal{degree}& \textnormal{degree id}\\
+	0\le n_{sye}<5 & \textnormal{none}&0\\
+	5\le n_{sye}<8 & \textnormal{elementary}&1\\
+	8\le n_{sye}<13 & \textnormal{intermediate}&2\\
+	13\le n_{sye}<16 & \textnormal{college}&3\\
+	16\le n_{sye}<18 & \textnormal{bachelor}&4\\
+	18\le n_{sye}<21 & \textnormal{master}&5\\
+	21= n_{sye} & \textnormal{PhD degree}&6
+	\end{array}
+\]
+
+The productivity is assigned as follows. Each year of education increases the consumers ability by a fixed amount. So, the productivity assigned to a non worker with  $n_{sye}$ successful year of education is
+\[
+	wp=\theta_{as}+\frac{0.5}{\theta_{mnpe}}n_{sye}
+\]
+Note that $\theta_{as}=0.5$ implies $n_{sye}=\theta_{mnpe}$ so that $wp=1$.
+
+Once the productivity of a non student is known, we compute his/her potential production 
+\[Y^{Pns}=\theta_{YL}wp\]
+
+The education history initialization is stopped by condition 3 when the consumer is young. In this case the subject is assigned the state of student and its education history will be evolved in the main loop using the rules explained above.
+
+\subsubsection*{Employed and unemployed}
+
+At this stage all non students are unemployed. Now, some of them will be employed by firms. 
+
+To perform this task we introduce the following\\
+parameter:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{ptbub}$&\verb+Context.probabilityToBeUnemployedAtTheBeginning+&$0.2$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+With probability $1-\theta_{ptbub}$, each non student select a firm randomly and send his/her CV to this firm. Subjects who do not send a CV (this happens with probability $\theta_{ptbub}$) enter the main loop in the unemployments state. 
+
+\subsubsection{Proposing consumers bank account}
+
+This is a first action to setup the consumers balance sheet. 
+
+The involved parameters are:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{nbcc}$&\verb+Context.numberOfBanksAConsumerCanBeCustumerOf+&$1$\\
+ $\theta_{mincba}$&\verb+Context.minConsumerInitialBankAccount+&$-500$\\
+ $\theta_{maxcba}$&\verb+Context.maxConsumerInitialBankAccount+&$500$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+
+Each consumer select randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of the bank account the code drawn a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the demandedCredit variable (it will managed when the bank account will be setup). Non negative number are assigner to the bank account amount.
+
+The amount will be revised in the final step of the initialization to ensure stock consistency.
+
+\subsection{Firms initialization}
+\subsubsection{Potential production of labor}
+In the consumers initialization we saw that some non student sent their CV to firms.
+
+Each Firm now has a list of CVs. Each firm employs all the senders of the CVs that are in the received CVs list. The CV senders state is switched from unemployed to employed.
+
+Summing the potential production of each employee, the firm determine the potential production of its labor force:
+\[
+	wp_f=\sum_{w}wp_{w,f}
+\]
+the potential production is thus
+\[
+	Y^{PL}_f=\theta_{YL}wp_f
+\]
+
+\subsubsection{Production capital}
+As we told above, due to the Leontif production function, the production capital is set in such a way that the potential production from capital is equal to the potential production of labor. We have already defined the potential production of capital as
+\[Y_f^{PK}=K_f\]
+So, the initial level of capital for each firm is set to
+\[
+K_f=Y^{PL}_f
+\]
+\subsubsection{Balance sheet}
+
+In the previous step we set up the assets side of the firms balance sheet.
+
+As explained above, we have two liabilities: equity and bank account. We set up equity and determine the bank account residually.
+
+To setup equity we need these\\
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{minfieb}$&\verb+Context.minFirmInitialEquityRatio+&$0.1$\\
+ $\theta_{maxfieb}$&\verb+Context.maxFirmInitialEquityRatio+&$0.3$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+Each firm equity is set as follow
+\[
+	EF_f=u_{Ef}K_f
+\]
+where $u_{Ef}$ is drawn from $U(\theta_{minfieb},\theta_{maxfieb})$.
+
+Finally, each firm sets her bank accounts. First of all the level of bank account is computed as
+\[
+BA_f=K_f-EF_f
+\]
+
+The model has a parameter for the number of banks a firm can be costumer of\\
+parameter:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{nbbc}$&\verb+Context.numberOfBanksAFirmCanBeCustumerOf+&$1$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+each firm selects randomly a number of banks equal to $\theta_{nbbc}$ and open a bank account in each of them. The amount of the bank account is set to zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit is each bank account is set to $BA_f/\theta_{nbbc}$.
+
+
+\subsection{Banks initialization}
+
+
+To setup the banks balance sheet, we start again from their assets.
+The amount of negative bank accounts is summed up. This gives the loans extended a bank:
+\[
+L_b=\sum BA_b^-
+\]
+
+
+
+Given each bank assets, we setup the equity by using the following\\
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{minbier}$&\verb+Context.minBankInitialEquityRatio+&$0.1$\\
+ $\theta_{maxbier}$&\verb+Context.maxBankInitialEquityRatio+&$0.3$\\
+	\hline
+\end{tabular}
+
+\vskip5mm
+A bank equity base of a bank is then computed as
+\[
+	EB_b=u_{Eb}L_b
+\]
+where $u_{Eb}$ is drawn from $U(\theta_{minbieb},\theta_{maxbieb})$.
+
+Now, the level of deposits compatible with the balance sheet relationship is computed:
+\[
+D_b=L_b-EB_b
+\]
+
+Due to the random elements in the initialization of consumers and firms, we in general have
+\[
+	\sum BA^+_b \neq D_b
+\]
+To satisfy the balance sheet identity, the amount of positive bank accounts is adjusted as follows:
+\[
+	BA^{+adj}=BA^+\frac{D_b}{\sum BA^+_b}
+\]
+In this way, stock consistency in each bank balance sheet is restored:
+\[
+	\sum BA^{+adj}_b=D_b
+\]
+
+\newpage
 \section{The main loop}
 The main loop can be divided into two parts:
 \begin{enumerate}
@@ -495,7 +808,7 @@ The main loop can be divided into two parts:
 
 \subsection{the process that leads to the consumption of what has been produced}
 %\subsection{Consumer-market-bank relationship}
-\subsubsection{The dynamics}
+We present here the sequence of events and will enter in the details in the following subsections.
 
 \begin{enumerate}
 	\item consumers receive wages;
@@ -515,14 +828,14 @@ The main loop can be divided into two parts:
 		\end{enumerate}
 	\item banks decide how much credit to allow;
 	\item consumers adjust their desired consumption according to allowed credit. 
-	\item Consumers go to goods in the market in order to satisfy their possible demand.
+	\item Consumers go in the good market in order to satisfy their possible demand.
 	\item Office for statistics helps finding goods.
 	\item The \textit{effective} level of consumption is established: it may be less or equal to the desired consumption.
 	\item consumers adjust their bank accounts (deposits and loans) according to effective consumption.
 \end{enumerate}
 
+\subsubsection{Consumer-Bank relationship}
 
-The following table allows to sketch the step evolution of flows, stock and information not recorded in accounting:
 \begin{table}[htp]
 	\resizebox{\linewidth}{!}{
 \begin{tabular}{c c c c}
@@ -595,7 +908,7 @@ Each consumer is endowed with a bank account. The bank-consumer relationship pro
 Let's consider the consumer-bank dynamics in some specific cases.
 \fi
 
-\subsubsection{A focus on Indebted Consumers}
+A focus on Indebted Consumers
 %\subsubsection*{Step 1: interests and ask for repayments}
 \subsubsection*{Step 1: interests and loans repayment}
 
@@ -752,10 +1065,38 @@ bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\b
 disposableIncome = {\bf0}  desiredConsumption = 18 effectiveConsumption = 15
 \end{Verbatim}
 
+\newpage
+\subsubsection{Students evolution}
+
+\newpage
+\subsubsection{Goods market supervisor}
 
 \newpage
 \subsection{The process that leads to production}
 
+This process consists in firms' attempt to adjust inputs to perform their demand expected for the next period.
+
+First of all they have to establish their target level of production. To this aim, they have two important signals from the present period: the level of desired demand from consumers and that from other firms.
+Concerning the demand from consumers, we highlight how, the purchased quantity can be different from that initially desired by consumers. Indeed, when a consumer does not find enough goods of a given type, its demand is moved to other goods by the OFS.
+
+Once the target level has been established, the adjustment process start. 
+
+The production can be either reduced or augmented. The case of a production reduction has no difficulties: The production capital used in the production is reduced and workers are fired.
+
+The upward adjustment is more tricky because the joint availability of resources must be checked.
+So, the firm has first to check how many financial resources are available for realizing the desired investment. Then It has to check if there are enough unemployed labor force available. Once the new realizable production is known the production factor adjustment starts: workers are hired and production capital is bought. Concerning the latter, the firm first buys existing unused production capital if it exists. If, after this adjustment the firm still needs production capital it asks for the production of new product on the goods market.
+
+Summing up, the process leading to production is composed of the following phases:
+\begin{enumerate}
+	\item set the target level of production
+	\item check available financial resources for upward adjustment of production capital
+	\item check availability of labor force taking in mind the possible financial constraints and hire.
+	\item The firm can be constrained in the labor market, thus the available financial resources can remain partially unused. The entrepreneur lines up the production capital coherently with the gathered workforce.  
+	\item entrepreneurs who want to decrease production capital offer it on the unused production capital market, while entrepreneurs who want to increase the production capital demand it on the same market. 
+	\item if offered unused production capital is lower that that demanded, order of new product to other firms are issued. 
+\end{enumerate}
+
+\subsubsection{check available financial resources}
 The bank-firm relationship progresses by the following steps:
 
 \begin{enumerate}
@@ -971,7 +1312,7 @@ cashOnHand = 0 financialResourcesInBankAccounts = 0
 
 
 
-\section{Unused capital and investments}
+\subsubsection{Unused capital and investments}
 
 It can happen that a number of firms in the economy want to increase their production capital while other have an excess of it.
 
@@ -1003,6 +1344,80 @@ If the second firm can sell the unused capital to the first one, the total amoun
 In the other case bank lending increase to 210.
 
 However, in the second case the first firm buys new production goods and the aggregate demand is higher than in the first case. 
+\subsubsection{Realizing production}
+To realize production firms need two production input: capital and labor.
+
+For each of these two production input we compute the potential production, that is the production that can realize with the current level of the factor provided the other factor is not in short supply.
+
+The capital potential production is assumed to be equal to the level of capital:
+\[
+	Y^{PK}_f=K_f
+\]
+
+The potential production of labor is more tricky because workers are heterogeneous and has different productivities.
+If we identify a worker's productivity with $wp_{w,f}$, we compute the sum of workers productivities
+\[
+	wp_f=\sum_{w}wp_{w,f}
+\]
+the potential production is thus
+\[
+	Y^{PL}_f=\theta_{YL}wp_f
+\]
+finally, the potential output is given by the Leontief type production function
+\[
+Y^P_f=\min(Y^{PK},Y^{PL})
+\]
+
+Involved parameter:
+
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
+	\hline
+\end{tabular}
+
+\subsubsection{Paying wages}
+
+
+Non student that have a job receive a wage. 
+
+The wage depends on the workers productivity. 
+
+The software gives the possibility to choose which productivity is considered. Possibilities are
+\begin{enumerate}
+	\item worker's productivity
+		\item the firm level average productivity of the workers having the same degree of education
+		\item the system wide level average productivity of the workers having the same degree of education
+\end{enumerate}
+
+The wage cannot be lower than the unemployment dole and cannot be higher than the potential product of the worker.
+
+The wage setting equation is
+\[
+	ww=ud+\theta_{wp}*\theta_{YL}*wp
+\]
+
+Involved parameter:
+
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$\theta_{wp}$&\verb+laborMarketStateToSetWage+&0.5\\
+$\theta_{wsr}$&\verb+wageSettingRule+&2\\
+	\hline
+
+\end{tabular}
+
+
+\subsubsection{Computation of economic result}
+
+
+
 
 
 \end{document}

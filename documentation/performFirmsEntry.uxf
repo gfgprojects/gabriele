@@ -6,23 +6,15 @@
     <coordinates>
       <x>20</x>
       <y>0</y>
-      <w>841</w>
-      <h>785</h>
+      <w>593</w>
+      <h>539</h>
     </coordinates>
     <panel_attributes>title:OfficeForStatistics.perforFirmsEntry()
 Start
-compute numberOfUnemployed
 While[while\newFirmsList.hasnext()]
 	get firm
 	set firm absolute rank
-	If
-		[if\an unemployed\for this firm exists]
-		firm setupBankAccount()
-
-		[else]
-		firm setupBankAccountAtFullEmployement()
-
-	EndIf
+	firm setupBankAccountOfNewEnteringFirm()
 	add this firm to its industry
 
 resetProductAttractiveness()\\(entry of new Firms modifies\the competition in the product\market)
@@ -35,40 +27,27 @@ End
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
       <x>20</x>
-      <y>830</y>
-      <w>467</w>
-      <h>509</h>
+      <y>620</y>
+      <w>481</w>
+      <h>753</h>
     </coordinates>
-    <panel_attributes>title:Firm.setupBankAccount()
-Start
-productionCapital=Context.productionOfNewEnteringFirm
-firmInvestiment=productionCapital
-desiredDemand=productionCapital
-equity=productionCapital*uniform(\Context.minFirmInitialEquityRatio,\Context.maxFirmInitialEquityRatio)
-debt=productionCapital-equity
-extract Context.numberOfBanksAFirmCanBeCustumerOf\different banks from the banksList
-open an account in each bank.\The account in each bank is set to\debt/Context.numberOfBanksAFirmCanBeCustumerOf
-End
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
-    <coordinates>
-      <x>510</x>
-      <y>830</y>
-      <w>452</w>
-      <h>509</h>
-    </coordinates>
-    <panel_attributes>title:Firm.setupBankAccountAtFullEmployment()
+    <panel_attributes>title:Firm.setupBankAccountOfNewEnteringFirm()
 Start
 productionCapital=0
-firmInvestiment=productionCapital
-desiredDemand=productionCapital
-equity=productionCapital*uniform(\Context.minFirmInitialEquityRatio,\Context.maxFirmInitialEquityRatio)
-debt=productionCapital-equity
+productionCapacityAfterWorkforce adjustment=0
+firmInvestiment=Context.productionOfNewEnteringFirm;
+desiredProductionCapital=firmInvestment
+creditToAskInSetDesiredCredit=0
+desiredDemand=0
+equity=0
+debt=0
+//equity=productionCapital*uniform(\Context.minFirmInitialEquityRatio,\Context.maxFirmInitialEquityRatio)
+//debt=productionCapital-equity
 extract Context.numberOfBanksAFirmCanBeCustumerOf\different banks from the banksList
 open an account in each bank.\The account in each bank is set to\debt/Context.numberOfBanksAFirmCanBeCustumerOf
+add each account to bankAccountsListWithNoUnpaidAmount
+bestBankAccount= first among bank accounts
+bestBankAccount.setAllowedCredit(-firmInvestment)
 End
 </panel_attributes>
     <additional_attributes/>
@@ -76,23 +55,12 @@ End
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>180</x>
-      <y>430</y>
-      <w>100</w>
-      <h>420</h>
+      <x>120</x>
+      <y>250</y>
+      <w>170</w>
+      <h>390</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;400.0;10.0;10.0;80.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>770</x>
-      <y>450</y>
-      <w>30</w>
-      <h>400</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;380.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;370.0;10.0;10.0;150.0;10.0</additional_attributes>
   </element>
 </diagram>

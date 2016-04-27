@@ -30,42 +30,7 @@ End
   <element>
     <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
     <coordinates>
-      <x>0</x>
-      <y>470</y>
-      <w>602</w>
-      <h>1349</h>
-    </coordinates>
-    <panel_attributes>title:Firm.hireUsingCV()
-Start
-If
-	[if\hadFired]
-
-	[else]
-	If
-		[if\firmInvestment&gt;=0]
-		targetLevelOf\Workers\Production\Capacity=\productionCapital
-
-		[else]
-		targetLevelOf\Workers\Production\Capacity=\desiredDemand
-	EndIf
-	While[while\production\Capacity\After\Workforce\Adjustment\&lt;\targetLevelOf\Workers\Production\Capacity\&amp;&amp;\applications\List.hasNext()]
-		get curriculum sender
-		If
-			[if\sender is\employed]
-
-			[if\sender is\unemployed]
-			hire the\CV sender
-			increase\Production\Capacity\After\Workforce\Adjustment
-
-EndIf
-End
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
-    <coordinates>
-      <x>640</x>
+      <x>760</x>
       <y>470</y>
       <w>538</w>
       <h>1053</h>
@@ -95,28 +60,6 @@ End
     <additional_attributes/>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>650</x>
-      <y>280</y>
-      <w>130</w>
-      <h>210</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>110.0;190.0;110.0;10.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>40</x>
-      <y>230</y>
-      <w>90</w>
-      <h>260</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;240.0;10.0;10.0;70.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>Text</id>
     <coordinates>
       <x>470</x>
@@ -137,5 +80,85 @@ End
     </coordinates>
     <panel_attributes>_ _ _ _ _ </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>470</y>
+      <w>657</w>
+      <h>1997</h>
+    </coordinates>
+    <panel_attributes>title:Firm.hireUsingReceivedCV()
+Start
+If
+	[if\hadFired]
+	targetLevelOf\Workers\Production\Capacity=\desired\Production\Capital
+
+
+	[else]
+	If
+		[if\firmInvestment&gt;=0]
+		targetLevelOf\Workers\Production\Capacity=\productionCapital+\firmInvestment
+
+		[else]
+		targetLevelOf\Workers\Production\Capacity=\desired\Production\Capital
+	EndIf
+//	newHiredProductionCapacity=0
+	While[while\production\Capacity\After\Workforce\Adjustment\&lt;\targetLevelOf\Workers\Production\Capacity\&amp;&amp;\applications\List.hasNext()]
+		get curriculum sender
+		If
+			[if\sender is\employed]
+
+			[if\sender is\unemployed]
+			hire the\CV sender
+			increase\Production\Capacity\After\Workforce\Adjustment
+//			increase\newHired\Production\Capacity
+
+//	If
+//		[if\firmInvestment&gt;0]
+//		If
+//			[if\firmInvestment&gt;\newHired\Production\Capacity]
+//			firmInvestment=\newHired\Production\Capacity
+//
+//			[else]
+//
+//		EndIf
+//
+//		[else]
+EndIf
+If
+	[if\Production\Capacity\After\Workforce\Adjustment\&gt;\targetLevel\OfWorkers\Production\Capacity]
+	firm\Realized\Investment\=\firmInvestment
+	
+	[else]
+	firm\Realized\Investment\=\Production\Capacity\After\Workforce\Adjustment\-\productionCapital
+
+EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>280</y>
+      <w>230</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>210.0;190.0;210.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>50</x>
+      <y>230</y>
+      <w>80</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;240.0;10.0;10.0;60.0;10.0</additional_attributes>
   </element>
 </diagram>

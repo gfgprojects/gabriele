@@ -157,25 +157,14 @@ Back to <a href="index.html"> home </a>
 </tr>
 <tr>
 	<td><b>Firms</b>* </td>
-	<td><a href="adjustProductionCapitalAndBankAccount.html">adjustProductionCapitalAndBankAccount</a></td>
-	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
+	<td><a href="setPossibleInvestment.html">setPossibleInvestment</a></td>
+	<td>adjust possible investment according to the allowed credit.</td>
 </tr>
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performFirmsEntry.html">performFirmsEntry</a> </td>
 	<td>In this model, the number of firm is constant. For each firm exit in the performFirmsExit() method, a new firm is created and added to the context. The program checks if an unemployed exists for each entering firm. If yes, The production capital of the new firm is positive and equal to the parameter in the context, else, the production capital is set to zero. The production capital of new firms is considered as demand for investments.   </td>
 </tr>
-<tr>
-	<td><b>OfficeForStatistics </b> </td>
-	<td><a href="computeInvestments.html">computeInvestments</a> </td>
-	<td>Sum of investment of incumbent and new firms.</td>
-</tr>
-<tr>
-	<td><b> </b> </td>
-	<td><a href="allocateInvestments.html">allocateInvestments</a> </td>
-	<td>The market for unused capital is activated. If unused capital exists, the demand for new capital is reduced by the unused capital. The remainder is considered as demand of newly produced goods.</td>
-</tr>
-
 
 <tr bgcolor="lightgray">
 	<td ><b>Labor<br>market</b></td>
@@ -215,6 +204,23 @@ Back to <a href="index.html"> home </a>
 	<td><a href="activateLaborMarket.html">activateOfficeForLabor</a> </td>
 	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
 </tr>
+<tr>
+	<td><b>Firms</b>* </td>
+	<td><a href="adjustProductionCapitalAndBankAccount.html">adjustProductionCapitalAndBankAccount</a></td>
+	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics </b> </td>
+	<td><a href="computeInvestments.html">computeInvestments</a> </td>
+	<td>Sum of investment of incumbent and new firms.</td>
+</tr>
+<tr>
+	<td><b> </b> </td>
+	<td><a href="allocateInvestments.html">allocateInvestments</a> </td>
+	<td>The market for unused capital is activated. If unused capital exists, the demand for new capital is reduced by the unused capital. The remainder is considered as demand of newly produced goods.</td>
+</tr>
+
+
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="performConsumersTurnover.html">performConsumersTurnover</a> </td>
