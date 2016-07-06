@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>528</w>
+      <h>707</h>
+    </coordinates>
+    <panel_attributes>title:Bank.resetFirmsDemandedAndAllowedCredit()
+Start
+demandedCredit=0
+allowedCredit=0
+While[cycle\over\accounts]
+	get account
+	If
+		[if\ownerType=firm]
+		this account resetDemandedCredit():\demandedCredit=0
+		this account resetAllowedCredit():\allowedCredit=0
+    
+		[else]
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

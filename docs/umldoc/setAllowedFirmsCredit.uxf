@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>1142</w>
+      <h>1701</h>
+    </coordinates>
+    <panel_attributes>title:Bank.setAllowedFirmsCredit()
+Start
+totalDemandedCredit=0
+totalAllowedCredit=0
+While[while\bankAccountsList.\hasNext()]
+	get account
+	If
+		[if\acccount\owner=\firm]
+		get this account's amount
+		get this account's\demanded credit
+		increase totalDemandedCredit\by this account's demanded credit
+		If
+			[if\uniform&lt;Context.\firmsProbability\ToHaveNew\DemandedCredit\CompletelyAllowed]
+			multiplier=1
+
+			[else]
+			multiplier=Context.\percentageOfNew\DemandedCredit\AllowedToFirms\WhenCreditIsNot\CompletelyAllowed
+		EndIf
+		If
+			[if\amount&gt;=0]
+			allowedCredit=multiplier*demandedCredit\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+
+			[else]
+			If
+				[if\desiredCredit&gt;0]
+				allowedCredit=amount+multiplier*\(demandedCredit-amount)\(note that demanded credit is not zero only\for banks to whom the credit was asket)
+
+				[else]
+				allowedCredit=0
+
+			EndIf
+		increase totalAllowedCredit\by allowedCredit
+
+		[else]
+
+	EndIf
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.element.Text</type>
+    <coordinates>
+      <x>140</x>
+      <y>40</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Same code as
+setAllowedConsumerCredit
+evaluate if use the same
+method in the two cases </panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>1010</w>
+      <h>1187</h>
+    </coordinates>
+    <panel_attributes>title:Bank.updateFirmsAccounts()
+Start
+While[while\accountsList.\hasNext]
+	get account
+	get amount
+	get ownerType
+	If
+		[if\ownerType\==firm]
+		If
+			[if\account amount &gt;=0]
+			increase amount by\interests at deposits rate
+			demandeCredit=0
+			allowedCredit=0
+
+			[if\account amount &lt;0]
+			decrease amount by\interest at loans rate
+			If
+				[if\uniform&lt;Context.firms\ProbabilityToHave\OutstandingDebt\CompletelyRenewed\]
+				set allowedCredit to account
+
+				[else]
+				set allowedCredit to account*\Context.percentageOf\OutstandingCredit\AllowedToFirmsWhen\CreditIsNotCompletelyRenewed
+
+End</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

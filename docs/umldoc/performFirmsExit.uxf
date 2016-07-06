@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>633</w>
+      <h>1137</h>
+    </coordinates>
+    <panel_attributes>title:OfficeForStatistics.performFirmsExit()
+Start
+empty exitingFirmsList
+empty newFirmsList
+While[while\firmsList.\hasNext()]
+	get aFirm
+	If
+		[if\demand from household+\demand from firms&lt;20]
+		aFirm ask banks to close accounts
+		aFirm fire workers
+		add aFirm to exitingFirmsList
+		create a new firm
+		add the new firm to newFirmsList
+
+		[else]
+
+While[while\exitingFirmsList.\hasNext()]
+	get aFirm
+	remove the firm from the industry\it belongs
+	remove the firm from context
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>702</w>
+      <h>1301</h>
+    </coordinates>
+    <panel_attributes>title:Firm.setDesiredCredit()
+Start
+desiredProductionCapital =\desiredDemand from consumers+\demand from firms
+financialResourceInBankAccounts =\sum of bankAccounts with positive\account
+unpaidAmountInBankAccounts= sum\of unpaid amounts in bank accounts
+identify the worstBankAccount\(where resources will be deposited if available)\\create a list of banks with NoUnpaidAmount 
+identify the bankAccount with best position\among the banks with noUnpaidAmount\(where credit will be asked if needed)\the bestBankAccount does not exists if the\firms has an unpaid amount in all the banks
+If
+	[if\desiredCapital\&gt; capital]
+	creditToAsk=\desiredProductionCapital-\productionCapital+\unpaidAmountInBankAccounts-\cashOnHand-\financialResourcesInBankAccounts
+
+	[if\desiredCapital\&lt;= capital]
+	creditToAsk=\unpaidAmountInBankAccounts-\cashOnHand-\financialResourcesInBankAccounts
+EndIf
+	
+If
+	[if\creditToAsk&gt;0]
+	If
+		[if\bestBankAccount\exists]
+		bestAccount.\setDesiredCredit(0,creditToAsk)
+
+		[else]
+	EndIf
+	
+	[else]
+EndIf
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

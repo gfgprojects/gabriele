@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>591</w>
+      <h>645</h>
+    </coordinates>
+    <panel_attributes>title:Bank.resetConsumersDemandedAndAllowedCredit()
+Start
+//demandedCredit=0
+//allowedCredit=0
+While[cycle\over\accounts]
+	get account
+	get owner
+	If
+		[if ownerType=consumer]
+//		If
+//			[if demandedCredit&lt;allowedCredit\(the two values are negaive)]
+//			this account resetAllowedCredit()\(put it to zero)
+//			[else]
+		this account resetDemandedCredit()\(put it to zero)
+		this account resetAllowedCredit()\(put it to zero)
+
+		[else]
+
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

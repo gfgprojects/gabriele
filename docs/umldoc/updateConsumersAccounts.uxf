@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>80</x>
+      <y>0</y>
+      <w>1276</w>
+      <h>1203</h>
+    </coordinates>
+    <panel_attributes>title:Bank.updateConsumersAccounts()
+Start
+While[while\accountsList.\hasNext]
+	get account
+	get amount
+	get ownerType
+	If
+		[if\ownerType\==consumer]
+		If
+			[if\account amount &gt;=0]
+			increase amount by\accrued interests
+			desiredCretid=0
+			allowedCredit=0
+
+			[if\account amount &lt;0]
+			If
+				[if\consumer isStudent\or unemployed worker]
+				increase amount by\interest at subsidized rate
+				set demandedCredit to account
+				set allowedCredit to account
+
+				[if\consumer isWorking]
+				increase amount by\interest at loans rate
+				set demandedCredit to account
+				set allowedCredit to account*(1-Context.percentageOfLoan\ToRefundForIndebtedWorkersIfAsked)\with probability Context.probability\ToBeAskedToRefundForIndebtedWorkers\or to account with the complement probability
+			EndIf
+		EndIf
+
+		[else]
+	EndIf
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

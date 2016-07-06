@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>2020</w>
+      <h>1505</h>
+    </coordinates>
+    <panel_attributes>title:Firm.adjustProductionCapitalAndBankAccount()
+Start
+If
+	[if\desiredProductionCapital\&gt; productionCapital]
+	creditToAsk=\desiredProductionCapital\- productionCapital\- cashOnHand\- financialResourcesInBankAccounts\+unpaidAmountInBankAccounts
+	If
+		[if\bestBank\exists]
+		amountAvailableFromBestBank=\get available credit from best bank
+
+		[else]
+		amountAvailableFromBestBank=0;
+	EndIf
+	If
+		[if\creditToAsk&gt;0]
+		If
+			[if\allowedCredit\&gt;actualCredit]
+			If
+				[if\allowd credit &gt;\credit needed for\desiredCapital]
+				capital=desiredCapital
+				bankAccount=demandedCredit
+
+				[if\allowd credit &lt;=\credit needed for\desiredCapital]
+				capital=capital allowed by credit
+				bankAccount=allowedCredit
+			EndIf
+
+			[if\allowedCredit\&lt;=actualCredit]
+			If
+				[if\bankAccount +\cashOnHand +\financialResource\&gt;\allowedCredit]
+				capital is unchanged
+				bankAccount =\bankAccount +\cashOnHand +\financialResouces
+
+				[if\bankAccount +\cashOnHand +\financialResource\&lt;=\allowedCredit]
+				badDebt
+			EndIf
+
+		EndIf
+
+		[if\crediToAsk&lt;=0]
+		capital=desiredCapital
+		bankAccount =\bankAccount +\(-crediToAsk)
+	EndIf
+
+	[if\desiredProductionCapital\&lt;= productionCapital]
+	capital=desiderCapital
+	If
+		[if\cashOnHand +\financialResourcesIBA&lt;0]
+		If
+			[demanded credit &gt;\allowedCredit]
+			badDent
+
+			[demanded credit &lt;=\allowedCredit]
+			bankAccount =\demandedCredit
+		EndIf
+
+		[if\cashOnHand +\financialResourcesIBA&gt;=0]
+		bankAccount =\bankAccount +\cashOnHand +\financialResoucesIBA
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

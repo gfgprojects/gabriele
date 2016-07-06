@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>540</w>
+      <h>541</h>
+    </coordinates>
+    <panel_attributes>title:agents.Consumer.setupBankAccount()
+Start
+While[while i &lt;\numerOfBanks\AConsumerCanBe\CustomerOf]
+	select a bank randomly\avoiding duplications
+	create aBankAccount with amount\randomly drawn between\Context.minConsumerInitialBankAccount\and\Context.maxConsumerInitialBankAccount 
+	add aBankAccount to bankAccountList
+	make the bank add the account\to its AccountsList 
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

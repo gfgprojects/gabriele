@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>2867</w>
+      <h>3027</h>
+    </coordinates>
+    <panel_attributes>title:Firm.setPossibleInvestment()
+Start
+If
+	[if\credit is needed\(creditToAsk&gt;0)]
+	If
+		[if\bestBank\exists]
+		amountAvailable\FromBestBank=\get availableCredit\from best bank
+//		bestBankAccount\setAccount to\allowed credit
+
+		[else]
+		amountAvailable\FromBestBank=0
+	EndIf
+	While[for cycle\on bank\accounts]
+		getBankAccount
+		If
+			[if\account&gt;0]
+			increase cashOnHand\by ammount
+			set amount of\this bank to 0
+
+			[else]
+			
+		EndIf
+		
+	If
+		[if\cashOnHand&lt;0]
+		If
+			[if\amountAvailable\FromBestBank&gt;\(-cashOnHand)]
+			drecrease amountAvailable\FromBestBank by cashOnHand
+			cashOnHand=0
+			If
+				[if\unpaidAmountIn\BankAccounts&gt;0]
+				If
+					[if\amountAvailable\FromBestBank&gt;\unpaidAmount]
+					set unpaid amount\to 0 in all the accounts\and modify the accounts\accordingly
+					decrease amountAvailable\FromBestBank\by unpaid amount
+					unpaidAmount=0
+
+					[else]
+					multiplier=\amountAvailable\FromBestBank/\unpaidAmount
+					set the unpaidAmount to\unpaidAmount*(1-multiplier)\in all bank accounts\and modify their accounts\accordingly
+					amountAvailableFrom\BestBank=0
+
+				EndIf
+
+				[else]
+
+			EndIf
+
+			[if\amountAvailable\FromBestBank&lt;=0]
+			increase cashOnHand by\amountAvailableFromBestBank
+			amountAvailableFromBestBank=0
+			promissory notes = -cashOnHand
+			cashOnHand=0
+		EndIf
+		firmInvestment=amountAvailableFromBestBank
+		amountAvailableFromBestBank=0
+
+		[if\cashOnHand&gt;=0]
+		define resourcesAvailable=\cashOnHand+\creditAvailableFromBestBank
+		If
+			[if\unpaidAmountIn\BankAccounts&gt;0]
+			If
+				[if\resourcesAvailable&gt;\unpaidAmountIn\BankAccounts]
+				set unpaidAmount to zero\in each bankAccount and\modify their accounts\accordingly
+				decrease resourcesAvailable by\unpaidAmountInBankAccounts
+				unpaidAmount=0
+				cashOnHand=0
+
+				[else]
+				multiplier=\resurcesAvailable/\unpaidAmountIn\BankAccounts
+				set the unpaidAmount to\unpaidAmount*(1-multiplier)\in all bank accounts\and modify their accounts\accordingly
+				resourcesAvailable=0
+			EndIf
+
+			[else]
+		EndIf
+		firmInvestment=resourcesAvailable
+		resourcesAvailable=0
+	EndIf
+	amountToWithdrawFromBanksForInvestments=0
+
+	[if\credit is not needed\(creditToAsk&lt;=0)]
+	define amountToWithdrawFromBanks=0
+	If
+		[if\cashOnHand&lt;0]
+		increase amountToWithdraw\fromBanks by -cashOnHand
+		cashOnHand=0
+		If
+			[if\desiredProductionCapital&gt;\productionCapital]
+			firmInvestment=desiredProductionCapital-\productionCapital
+			increase amountToWithdraw\fromBanks by FirmInvestment
+
+			[else]
+			firmInvestment=0
+		EndIf
+		If
+			[if\unpaidAmountIn\BankAccounts&gt;0]
+			increase amountToWithdraw\fromBanks by unpaidAmount\InBankAccounts
+			set unpaidAmountInBank\Accounts to 0 in all banks
+
+			[if\unpaidAmountIn\bankAccounts=0]
+		EndIf
+
+		[if\cashOnHand&gt;=0]
+		If
+			[if\unpaidAmountIn\BankAccounts&gt;0]
+			set unpaidAmount to 0\in all banks 
+			If
+				[if\cashOnHand&gt;=\unpaidAmount\InBankAccounts]
+				decrease cashOnHand\by unpaidAmountIn\BankAccounts
+				unpaidAmountInBankAccounts=0
+
+				[if\cashOnHand&lt;\unpaidAmount\InBankAccounts]
+				increase amountToWithdraw\fromBanks by unpaidAmount\InBankAccounts-cashOnHand
+				cashOnHand=0				
+			EndIf
+
+			[if\unpaidAmountIn\BankAccounts=0]
+		EndIf
+		If
+			[if\desiredProductionCapital&gt;\productionCapital]
+			firmInvestment=\desireProductionCapital-productionCapital
+			If
+				[if\cashOnHand-\firmInvestment&gt;=0]
+//				decrease\cashOnHand by\firmInvestment
+//				increase worstBankAccount\by cashOnHand
+//				cashOnHand=0
+
+				[else]
+				increase amountToWithdraw\fromBanks by\firmInvestment-cashOnHand
+				cashOnHand=0
+				
+			EndIf
+
+			[else]
+			firmInvestment=0
+//			increase\worstBankAccount\by cashOnHand
+//			cashOnHand=0
+		EndIf
+//	multiplier=\amountToWithdrawFromBanks/\financialResourcesInBankAccounts
+//	multiply positive bank accounts by\(1-multiplier)
+	amountToWithdrawFromBanksForInvestments=\amountTowithdrawFromBanks
+EndIf
+//increase productionCapital by firmInvestment
+If
+	[if\desiredProductionCapital&lt;\productionCapital]
+	firmInvestment=\desiredProductionCapital-\productionCapital
+
+	[else]
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>80</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>production capital setting
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>470</x>
+      <y>2450</y>
+      <w>360</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1320</x>
+      <y>2270</y>
+      <w>290</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>2280</x>
+      <y>1280</y>
+      <w>560</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>1600</x>
+      <y>760</y>
+      <w>540</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>120</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>promissory notes
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>650</x>
+      <y>1630</y>
+      <w>260</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>1780</x>
+      <y>2850</y>
+      <w>310</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>firms that want to disinvest are assigned
+with negative values of firmInvestment
+this amount will be offered in the market for used capital</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>50</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>bank account setting
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>30</x>
+      <y>90</y>
+      <w>200</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>production capital setting
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.baselet.element.old.allinone.ActivityDiagramText</type>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>1929</w>
+      <h>1917</h>
+    </coordinates>
+    <panel_attributes>title:Firm.adjustProductionCapitalAndBankAccount()
+Start
+If
+	[if\credit is needed\(creditToAsk&gt;0)]
+	If
+		[desired\Production\Capital\&gt;\production\Capital]
+		If
+			[if\bestBank\exists]
+			If
+				[if\firmInvestment\&lt;=0]
+				set bestBankAccount\to\allowedCredit
+
+				[if\firmInvestment\&gt;0]
+				If
+					[If\firm\Realized\Investment\&gt;0]
+					set bestBankAccount\to\allowedCredit\+\firmInvestment\-\firmRealizedInvestment
+					
+					[else]
+				EndIf
+				
+			EndIf
+			
+			[else]
+			
+		EndIf
+
+		[else]
+	EndIf
+
+	[if\credit is not needed\(creditToAsk&lt;=0)]
+	If
+		[if\cashOnHand\=0]
+		If
+			[if\amountTo\WitdrawFrom\BanksFor\Investments&gt;0]
+			If
+				[if\firmRealized\Investment&gt;0]
+				decrease\amountTo\WitdrawFrom\BanksFor\Investments\by\firmInvestment\-\firmRealized\Investment
+				If
+					[if\amountTo\WitdrawFrom\BanksFor\Investments&gt;0]
+					define multiplier
+					multiplier=\amountToWithdrawFromBanks/\financialResourcesInBankAccounts
+					multiply positive bank accounts by\(1-multiplier)
+
+					[if\amountTo\WitdrawFrom\BanksFor\Investments&lt;=0]
+					increase\worstBankAccount\by\-amountTo\WitdrawFrom\BanksFor\Investments
+
+				EndIf
+
+				[if\firmRealized\Investment&lt;0]
+				
+			EndIf
+
+			[if\amountTo\WitdrawFrom\BanksFor\Investments=0]
+
+		EndIf
+		
+		[if\cashOnHand\&gt;0]
+		If
+			[if\firmRealized\Investment&gt;0]
+			decrease\cashOnHand\by\firmRealized\Investment
+
+			[else]
+
+		EndIf
+		increase\worstBankAccount\by\cashOnHand
+		cashOnHand=0
+
+	EndIf
+
+increase\productionCapital\by\firmRealizedInvestment
+End
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>20</x>
+      <y>810</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>bg=yellow
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>710</x>
+      <y>1780</y>
+      <w>190</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>810</x>
+      <y>1420</y>
+      <w>260</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>1080</x>
+      <y>1200</y>
+      <w>160</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>230</x>
+      <y>1060</y>
+      <w>210</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>1730</x>
+      <y>800</y>
+      <w>150</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

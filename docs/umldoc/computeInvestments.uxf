@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.ActivityDiagramText</type>
+    <coordinates>
+      <x>20</x>
+      <y>0</y>
+      <w>793</w>
+      <h>1347</h>
+    </coordinates>
+    <panel_attributes>title:OfficeForStatistics.computeInvestments()
+Start
+aggregateInvestments=\sum of positive firmInvestment
+aggregateUnusedProductionCapital=\sum of negative firmInvestment
+If
+	[if aggregateInvestments&gt;0\&amp;&amp;\aggregateUnusedProductionCapital&gt;0]
+	aggregateUnusedProductionCapitalForSale=\aggregateUnusedProductionCapital*\Context.percentageOfRealizedUnusedProductionCapital;
+	If
+		[if\aggregateUnusedPro\ductionCapitalForSale&gt;\aggregateInvestments]
+		shareOfUnusedCapitalSold=\aggregateInvestments/\aggregateUnusedPro\ductionCapitalForSale
+		aggregateInvestments=0
+
+		[else]
+		shareOfUnusedCapitalSold=1;
+		decrease\aggregateInvestments\by\aggregateUnusedPro\ductionCapitalForSale
+
+	While[for each firm with\firmInvestment&lt;0]
+		decrease productionCapital\by\firmInvestment*\shareOfUnusedCapitalSold
+		increase worstBankAccount by\firmInvestment*\shareOfUnusedCapitalSold*\Context.percentageOfRealized\UnusedProductionCapital
+	EndIf
+
+	[else]
+
+set each industry demand from firms\equal to\aggregateInvestments*\Industry.getProductAttractiveness()
+
+End
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
