@@ -1,0 +1,123 @@
+\documentclass[a4paper]{article}
+\usepackage{fancyvrb}
+\title{Example: Firm-Bank relationship in bad conditions}
+\begin{document}
+\maketitle
+
+\subsubsection{Bad condition}
+\subsubsection*{Step 1: interests and ask for repayments}
+Firms can be customers of several banks.
+
+First of all, the banks account the interest rate.
+
+Suppose that after accounting interests we have the following situation
+\begin{verbatim}
+bank 1 account =   10
+bank 2 account = -150
+bank 3 account =  -50
+\end{verbatim}
+
+The bank assumes that indebted firms ask for the whole renewal of the debt:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0
+bank 2 account = -150  demanded credit = -150
+bank 3 account =  -50  demanded credit =  -50
+\end{verbatim}
+
+Each bank with a negative account can ask for refunding. In this case the allowed credit is lower (in absolute value) to the demanded credit.
+Suppose bank 2 asks for refunding and bank 3 does not:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
+\end{verbatim}
+
+In this example, the firm needs 20 to satisfy banks requests.
+
+\subsubsection*{Step 2: refunding}
+
+The possibility to refund depends on the resources available on banks and on the economic result. In our example, 10 is available in bank 1.
+
+To go on with our example, let us assume that the economic result is \verb+-50+ i.e. the firm is suffering a loss.
+
+The firm use 10 available in bank 1, but it is not enough to satisfy banks requests. Shortages are recorded as unpaid amounts.
+
+The firm financial situation is represented as follows
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -140  demanded credit = -150 allowed credit = -130 unpaid = 10
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+\subsubsection*{Step 3: account resetting}
+In this step, banks set the demanded and allowed credit are set to zero.
+
+The new situation is
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
+bank 2: account = -140  demanded credit =  0 allowed credit = 0 unpaid = 10
+bank 3: account =  -50  demanded credit =  0 allowed credit = 0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+
+
+\subsubsection*{Step 4: set desired credit}
+
+Now the firm can ask for new credit. This can be done for two reasons: 1) to finance new investments and 2) to pay unsatisfied lenders.
+
+Suppose now that our firm does not invest, and asks for credit to pay unsatisfied lenders.
+
+Credit in this step is asked to one of the banks, in particular to that with the ``best'' account.
+
+In this example, the new asked credit is \verb/10+50=60/. The update situation is 
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit = -60 allowed credit = 0 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit = 0 unpaid = 10
+bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+
+
+
+
+
+\subsubsection*{Step 5: credit supply}
+
+The bank now decides the allowed credit.
+
+The situation evolves differently according to the allowed amount.
+
+Suppose first, the bank allows all the demanded credit. The situation is as follows
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit = -60 allowed credit = -60 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit =   0 unpaid = 10
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+\subsubsection*{Step 6: the firm adjust bank accounts}
+
+The resources made available by bank 1 are used and the situation evolve into the following
+
+\begin{verbatim}
+bank 1: account =  -60  demanded credit = -60 allowed credit = -60 unpaid =  0
+bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  0
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = 0
+\end{verbatim}
+
+\end{document}

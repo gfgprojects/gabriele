@@ -1,0 +1,150 @@
+\ifglsentryexists{var:WWf}{}%
+{%
+\gls@defglossaryentry{var:WWf}%
+{%
+name={$WW_{f,j}$},%
+sort={$WW_{f,j}$},%
+type={variable},%
+first={$WW_{f,j}$},%
+firstplural={$WW_{f,j}$s},%
+text={$WW_{f,j}$},%
+plural={$WW_{f,j}$s},%
+description={Sum of wages payed by firm $f$ producing good $j$},%
+descriptionplural={Sum of wages payed by firm $f$ producing good $j$},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{var:coh}{}%
+{%
+\gls@defglossaryentry{var:coh}%
+{%
+name={$CoH_{f,j}$},%
+sort={$CoH_{f,j}$},%
+type={variable},%
+first={$CoH_{f,j}$},%
+firstplural={$CoH_{f,j}$s},%
+text={$CoH_{f,j}$},%
+plural={$CoH_{f,j}$s},%
+description={Cash on hand of firm $f$ producing good $j$},%
+descriptionplural={Cash on hand of firm $f$ producing good $j$},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{var:Dfh}{}%
+{%
+\gls@defglossaryentry{var:Dfh}%
+{%
+name={$D_{f\leftarrow h,j}$},%
+sort={$D_{f\leftarrow h,j}$},%
+type={variable},%
+first={$D_{f\leftarrow h,j}$},%
+firstplural={$D_{f\leftarrow h,j}$s},%
+text={$D_{f\leftarrow h,j}$},%
+plural={$D_{f\leftarrow h,j}$s},%
+description={Demand of consumption goods},%
+descriptionplural={Demand of consumption goods},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{var:Dff}{}%
+{%
+\gls@defglossaryentry{var:Dff}%
+{%
+name={$D_{f\leftarrow f,j}$},%
+sort={$D_{f\leftarrow f,j}$},%
+type={variable},%
+first={$D_{f\leftarrow f,j}$},%
+firstplural={$D_{f\leftarrow f,j}$s},%
+text={$D_{f\leftarrow f,j}$},%
+plural={$D_{f\leftarrow f,j}$s},%
+description={Demand of goods for investment pupose},%
+descriptionplural={Demand of goods for investment pupose},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%
+\ifglsentryexists{par:psi}{}%
+{%
+\gls@defglossaryentry{par:psi}%
+{%
+name={$\phi _{f\leftarrow h,j}$},%
+sort={$\phi _{f\leftarrow h,j}$},%
+type={parameter},%
+first={$\phi _{f\leftarrow h,j}$},%
+firstplural={$\phi _{f\leftarrow h,j}$s},%
+text={$\phi _{f\leftarrow h,j}$},%
+plural={$\phi _{f\leftarrow h,j}$s},%
+description={share of something},%
+descriptionplural={share of something},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={},%
+longplural={},%
+short={},%
+shortplural={},%
+counter={page},%
+parent={},%
+%
+}%
+}%

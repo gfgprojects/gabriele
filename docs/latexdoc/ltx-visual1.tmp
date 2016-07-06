@@ -1,0 +1,11 @@
+verbatimtex
+%&latex
+\input{textpathfigs}
+\begin{document}
+etex
+picture latexmp_picture[];
+latexmp_picture[1]:= btex \usefont{T1}{bch}{m}{n}\huge\spaced{consumption} etex ;
+latexmp_picture[2]:= btex \usefont{T1}{bch}{m}{n}\huge\spaced{Production} etex ;
+latexmp_picture[3]:= btex \usefont{T1}{bch}{m}{n}\large\spaced{Labor mkt} etex ;
+latexmp_picture[4]:= btex \usefont{T1}{bch}{m}{n}\large\spaced{Production capital and Credit mkts} etex ;
+latexmp_picture[5]:= btex \usefont{T1}{bch}{m}{n}\large\spaced{Goods and Credit mkts} etex ;

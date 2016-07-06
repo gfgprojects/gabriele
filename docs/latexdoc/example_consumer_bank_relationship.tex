@@ -1,0 +1,178 @@
+\documentclass[a4paper]{article}
+\usepackage{fancyvrb}
+\title{Example: Consumer-Bank relationship}
+\begin{document}
+\maketitle
+%\input{table_consumer_bank_relationship}
+This document provides an example of the accounting made by the software during the process that leads to comsumption. 
+The focus in on an indebted Consumer.
+
+We trace hereafter the steps explained in the manual.  
+%\subsubsection*{Step 1: interests and ask for repayments}
+\subsubsection*{Step 1: interests and loans repayment}
+
+In this example, each consumer is customer of three banks.
+
+First of all, banks account the interest rate.
+
+Suppose that after accounting interest rate, the consumer's bank accounts have the following amounts:
+\begin{verbatim}
+bank 1 account =   10
+bank 2 account = -150
+bank 3 account =  -50
+\end{verbatim}
+
+The bank assumes that indebted consumers (those with a negative bank account) ask for the whole renewal of the debt:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0
+bank 2 account = -150  demanded credit = -150
+bank 3 account =  -50  demanded credit =  -50
+\end{verbatim}
+
+Each bank with a negative account can ask for refunding. If this happens, the allowed credit is lower (in absolute value) than the demanded credit.
+Suppose banks 2 and 3 intend to reduce their exposition as follows:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
+\end{verbatim}
+
+In this example, the consumer needs 25 to satisfy banks requests.
+
+\subsubsection*{step 2: refunding}
+The consumer refunds her bank account if she has enough income (to refund) and, in any case, refunds an amount that allows a subsistence consumption level. 
+\\Let's consider this example:
+
+\verb+disposableIncome=40+\\
+and that the subsistence consumption is 10.
+
+The software first computes the resources available to refund. They are given by 
+the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption. In this example we have:
+
+\verb/resourceAvailableToRefund = 10 + 40 - 10 = 40/
+
+These resources are enough to satisfy banks' requests; the consumer refunds totally banks because her financial resources allow both debt repayment and a consumption greater than the subsistence level. 
+Therefore, the new situation is:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -130  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -45  demanded credit =  -50 allowed credit =  -45
+
+disposableIncome = 15
+\end{verbatim}
+
+
+%If the income is not enough to refund and have the minimum consumption, the consumers makes a proposal to the bank by reducing the demand for credit. 
+
+Consider now a slightly different situation in bank accounts:
+\begin{verbatim}
+bank 1 account =   15  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
+\end{verbatim}
+and suppose the consumer's income is 15 instead of 40. Now resources available to refund banks (the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption) are given by:
+
+\verb/resourceAvailableToRefund = 15 + 15 - 10 = 20/
+
+They are not enough to satisfy banks' requests (25 is needed). Suppose 15 is used to refund bank 1 and 5 to refund bank 2. Unpaid amounts are recorded and disposable income is set to allow the subsistence consumption:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    {\bf0}  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -135  demanded credit = -150 allowed credit = -130 unpaid =  5
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -45 unpaid =  5
+
+disposableIncome = {\bf10}
+\end{Verbatim}
+
+We continue this example with this second situation.
+
+\subsubsection*{Step 3: account resetting}
+In this step, banks set the demanded and allowed credit to zero.
+
+Banks accounts are the updated as follows:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
+bank 2: account = -135  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
+bank 3: account =  -50  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
+
+disposableIncome = 10
+\end{Verbatim}
+
+
+
+
+\subsubsection*{step 4: consumers set desired credit}
+Now each consumer can asks for new credit. This can be done for two reasons: 1) to achieve a desired consumption higher than disposable income and 2) to pay unsatisfied lenders.
+
+Suppose now that the consumer would like to consume 20.
+
+She asks for additional financial resources both to finance consumption (10) and to pay back bank 2 and 3 (5+5).
+
+The additional credit amount of 20 is asked to one bank. In particular, the bank with the ``best'' account (bank 1) is chosen. 
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = {\bf-20} allowed credit = 0 unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit = 0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  5
+
+disposableIncome = 10  desiredConsumption = 20
+\end{Verbatim}
+
+
+\subsubsection*{Step 5: credit supply}
+
+%The bank decides how much credit to allow.
+
+The bank decides about the amount of loans to give out.
+Suppose allowed credit is 18
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = -20 allowed credit = {\bf-18} unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+
+disposableIncome = 10  desiredConsumption = 20
+\end{Verbatim}
+
+Note that the funds now available to the consumers are 
+
+\verb\disposableIncome + allowed credit=10+18=28\ 
+
+\subsubsection*{step 6: adjust desired consumption according to allowed credit}
+
+In this step, the desired consumption is reduced by the difference between the demanded and the allowed credit. This reduction cannot make the desired consumption be lower than the subsistence level.
+
+In the example we have
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+
+disposableIncome = 10  desiredConsumption = {\bf18}
+\end{Verbatim}
+
+Now, the consumer goes in the goods market trying to satisfy her desires. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
+
+\subsubsection*{step 7: the consumer adjust bank accounts}
+
+The consumer can thus consume 15. 10 of them are payed with disposable income and 5 of them are borrowed from bank 1. 
+
+Bank 1 is also willing to lend additional resources (18-5=13), so the consumer uses them to satisfy bank 2 and 3 refunding requests:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =  {\bf-15}  demanded credit = -20 allowed credit = -18 unpaid =  0
+bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+
+disposableIncome = {\bf0}  desiredConsumption = 18 effectiveConsumption = 15
+\end{Verbatim}
+
+\newpage
+\end{document}
+
+

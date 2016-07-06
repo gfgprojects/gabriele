@@ -1,0 +1,9 @@
+if credit is needed
+	get available credit
+	withdraw all positive bank accounts and increase cashOnHand
+	available credit is first used to cover negative cashOnHand; it cab be enough or note
+	if it is not enought, the difference is covered by promissory notes
+	if it is enought, the loss is canceled and  the remainder is first used to pay unpaidAmounts to banks. It can be enough or not
+		if it is not enough, the unpaid amounts in bank accounts are reduced by the share covered
+		if it is enough, the unpaid amounts are canceled and the remainder is positive
+	

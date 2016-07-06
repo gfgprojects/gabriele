@@ -1,0 +1,96 @@
+\documentclass[a4paper]{article}
+\usepackage{fancyvrb}
+\title{Example: Firm-Bank relationship in good conditions}
+\begin{document}
+\maketitle
+
+
+
+\subsubsection{Good conditions}
+	\subsubsection*{Step 1: interests and repayments}
+	Suppose we start from the same conditions as in the bad cases.
+
+	There are no differences in the evolution of this step, so that the situation at the end of this step is the same:
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
+\end{verbatim}
+
+
+	\subsubsection*{Step 2: refunding}
+	Good conditions here means that the firm realized a profit and thus has a positive cash on hand, say
+
+	\verb+cashOnHand = 50+
+
+20 of them are used to refund the bank. So, now, the situation is 
+
+\begin{verbatim}
+bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit = -150 allowed credit = -130 unpaid =  0
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+
+cashOnHand = 30
+\end{verbatim}
+
+
+
+	\subsubsection*{Step 3: account resetting}
+
+\begin{verbatim}
+bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 30
+\end{verbatim}
+
+	\subsubsection*{Step 4: set desired credit}
+	Imagine now, the firm had a production capital equal to 100 before starting production. 
+	
+	Suppose production depreciates capital to 95.
+
+	Furthermore, suppose the firm expects an increase of demand and wants to increase its production capital to 110.
+
+	So, to bring production capital to the desired level 15 is needed.
+
+	Checking financial resources available internally the firm conclude that it can achieve the objective without asking to banks. 
+
+	Furthermore there is an inconsistency in firms bank accounts: the positive one should be used to reduce the negative ones. The software at this stage withdraws positive bank accounts and store them in the variable \verb+financialResourcesInBankAccounts+:
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 30 financialResourcesInBankAccounts = 10
+\end{verbatim}
+
+	\subsubsection*{Step 5: credit supply}
+In this step no change is performed because credit was not asked.
+
+	\subsubsection*{Step 6: adjust production capital and banks accounts}
+
+	Production capital is adjusted by using internal financial resources. 
+
+	So, after this step we have
+
+	\verb+productionCapital=110+
+
+	\verb/cashOnHand + financialResourcesInBankAccounts = 25/
+
+	finally, the residual internal refunds are used to improve the ``worst'' bank account:
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -105  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 0 financialResourcesInBankAccounts = 0
+\end{verbatim}
+
+\end{document}
+
+
+
+

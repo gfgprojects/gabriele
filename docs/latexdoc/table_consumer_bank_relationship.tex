@@ -1,0 +1,53 @@
+\begin{table}[htp]
+	\resizebox{\linewidth}{!}{
+\begin{tabular}{c c c c}
+	\hline \hline
+	 & \multicolumn{2}{c}{\textbf{Traditional modeling}}& \textbf{Additional information}\\
+		\hline \hline 
+	Step&Flow&Stock&\\
+	\hline
+	initial	&		&$BA$		&\\
+	\hline
+	1	&		&		&new about income \\
+	\hline
+	2a	&$iBA$		&$BA+iBA$	&\\ %questo è giusto per interessi anticipati
+%	\hline
+	2b	&		&		&$\Delta BA^{db}$ desired by banks\\
+	\hline
+	3	&	&	&$ref=\min(w-c^s,\Delta BA^{db})$\\
+%	\hdashline
+	3	&		&		&$unpaid=\Delta BA^{db}-ref$\\
+	\hline
+	5a	&		&		&desider consumption ($c^d$)\\
+%	\hdashline
+	 5b&		&		&$\Delta BA^{dc}$ desired by consumers\\
+		&		&		&$=\max(0,c^d-(w-ref))+unp$\\
+	5c	&		&		&$bestBank=\{identified, not\ exist\}$\\
+	5d	&		&		&if bestBank exists ask $\Delta BA^{dc}$ to it \\
+	\hline
+	6	&		&		&$\Delta BA^{ab}$ allowed by banks\\
+%	\hdashline
+		&		&		&$\Delta ref=-\Delta unp$\\
+%		\hdashline
+		&		&		&$\Delta BA^{ab}$ available for consumption\\
+%		\hdashline
+		&		&		&=$\Delta BA^{ab}-\Delta ref$\\
+	\hline
+	7	&		&		&$c^{pb}$ consumption possible by credit\\
+%	\hdashline
+	\hline
+	10	&		&		&$c$ consumption possible by market\\
+	\hline
+%	9	&$\max(w-ref-c,0)$	&$BA+iBA+ref$	&\\
+%		&		&	$+\min(w-ref-c,0)$&\\
+%		&		&	\\
+%		\hdashline
+	11	&$w-c$		&	$BA+iBA+w-c$&\\
+	\hline \hline
+\end{tabular}
+}
+%\vskip5mm
+\caption{Households: accounting and transaction sequence}
+\end{table}
+
+

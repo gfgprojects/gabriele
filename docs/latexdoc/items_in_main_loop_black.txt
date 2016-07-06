@@ -1,0 +1,28 @@
+F: make production
+OFS: substitute retired consumers
+OFS: compute and allocate investments
+F: set production capital and bank account
+LM: match vacancies and unemployed
+F: hire
+C$_U$: send curricula
+F: retire and fire workers
+OFS: perform firm entry
+F: set possible investment
+B$\rightarrow$F: set allowed credit
+F$\rightarrow$B: set desired investments (ask for credit if needed)
+F$\rightarrow$B: pay back if possible
+B$\rightarrow$F: pay interest and ask refunding
+OFS: perform firms exit
+F: compute economic result and capital depreciation
+C$\rightarrow$B: compute saving and deposit them
+C: resize consumption if unsatisfied demand persists
+OFS: satisfy unsatified demand if possible
+OFS: compute and allocate desired demand
+C: resize consumption if demanded credit is not allowed
+B$\rightarrow$C: set allowed credit
+C$\rightarrow$B: set desired consumption (ask for credit if needed)
+C$_S$: step state
+C$\rightarrow$B: pay back if possible
+B$\rightarrow$C: pay interest and ask refunding
+F$\rightarrow$C: pay wages
+OFS: compute variables

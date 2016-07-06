@@ -1,0 +1,2 @@
+makeindex -s manual.ist -o manual.vin manual.vot
+makeindex -s manual.ist -o manual.pin manual.pot

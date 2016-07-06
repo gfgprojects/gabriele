@@ -1,0 +1,17 @@
+This is MetaPost, version 1.902 (TeX Live 2014) (kpathsea version 6.2.0)  21 JUL 2015 12:58
+**agents_and_interactions_figure2.mp.mp
+(/usr/local/texlive/2014/texmf-dist/metapost/base/mpost.mp
+(/usr/local/texlive/2014/texmf-dist/metapost/base/plain.mp
+Preloading the plain mem file, version 1.005) )
+(./agents_and_interactions_figure2.mp.mp
+>> agents_and_interactions_figure2.mp.mp
+>> agents_and_interactions_figure2.mp.mpx
+! ! Unable to make mpx file.
+l.1 draw thelabel.lft(btex
+                           \\color{blue}F\\color{black}: make production \hs...
+The two files given above are one of your source files
+and an auxiliary file I need to read to find out what your
+btex..etex blocks mean. If you don't know why I had trouble,
+try running it manually through MPtoTeX, TeX, and DVItoMP
+
+
