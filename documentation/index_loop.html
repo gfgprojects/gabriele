@@ -32,7 +32,7 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>Consumers</b>*: </td>
 	<td><a href="payBackBankDebt.html">payBackBankDebt </a></td>
-	<td>In the previus steps banks can ask to reduce debt. Now, consumers pay back with their income or their positive bank account. Consumers disposableIncome is reduced according to the amount they pay back. If a consumers has not enough resources, banks take note of the unpaid amount and the consumer's disposable income is set to the subsistence level. </td>
+	<td>In the previuos steps banks can ask to reduce debt. Now, consumers pay back with their income or their positive bank account. Consumers disposableIncome is reduced according to the amount they pay back. If a consumers has not enough resources, banks take note of the unpaid amount and the consumer's disposable income is set to the subsistence level. </td>
 </tr>
 <tr>
 	<td><b>Bank</b>: </td>
@@ -153,7 +153,7 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>Banks </b> </td>
 	<td><a href="setAllowedFirmsCredit.html">setAllowedFirmsCredit</a> </td>
-	<td>random for now</td>
+	<td>Banks decide how many credit to allow to firms</td>
 </tr>
 <tr>
 	<td><b>Firms</b>* </td>
@@ -197,13 +197,20 @@ Back to <a href="index.html"> home </a>
 <tr>
 	<td><b>Firms </b> </td>
 	<td><a href="laborForceUpwardAdjustment.html">laborForceUpwardAdjustment</a> </td>
-	<td>The execution of this action depends on the model parametrization. If active, firms hire new workers directly according to their needs. Some firms could not find all the desired workers and some workers could not find a job. Unsatified position could be fulfilled if the following action is active in the simulation parametrization.</td>
+	<td>The execution of this action depends on the model parametrization. If this action is executed, firms hire new workers directly according to their needs. Some firms could not find all the desired workers and some workers could not find a job. Unsatisfied positions could be fulfilled if the following action is active in the simulation parametrization.</td>
 </tr>
 <tr>
 	<td><b>OfficeForStatistics</b> </td>
 	<td><a href="activateLaborMarket.html">activateOfficeForLabor</a> </td>
-	<td>The execution of this action depends on the model parametrization. If the previous action is active, this action aims at fulfilling further hiring unsatified by the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
+	<td>The execution of this action depends on the model parametrization. If the previous action was performed, this action aims at fulfilling residual vacancies of the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
 </tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Production<br>goods market</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
 <tr>
 	<td><b>Firms</b>* </td>
 	<td><a href="adjustProductionCapitalAndBankAccount.html">adjustProductionCapitalAndBankAccount</a></td>

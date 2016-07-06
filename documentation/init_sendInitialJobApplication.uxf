@@ -9,7 +9,7 @@
       <w>529</w>
       <h>677</h>
     </coordinates>
-    <panel_attributes>title:Consumer.sendInitialJobApplication()
+    <panel_attributes>title:agents.Consumer.sendInitialJobApplication()
 Start
 If
 	[if\student]

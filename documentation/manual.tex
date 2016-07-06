@@ -1,22 +1,636 @@
-\documentclass{article}
-\usepackage{graphicx}
+\documentclass{book}
+\usepackage{graphicx,xcolor}
 \usepackage{fancyvrb}
-
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{sidenotes}
+\usepackage[toc]{glossaries}
+\newglossary[nlg]{variable}{vin}{vot}{Notation: variables}
+\newglossary[nlg]{parameter}{pin}{pot}{Notation: Parameters}
+\makeglossaries
+\newcommand{\umllocation}{file:///Users/giulioni/Dropbox/svn/sfcabm_my/documentation}
+\title{GABRIELE}
+\author{Gianfranco Giulioni}
 \begin{document}
+%\maketitle
+ 
+\begin{titlepage}
+
+%	\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+	\begin{center}
+	{\color{blue}\scshape\Huge GABRIELE \par}
+	\end{center}
+
+	\vspace{2cm}
+
+	\noindent
+	{\color{blue}\scshape\Huge G}{\scshape\LARGE eneral} 
+	{\color{blue}\scshape\Huge A}{\scshape\LARGE gent} 
+	{\color{blue}\scshape\Huge B}{\scshape\LARGE ased}\\
+	{\color{blue}\scshape\Huge R}{\scshape\LARGE epast} \hskip7mm 
+	{\color{blue}\scshape\Huge I}{\scshape\LARGE mplemented}  
+	{\color{blue}\scshape\Huge E}{\scshape\LARGE xtensible}\\
+	{\color{blue}\scshape\Huge L}{\scshape\LARGE aboratory} \hskip2.5mm
+	{\scshape\large for} \hskip2.5mm
+	{\color{blue}\scshape\Huge E}{\scshape\LARGE conomics \par}
+
+%	\begin{tabular}{l l l}
+%	{\color{blue}\scshape\Huge G}{\scshape\LARGE eneral}&
+%	{\color{blue}\scshape\Huge A}{\scshape\LARGE gent}&
+%	{\color{blue}\scshape\Huge B}{\scshape\LARGE ased}\\
+%	{\color{blue}\scshape\Huge R}{\scshape\LARGE epast}&
+%	{\color{blue}\scshape\Huge I}{\scshape\LARGE mplemented}& 
+%	{\color{blue}\scshape\Huge E}{\scshape\LARGE xtensible}\\
+%	{\color{blue}\scshape\Huge L}{\scshape\LARGE aboratory}& 
+%	{\scshape\large for}&
+%	{\color{blue}\scshape\Huge E}{\scshape\LARGE Economics \par}
+%	\end{tabular}
+
+
+ 
+	
+	\vspace{1.5cm}
+	\noindent
+	{\scshape\Huge Instructions Manual \par}
+
+	\vspace{2cm}
+	\noindent
+	{\Large\itshape Gianfranco Giulioni\par}
+	\vfill
+%	supervised by\par
+%	Dr.~Mark \textsc{Brown}
+
+%	\vfill
+
+% Bottom of the page
+	{\large \today\par}
+\end{titlepage}
+
+\newpage
+\thispagestyle{empty}
+
+\null
+
+\newpage
+\thispagestyle{empty}
+
+\vspace*{5cm}
+\begin{flushright}
+	To Gabriele
+\end{flushright}
+
+\newpage
+\thispagestyle{empty}
+
+\null
+
+\newpage
+
+\pagenumbering{roman}
+
 \tableofcontents
-\section{Coding}
-You can try your main loop without scheduling events by setting the \verb+schedulingFlag+ to false.
-\section{The components of the system}
+ 
+
+\input{glossary_notation_variables}
+\input{glossary_notation_parameters}
+
+%A \gls{not:set} is a collection of objects.
+
+\printglossaries
+
+\clearpage
+\thispagestyle{empty}
+\pagenumbering{arabic}
+%\section{Coding}
+%You can try your main loop without scheduling events by setting the \verb+schedulingFlag+ to false.
+
+\part{Setting up GABRIELE}
+
+
+In this part of the manual we describe two ways of setting up for running the model. The first one is the standard way where one can take advantage of various wizards to set up and running the model. Although this provides several facilities, some user could feel uncomfortable with this standard process and would like to revert to a more basic process. The streamlined installation is for these users. It behooves to point out that the streamlined process was especially designed for running the model in the local machine and in batch mode. Therefore, funs of the Unix like command line interface will particularly enjoy it. To help clarifying, it is worth to say that the streamlined procedure was developed to avoid the slowness of the wizards when continuously checking the effects of introducing new lines of code. It allows to run the model from the command line by typing two keys (i.e arrow up key - to recall the execution command, and the enter key). 
+
+\chapter{Standard Installation}
+\section{Installation}
+
+In this section we describe the standard installation process needed to prepare the system to run the model. After taking the steps described below, the user should be able to run the model regardless of the operative system s/he is using.
+
+The model needs Repast Symphony (RS), who in turn needs the Java Development Kit (JDK). Therefore we need first to check if the JDK is installed in the system and install it if needed. Once JDK is properly running, we have to install RS. Finally the model can be installed and run in RS.
+
+\subsection{Java Development Kit (JDK)}
+
+Check in the list of installed software if JDK is installed in your system. If yes, note the JDK version.
+
+The fastest way to check all this is to open the command line interface of your system, type \verb+javac -version+ and hit the return key. 
+
+Once verified if JDK is installed and, if yes, its version, visit the following url\\
+http://www.oracle.com/technetwork/java/javase/downloads/index.html\\
+to check the leatest released version of JDK.
+
+If JDK is not installed in your system or it is not at the latest release, follow the instruction found in the JDK download page to install or upgrade it. You can also search the internet for alternative ways to install or upgrade the JDK on your system.
+
+This installation phase is completed when the \verb+javac -version+ command returns what you expect.
+If not, you should fist check if the folder containing the JDK executables are in your execution path. If not, it must be added manually.
+Furthermore, some Linux distribution must be informed on which JDK to use using the \verb+update-alternatives+ command. 
+
+\subsection{Repast Simphony (RS)}
+
+The Repast suite website: http://repast.sourceforge.net has all the information needed to download and install RS.
+
+Note that RS is provided as a plugin of the eclipse Integrated Development Environment. The Repast development team provides a customized version of eclipse, so you could encounter problems with already installed versions of eclipse. Note that the streamlined installation provided below show how to avoid using eclipse.
+
+\subsection{GABRIELE}
+
+GABRIELE has to be installed as an eclipse RS project. We will give hereafter the instructions to achieve this goal.
+
+First of all, open the eclipse downloaded and installed as described in the previous section.
+
+Suppose your workspace has the following path:\\
+\verb+/Users/coolcoder/Documents/workspace+
+
+Open the RS perspective (window $\rightarrow$ open perspective).
+
+Create a new RS project called grabriele (file $\rightarrow$ new $\rightarrow$ Repast Simphony project)
+
+This creates the \verb+gabriele+ folder and a series of sub folders inside the workspace:
+
+\begin{verbatim}
+/Users/coolcoder/Documents/workspace/gabriele
+/Users/coolcoder/Documents/workspace/gabriele/batch
+/Users/coolcoder/Documents/workspace/gabriele/bin
+. . . 
+/Users/coolcoder/Documents/workspace/gabriele/gabriele.rs
+. . . 
+/Users/coolcoder/Documents/workspace/gabriele/src
+/Users/coolcoder/Documents/workspace/gabriele/src/gabriele
+\end{verbatim}
+
+%Now, the source code of the \verb+gabriele+ package and the parameters file have to be added to the gabriele project.
+
+Now, the GABRIELE files have to be added to the just created RS project folders tree.
+
+We give here two alternatives: via git and using a zipped archive.
+
+\subsubsection{Using git}
+
+As you probably know, this is the best option to share the code developments you will do.
+
+So, let us show how to fetch the GABRIELE files via git. To do that you must have a git client installed in your system. Many system comes with a git client already installed, otherwise you have to install it. Mac and windows users can consider to install the GitHub Desktop software.
+
+You can verify if git is installed in your system by checking if your command line interface recognize the \verb+git+ command.  
+If your check is successful, change directory to the gabriele project folder:\\
+\verb+cd /Users/coolcoder/Documents/workspace/gabriele+\\
+and type the following commands:
+\begin{verbatim}
+git init
+git remote add origin https://github.com/ggiulion/gabriele.git
+git fetch origin master
+git reset --hard FETCH_HEAD
+\end{verbatim}
+
+Then if you plan to make your code changes available on GitHub, add the command:\\
+\verb+git push --set-upstream origin master+
+
+Now, the gabriele files should show up in the RS project folders.
+Refresh the gabriele RS project with the navigation tab selected in the side bar (file $\rightarrow$ refresh) to make them visible in eclipse.
+
+The following figure show how the src sub folders should look like.
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_navigation}
+
+
+\subsubsection{Using a zip archive}
+
+Point your browser to\\ 
+\verb+https://github.com/ggiulion/gabriele+\\
+Click on the ``clone or download'' button and choose ``download zip''.
+
+This will download the \verb+gabriele-master.zip+ file in your system.
+
+Unpacking it, the gabriele-master folder is created.
+Move the whole content of this folder in the gabriele RS project folder:\\  
+\verb+/Users/coolcoder/Documents/workspace/gabriele/+\\
+if your procedure asks about what should be done with existing files and folder, choose to overwrite them (merging the folders). 
+
+\iffalse
+At the end of this process one must have
+
+\begin{verbatim}
+/Users/coolcoder/Documents/workspace/gabriele/agents/Bank.java
+/Users/coolcoder/Documents/workspace/gabriele/agents/Consumer.java
+/Users/coolcoder/Documents/workspace/gabriele/agents/Firm.java
+/Users/coolcoder/Documents/workspace/gabriele/agents/Industry.java
+/Users/coolcoder/Documents/workspace/gabriele/agents/package-info.java
+/Users/coolcoder/Documents/workspace/gabriele/bargaining/AProductDemand.java
+/Users/coolcoder/Documents/workspace/gabriele/bargaining/Curriculum.java
+/Users/coolcoder/Documents/workspace/gabriele/bargaining/LaborOffer.java
+/Users/coolcoder/Documents/workspace/gabriele/Context.java
+/Users/coolcoder/Documents/workspace/gabriele/financialContracts/BankAccount.java
+/Users/coolcoder/Documents/workspace/gabriele/institutions/CentralBank.java
+/Users/coolcoder/Documents/workspace/gabriele/institutions/Government.java
+/Users/coolcoder/Documents/workspace/gabriele/institutions/LaborMarket.java
+/Users/coolcoder/Documents/workspace/gabriele/institutions/OfficeForStatistics.java
+/Users/coolcoder/Documents/workspace/gabriele/utils/AbsoluteRankNonAggregateDataSource.java
+\end{verbatim}
+
+Finally you have to override the \verb+parameter.xml+ file already present in\\  
+\verb+/Users/coolcoder/Documents/workspace/gabriele/gabriele.rs+\\
+with that supplied with \verb+gabriele+.
+\fi
+
+
+Now refresh eclipse (file $\rightarrow$ refresh).
+
+
+
+\section{Testing the Installation}
+\subsection{Setup the data loader}
+
+
+First you have to start the RS GUI window. To do so, click on the down black arrow highlighted by the red circle in the following picture
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_execution1}
+
+After clicking, a menu opens as shown by the following figure. Click the \verb+gabriele Model+ item
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_execution2}
+
+After a while, the RS GUI displayed in the following figure will show up
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui1}
+
+The first time you start the RS GUI with the GABRIELE scenario you have to setup the custom dataloader. As you can see in the scenario tree under the Data Loades item the XML \& Model data loader is present. This must be changed in the custom loader for this model. To do so right click on the Data loaders item and choose set Data Loader as shown in the following figures
+
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui2}
+
+The following new window will appear
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui3}
+
+Choose Custom ContextBuilder implementation and click next:
+A new window with a proposal will appear. 
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui4}
+
+Clicking next will change the window as follows 
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui5}
+
+Click finish.
+
+Now, the previous data loader is replaced by the GABRIELE data loader (Context) as shown by the following figure
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui6}
+
+Click on the floppy disk icon to make the changes permanent.
+
+%Now, closing the window you are asked to make your change permanent: 
+
+%\noindent
+%\includegraphics[scale=0.35]{fig_gabriele_rs_gui8}
+
+%Click on yes.
+
+\subsection{Running GABRIELE}
+
+
+There are two ways of running RS models: The GUI and the BATCH mode.
+
+The GUI mode can be of great visual impact because several monitoring devices continuously updating during runtime can be added to the RS GUI window. The flip side of the coin is that these devices slow down simulation execution. Second, the simulation runs exclusively in a machine running an X server. Notwithstanding the GUI mode can be a valid tool during the model development, when massive simulations are performed, the BATCH mode should be used. BATCH mode runs are faster because all the graphics elements are turned off. Furthermore, the absence of graphics makes it possible to run the model in parallel on several machines. It is worth saying that RS has very useful facilities for running a model in parallel.
+
+
+Let us start this section from the very beginning i.e. with the eclipse software just opened and show how to run the model both in GUI and BATCH mode.
+
+First of all, click on the down black arrow highlighted by the red circle in the following picture
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_execution1}
+
+After clicking, a menu opens as shown by the following figure. 
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_execution2}
+
+The GUI execution is activated by clicking the \verb+gabriele Model+ item, while the BATCH execution can be started by clicking the \verb+Batch gabriele model+.
+
+
+\subsubsection{Running in GUI mode}
+
+So, the RS GUI window opens by clicking the \verb+gabriele Model+ item. Check if Context is listed under the Data Loaders item of the scenario tree.
+
+Use the RS GUI window intuitive buttons to interact with the simulation. A more detailed description on how to control the simulation is given at page 24 ``Repast Java Getting Started'' document available in RS web site.
+
+The current version of the model has no runtime monitoring graphical element, so one can check the progress of the simulation watching at the tick count number in upper right corner of the RS GUI window or at the text output in the console panel of Eclipse window as shown in the following figure. 
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_gui7}
+
+On the other hand, GABRIELE record data in text and csv files. So, running the model they will be added to the model base directory\\
+\verb+/Users/coolcoder/Documents/workspace/gabriele+\\
+Data files can be easily identified because their name starts with \verb+zdata+.
+
+The file \verb+zdata_aaa_readme.txt+ gives a description of the contents of all the data files.
+
+\subsubsection{Running in BATCH mode}
+
+Clicking on the \verb+Batch gabriele model+ as in the following figure
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_execution3}
+
+activates the batch run configuration wizard.
+
+We point the reader to the ``Repast Simphony Batch Runs Getting Started'' document available in RS website for a full description of the wizard.
+
+We only point out that the present version of the model uses custom output recording techniques. Therefore, the RS File Sink are not used. This implies that the ``Optional Output File Patterns'' must be set as in the following figure
+
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_batch}
+
+This configuration instructs RS to fetch from all the machines running the model in parallel all the file whose name begins with \verb+zdata+  and move them in an output sub-folder named 
+\verb+batch_date+. Needless to say that the sub-folder name can be chosen at your convenience, and it can be changed at each batch run in order to avoid overriding the data.
+
+
+The following figure shows the contents of the model output folder after a local batch run using Eclipse navigator panel\\ 
+\noindent
+\includegraphics[scale=0.35]{fig_gabriele_rs_batch1}
+
+
+\chapter{Streamlined Installation}
+
+\section{Installation}
+This chapter reports the instructions for installing and running the model in Unix like Operating Systems using a command line approach. Therefore, the instructions will be also valid for Linux and recent Mac machines.
+
+The examples and the command line outcomes given below relate to a user named \verb+coolcoder+. You should easily be able to adapt the paths to you own user account. 
+
+The following colors are used:\\
+\color{red}red \color{black} to denote a command;\\
+\color{blue}blue \color{black} to denote an ordinary file in command line output;\\
+\color{green}green \color{black} to denote an executable file in command line output;\\
+\color{magenta}magenta \color{black} to denote the contents of text files.\\
+
+\subsection{Install Repast}
+
+Follow the instruction in
+\url{http://repast.sourceforge.net}
+to install the newest Repast Simphony release.
+
+\subsection{Install the model}
+
+Download the model installation bundle \verb+modelJasss.zip+ from \\
+\url{https://www.openabm.org/model/4990}
+
+Suppose the model destination folder is called \verb+models+ and has the following absolute path: \\
+\verb+/Users/coolcoder/models+
+
+Move \verb+modelJasss.zip+ to this directory and \verb+cd+ into it.
+
+The content of the folder is
+
+\vskip2mm
+\noindent\verb+~/models$ +\color{red}\verb+ls+ \color{blue}\\
+\verb+modelJass.zip+
+\color{black}
+
+\vskip2mm
+Extract the zip file:
+
+\vskip2mm
+\noindent\verb+~/models$ +\color{red}\verb+unzip modelJasss.zip+ \color{blue}\\
+\verb+Archive:  modelJasss.zip+\\
+\verb+   creating: modelJasss/+\\
+\verb+   creating: modelJasss/bin/+\\
+\verb+   creating: modelJasss/bin/modelJasss/+\\
+\verb+  inflating: modelJasss/bin/modelJasss/Bank.class+\\ 
+\verb+  inflating: modelJasss/bin/modelJasss/Consumer.class+\\ 
+\verb+  . . .+\\
+\verb+  . . .+\\
+\color{black}
+\noindent\verb+~/models$ +\color{red}\verb+ls+ \color{blue}\\
+\verb+modelJasss+\\
+\verb+modelJasss.zip+\\
+\color{black}
+
+\verb+cd+ into the \verb+modelJasss+ directory and get its absolute path  
+
+
+
+\vskip2mm
+\noindent\verb+~/models$ +\color{red}\verb+cd modelJasss+ \color{black}\\
+\verb+~/models/modelJasss$ +\color{red}\verb+pwd+ \color{blue}\\
+\verb+/Users/coolcoder/models/modelJasss+
+\color{black}
+\vskip2mm
+
+
+Save this information because it will be used in the configuration phase. \\ We will refer to it as the model base directory.
+
+
+\subsection{Configuration}
+
+Create a new directory outside the model base directory. \\ We will refer to it as the data directory.
+
+Suppose the data directory is called \verb+modelJasssData+ and has the following absolute path: \\
+\verb+/Users/coolcoder/Documents/modelJasssData+
+
+\verb+cd+ into the data directory.
+
+Find out the Repast installation directory:
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb+sudo find / -name "repast.simphony.core*"+ \color{black}
+\verb+Password:+ \\ \color{blue}
+\verb+/Users/coolcoder/abm_java_libraries/repast/repast.simphony.core_2.3.1 +\\
+\color{black}
+\vskip2mm
+
+In this expression, \verb+/Users/coolcoder/abm_java_libraries/repast+ is repast base directory and \verb+2.3.1+ is repast version.
+
+Prepare a text file named \verb+paths.txt+ having the repast base directory in its first line, repast version in the second line and the model base directory in the third line:
+
+\color{magenta}
+\vskip2mm \noindent
+\verb+/Users/coolcoder/abm_java_libraries/repast+ \\
+\verb+2.3.1+ \\
+\verb+/Users/coolcoder/models/modelJasss+
+\vskip2mm
+
+\color{black}
+You must adapt the paths and the repast version of this file to your settings.
+
+Save this file into the data directory.
+
+\vskip2mm
+Download the \verb+configure.txt+ file from \\
+\url{https://www.openabm.org/model/4990}
+
+Move it in the data folder.
+
+The contents of your data folder is now:
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb+ls+ \color{blue}\\
+\verb+configure.txt+ \\
+\verb+paths.txt+
+\color{black}
+
+\vskip2mm
+Rename the \verb+configure+ file, make it executable and run it:
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|mv configure.txt configure| \color{black}\\
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|chmod +x configure| \color{black}\\
+\verb+~/Documents/modelJasssData$ +\color{red}\verb|./configure| \color{black}
+
+\vskip2mm
+This creates three additional files:
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb+ls+ \color{blue}\\
+\verb+compile+\\ \color{green}
+\verb+configure+\\ \color{blue}
+\verb+paths.txt+ \\
+\verb+run_batch+ \\
+\verb+sourcefilespath+
+\color{black}
+
+\vskip2mm
+Make the \verb+compile+ and \verb+run_batch+ files executable:
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|chmod +x compile| \color{black}\\
+\verb+~/Documents/modelJasssData$ +\color{red}\verb|chmod +x run_batch| \color{black}
+\vskip2mm
+
+\section{Testing the installation}
+
+To compile the model type
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|./compile| \color{black}
+\vskip2mm
+
+To run the model type
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|./run_batch| \color{black}
+\vskip2mm
+
+When the run completes, you will find the files containing the output of your simulation inside the data directory.
+The data file have the \verb+z_+ prefix for ease of their identification: 
+
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|ls| \\ \color{green}
+\verb+compile+ \\
+\verb+configure+ \\ \color{blue}
+\verb+paths.txt+ \\ \color{green}
+\verb+run_batch+ \\ \color{blue}
+\verb+sourcefilespath+ \\
+\verb+z_consumersAskedCredit_run1.txt+ \\
+\verb+z_consumersAvailableIncome_run1.txt+ \\
+\verb+z_consumersConsumption_run1.txt+ \\
+\verb+z_consumersEmployment_run1.txt+ \\
+\verb+z_consumersObtainedCredit_run1.txt+ \\
+\verb+z_consumersPossibleAdditionalConsumption_run1.txt+ \\
+\verb+z_consumersProductivity_run1.txt+ \\
+\verb+z_consumersRho_run1.txt+ \\
+\verb+z_consumersWage_run1.txt+ \\
+\verb+z_consumersWealth_run1.txt+ \\
+\verb+z_datiBanca_run1.txt+ \\
+\verb+z_datiFirm_run1.txt+ \\
+\vskip2mm
+\color{black}
+
+Use your favorite data handling software to load the data and make analysis.
+
+
+We provide hereafter the code to load the data in \verb+R+: 
+
+\begin{verbatim}
+#change the following instruction with the absolute path of the data folder 
+#(only if R current working directory is different from your data folder)
+dir<-"./"
+#Load aggregate data
+bankdata1<-read.csv(paste(dir,"z_datiBanca_run1.txt",sep=""),sep=";")
+bankdata<-bankdata1[-dim(bankdata1)[1],]
+firmdata1<-read.csv(paste(dir,"z_datiFirm_run1.txt",sep=""),sep=";")
+firmdata<-bankdata1[-dim(bankdata1)[1],]
+
+#Load microeconomic data
+consumersWealth1<-read.csv(paste(dir,"z_consumersWealth_run1.txt",sep=""),
+                                                        header=F,sep=";")
+consumersWealth<-consumersWealth1[,-dim(consumersWealth1)[2]]
+consumersWage1<-read.csv(paste(dir,"z_consumersWage_run1.txt",sep=""),
+                                                        header=F,sep=";")
+consumersWage<-consumersWage1[,-dim(consumersWage1)[2]]
+consumersConsumption1<-read.csv(paste(dir,"z_consumersConsumption_run1.txt",sep=""),
+                                                        header=F,sep=";")
+consumersConsumption<-consumersConsumption1[,-dim(consumersConsumption1)[2]]
+consumersEmployment1<-read.csv(paste(dir,"z_consumersEmployment_run1.txt",sep=""),
+                                                                header=F,sep=";")
+consumersEmployment<-consumersEmployment1[,-dim(consumersEmployment1)[2]]
+\end{verbatim}
+
+
+\subsection{Changing parameters}
+
+Open the\\
+\verb+/Users/coolcoder/models/modelJasss/scenario/batch_parameters.xml+ \\
+file with your favorite text editor. Change the parameter values and save the file.
+
+Run the model with the command
+\vskip2mm
+\noindent\verb+~/Documents/modelJasssData$ +\color{red}\verb|./run_batch| \color{black}
+\vskip2mm
+
+\subsection*{About parameters}
+
+\subsubsection*{The random seed}
+In the parameter file included in the \verb+modelJasss.zip+, the random seed is set.
+This implies that each run of the model delivers exactly the same results.
+
+ 
+If you need different results in different run, you have to comment the seed setting line as follows:
+
+\color{magenta}
+\begin{verbatim}
+<!--  begin comment
+<parameter name="randomSeed" type="constant" constant_type="int" value="1435673">
+</parameter>
+end comment -->
+\end{verbatim}
+\color{black}
+
+\subsubsection*{Saving data}
+In the parameter file included in the \verb+modelJasss.zip+, the options to save households' individual data is enabled.
+
+In case you want to go for an aggregate analysis, you can disable these options.
+This will speed up your simulations and will avoid recording huge data files especially when you set up your simulation with a large number of agents and/or you set the stopping time to a large values. 
+
+To disable these options change \color{magenta}value=''true'' \color{black} in \color{magenta}value=''false'' \color{black} in the setting line for the parameters whose name start with \verb+saveToFile+ expression.
+
+
+
+
+
+
+\part{Understanding GABRIELE}
+
+\chapter{Introduction}
 This model aims at reproducing the dynamics of an economic systems.
 
-Describing the functioning of a dynamic system implies to know the components of the systems, how they work and how they interact with each other. 
-Therefore it is a demanding task.
+Describing the functioning of a dynamic system implies to know the components of the systems, how they behave and how they interact with each other. 
 
-To ease the task, we report hereafter two visual representations. The first one aims at showing the \textbf{model components} and the second one describes the \textbf{sequence of events} in each time step.
+Throughout this document we will extensively use the two visual representations reported in figures \ref{fig:components} and \ref{fig:sequence}. The first one aims at showing the \textbf{model components} and the second one describes the dynamics of events. This includes the initialization phase who is performed just once at the beginning of the simulation and the \textbf{sequence of events} repeated in each time step.
 
-The reader can overview these two visual representations by looking at figures \ref{fig:components} and \ref{fig:sequence}.
 
-In the following subsections we will carefully describe these two representations because they will be used in combination throughout the whole document. 
+%In the following subsections we will carefully describe these two representations because they will be used in combination throughout the whole document. 
 
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1.pdf}
@@ -32,469 +646,54 @@ In the following subsections we will carefully describe these two representation
 \end{figure}
 
 \newpage
+
 %\subsection{System Components}
+\chapter{The components of the system}
 We divide systems components in the following categories:
 \begin{itemize}
 	\item agents;
 	\item goods;
 	\item financial assets.
 \end{itemize}
-\subsection{Agents}
-The characterization of agents is that which is standard in economic modeling:
+\section{Agents}
+The standard economic modeling characterization is used. The model is therefore populated by the following agents:
 \begin{itemize}
 	\item consumers
 	\item firms
 	\item government
 	\item the banking sector
 
-		$f\in \{1, 2, \cdots, F\}$
+%		$f\in \{1, 2, \cdots, F\}$
 
 \end{itemize}
-Beside these agents we have an additional agent that have a global view of the system. It computes aggregate variables, and using this information it supervises the functioning of the models regulating markets and revising agents' individual variables where needed. We call this ``supervisor'' the Office for Statistics.
+Beside these agents we have an additional agent, the Office for statistics, that have a global view of the system. It computes aggregate variables, and using this information it supervises the functioning of the models regulating markets and revising agents' individual variables where needed.
 
-\subsection{Goods}
+\section{Goods}
 \begin{itemize}
 	\item consumption goods
 	\item investment goods
+	\item labor
 \end{itemize}
 
 Goods are exchanged on markets.
 
-\subsection{Financial assets}
+\section{Financial assets}
 
-In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. This task is not trivial and we perform it by using  
-%A characteristic of our model is the focus on the coherence at the stock level.
-%This push us to use 
-a stocks matrix approach that allows us to identify the type of financial assets needed to have a consistent framework. 
+In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
 
-As we will explain later on in this section, using this approach we can also identify mechanisms to manage coherently situations of financial stress. The latter are important to study the functioning of the economy in pathological cases.  
-
-To avoid inaccuracies in performing this thorny task, we start from a trivial representation where consumers and firms are present. We then gradually enrich the framework to obtain a configuration where government and banking sectors are also considered.
-
-Before starting we recall that the stock matrix we will use hereafter reports the balance sheets of economic agents. 
-Stock consistency implies that the sum of elements in each column and row of the matrix is zero.  
-
-
-%Before progressing we present the simplest example. 
-Let's consider an island-barter economy (money does not exist) populated by a single agent named Robinson Crusoe, whose main activity is to find food. 
-The food in the island is perishable and inventories cannot be carried to the following periods. To perform his activity, Robinson establishes the Crusoe\&co to which he bestows his tools ($K$). From an accounting point of view we can distinguish two subjects: Robinson as a consumer and the Crusoe\&co. The balance sheets of the two subjects in the economy are represented as follows:
-
-\vskip5mm
-\begin{center}
-
-\begin{tabular}{r c c}
-	& \parbox{1.5cm}{\centerline{firm}} & \\
-\hline
-real	&$K$	& $+$	\\
-(production capital)&		&	\\
-\hline
-financial&$EF$	&$-$	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-
-
-\hskip1cm
-\begin{tabular}{r c c }
-	
-	&household&\\
-\hline
-financial&$EF$	&	$+$  \\
-\hline
-counterbalance to financial &$WH$	&$-$\\
-(wealth) &	&\\
-\hline
-&$\sum$	&	0
-\end{tabular}
-
-
-\end{center}
-\vskip5mm
-note that setting up an accounting framework creates two ``artificial'' categories: the counterpart to the production capital in Crusoe\&co balance sheet, $EF$, that we will call equity capital and the counterpart to equity capital in Robinson's balance sheet, $WH$, that measures his wealth. The signs are used to specify whether the component of the balance sheet is an asset $+$, or a liability $-$.
-
-This reasoning allows us to identify a first category of financial assets: equity capital that %represents the value of $K$; 
-in modern economies materializes in \textit{shares}.
-With a change of perspective we say that both $K$ and $WH$ counterbalance the financial aspect so that the balance sheet of the two subjects can be summarized in the following stock matrix:
-
-\vskip5mm
-\begin{center}
-
-\begin{tabular}{r c c}
-	\hline
-	& household 	& \parbox{1.5cm}{\centerline{firm}} \\
-\hline
-\hline
-$EF$	&	$+$	&$-$	\\
-	\hline
-counterbalance to financial	&	$WH$	&$K$	\\
-\hline
-\hline
-$\sum$		&0&0\\
-\end{tabular}
-\end{center}
-\vskip5mm
-
-
-It is worth emphasizing that the rows of the matrix relate to the types of assets that are accounted for in the economy.  In the simple case presented in this section, we consider only shares as financial assets.
-
-\vskip5mm
-
-As stated above, stock consistency implies that the rows of the matrix also sum to zero:
-
-\vskip5mm
-\begin{center}
-\begin{tabular}{r c c c}
-	\hline
-	& household 	& \parbox{1.5cm}{\centerline{firm}}  &$\sum$\\
-\hline
-\hline
-$EF$	&	$+$	&$-$	&0\\
-	\hline
-counterbalance to financial	&	$WH$	&$K$	&0\\
-	\hline
-	\hline
-$\sum$ &	0	&0	&0
-\end{tabular}
-
-\end{center}
-\vskip5mm
-
-Let's consider a richer (and more populated) economy where someone invented a new contract. 
-The Bank\&co is created to implement a business based on the newly created contract named bank account ($BA$). Both households and firms can sign a bank account contract with the Bank\&co.
- Households, firms and bank can be either lenders or borrowers. The lender records the $BA$ amount with a positive sign while the borrower with a negative sign. Note that the $BA$ amounts are usually referred to as either \textit{deposit}, if the household or the firm act as lenders, or \textit{loan} if they act as borrowers.  
-
-Introducing this agent (the bank), two new financial activities are to be considered in the economy: its equity ($EB$) and the bank account. 
-Concerning the latter, instead of using two different rows, one for deposits and one for loans, we think it is more coherent to use one line because the $BA$ is the unique contract an agent can sign with banks. This is of convenience because we will deal with a dynamic context in which a bank account changes its sign from period to period so that considering one entry rather than two will make the accounting easier.   
-
-After considering the $BA$, the agents' balance sheets are:
-
-\vskip5mm
-\begin{center}
-
-	\begin{tabular}{r c c }
-	
-		&\multicolumn{2}{c}{household}\\
-\hline
-&$BA$	&	$+/-$  \\
-&$EB$	&	+  \\
-&$EF$	&	+  \\
-\hline
-counterpart to fin. &$WH$	&$-$\\
-\hline
-&$\sum$	&	0
-\end{tabular}
-\hskip5mm
-\begin{tabular}{r c c}
-	& \multicolumn{2}{c}{firm} \\
-\hline
-&$BA$	&	$+/-$  \\
-&$EB$	&	+  \\
-&$EF$	&$-$	\\
-\hline
-counterpart to fin.	&$K$	& +	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-\hskip5mm
-\begin{tabular}{r c c}
-	& \multicolumn{2}{c}{bank} \\
-\hline
-&$\sum BA$	&	$+$  \\
-&$EB$	&	$-$  \\
-&$EF$	&$+$	\\
-\hline
-counterpart to fin.	&	& 0	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-
-\end{center}
-\vskip5mm
-
-Let us now build a stock matrix for an economy populated by one household, one firm and one bank. We consider the case in which $BA_h>0$, $BA_f<0$ and $BA_h>-BA_f$ and shares are held exclusively by households. The stock matrix is reported in table \ref{tab:sm1}.
-
-\begin{table}
-	\centering
-\begin{tabular}{r c c c c}
-	\hline
-	& household 	& \parbox{1.5cm}{\centerline{firm}} & \parbox{1.5cm}{\centerline{bank}} &$\sum$\\
-\hline
-\hline
-$BA$	&	$+$	&$-$	&$BA_h+BA_f$&0\\
-$EB$	&	$+$	&	&$-$&0\\
-$EF$	&	$+$	&$-$	&&0\\
-	\hline
-counterbalance to financial	&	$WH$	&$K$	&0\\
-	\hline
-	\hline
-$\sum$ &	0	&0	&0
-\end{tabular}
-	\caption{stock matrix with $BA_h>0$, $BA_f<0$, $BA_h>-BA_f$ and shares are held exclusively by households}
-	\label{tab:sm1}
-\end{table}
-
-
-
-A visual representation of the matrix is given in figure \ref{fig:vstock0}.
-\begin{figure}[htp]
-	\centering
-\hskip-1cm
-\includegraphics[scale=0.8]{balances-0.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock0}
-\end{figure}
-It shows the result often highlighted in macroeconomic textbook that in this kind of economy, wealth equates production capital:
-\[WH=K\]
-but it also shows less straightforward relationships such as 
-\[
-	 K=BA_h+EB+EF
-\]
-or
-\[
-W=BA_f+EF
-\]
-A slightly more sophisticated case in obtained by letting banks and firm holding each other shares. The stock matrix is now reported in table \ref{tab:sm2} and visually represented in figure \ref{fig:vstock1}.
-
-\begin{table}[t]
-	\centering
-\begin{tabular}{r c c c c}
-	\hline
-	& household 	& \parbox{1.5cm}{\centerline{firm}} & \parbox{1.5cm}{\centerline{bank}} &$\sum$\\
-\hline
-\hline
-$BA$	&	$+$	&$-$	&$BA_h+BA_f$&0\\
-$EB$	&	$+$	&$+$	&$-$&0\\
-$EF$	&	$+$	&$-$	&$+$&0\\
-	\hline
-counterbalance to financial	&	$WH$	&$K$	&0\\
-	\hline
-	\hline
-$\sum$ &	0	&0	&0
-\end{tabular}
-	\caption{stock matrix with $BA_h>0$, $BA_f<0$, $BA_h>-BA_f$ and shares are held by all the agents}
-	\label{tab:sm2}
-\end{table}
-
-\begin{figure}[t]
-	\centering
-\hskip-1cm
-\includegraphics[scale=0.8]{balances-1.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock1}
-\end{figure}
-The figure shows some gray area. They are introduced to find our relationships among balance sheet variables by visual inspection. In particular, the darker gray area signal areas that have to be discarded from the considered balance sheet while lighter ones are balance sheet items that are important for deducing relationships.  Consider for example firm assets. Their amount is given by
-\[K+EB_{f}\]
-looking now to household's liabilities we deduce that we have to add the dark gray area to wealth to reach the same amount of firm assets. But the dark gray area is equal to $EB_{f}$. So we can write
-\[K+EB_{f}=WH+EB_{f}\]
-that brings us to state that
-\[WH=K\]
-holds again. 
-%In fact, to obtain the household's balance sheet we hat to remove the gray area. Its amount is equal to equity issued by the bank and hold by the firm ($E_{b,f}$). This is the same amount one have to subtract from the firm assets to obtain the production capital, thus $K=W$. 
-As we did above, we can specify less straightforward relationships such as
-\[K=BA_h+EB_{h}+EF_{h}\]
-\[
-	WH=BA_f+EF_{h}+(EF_{b}-EB_{f})
-\]
-that generalizes what written above.
-
-We can now complete our framework by introducing the government. This also introduces an additional financial asset: government bonds ($GB$). 
-Table \ref{tab:bsall} reports the balance sheets, table \ref{tab:sm3} the stock matrix and figure \ref{fig:vstock2} the visual representation of the new situation. 
-We can again deduce the economic equations.
-\[W+EB_{f}-GB_{f}=K+GB_b+GB_f+EB_{f}\]
-\[WH=K+GB_b+GB_f+GB_{f}\]
-\[WH=K+WG\]
-
-
-\begin{table}[p]
-	\begin{center}
-
-	\begin{tabular}{r c c }
-	
-		&\multicolumn{2}{c}{household}\\
-\hline
-&$BA$	&	$+/-$  \\
-&$EB$	&	+  \\
-&$EF$	&	+  \\
-&$GB$	&	+  \\
-\hline
-counterpart to fin. &$WH$	&$-$\\
-\hline
-&$\sum$	&	0
-\end{tabular}
-\hskip5mm
-\begin{tabular}{r c c}
-	& \multicolumn{2}{c}{firm} \\
-\hline
-&$BA$	&	$+/-$  \\
-&$EB$	&	+  \\
-&$GB$	&$+$	\\
-&$EF$	&$-$	\\
-\hline
-counterpart to fin.	&$K$	& +	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-\hskip5mm
-\begin{tabular}{r c c}
-	& \multicolumn{2}{c}{bank} \\
-\hline
-&$\sum BA$	&	$+$  \\
-&$GB$	&	$+$  \\
-&$EB$	&	$-$  \\
-&$EF$	&$+$	\\
-\hline
-counterpart to fin.	&	& 0	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-\hskip5mm
-\begin{tabular}{r c c}
-	& \multicolumn{2}{c}{government} \\
-\hline
-&$\sum GB$	&	$-$  \\
-\hline
-counterpart to fin.	&$WG$	& +	\\
-\hline
-&$\sum$		&0\\
-\end{tabular}
-
-
-\end{center}
-	\caption{balance sheets with government bonds}
-	\label{tab:bsall}
-\end{table}
-
-
-
-\begin{table}[p]
-	\centering
-\begin{tabular}{r c c c c c}
-	\hline
-	& household 	& \parbox{1.5cm}{\centerline{firm}} & \parbox{1.5cm}{\centerline{bank}} & \parbox{1.5cm}{\centerline{gov}} &$\sum$\\
-\hline
-\hline
-$BA$	&	$+$	&$-$	&$BA_h+BA_f$&&0\\
-$EB$	&	$+$	&$+$	&$-$&&0\\
-$EF$	&	$+$	&$-$	&$+$&&0\\
-$GB$	&	$+$	&$+$	&$+$&$-$&0\\
-	\hline
-counterpart	&	$WH$	&$K$&0&$WG$	&0\\
-	\hline
-	\hline
-$\sum$ &	0	&0	&0&0
-\end{tabular}
-	\caption{stock matrix with $BA_h>0$, $BA_f<0$, $BA_h>-BA_f$ and shares are held by all the agents}
-	\label{tab:sm3}
-\end{table}
-
-\begin{figure}[p]
-\hskip-3cm
-\includegraphics[scale=0.8]{balances-2.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock2}
-\end{figure}
-
-\clearpage
-
-
-Figure \ref{fig:vstock2} presents a rather complicate situation. We now simplify it to reach a starting point for considering situation of agents' financial stress. 
-%We proceed by making two simplifications that brings us to our initial situation where shares are hold exclusively by households. 
-The simplifications is: shares abd bonds are hold exclusively by households. 
-
-Figure \ref{fig:vstock5} shows the simplified situation.   
-
-\iffalse
-\begin{itemize}
-	\item the firm do not possesses bank shares
-	\item the firm do not possesses government bonds
-	\item the bank do not possesses the firm shares
-\end{itemize}
-
-represented in figures \ref{fig:vstock3} and \ref{fig:vstock4}.
-Figure \ref{fig:vstock4} shows the simplified situation.   
-
-
-\begin{figure}[p]
-\hskip-3cm
-\includegraphics[scale=0.8]{balances-3.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock3}
-\end{figure}
-
-\begin{figure}[ht]
-\hskip-3cm
-\includegraphics[scale=0.8]{balances-4.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock4}
-\end{figure}
-\fi
-
-\begin{figure}[ht]
-\hskip-3cm
-\includegraphics[scale=0.8]{balances-5.pdf}
-	\caption{visual representation of the stock matrix}
-	\label{fig:vstock5}
-\end{figure}
-
-
-
-\clearpage
-The aggregate stock matrix is obtained by summing over individual values and is reported in table \ref{table:simplified}.
-
-%\vskip5mm
-\begin{table}[htp]
-\begin{center}
-\begin{tabular}{l c c c c c}
-	\hline
-&	& Household 	& \parbox{1.5cm}{\centerline{Firm}}   & \parbox{1.5cm}{\centerline{Bank}} &$\sum$\\
-\hline
-\hline
-$BA$	&	&$\sum_h BA$	&$\sum_f BA$	&$-\sum_b (\sum_h BA+\sum_f BA)$	&0\\
-$E_f$	&	&$\sum_h E_f$	&-$\sum_f E_f$	&$\sum_b E_f$	&0\\
-$E_b$	&	&$\sum_h E_b$	&$\sum_f E_b$	&-$\sum_b E_b$	&0\\
-	\hline
-counterbalance	&&		&	&	&\\
-to financial	&&	$\sum_hW$	&$\sum_fK$	&0	&0\\
-assets	&&		&	&	&\\
-	\hline
-	\hline
-&$\sum$	&	0	&0	&0	&0\\
-\end{tabular}
-\end{center}
-\caption{A simplified bottom-up stock matrix with a banking sector}
-\label{table:simplified}
-\end{table}
-
-
-
-In each balance sheet, one variable is determined as the complement to the others:
-
-\[
-W_h=BA_h+E_b+E_f
-\]
-\[
-E_f=K_f-BA_f+E_b
-\]
-\[
-E_b=\sum BA+E_f
-\]
-
-Economic models usually account for the ``normal'' case in which the three variables reported above have positive values. However, it is worth considering ``pathological'' cases in which these variables get negative. This section shed light on how these cases should be treated.  
-
-\newpage 
 \newpage
+\chapter{The Dynamics of Events}
 \section{Initialization}
-The initialization phase aims allowing firms to determine their initial production reducing exogenous setting to the minimum. 
+The initialization phase allow firms to determine their initial production reducing exogenous setting to the minimum. 
 
-When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents will be set in a stock flow consistent way.
-
-We will describe the initialization process in a more detailed way hereafter.
+When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a stock flow consistent way.
+The details on the initialization process are given hereafter.
 
 To realize production firms need two production input: capital and labor. We use the following Leontief type production function:
 \[
 Y_f=\min(Y_f^{PK},Y_f^{PL})
 \]
-That is, production realized by firm $f$ is the minimum between the firm potential production capital production, $Y_f^{PK}$, and the potential production that can be obtained by the labor force employed by the firm, $Y_f^{PL}$. 
+That is, production realized by firm $f$ is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, $Y_f^{PK}$, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, $Y_f^{PL}$. 
 
 
 The capital potential production is assumed to be equal to the level of capital:
@@ -528,9 +727,13 @@ To arrive at the very first $Y_f$ we adopt the following strategy.
 	\item adjust capital such as the potential output from capital is equal to the potential output from workers 
 \end{itemize}
 
-Note how the first step implies a preliminary setup of consumer state, while the second step allows the setup of firms assets balance sheet item. 
-Following the second step, we can setup firms balance sheet liabilities.
-Once consumers and firms banks accounts are known, we setup banks balance sheets.
+Note how the first step implies a preliminary setup of household working state, while the second step allows the setup of firms assets balance sheet item. 
+
+Knowing firms balance sheet assets we set the liabilities in such a way that the balace sheet identity is satisfied.
+
+Next, we initialize the household balance sheet.
+
+Once the amount of households' and firms banks accounts are known, we setup banks balance sheets.
 
 So the whole initialization sequence has the following phases:
 \begin{enumerate}
@@ -539,6 +742,8 @@ So the whole initialization sequence has the following phases:
 	\item set agents balance sheet
 	\item revise agents balance sheet for stock consistency
 \end{enumerate}
+
+These phases are explained in details in the documentation ?????. There, we present the steps taken for initializing the model in a sequential order. We also document those method that are not trivial by using UML activity diagrams.
 
 We will now discuss the initialization for each type of agent.
 
@@ -580,11 +785,11 @@ parameter:\\
 \end{tabular}
 
 \vskip5mm
-Using the \verb+abilityStudent+ and the \verb+consumerAge+ the education history of consumers is inizialized. Each year of education is set to successful if
+Using the \verb+abilityStudent+ and the \verb+consumerAge+ the education history of consumers is initialized. Each year of education is set to successful if that year uniform random draw $u$ is less that two times the student ability:\footnote{Note how $2\theta_{as}\le 1$ and $u$ is drawn from a $U(0,1)$.}
 \[
 	u<2\theta_{as}
 \]
-and unsuccessful otherwise. $u$ is drawn from a $U(0,1)$. Note that best students has $\theta_{as}=0.5$, so they will be alway successful because $2\theta_{as}=1$. Students with less abilities has lower probability to be successful.\\
+and unsuccessful otherwise.  Note that best students has $\theta_{as}=0.5$, so they will be alway successful because $2\theta_{as}=1$. Students with less abilities has lower probability to be successful.\\
 
 To initialize the education history we need the following\\ 
 parameters:\\
@@ -652,9 +857,9 @@ parameter:\\
 \end{tabular}
 
 \vskip5mm
-With probability $1-\theta_{ptbub}$, each non student select a firm randomly and send his/her CV to this firm. Subjects who do not send a CV (this happens with probability $\theta_{ptbub}$) enter the main loop in the unemployments state. 
+With probability $1-\theta_{ptbub}$, each non student selects a firm randomly and send his/her CV to this firm. Subjects who do not send a CV (this happens with probability $\theta_{ptbub}$) enter the main loop in the unemployment state. 
 
-\subsubsection{Proposing consumers bank account}
+\subsubsection{Initializing consumers bank account}
 
 This is a first action to setup the consumers balance sheet. 
 
@@ -704,7 +909,7 @@ In the previous step we set up the assets side of the firms balance sheet.
 
 As explained above, we have two liabilities: equity and bank account. We set up equity and determine the bank account residually.
 
-To setup equity we need these\\
+To setup equity we use the following\\
 parameters:\\
 \begin{tabular}{l l l}
 	\hline
@@ -740,14 +945,14 @@ parameter:\\
 \end{tabular}
 
 \vskip5mm
-each firm selects randomly a number of banks equal to $\theta_{nbbc}$ and open a bank account in each of them. The amount of the bank account is set to zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit is each bank account is set to $BA_f/\theta_{nbbc}$.
+each firm selects randomly a number of banks equal to $\theta_{nbbc}$ and open a bank account in each of them. The amount of the bank account is set to zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit in each bank account is set to $BA_f/\theta_{nbbc}$.
 
 
 \subsection{Banks initialization}
+We remember that in this version of the model, we have only one financial contract: the Bank account ($BA$). Bank accounts can have a positive amount or a negative one. Hereafter, we denote a bank account with a positive amount with $BA^+$ and  $BA^-$ denotes a negative amount.
 
-
-To setup the banks balance sheet, we start again from their assets.
-The amount of negative bank accounts is summed up. This gives the loans extended a bank:
+To setup the banks balance sheet, we start again from their assets. Bank assets are households' and firms financial liabilities. In this version of the model, financial liabilities are given by negative bank accounts. 
+The sum of negative bank accounts gives the loans extended by a bank:
 \[
 L_b=\sum BA_b^-
 \]
@@ -767,7 +972,7 @@ parameters:\\
 \end{tabular}
 
 \vskip5mm
-A bank equity base of a bank is then computed as
+A bank equity base is then computed as
 \[
 	EB_b=u_{Eb}L_b
 \]
@@ -778,7 +983,7 @@ Now, the level of deposits compatible with the balance sheet relationship is com
 D_b=L_b-EB_b
 \]
 
-Due to the random elements in the initialization of consumers and firms, we in general have
+Due to the random elements in the initialization of consumers and firms, we usually have
 \[
 	\sum BA^+_b \neq D_b
 \]
@@ -806,7 +1011,7 @@ The main loop can be divided into two parts:
 	\label{fig:clockcolor}
 \end{figure}
 
-\subsection{the process that leads to the consumption of what has been produced}
+\subsection{The process that leads to the consumption of what has been produced}
 %\subsection{Consumer-market-bank relationship}
 We present here the sequence of events and will enter in the details in the following subsections.
 
@@ -819,502 +1024,780 @@ We present here the sequence of events and will enter in the details in the foll
 		\end{enumerate}
 	\item consumers refund if possible (if they have enough financial resources);
 	\item students update their state
-	\item consumers 
-		\begin{enumerate}
-			\item compute their desired consumption
-			\item compute if they have enough financial resources to realize their desired consumption
-			\item if financial resources are needed to realize desired consumption or unpaid amounts exists, consumers check if banks to whom credit can be asked exists and choose the one with the ``best'' bank account;
-			\item if financial resources are needed and the best bank account exists, consumers asks for new credit. Credit can be asked to consume more than the available resources and/or to repay outstanding debt that they are able to refund;
-		\end{enumerate}
+	\item consumers compute desired consumption and ask for credit in order to achieve the desired level 
 	\item banks decide how much credit to allow;
-	\item consumers adjust their desired consumption according to allowed credit. 
-	\item Consumers go in the good market in order to satisfy their possible demand.
-	\item Office for statistics helps finding goods.
-	\item The \textit{effective} level of consumption is established: it may be less or equal to the desired consumption.
+	\item Allowed consumption is computed: consumers adjust their desired consumption according to allowed credit. 
+	\item Goods markets open: Office for statistics helps finding goods.
+	\item The \textit{effective} level of consumption is established: it may be less or equal to the allowed consumption.
 	\item consumers adjust their bank accounts (deposits and loans) according to effective consumption.
 \end{enumerate}
 
-\subsubsection{Consumer-Bank relationship}
+We now will enter into details of each event.
 
-\begin{table}[htp]
-	\resizebox{\linewidth}{!}{
-\begin{tabular}{c c c c}
-	\hline \hline
-	 & \multicolumn{2}{c}{\textbf{Traditional modeling}}& \textbf{Additional information}\\
-		\hline \hline 
-	Step&Flow&Stock&\\
+\subsubsection{Consumers receive wages}
+
+This step involves only employed consumers. The wage each employed consumer receives is a mark up on the unemployment dole: 
+
+\begin{equation}
+	ww=ud+\theta_{wp}*\theta_{YL}*f(wp)
+	\label{eq:ww}
+\end{equation}
+where:\\
+
+\vskip2mm
+\begin{tabular}{l l l}
 	\hline
-	initial	&		&$BA$		&\\
+	in papers& in code&value\\
 	\hline
-	1	&		&		&new about income \\
 	\hline
-	2a	&$iBA$		&$BA+iBA$	&\\ %questo è giusto per interessi anticipati
-%	\hline
-	2b	&		&		&$\Delta BA^{db}$ desired by banks\\
+$ud$&\verb+Context.unemploymentDole+&\\
+$\theta_{wp}$&\verb+Context.laborMarketStateToSetWage+&0.5\\
+$\theta_{YL}$&\verb+Context.parameterOfProductivityInProductionFuncion+&100\\
 	\hline
-	3	&	&	&$ref=\min(w-c^s,\Delta BA^{db})$\\
-%	\hdashline
-	3	&		&		&$unpaid=\Delta BA^{db}-ref$\\
-	\hline
-	5a	&		&		&desider consumption ($c^d$)\\
-%	\hdashline
-	 5b&		&		&$\Delta BA^{dc}$ desired by consumers\\
-		&		&		&$=\max(0,c^d-(w-ref))+unp$\\
-	5c	&		&		&$bestBank=\{identified, not\ exist\}$\\
-	5d	&		&		&if bestBank exists ask $\Delta BA^{dc}$ to it \\
-	\hline
-	6	&		&		&$\Delta BA^{ab}$ allowed by banks\\
-%	\hdashline
-		&		&		&$\Delta ref=-\Delta unp$\\
-%		\hdashline
-		&		&		&$\Delta BA^{ab}$ available for consumption\\
-%		\hdashline
-		&		&		&=$\Delta BA^{ab}-\Delta ref$\\
-	\hline
-	7	&		&		&$c^{pb}$ consumption possible by credit\\
-%	\hdashline
-	\hline
-	10	&		&		&$c$ consumption possible by market\\
-	\hline
-%	9	&$\max(w-ref-c,0)$	&$BA+iBA+ref$	&\\
-%		&		&	$+\min(w-ref-c,0)$&\\
-%		&		&	\\
-%		\hdashline
-	11	&$w-c$		&	$BA+iBA+w-c$&\\
-	\hline \hline
 \end{tabular}
-}
-%\vskip5mm
-\caption{Households: accounting and transaction sequence}
-\end{table}
 
-\iffalse
-\subsection{Bank-Consumer relationship}
-Each consumer is endowed with a bank account. The bank-consumer relationship progresses by the following steps:
+\vskip2mm
+and $f(wp)$ is a function of workers' productivity.
 
+Three possibilities for $f(wp)$ are presently implemented:
 \begin{enumerate}
-	\item banks account interests and ask for loan repayments to indebted consumers
-	\item consumers refund if possible (if they have enough financial resources)
-	\item the software performs a technical step by resetting some variables of the bank accounts (\dots)
-	\item consumers asks for new credit
-	\item banks decide how much credit to allow
-	\item consumers adjust desired consumption according to allowed credit. 
-		
-		Then, consumers try to gather the desired level of goods on the market. The effective level of consumption is established: it may be less or equal to the desired consumption.
-	\item consumers adjust their bank accounts (deposits and loans) according to effective consumption.
+	\item $f(wp)$ is the worker's productivity;
+	\item $f(wp)$ is average productivity of workers having the worker's degree in the employer's firm
+	\item $f(wp)$ is average productivity of workers having the worker degree in the economy
 \end{enumerate}
 
-%In the following we will present the dynamics of these events in some cases.
-Let's consider the consumer-bank dynamics in some specific cases.
-\fi
 
-A focus on Indebted Consumers
-%\subsubsection*{Step 1: interests and ask for repayments}
-\subsubsection*{Step 1: interests and loans repayment}
+This leads to three different wage setting rules. One of these rules can be chosen by means of the following\\
+parameter:\\
+\verb+Context.wageSettingRule+
 
-Consumers can be customers of several banks.
+The researcher can choose which one to use in a given run by setting the \verb+value+ of this parameter in the \verb+batch_parameters.xml+ file located in the scenario folder.
 
-First of all, banks account the interest rate.
+As mentioned above, this parameter can take three possible values that are: 0, 1 and 2.
 
-Suppose that after accounting interest rate, we have the following situation
-\begin{verbatim}
-bank 1 account =   10
-bank 2 account = -150
-bank 3 account =  -50
-\end{verbatim}
+\begin{itemize}
+	\item 
+		If \verb+value=0+ the wage depends on the worker's productivity.
+	\item 
+		If \verb+value=1+ the wage depends on the productivity of workers employed in the firm having the same education level of the considered worker.
+	\item 
+		If \verb+value=2+ the wage depends on the productivity of workers having the same education level of the considered worker in the whole economy.
 
-The bank assumes that indebted consumers (those with a negative bank account) ask for the whole renewal of the debt:
+\end{itemize}
 
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0
-bank 2 account = -150  demanded credit = -150
-bank 3 account =  -50  demanded credit =  -50
-\end{verbatim}
+The UML sequence diagram of this event is available here \href{\umllocation/setWorkersWage.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-Each bank with a negative account can ask for refunding. In this case the allowed credit is lower (in absolute value) than the demanded credit.
-Suppose banks 2 and 3 intend to reduce their exposition and that the new situation is:
+\subsubsection{Banks account interests and ask for loan repayments}
 
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0 allowed credit =    0
-bank 2 account = -150  demanded credit = -150 allowed credit = -130 
-bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
-\end{verbatim}
+The accounting of interest updates the households bank accounts.
 
-In this example, the consumer needs 25 to satisfy banks' request.
+Positive bank accounts are updated using the interest rate on deposits $i^+$, so that if $BA_{hb,t}\ge 0$
+\[
+BA_{hb,t+1}=BA_{hb,t}(1+i^+)
+\]
 
-\subsubsection*{step 2: refunding}
-The consumer refunds her bank account if she has enough income (to refund) and, in any case, refunds an amount that allows a subsistence consumption level. 
-\\Let's consider this example:
+The model has two different interest rates on loans. The ordinary interest rate ($i^-_{w}$) is charged on bank accounts with negative amount owned by workers, while a lower interest rate ($i^-_{nw}$) is charged on negative bank accounts owned by students and unemployed people. 
 
-\verb+disposableIncome=40+\\
-and that the subsistence consumption is 10.
+Once the accrued interest has been accounted, the bank may ask the reduction of some negative accounts. This involves only the accounts owned by workers.
 
-The software first computes the resources available to refund. They are given by 
-the sum of positive amounts in her bank accounts plus the disposable income minus the subsistence consumption. In the example we have:
+ 
+The amount of a negative bank account owned by a worker desired by the bank is thus determined as follows:
+\[
+	BA^{db}=\left\{ 
+		\begin{array}{l l l}
+			BA_{t+1}(1-\theta_{is})&\textnormal{with probability}& pr_{is}\\
+			BA_{t+1}&\textnormal{with probability}& 1-pr_{is}\\
+		\end{array}
+		\right.
+\]
 
-\verb/resourceAvailableToRefund = 10 + 40 - 10 = 40/
+The parameters involved in this computation are:
 
-These resources are enough to satisfy banks' requests; the consumer refunds totally her bank account because her income allows both debt repayment and a consumption greater than the subsistence level. 
-Therefore, the new situation is:
+\vskip2mm
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$i^+$&\verb+Context.interestRateOnDeposits+&\\
+$i^-_{w}$&\verb+Context.interestRateOnLoans+&\\
+$i^-_{nw}$&\verb+Context.interestRateOnSubsidizedLoans+&\\
+$\theta_{is}$&\verb+Context.percentageOfLoanToRefundForIndebtedWorkersIfAsked+&\\
+$pr_{is}$&\verb+Context.probabilityToBeAskedToRefundForIndebtedWorkers+&\\
+	\hline
+\end{tabular}
 
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0 allowed credit =    0
-bank 2 account = -130  demanded credit = -150 allowed credit = -130 
-bank 3 account =  -45  demanded credit =  -50 allowed credit =  -45
+\vskip2mm
 
-disposableIncome = 15
-\end{verbatim}
-
-
-%If the income is not enough to refund and have the minimum consumption, the consumers makes a proposal to the bank by reducing the demand for credit. 
-
-Consider now an alternative situation where consumer's income is 15 instead of 40. Now resources available to refund banks (the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption) are:
-
-\verb/resourceAvailableToRefund = 10 + 15 - 10 = 15/
-
-They are not enough to satisfy banks' requests, so unpaid amounts are recorded and disposable income is set to allow the subsistence consumption:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =    {\bf0}  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -135  demanded credit = -150 allowed credit = -130 unpaid =  5
-bank 3: account =  -50  demanded credit =  -50 allowed credit =  -45 unpaid =  5
-
-disposableIncome = {\bf10}
-\end{Verbatim}
-
-\subsubsection*{Step 3: account resetting}
-In this step, banks set the demanded and allowed credit to zero.
-
-The new situation is:
-
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
-bank 2: account = -135  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
-bank 3: account =  -50  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
-
-disposableIncome = 10
-\end{Verbatim}
+The UML sequence diagram of this event is available \href{\umllocation/updateConsumersAccounts.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
 
+\subsubsection{Consumers refund if possible}
+
+In the previous step banks can ask to reduce amount of negative bank accounts. 
+
+In this model households can have more than one bank account. In principle, some of them can be positive, and others negative. The downward adjustment can be asked on some of the negative accounts.  Households can face banks refunding request using all their financial assets: income (wage) and their positive bank account. 
+
+Households first try to fulfill bank requests by moving funds from positive to negative bank accounts. It this is not enough, they use their income. However, income can be used to fulfill banks requests as long as its amount is not lower than the subsistence level of consumption. In the worst case where banks request cannot be satisfied by using all the available financial resources, the household consumes the subsistence level of consumption and the bank reduces the negative amount of the bank account by an amount lower than it would and consequently record a positive unpaid amount.     
+
+The UML sequence diagram of this event is available \href{\umllocation/payBackBankDebt.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+%Households first compute both the funds needed to fulfill banks requests and also computes all the available funds. Subtracting from all the available funds the subsistence level of consumption the software computes the funds that are available to satisfy banks requests.   
+
+%If the funds available to refund are higher than the total amount needed to fulfill banks requests, all the amounts of bank accounts that was asked to be reduced are set to the amount desired by banks and the positive bank accounts are managed as follows. The first bank account of the positive bank account list is taken. If its amount is higher that the total amount to be refunded, its amount is reduced by the amount to be refunded; otherwise its amount is set to zero and the second account in the list is involved in the same process. If some amount to be refunded remains after visiting the last account of the list, the available income is used. The available income can be used to fulfill banks requests as long as its amount is not lower than the subsistence level of consumption.      
 
 
-\subsubsection*{step 4: consumers set desired credit}
-Now each consumer can asks for new credit. This can be done for two reasons: 1) to achieve a desired consumption higher than disposable income and 2) to pay unsatisfied lenders.
+\subsubsection{Students update their states}
 
-Suppose now that the consumer would like to consume 20.
+The evolution of a student state follows the process already described in the initialization.
 
-She asks for additional financial resources both to finance consumption (10) and to pay back bank 2 and 3 (5+5).
+In particular, the current period of education is successful if the new uniform random draw $u$ is less that two times the student ability:
+\[
+	u<2\theta_{as}
+\]
+and unsuccessful otherwise.
 
-The additional credit amount of 20 is asked to one bank. In particular, the bank with the ``best'' account (bank 1) is chosen. 
+If the education period is successful, the number of successful years of education ($n_{sye}$) is increased:
+\[
+n_{sye}=n_{sye}+1
+\]
+and the degree of education is updated according to the table already reported above:
+\[
+	\begin{array}{l l l}
+		n_{sye}& \textnormal{degree}& \textnormal{degree id}\\
+	0\le n_{sye}<5 & \textnormal{none}&0\\
+	5\le n_{sye}<8 & \textnormal{elementary}&1\\
+	8\le n_{sye}<13 & \textnormal{intermediate}&2\\
+	13\le n_{sye}<16 & \textnormal{college}&3\\
+	16\le n_{sye}<18 & \textnormal{bachelor}&4\\
+	18\le n_{sye}<21 & \textnormal{master}&5\\
+	21= n_{sye} & \textnormal{PhD degree}&6
+	\end{array}
+\]
+and the subject's productivity is improved as explained in the initialization section: 
+\[
+	wp=\theta_{as}+\frac{0.5}{\theta_{mnpe}}n_{sye}
+\]
 
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =    0  demanded credit = {\bf-20} allowed credit = 0 unpaid =  0
-bank 2: account = -135  demanded credit =   0 allowed credit = 0 unpaid =  5
-bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  5
+The subject looses his/her state of student 
+\begin{enumerate}
+	\item in case of a success, if the maximum periods of possible education ($\theta_{mnpe}+\theta_{mnfpe}$) or
+	\item in case of failure, if the maximum number of failures admitted ($\theta_{mnfpe}$)
+\end{enumerate}
+is reached. In these cases, his/her status change in unemployed.
 
-disposableIncome = 10  desiredConsumption = 20
-\end{Verbatim}
+The UML sequence diagram of this event is available \href{\umllocation/stepStudentState.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
 
-\subsubsection*{Step 5: credit supply}
+\subsubsection{Consumers compute desired consumption and ask for credit in order to achieve the desired level}
+This task is performed by taking the following steps.
 
-%The bank decides how much credit to allow.
+Each consumer computes her/his income. Workers have the wage as an income, unemployed have the dole and students have no income. Consumers also computes their financial resources by looking at their bank accounts. 
 
-The bank decides about the amount of loans to give out.
-Suppose allowed credit is 18
+Based on this information the desired consumption is computed using a consumption function. In the current version of the model this amount is computed randomly and it can be higher or lower than the available income.  
 
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =    0  demanded credit = -20 allowed credit = {\bf-18} unpaid =  0
-bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
-bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+This allows to compute the desired total level of expenditure of consumption: $D^d$.
 
-disposableIncome = 10  desiredConsumption = 20
-\end{Verbatim}
+In this model we can have product differentiation. In this case, the desired demand for each item is computed as follows:
+\[
+D_j^d=\alpha_jD^d
+\]
+where $\alpha_j$ is an index of the consumers appreciation for the given item. Of course the condition $\sum_j \alpha_j$ must be verified.
 
-Note that the funds now available to the consumers are 
+If the available financial resources are not enough to realize desired consumption, consumers evaluate the possibility to ask for credit. This possibility is precluded if all the consumers' bank accounts have a positive unpaid amount. Otherwise, the consumer asks all the credit needed to the bank with the best bank account. 
 
-\verb\disposableIncome + allowed credit=10+18=28\ 
+Credit is also asked to the bank with the best bank account to satisfy unpaid amounts that exist in other banks. 
 
-\subsubsection*{step 6: adjust desired consumption according to allowed credit}
 
-In this step, the desired consumption is reduced by the difference between the demanded and the allowed credit. This reduction cannot make the desired consumption be lower than the subsistence level.
+The UML sequence diagram of this event is available \href{\umllocation/stepDesiredConsumption.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-In the example we have
+\subsubsection{Banks decide how much credit to allow}
 
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
-bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
-bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+In the previous step, consumers who need credit set the desired amount on one of their bank accounts having null unpaid amount if such account exists. Let us identify this variable with $BA^{dc}$ (where the $dc$ upper script means \textbf desired by \textbf consumers). Because they are asking for credit, this amount is negative:  $BA^{dc}<0$. Note that the best bank account con have both a positive and negative amount. 
 
-disposableIncome = 10  desiredConsumption = {\bf18}
-\end{Verbatim}
+In the present version of the model, the bank decides the allowed credit $BA^{ab}<0$ (\textbf allowed by \textbf bank) as follows
 
-Now, the consumer goes in the goods market trying to satisfy her desires. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
+\begin{itemize}
+	\item if $BA\ge 0$ and $BA^{ab}<0$
+		\[BA^{ab}=\left\{
+			\begin{array}{l l l}
+				BA^{dc}&\textnormal{with probability}&pr_{ab}\\
+				\theta_{ab}BA^{dc}&\textnormal{with probability}&1-pr_{ab}\\
+			\end{array}
+		\right.
+		\]
+	\item if $BA< 0$ and $BA^{ab}<BA$
+		\[BA^{ab}=\left\{
+			\begin{array}{l l l}
+				BA^{dc}&\textnormal{with probability}&pr_{ab}\\
+				BA-\theta_{ab}(BA-BA^{dc})&\textnormal{with probability}&1-pr_{ab}\\
+			\end{array}
+		\right.
+		\]
+\end{itemize}
 
-\subsubsection*{step 7: the consumer adjust bank accounts}
+We have thus the following\\
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{ab}$&\verb+Context.percentageOfCreditAllowedTo+&\\
+ &\hskip1.5cm\verb+ConsumersWhenCreditIsNotTotallyFunded+&\\
+ $pr_{ab}$&\verb+Context.consumersProbabilityToGetFunded+&\\
+	\hline
+\end{tabular}
 
-The consumer can thus consume 15. 10 of them are payed with disposable income and 5 of them are borrowed from bank 1. 
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/setAllowedConsumersCredit.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-Bank 1 is also willing to lend additional resources (18-5=13), so the consumer uses them to satisfy bank 2 and 3 refunding requests:
+\subsubsection{Consumers adjust their desired consumption according to allowed credit} 
 
-\begin{Verbatim}[commandchars=\\\{\}]
-bank 1: account =  {\bf-15}  demanded credit = -20 allowed credit = -18 unpaid =  0
-bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
-bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+Because there is the possibility that bank does not allow all the demanded credit, we introduce a new variable: the allowed demand. 
 
-disposableIncome = {\bf0}  desiredConsumption = 18 effectiveConsumption = 15
-\end{Verbatim}
+This variable can differ from the desired demand only for consumers who asked for credit an whose request was not satisfied by banks.
 
-\newpage
-\subsubsection{Students evolution}
+Because we can have product differentiation, we compute the allowed-desired demand ratio:
+\[
+	r_{ad}=\frac{D^a}{D^d}
+\]
+and the we scale the demand of each single item by this amount
+\[
+	D_j^a=r_{ad}D_j^d
+\]
 
-\newpage
-\subsubsection{Goods market supervisor}
+The UML sequence diagram of this event is available \href{\umllocation/adjustConsumptionAccordingToExtendedCredit.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-\newpage
+\subsubsection{Good markets open: office for statistics helps finding goods}
+We code the goods market function in such a way that both centralized and decentralized matching mechanisms can be mimicked. 
+In particular we make the Office for Statistic to supervise goods allocation.
+
+The task is performed by taking the following steps:
+\begin{itemize}
+	\item compute the desired demand
+	\item allocate desired demand to firms
+	\item match demand and supply
+	\item update firms sales
+\end{itemize}
+These items are detailed hereafter.
+
+\noindent$\bullet$ \textit{Compute the desired demand.} The Office for Statistics computes the demand of each industry by summing over all the consumers. Therefore, provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D_1,\cdots,D_J\}$.
+
+The elements of the vector are computed as follows:
+\[
+	D^d_j=\sum_c (1-\theta_{gmi}) D_{cj}^{ac}
+\]
+This formulation is motivated by the attempt to mimic decentralized markets and the deriving imperfections that cause demand get lost in the consumers searching process.
+We introduce thus the following\\
+parameter:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{gmi}$&\verb+Context.percentageOfDemandMissed+&\\
+ &\hskip1.5cm\verb+BecauseOfGoodsMarketImperfections+&\\
+	\hline
+\end{tabular}
+
+\vskip3mm
+The desired aggregate demand is also computed as
+\[
+D^d=\sum_jD^d_j
+\]
+
+The UML sequence diagram of this event is available \href{\umllocation/computeDesiredDemand.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+\noindent$\bullet$ \textit{Allocate desired demand to firms.} In this step, the demand ($D^d_j$) computed in the previous step is allocated to the various firms according to their share of production in the industry they belong to:
+\[
+	D^d_{fj}=D^d_j\frac{Y_{fj}}{Y_j}
+\]
+Note that firms in some industries may have $D^d_{fj}>Y_{fj}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
+
+The UML sequence diagram of this event is available \href{\umllocation/allocateDesiredDemand.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+\noindent$\bullet$ \textit{Match demand an supply.} In this model we have vertical differentiation. This means that products with higher $j$ are preferred. It may thus happens that demand on these product is higher than supply. 
+In case the demand of a given product cannot be entirely satisfied, the office for statistics try to fulfill consumers excess demand of this product with the product that precede it in the quality ladder. The Office for statistic moves demand across industries starting from the most advanced product and proceeding backward. 
+This mechanism aims to mimic consumer decision to buy a less advanced product if the item s/he desire is in short supply.
+
+At the end of this process the demand received by each industry ($D_j$) and that received by each firm ($D_{fj}$) is known.
+
+Consumers are then informed of the demand reallocation and their final demand is computed:
+\[
+	D_{cj}=D_{cj}^{ac}\frac{D_j}{D_j^d}
+\]
+
+
+The UML sequence diagram of this event is available \href{\umllocation/matchDemandAndSupply.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+\noindent$\bullet$ \textit{Update firms sales.}
+Firms are also informed on the items they have sold:
+\[
+	D_{fj}=D_j \frac{Y_{fj}}{Y_j}
+\]
+This information will be then used to compute profit.
+
+The UML sequence diagrams of this event are available \href{\umllocation/computeDemand.html}{here} and \href{\umllocation/allocateDemand.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+\subsubsection{consumers adjust their bank accounts (deposits and loans) according to effective consumption}
+
+Once the effective consumption is known, consumers buy the product by and pay them to firms.
+
+The consumers financial position is adjusted accordingly.
+
+Those who consumes less that their income brings saving their saving to the bank with the worst position. Those who were allowed credit decreases their best bank account by the amount needed to consume. If additional allowed credit remains, it is used to reduce or cancel the unpaid amounts possibly present in the other bank accounts.   
+
+The UML sequence diagram of this event is available \href{\umllocation/updateBankAccountAccordingToEffectiveConsumption.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+\subsubsection{Example}
+
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_consumer_bank_relationship.html}{here}
+\begin{marginfigure}
+\hskip8mm	\includegraphics[scale=0.07]{example.png}
+\end{marginfigure}
+
+
 \subsection{The process that leads to production}
 
-This process consists in firms' attempt to adjust inputs to perform their demand expected for the next period.
+The bulk of this process consists in firms' attempt to adjust inputs to be able to make the production needed to satisfy the demand expected for the next period.
 
-First of all they have to establish their target level of production. To this aim, they have two important signals from the present period: the level of desired demand from consumers and that from other firms.
-Concerning the demand from consumers, we highlight how, the purchased quantity can be different from that initially desired by consumers. Indeed, when a consumer does not find enough goods of a given type, its demand is moved to other goods by the OFS.
+First of all, firms have to establish the level of production to be sold in the next period. To this aim, they have two important signals from the present period: the level of desired demand from consumers and that from other firms (the latter relate to investment as we will clarify below).
+Concerning the demand from consumers, we recall that the quantity sold by a firm can be different from that initially demanded by consumers. Indeed, the discussion in the previous section points out that when a consumer does not find enough goods of a given type, her/his demand can be moved (depending the chosen parametrization) to other goods by the Office For Statistic. However, the firm is informed on the initial level of demand (that desired by consumers) on the item it produces. It is thus natural a firm would realize a production equal to the demand initially claimed by consumers.  
 
-Once the target level has been established, the adjustment process start. 
+%This information is used to set the target level of production. Once this figure has been established, the firm starts the inputs adjustment process in order to achieve the production target. 
 
-The production can be either reduced or augmented. The case of a production reduction has no difficulties: The production capital used in the production is reduced and workers are fired.
+Currently available inputs can be higher or lower than those needed to realize the target production. Inputs excesses are someway easier to manage than shortages: the production capital used in the production is reduced and workers are fired.
+The upward adjustment is instead more tricky because 
+%the joint availability of resources must be checked.
+%Both production capital and labor force are involved in the adjustment. S
+several impediments to reach the desired level of inputs can occur.
+First of all, the level of financial resources including new available credit must be established. Second, the availability of the inputs on the market must be checked. Finally, if shortage of one of the inputs is detected, the demand of the others factors must be adjusted coherently. Inputs shortages deserves additional care by making a distinction between inputs that can be produced and those whose production is not possible or cannot be easily obtained in the short run. In the present version of the model we have two inputs: production capital and labor. We treat production capital as ``producible'' while labor as non producible.  
+However, production capital, as labor, keeps a part of its production power for the future even if it is not employed in a given period. We account for this by including a market for existing unused production capital. So, firms that needs additional production capital, first try to buy already existing production goods that are not used by other firms. Firms that after this adjustment still needs production capital ask for new production goods to other firms. To keep the model simple, we assume that production goods are made up of the same goods available to consumers, so that, at the end, new investments affect the demand on the existing goods markets.
 
-The upward adjustment is more tricky because the joint availability of resources must be checked.
-So, the firm has first to check how many financial resources are available for realizing the desired investment. Then It has to check if there are enough unemployed labor force available. Once the new realizable production is known the production factor adjustment starts: workers are hired and production capital is bought. Concerning the latter, the firm first buys existing unused production capital if it exists. If, after this adjustment the firm still needs production capital it asks for the production of new product on the goods market.
+
+%So, the firm has first to check how many financial resources are available for realizing the desired investment. Then It has to check if there are enough unemployed labor force available. Once the new realizable production is known the production factor adjustment starts: workers are hired and production capital is bought. Concerning the latter, the firm first buys existing unused production capital if it exists. If, after this adjustment the firm 
 
 Summing up, the process leading to production is composed of the following phases:
-\begin{enumerate}
-	\item set the target level of production
-	\item check available financial resources for upward adjustment of production capital
-	\item check availability of labor force taking in mind the possible financial constraints and hire.
-	\item The firm can be constrained in the labor market, thus the available financial resources can remain partially unused. The entrepreneur lines up the production capital coherently with the gathered workforce.  
-	\item entrepreneurs who want to decrease production capital offer it on the unused production capital market, while entrepreneurs who want to increase the production capital demand it on the same market. 
-	\item if offered unused production capital is lower that that demanded, order of new product to other firms are issued. 
-\end{enumerate}
+\begin{itemize}
+%	\item set the target level of production
+	\item \colorbox{lightgray}{check available financial resources} for upward adjustment of production capital. This phases is performed by taking the following steps:
 
-\subsubsection{check available financial resources}
-The bank-firm relationship progresses by the following steps:
+\begin{itemize}
+	\item compute the economic result and capital depreciation;
+	\item perform firms turnover;
+	\item banks account interests and ask for loan repayments to indebted firms;
+	\item firms refund if possible;
+	\item the software performs a technical step by resetting some variables of the bank accounts;
+	\item firms ask for new credit;
+	\item banks decide how much credit to allow;
+	\item firms compute investment demand and supply and adjust unpaid amount if possible.
+	\item entry of new firms that will ask for production capital.
+\end{itemize}
+
+
+	\item \colorbox{lightgray}{Labor force adjustment} taking in mind the possible financial constraints
+		\begin{itemize}
+			\item Firms perform labor force downward adjustment;
+			\item Unemployeds send curricula;
+			\item Perform labor force upward adjustment; 
+		\end{itemize}
+%	\item The firm can be constrained in the labor market, thus the available financial resources can remain partially unused. The entrepreneur lines up the production capital coherently with the gathered workforce.  
+	\item \colorbox{lightgray}{Production capital adjustment} taking in mind the possible workers constraint
+		\begin{itemize}
+			\item Firms try to adjust their production capital on the market for used production capital;
+			\item Firms that need additional capital ask for new production goods;
+		\end{itemize}
+	\item \colorbox{lightgray}{Consumer turnover}
+	\item \colorbox{lightgray}{Make production}
+\end{itemize}
+
+We now will enter into details of each step.
+\subsection*{\colorbox{lightgray}{Check available financial resources}}
+\subsubsection{Compute the economic result and capital depreciation}
+Each firm economic result is computed as follows
+
+\[
+	CoH_{f,j}=D_{f\leftarrow h,j}+D_{f\leftarrow f,j}-WW_{f,j}
+\]
+where \gls{var:coh} is cash on hand, \gls{var:Dfh} is demand from households, \gls{var:Dff} is demand from firms and \gls{var:WWf} is the amount of wages payed by the firm.
 
-\begin{enumerate}
-	\item banks account interests and ask for loan repayments to indebted firms
-	\item firms refund if possible (\dots)
-	\item the software performs a technical step by resetting some variables of the bank accounts
-	\item firms ask for new credit
-	\item banks decide how much credit to allow
-	\item firms adjust production capital and bank accounts
-\end{enumerate}
-In the following we will present the dynamics of these events in some cases.
+Concerning \gls{var:WWf}, it is given by the sum of the individual wage ($ww$) payed by the firm to the workers it employs. We saw above how $ww$ is computed (see equation \ref{eq:ww}), so we can write
+\[
+	WW_{f,j}=\sum ww
+\]
 
-\subsubsection{Bad condition}
-\subsubsection*{Step 1: interests and ask for repayments}
-Firms can be customers of several banks.
 
-First of all, the banks account the interest rate.
+Cash on hand can be used to integrate production capital if needed. To see if the cash on has to be used to buy production capital, we have to update the sate of this variable taking account of its depreciation.
 
-Suppose that after accounting interests we have the following situation
-\begin{verbatim}
-bank 1 account =   10
-bank 2 account = -150
-bank 3 account =  -50
-\end{verbatim}
+The production capital of the firm is identified by the $K_f$ variable. We divide this amount into two parts: $D_{f\leftarrow h,j}+D_{f\leftarrow f,j}$ is the production capital that was employed in the production and $K_f-D_{f\leftarrow h,j}-D_{f\leftarrow f,j}$ that was not used. In this model, these two parts of production capital have two distinct depreciation rate $\psi_D$ and $\psi_{!D}$.
 
-The bank assumes that indebted firms ask for the whole renewal of the debt:
+The production capital is thus updated as follows:
+\[
+	K_f=(D_{f\leftarrow h,j}+D_{f\leftarrow f,j})(1-\psi_D)+(K_f-D_{f\leftarrow h,j}-D_{f\leftarrow f,j})(1-\psi_{!D})
+\]
 
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0
-bank 2 account = -150  demanded credit = -150
-bank 3 account =  -50  demanded credit =  -50
-\end{verbatim}
 
-Each bank with a negative account can ask for refunding. In this case the allowed credit is lower (in absolute value) to the demanded credit.
-Suppose bank 2 asks for refunding and bank 3 does not:
 
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0 allowed credit =    0
-bank 2 account = -150  demanded credit = -150 allowed credit = -130 
-bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
-\end{verbatim}
+The UML sequence diagram of this event is available \href{\umllocation/computeEconomicResultAndCapitalDepreciation.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-In this example, the firm needs 20 to satisfy banks requests.
 
-\subsubsection*{Step 2: refunding}
+\subsubsection{Perform firms turnover}
 
-The possibility to refund depends on the resources available on banks and on the economic result. In our example, 10 is available in bank 1.
+In this basic version of the model, firms turnover is very simple: each firm that becomes too small is replaced with a new firm.
 
-To go on with our example, let us assume that the economic result is \verb+-50+ i.e. the firm is suffering a loss.
+The UML sequence diagram of this event is available \href{\umllocation/performFirmsExit.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+
+
+\subsubsection{Banks account interests and ask for loan repayments to indebted firms}
+
+The accounting of interest updates the firms bank accounts.
+
+Positive bank accounts are updated using the interest rate on deposits $i^+$, so that if $BA_{fb,t}\ge 0$
+\[
+BA_{fb,t+1}=BA_{fb,t}(1+i^+)
+\]
+
+Differently from consumers, firms have not a subsidized interest rate, and negative bank accounts are charged by the ordinary interest rate ($i^-_{w}$):
+\[
+BA_{fb,t+1}=BA_{fb,t}(1+i^.)
+\]
+
+Once the accrued interest has been accounted, the bank may ask the reduction of some negative accounts.
+The amount of a negative bank account owned by a firm desired by the bank is thus determined as follows:
+\[
+	BA^{db}=\left\{ 
+		\begin{array}{l l l}
+			BA_{t+1}&\textnormal{with probability}& pr_{fbren}\\
+			BA_{t+1}\theta_{fbncr}&\textnormal{with probability}& 1-pr_{fbren}\\
+		\end{array}
+		\right.
+\]
+
+The parameters involved in this computation are:
+
+\vskip2mm
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+$i^+$&\verb+Context.interestRateOnDeposits+&\\
+$i^-$&\verb+Context.interestRateOnLoans+&\\
+$\theta_{fbncr}$&\verb+Context.percentageOfOutstandingCreditAllowedTo+&\\
+&\hskip1.5cm\verb+FirmsWhenCreditIsNotCompletelyRenewed+&\\
+$pr_{fbren}$&\verb+Context.firmsProbabilityToHaveOutstanding+&\\
+&\hskip3cm\verb+DebtCompletelyRenewed+&\\
+	\hline
+\end{tabular}
+
+\vskip2mm
+
+The UML sequence diagram of this event is available \href{\umllocation/updateFirmsAccounts.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+\subsubsection{Firms refund if possible}
+In the previous step banks can ask to reduce amount of negative bank accounts. 
+
+In this model firms can have more than one bank account. In principle, some of them can be positive, and others negative. The downward adjustment can be asked on some of the negative accounts.  Firms can face banks refunding request using all their financial assets: cash flow and their positive bank account. 
+
+In case refund is asked on some accounts, the entrepreneur starts checking its bank account list from the beginning and when s/he find a positive amount use it to fulfill the other banks refunding requests.
+If the positive amounts are not enough, the cash on hand is used. If Even cash on hand is not enough, a positive unpaid amount is recoded.
+
+The UML sequence diagram of this event is available \href{\umllocation/firms_payBackBankDebt.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+\subsubsection{Firms ask for new credit}
+
+Firms may need new credit to increase the level of their production capital or to pay residual unpaid amounts on banks accounts.
+
+If credit is needed, the entrepreneur check the possibility to ask it to the banks it is customer of. This possibility is prevented if positive unpaid amount are present in all the firm bank accounts. If one or more bank accounts have no unpaid amount, the entrepreneur choses the bank account having the best account to ask new credit. Because all the bank accounts are evaluated by all firms, the code also identify the worst bank account. It will be used by The residual cash on hand that possibly remains in the following steps will be used to improve the amount of this bank account. 
+
+The UML sequence diagram of this event is available \href{\umllocation/setDesiredCredit.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+\subsubsection{Banks decide how much credit to allow}
+
+In the previous step, firms who need credit set the desired amount on one of their bank accounts having null unpaid amount if such account exists. Let us identify this variable with $BA^{df}$ (where the $df$ upper script means \textbf desired by \textbf firms). Because they are asking for credit, this amount is negative:  $BA^{df}<0$. Note that the best bank account con have both a positive and negative amount. 
+
+In the present version of the model, the bank decides the allowed credit $BA^{abf}<0$ (\textbf allowed by \textbf bank to \textbf firm) as follows
+
+\begin{itemize}
+	\item if $BA\ge 0$ and $BA^{abf}<0$
+		\[BA^{abf}=\left\{
+			\begin{array}{l l l}
+				BA^{df}&\textnormal{with probability}&pr_{abf}\\
+				\theta_{abf}BA^{df}&\textnormal{with probability}&1-pr_{abf}\\
+			\end{array}
+		\right.
+		\]
+	\item if $BA< 0$ and $BA^{abf}<BA$
+		\[BA^{abf}=\left\{
+			\begin{array}{l l l}
+				BA^{df}&\textnormal{with probability}&pr_{abf}\\
+				BA-\theta_{afb}(BA-BA^{df})&\textnormal{with probability}&1-pr_{abf}\\
+			\end{array}
+		\right.
+		\]
+\end{itemize}
+
+We have thus the following\\
+parameters:\\
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+ $\theta_{abf}$&\verb+Context.percentageOfNewDemandedCredit+&\\
+ &\hskip1.5cm\verb+AllowedToFirmsWhenCreditIsNotCompletelyAllowed+&\\
+ $pr_{abf}$&\verb+Context.firmsProbabilityToHaveNewDemanded+&\\
+ &\hskip1.5cm\verb+CreditCompletelyAllowed+&\\
+	\hline
+\end{tabular}
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/setAllowedFirmsCredit.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+
+\subsubsection{Firms compute investment demand and supply and adjust unpaid amount if possible}
+At the current state, some firm asked for new credit while other do not. 
+Those which asked for, now know the amount of credit the best bank (if it exist) is willing to allow.
+Therefore, they can check if the available credit is enough to cover their losses or to realize the desired investments. 
+Firms that want to invest, both those who asked for credit and those who do not, now know the level of investments they could achieve according to the available financial resources. However, we cannot set the amount of investment demand at this stage: firms have first to check for the availability of workers. If workers are not available, the desired level of investment is resized and the demand of investments is set. But this will happen in a later step.
+
+Three variables are set in this step: the \verb+firmInvestment+, the \verb+cashOnHand+, the \verb+promissoryNotes+, the \verb+unpaidAmount+.
 
-The firm use 10 available in bank 1, but it is not enough to satisfy banks requests. Shortages are recorded as unpaid amounts.
+Several economic conditions are managed in this step. 
 
-The firm financial situation is represented as follows
+In the worst case, the firm suffer a loss and available financial resources are not enough to cover it and a bank that lend money cannot be found. In this case we allow the firm to issue promissory notes that are delivered to consumers. These promissory notes will be payed in the future whenever possible.
+It highly probable that the loss is caused by a fall in demand, so that the firm want to decrease its production capital. 
+The variables listed above will probably appear as follows:\\
+\verb+firmInvestment<0+, \verb+cashOnHand=0+, \verb+promissoryNotes>0+, \verb+unpaidAmount>0+
+
+In another difficult situation the firm has profits and positive bank accounts that are not enough to pay back the bank. In this case the firm end up with positive unpaid amounts:\\
+\verb+firmInvestment<0+, \verb+cashOnHand=0+, \verb+promissoryNotes=0+, \verb+unpaidAmount>0+
+
+A better situation in that in which the fall of demand is not so heavy to cause a loss:\\
+\verb+firmInvestment<0+, \verb+cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+
+
+A promising situation is that in which the level of demand increase so that the firm want to invest and it has a positive economic result. Here we can distinguish between the case in which the cash on hand is not enough to finance investments:\\  
+\verb+firmInvestment > cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+ \\
+and the case in which the cash on hand is higher than investments:\\
+\verb+firmInvestment < cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+ \\
+In the latter case the cash on hand in excess is deposited in the worst bank account.
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/setPossibleInvestment.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+\subsubsection{entry of new firms that will ask for production capital}
+
+In the previous step we computed the potential demand and supply of production capital by incumbent firms. However, the demand of production capital must be integrated with that of firms that just entered the market. 
+The entering of new firms also impacts on banks because they are involved in the financing of these new activities. Furthermore, the new entries modifies the position each firms has on the goods market because it will attract a share of demand.
+
+All these aspects are managed in this step.
+In particular, the desired size of each new firm is a parameter:\\
+
+\vskip3mm
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+	$K_{entry}$&\verb+Context.productionOfNewEnteringFirm+&\\
+	\hline
+\end{tabular}
+
+\vskip3mm
+This amount is also identified as \verb+firmInvestment+ and thus enters in the demand for production capital.
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -140  demanded credit = -150 allowed credit = -130 unpaid = 10
-bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+New firms thus opens a number of bank accounts and ask for funds to finance the new investment to one of these banks (the fist one created for coding convenience).
+The bank allows for all the credit asked by a new firm.
 
-cashOnHand = -50
-\end{verbatim}
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/performFirmsEntry.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-\subsubsection*{Step 3: account resetting}
-In this step, banks set the demanded and allowed credit are set to zero.
 
-The new situation is
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
-bank 2: account = -140  demanded credit =  0 allowed credit = 0 unpaid = 10
-bank 3: account =  -50  demanded credit =  0 allowed credit = 0 unpaid =  0
+\subsection*{\colorbox{lightgray}{Labor force adjustment}}
 
-cashOnHand = -50
-\end{verbatim}
+\subsubsection{Firms perform labor force downward adjustment}
 
+The downward adjustment of the labor force follows two motivations:
+\begin{itemize}
+	\item workers retirement;
+	\item excess of labor production capacity with respect to the expected demand.
+\end{itemize}
 
+Concerning retirement, the software checks each worker's age against the parameter:\\
 
-\subsubsection*{Step 4: set desired credit}
+\vskip3mm
+\noindent
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+	$\theta_{retire}$&\verb+Context.ConsumerExitAge+&\\
+	\hline
+\end{tabular}
 
-Now the firm can ask for new credit. This can be done for two reasons: 1) to finance new investments and 2) to pay unsatisfied lenders.
+\vskip3mm
+The check is made by each firm, and if the worker's age is higher than the retirement age, the worker is removed from the workers list.
 
-Suppose now that our firm does not invest, and asks for credit to pay unsatisfied lenders.
 
-Credit in this step is asked to one of the banks, in particular to that with the ``best'' account.
+Once, retirement is performed, the firm computes its workers production capacity.
+If it is higher than the demand expected for the next period, the firm fire workers starting from the bottom of its workers list i.e. adopting a last in, first out method.
+The firm continue firing until firing an additional worker will bring the workers production capacity lower than the expected demand.
 
-In this example, the new asked credit is \verb/10+50=60/. The update situation is 
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/laborForceDownwardAdjustment.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit = -60 allowed credit = 0 unpaid =  0
-bank 2: account = -140  demanded credit =   0 allowed credit = 0 unpaid = 10
-bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  0
 
-cashOnHand = -50
-\end{verbatim}
+\subsubsection{Unemployeds send curricula}
 
+The way Unemployed people send curricula depends on the labor market matching mechanism. The latter can be chosen by setting the following parameter:\\
 
+\vskip3mm
+\noindent
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+	$\theta_{lm-match}$&\verb+Context.FirmsWorkersMatching+&\\
+	\hline
+\end{tabular}
 
+\vskip3mm
+It can be set as follows:\\
+0 perform a decentralized mechanism only;\\
+1 perform first a decentralized matching followed by a centralized allocation of residual vacancies;\\
+2 perform a centralized matching only.
 
+If the decentralized matching mechanism is involved (cases 0 and 1), unemployed consumers are allowed to select a number of firms given by the parameter:
 
+\vskip3mm
+\noindent
+\begin{tabular}{l l l}
+	\hline
+	in papers& in code&value\\
+	\hline
+	\hline
+	$\theta_{retire}$&\verb+Context.numberOfJobApplicationAnUnemployedSends+&\\
+	\hline
+\end{tabular}
 
-\subsubsection*{Step 5: credit supply}
+\vskip3mm
+and send to each of them the curriculum.
 
-The bank now decides the allowed credit.
+If the centralized matching mechanism is involved (cases 1 and 2), unemployed consumers send their curriculum to the labor office.
 
-The situation evolves differently according to the allowed amount.
+So, in case 0, unemployed consumers send $\theta_{lm-match}$ curricula, in case 1 they send $\theta_{lm-match}+1$ curricula while in case 2 they send just one curriculum.
 
-Suppose first, the bank allows all the demanded credit. The situation is as follows
 
-\begin{verbatim}
-bank 1: account =    0  demanded credit = -60 allowed credit = -60 unpaid =  0
-bank 2: account = -140  demanded credit =   0 allowed credit =   0 unpaid = 10
-bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
 
-cashOnHand = -50
-\end{verbatim}
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/sendJobApplications.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-\subsubsection*{Step 6: the firm adjust bank accounts}
 
-The resources made available by bank 1 are used and the situation evolve into the following
+\subsubsection{Perform labor force upward adjustment}
 
-\begin{verbatim}
-bank 1: account =  -60  demanded credit = -60 allowed credit = -60 unpaid =  0
-bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  0
-bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+In this step, firms that want to increase their production try to hire new workers. At this stage they know the level of production capital that can be achieved given the credit allowed by banks. The attempt here is to line up the workers production capacity to the capital production capacity allowed by banks.
 
-cashOnHand = 0
-\end{verbatim}
+Workers search mechanisms depends on the matching mechanism chosen (the $\theta_{lm-match}$ parameter presented in the previous paragraph).
+If the decentralized matching mechanism is involved (cases 0 and 1), each firm hires among those who sent the curriculum to it (those who were already hired by other firms are not considered by the firm).
 
-\subsubsection{Good conditions}
-	\subsubsection*{Step 1: interests and repayments}
-	Suppose we start from the same conditions as in the bad cases.
+In case 1, the residual vacancies are posted to the labor office, while in case 2, all the vacancies are posted. The Labor office will try to fill the vacancies. 
 
-	There are no differences in the evolution of this step, so that the situation at the end of this step is the same:
-\begin{verbatim}
-bank 1 account =   10  demanded credit =    0 allowed credit =    0
-bank 2 account = -150  demanded credit = -150 allowed credit = -130 
-bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
-\end{verbatim}
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/laborForceUpwardAdjustment.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
 
-	\subsubsection*{Step 2: refunding}
-	Good conditions here means that the firm realized a profit and thus has a positive cash on hand, say
+\subsection*{\colorbox{lightgray}{Production capital adjustment}}
 
-	\verb+cashOnHand = 50+
+%	entrepreneurs who want to decrease production capital offer it on the unused production capital market, while entrepreneurs who want to increase the production capital demand it on the same market. 
+%	if offered unused production capital is lower that that demanded, order of new product to other firms are issued. 
 
-20 of them are used to refund the bank. So, now, the situation is 
+\subsubsection{Firms try to adjust their production capital on the market for used production capital}
 
-\begin{verbatim}
-bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -130  demanded credit = -150 allowed credit = -130 unpaid =  0
-bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+First of all, a further check on the workers production capacity is done.
+It ca happen that workers production capacity and potential production capital cannot be lined up because of workers shortage. In this case, the capital production capacity, and hence investment demand, is resized to meet the workers production capacity.
 
-cashOnHand = 30
-\end{verbatim}
-
-
-
-	\subsubsection*{Step 3: account resetting}
-
-\begin{verbatim}
-bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
-
-cashOnHand = 30
-\end{verbatim}
-
-	\subsubsection*{Step 4: set desired credit}
-	Imagine now, the firm had a production capital equal to 100 before starting production. 
-	
-	Suppose production depreciates capital to 95.
-
-	Furthermore, suppose the firm expects an increase of demand and wants to increase its production capital to 110.
-
-	So, to bring production capital to the desired level 15 is needed.
-
-	Checking financial resources available internally the firm conclude that it can achieve the objective without asking to banks. 
-
-	Furthermore there is an inconsistency in firms bank accounts: the positive one should be used to reduce the negative ones. The software at this stage withdraws positive bank accounts and store them in the variable \verb+financialResourcesInBankAccounts+:
-
-\begin{verbatim}
-bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
-
-cashOnHand = 30 financialResourcesInBankAccounts = 10
-\end{verbatim}
-
-	\subsubsection*{Step 5: credit supply}
-In this step no change is performed because credit was not asked.
-
-	\subsubsection*{Step 6: adjust production capital and banks accounts}
-
-	Production capital is adjusted by using internal financial resources. 
-
-	So, after this step we have
-
-	\verb+productionCapital=110+
-
-	\verb/cashOnHand + financialResourcesInBankAccounts = 25/
-
-	finally, the residual internal refunds are used to improve the ``worst'' bank account:
-
-\begin{verbatim}
-bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 2: account = -105  demanded credit =    0 allowed credit =    0 unpaid =  0
-bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
-
-cashOnHand = 0 financialResourcesInBankAccounts = 0
-\end{verbatim}
-
-
-
-
-
-\subsubsection{Unused capital and investments}
-
-It can happen that a number of firms in the economy want to increase their production capital while other have an excess of it.
+Through the previous steps we show that a number of firms in the economy want to increase their production capital while other have an excess of it.
 
 In this model, there is a market for exchanging existing unused production capital.
 
@@ -1327,8 +1810,15 @@ The sequence of events in the adjustment of production capital is as follows
 	\item unused capital is transformed in reusable production capital;
 	\item reusable production capital is used to satisfy aggregate investments;
 	\item firms that sold unused capital reduce their available production capital and increase their worst bank account;
-	\item if aggregate investments are higher than reusable production capital, the difference increases the demanded in the goods market. 
 \end{itemize}
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/adjustProductionCapitalAndBankAccount.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
 
 The reuse of existing production capital is relevant for credit creation and aggregate demand.
 
@@ -1344,7 +1834,38 @@ If the second firm can sell the unused capital to the first one, the total amoun
 In the other case bank lending increase to 210.
 
 However, in the second case the first firm buys new production goods and the aggregate demand is higher than in the first case. 
-\subsubsection{Realizing production}
+
+\subsubsection{Firms that need additional capital ask for new production goods}
+
+If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods. 
+
+The office for statistics is charged for the  provisioning of such goods. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/computeInvestments.html}{here} and \href{\umllocation/allocateInvestments.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+
+
+
+
+
+\subsection*{\colorbox{lightgray}{Consumer turnover}}
+
+Consumer turnover is managed in a very simple way. When a consumer reaches the maximum age \verb+Context.ConsumerExitAge+ it is replaced with a new one having age equal to zero. The new consumers inherit the bank accounts of the exited consumer.
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/performConsumersTurnover.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+\vskip3mm
+
+
+
+
+\subsection*{\colorbox{lightgray}{Make production}}
 To realize production firms need two production input: capital and labor.
 
 For each of these two production input we compute the potential production, that is the production that can realize with the current level of the factor provided the other factor is not in short supply.
@@ -1379,45 +1900,51 @@ $\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
 	\hline
 \end{tabular}
 
-\subsubsection{Paying wages}
-
-
-Non student that have a job receive a wage. 
-
-The wage depends on the workers productivity. 
-
-The software gives the possibility to choose which productivity is considered. Possibilities are
-\begin{enumerate}
-	\item worker's productivity
-		\item the firm level average productivity of the workers having the same degree of education
-		\item the system wide level average productivity of the workers having the same degree of education
-\end{enumerate}
-
-The wage cannot be lower than the unemployment dole and cannot be higher than the potential product of the worker.
-
-The wage setting equation is
-\[
-	ww=ud+\theta_{wp}*\theta_{YL}*wp
-\]
-
-Involved parameter:
-
-\begin{tabular}{l l l}
-	\hline
-	in papers& in code&value\\
-	\hline
-	\hline
-$\theta_{wp}$&\verb+laborMarketStateToSetWage+&0.5\\
-$\theta_{wsr}$&\verb+wageSettingRule+&2\\
-	\hline
-
-\end{tabular}
-
-
-\subsubsection{Computation of economic result}
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/makeProduction.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+\vskip3mm
 
 
 
+Now we are ready to go again through the process that lead to consumption. However, as mentioned above, new entry of firms changes the market power of incumbents. Thus, a step done before the aggregate demand is allocated is the update of such market shares.   
+
+
+\vskip3mm
+The UML sequence diagram of this event is available \href{\umllocation/setupNewFirmsToComputeProductAttractiveness.html}{here}.
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
+\vskip3mm
+
+
+\section*{Examples of firm-bank relationship}
+
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_firm_bad_conditions.html}{here}
+\begin{marginfigure}
+\hskip8mm	\includegraphics[scale=0.07]{example.png}
+\end{marginfigure}
+
+\vskip1cm
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_firm_good_conditions.html}{here}
+\begin{marginfigure}
+\hskip8mm	\includegraphics[scale=0.07]{example.png}
+\end{marginfigure}
+
+
+
+\part{Modifying GABRIELE}
+
+\part{Documenting GABRIELE}
+\chapter{Unified Modeling Language (UML)}
+
+
+\chapter{Javadoc}
+
+From Repast project menu, choose Generate javadoc. Select gabriele from the list. Modify the destination folder to 
+\verb+<path to repast workspace>/gabriele/docs+ if needed and click on finish.
 
 
 \end{document}

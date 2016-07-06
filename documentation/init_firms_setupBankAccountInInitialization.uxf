@@ -9,7 +9,7 @@
       <w>575</w>
       <h>647</h>
     </coordinates>
-    <panel_attributes>title:Firm.setupBankAccountInInitialization()
+    <panel_attributes>title:agents.Firm.setupBankAccountInInitialization()
 Start
 productionCapital=production
 equity=ProductionCapital*U(Context.minFirmInitialEquityRatio,\Context.minFirmInitialEquityRatio)

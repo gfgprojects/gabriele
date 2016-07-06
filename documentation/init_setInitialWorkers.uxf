@@ -9,7 +9,7 @@
       <w>502</w>
       <h>631</h>
     </coordinates>
-    <panel_attributes>title:Firm.setInitialWorkers()
+    <panel_attributes>title:agents.Firm.setInitialWorkers()
 Start
 sumOfWorkersProductivity=0
 If

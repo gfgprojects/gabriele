@@ -9,7 +9,7 @@
       <w>670</w>
       <h>663</h>
     </coordinates>
-    <panel_attributes>title:start
+    <panel_attributes>title:agents.Bank.setupBalance()
 Start
 equityRatio=U(Context.minBankInitialEquityRatio,\Context.minBankInitialEquityRatio)
 equity=demandedCredit*equityRatio

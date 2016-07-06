@@ -9,7 +9,7 @@
       <w>807</w>
       <h>445</h>
     </coordinates>
-    <panel_attributes>title:create Consumers
+    <panel_attributes>title: consumers creation in Context
 Start
 While[for(i=0;\i&lt;numConsumers;\i++)]
 	aConsumer=new Consumer(consumersProgressiveIdentificationNumber,context)\(set identification number)
@@ -25,13 +25,13 @@ End
     <coordinates>
       <x>20</x>
       <y>460</y>
-      <w>488</w>
-      <h>355</h>
+      <w>570</w>
+      <h>371</h>
     </coordinates>
-    <panel_attributes>title:Consumer.initialize()
+    <panel_attributes>title:agents.Consumer.initialize()
 Start
 age=U[0,ContextConsumerExitAge-1]
-run school years\use abilityStudent to establish successes\   if failures&lt;Context.maxNumberOfFailedPeriodsOfEducation\       isStudent=false (will participate in the job labor market)
+run school years\use abilityStudent to establish successes\   if failures greater than Context.maxNumberOfFailedPeriodsOfEducation\   or successes = 21\       isStudent=false (will participate in the job labor market)
 set degree
 set productivity\according to degree
 End
