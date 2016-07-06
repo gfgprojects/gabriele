@@ -1,0 +1,264 @@
+<HTML>
+<HEAD>
+</HEAD>
+<BODY LANG="it-IT">
+
+Back to <a href="index.html"> home </a>
+<p><p>
+<h1>Main loop</h1>
+
+<table border=1>
+
+<tr>
+	<td><b>Firms</b>: </td>
+	<td><a href="umldoc/makeProduction.html"> makeProduction</a></td>
+	<td>Firms make production. </td>
+</tr>
+<tr>
+	<td><b>Office for statistics</b>:</td> 
+	<td><a href="umldoc/computeVariables.html">conputeVariables</a></td>
+	<td> (workers productivities, product diffusion indicator,... )</td>
+</tr>
+<tr>
+	<td><b>Firms</b>: </td>
+	<td><a href="umldoc/setWorkersWage.html"> setWorkersWage</a></td>
+	<td>Firms pay wage to workers. Productivities computed in the previous step can be used to set the wage. </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="umldoc/updateConsumersAccounts.html">updateConsumersAccounts </a></td>
+	<td>Interest and ask for refund. </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>*: </td>
+	<td><a href="umldoc/payBackBankDebt.html">payBackBankDebt </a></td>
+	<td>In the previuos steps banks can ask to reduce debt. Now, consumers pay back with their income or their positive bank account. Consumers disposableIncome is reduced according to the amount they pay back. If a consumers has not enough resources, banks take note of the unpaid amount and the consumer's disposable income is set to the subsistence level. </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="umldoc/resetConsumersDemandedAndAllowedCredit.html">resetConsumersDemandedAndAllowedCredit</a></td>
+	<td>code: demandedCredit=0;allowedCredit=0 </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="umldoc/stepStudentState.html"> stepStudentState</a></td>
+	<td> studens evolve their position. </td>
+</tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Consumption<br>goods market</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="umldoc/stepDesiredConsumption.html"> stepDesiredConsumption</a></td>
+	<td>compute the desired consumption. Consumers with a negative bank account or those with a positive bank account but who want to consume more than their bank account set the desired credit accordingly.</td>
+</tr>
+<tr>
+	<td><b>Bank</b>:</td> 
+	<td><a href="umldoc/setAllowedConsumersCredit.html">setAllowedConsumersCredit</a></td>
+	<td> set maximum credit consumers can have </td>
+</tr>
+<tr>
+	<td><b>Consumers</b>: </td>
+	<td><a href="umldoc/adjustConsumptionAccordingToExtendedCredit.html">adjustConsumptionAccordingToExtendedCredit</a></td>
+	<td>Those consumers who are credit constrained revise their desired consumption. Those who have negative desired consumption activate the <b>bailout procedure</b></td>
+</tr>
+<tr>
+	<td><b>Office for statistics</b>:</td> 
+	<td><a href="umldoc/computeDesiredDemand.html">computeDesiredDemand</a></td>
+	<td>Compute the <b>desired demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="umldoc/allocateDesiredDemand.html">allocateDesiredDemand</a></td>
+	<td>Each industry allocates <b>desired demand</b> to firms. Firms will use this figure to set production inputs for the next period</td>
+</tr>
+<tr>
+	<td> </td>
+	<td><a href="umldoc/matchDemandAndSupply.html">matchDemandAndSupply</a> </td>
+	<td>This mimic the good market functioning. Consumers who cannot find the desired product redirect their demand to other type of product. The desired demand of each consumer is thus revised and becomes <b>effective demand</b>.</td>
+</tr>
+<tr>
+	<td></td> 
+	<td><a href="umldoc/computeDemand.html">computeDemand</a></td>
+	<td>Compute the <b>effective demand</b> for each type of product (the industry desired demand) and the aggregate desired demand</td>
+</tr>
+<tr>
+	<td> </td>
+	<td><a href="umldoc/allocateDemand.html">allocateDemand</a> </td>
+	<td>Each industry allocates <b>effective demand</b> to firms. Firms will use this figure to set production inputs for the next period. </td>
+</tr>
+<tr>
+	<td><b>Consumers</b></td> 
+	<td><a href="umldoc/updateBankAccountAccordingToEffectiveConsumption.html">updateBankAccountAccordingToEffectiveConsumption</a></td>
+	<td>Each consumers withraw what needed or deposits what saved.</td>
+</tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Production<br>goods demand</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="umldoc/computeEconomicResultAndCapitalDepreciation.html">computeEconomicResultAndCapitalDepreciation</a> </td>
+	<td>compute cashOnHand as the difference of production an wages. </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="umldoc/performFirmsExit.html">performFirmsExit</a> </td>
+	<td>performConsumersExit </td>
+</tr>
+<tr>
+	<td><b>Banks</b> </td>
+	<td>removeExitedFirmsBankAccounts</td>
+	<td>close the bank accounts of firm that exit </td>
+</tr> 
+<tr>
+	<td><b>Banks</b> </td>
+	<td><a href="umldoc/updateFirmsAccounts.html">updateFirmsAccounts</a> </td>
+	<td>interest and refund. </td>
+</tr> 
+<tr>
+	<td><b>Firms</b>* </td>
+	<td><a href="umldoc/firms_payBackBankDebt.html">payBackBankDebt</a></td>
+	<td>firms refund debt. </td>
+</tr>
+<tr>
+	<td><b>(TBD) Firms</b> </td>
+	<td>stepAbsoluteRank </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>(TBD) Banks</b> </td>
+	<td>setBalanceSheetStrategy </td>
+	<td>(TBD) </td>
+</tr>
+<tr>
+	<td><b>Bank</b>: </td>
+	<td><a href="umldoc/resetFirmsDemandedAndAllowedCredit.html">resetFirmsDemandedAndAllowedCredit</a></td>
+	<td>code: demandedCredit=0;allowedCredit=0 </td>
+</tr>
+<tr>
+	<td><b>Firms</b> </td>
+	<td><a href="umldoc/setDesiredCredit.html">setDesiredCredit</a> </td>
+	<td>Credit can be asked to increase production capital or to restore a negative cash flow</td>
+</tr>
+<tr>
+	<td><b>Banks </b> </td>
+	<td><a href="umldoc/setAllowedFirmsCredit.html">setAllowedFirmsCredit</a> </td>
+	<td>Banks decide how many credit to allow to firms</td>
+</tr>
+<tr>
+	<td><b>Firms</b>* </td>
+	<td><a href="umldoc/setPossibleInvestment.html">setPossibleInvestment</a></td>
+	<td>adjust possible investment according to the allowed credit.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="umldoc/performFirmsEntry.html">performFirmsEntry</a> </td>
+	<td>In this model, the number of firm is constant. For each firm exit in the performFirmsExit() method, a new firm is created and added to the context. The program checks if an unemployed exists for each entering firm. If yes, The production capital of the new firm is positive and equal to the parameter in the context, else, the production capital is set to zero. The production capital of new firms is considered as demand for investments.   </td>
+</tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Labor<br>market</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+
+<tr>
+	<td><b>Firms</b> </td>
+	<td>jettisoningCurricula </td>
+	<td>empty the list of curricula </td>
+</tr>
+<tr>
+	<td><b>OfficeForLabor</b> </td>
+	<td>jettisoningCurricula </td>
+	<td>empty the list of curricula and vacancies </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="umldoc/laborForceDownwardAdjustment.html">laborForceDownwardAdjustment</a> </td>
+	<td>Account for retired workers and fire if needed. Fired workers set the isWorking flag to false. </td>
+</tr>
+<tr>
+	<td><b>Consumers </b> </td>
+	<td><a href="umldoc/sendJobApplications.html">sendJobApplications</a> </td>
+	<td>Unemployed consumers (those with isWorking=flalse) send curricula to firms and to office for labor </td>
+</tr>
+<tr>
+	<td><b>Firms </b> </td>
+	<td><a href="umldoc/laborForceUpwardAdjustment.html">laborForceUpwardAdjustment</a> </td>
+	<td>The execution of this action depends on the model parametrization. If this action is executed, firms hire new workers directly according to their needs. Some firms could not find all the desired workers and some workers could not find a job. Unsatisfied positions could be fulfilled if the following action is active in the simulation parametrization.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="umldoc/activateLaborMarket.html">activateOfficeForLabor</a> </td>
+	<td>The execution of this action depends on the model parametrization. If the previous action was performed, this action aims at fulfilling residual vacancies of the direct hiring process. Else, The office for labor allocate unemployed people to firms' vacancies.</td>
+</tr>
+
+<tr bgcolor="lightgray">
+	<td ><b>Production<br>goods market</b></td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+<tr>
+	<td><b>Firms</b>* </td>
+	<td><a href="umldoc/adjustProductionCapitalAndBankAccount.html">adjustProductionCapitalAndBankAccount</a></td>
+	<td>adjust production capital accordin to the allowed credit. Excess cashOnHand increase bank account. If firms cannot refund when asked by banks we have bad debt.</td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics </b> </td>
+	<td><a href="umldoc/computeInvestments.html">computeInvestments</a> </td>
+	<td>Sum of investment of incumbent and new firms.</td>
+</tr>
+<tr>
+	<td><b> </b> </td>
+	<td><a href="umldoc/allocateInvestments.html">allocateInvestments</a> </td>
+	<td>The market for unused capital is activated. If unused capital exists, the demand for new capital is reduced by the unused capital. The remainder is considered as demand of newly produced goods.</td>
+</tr>
+
+
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="umldoc/performConsumersTurnover.html">performConsumersTurnover</a> </td>
+	<td>performConsumersTurnover </td>
+</tr>
+<tr>
+	<td><b>OfficeForStatistics</b> </td>
+	<td><a href="umldoc/setupNewFirmsToComputeProductAttractiveness.html">setupNewFirmsToComputeProductAttractiveness</a> </td>
+	<td>update product attractiveness </td>
+</tr>
+
+
+</table>
+<p><p>
+Back to <a href="index.html"> home </a>
+</BODY>
+
+<tr>
+	<td><b> </b> </td>
+	<td><a href="umldoc/"></a> </td>
+	<td> </td>
+</tr>
+
+
+
+<tr>
+	<td> </td>
+	<td> </td>
+	<td> </td>
+</tr>
+
+
+<a href="umldoc/"></a>
+
