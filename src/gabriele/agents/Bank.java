@@ -1,9 +1,15 @@
-package sfcabm;
+package gabriele.agents;
    
 import java.util.ArrayList;
 import java.util.Iterator;
 import repast.simphony.random.RandomHelper;
-  
+
+import gabriele.financialContracts.BankAccount;
+import gabriele.Context;
+import gabriele.agents.Consumer;
+import gabriele.agents.Firm;
+import gabriele.institutions.CentralBank;
+
 public class Bank {
 	ArrayList<BankAccount> accountsList=new ArrayList<BankAccount>();
 	BankAccount aBankAccount;
@@ -53,6 +59,11 @@ public class Bank {
 		}
 
 	}
+
+/**	
+* Method used only once in initialization: setup bank balance sheet and resize deposits for stock-flow consistency.
+*/
+
 	public void setupBalance(){
 		double initialEquityRatio=RandomHelper.nextDoubleFromTo(Context.minBankInitialEquityRatio,Context.minBankInitialEquityRatio);
 		equity=demandedCredit*initialEquityRatio;

@@ -1,12 +1,14 @@
-package sfcabm;
+package gabriele.institutions;
 
 import repast.simphony.random.RandomHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import sfcabm.Firm;
-import sfcabm.Consumer;
-import sfcabm.Curriculum;
+import gabriele.agents.Firm;
+import gabriele.agents.Consumer;
+import gabriele.bargaining.Curriculum;
+import gabriele.Context;
+import gabriele.bargaining.LaborOffer;
 
 
 public class LaborMarket {

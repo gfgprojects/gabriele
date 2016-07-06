@@ -1,6 +1,6 @@
-package sfcabm;
+package gabriele.utils;
 
-import sfcabm.Firm;
+import gabriele.agents.Firm;
 
 import repast.simphony.data2.NonAggregateDataSource;
 

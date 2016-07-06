@@ -1,4 +1,6 @@
-package sfcabm;
+package gabriele.bargaining;
+
+import gabriele.Context;
 
 public class AProductDemand{
 	int absoluteRank,relativeRank;

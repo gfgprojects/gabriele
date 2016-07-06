@@ -1,4 +1,4 @@
-package sfcabm;
+package gabriele.agents;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,12 +9,15 @@ import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.essentials.RepastEssentials;
 
 //import java.util.ArrayList;
-//import sfcabm.LaborMkt;
-import sfcabm.Curriculum;
-import sfcabm.LaborOffer;
-import sfcabm.LaborMarket;
-import sfcabm.Context;
-import sfcabm.BankAccount;
+//import gabriele.LaborMkt;
+import gabriele.institutions.OfficeForStatistics;
+import gabriele.bargaining.Curriculum;
+import gabriele.bargaining.LaborOffer;
+import gabriele.institutions.LaborMarket;
+import gabriele.Context;
+import gabriele.financialContracts.BankAccount;
+import gabriele.agents.Bank;
+import gabriele.bargaining.Curriculum;
 
 public class Firm {
 	long production;
@@ -111,13 +114,15 @@ public class Firm {
 			System.out.println("       Firm "+identity+" received CV from consumer "+aCV.getSenderID()+" degree "+aCV.getSenderDegree());
 		}
 	}
-
+/**
+ * Method used only once during initialization: all the received job applications are accepted, the sum of workers' productivity is computed and the production is computed as a function of the sum of productivities.
+ */
 	public void setInitialWorkers(){
 		sumOfWorkersProductivity=0;
 		if(applicationList.size()>0){
 			/*
 			   try{
-			   consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			   consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 			   }
 			   catch(ClassNotFoundException e){
 			   System.out.println("Class not found");
@@ -156,7 +161,10 @@ public class Firm {
 			System.out.println("     Firm "+identity+" sum of productivity "+sumOfWorkersProductivity+ " production "+production);
 		}
 	}
-
+/**
+*Each Firm setup its balance sheet ant thus determine the level of debt....
+Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanBeCustumerOf and open a bank account in each of them. The amount of the bank account is set to zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demandedCredit is set to the debt divided by the number of banks the firm is customer of.
+*/
 	public void setupBankAccountInInitialization(){
 		productionCapital=production;//workersList.size()*Context.parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion;
 		equity=productionCapital*RandomHelper.nextDoubleFromTo(Context.minFirmInitialEquityRatio,Context.minFirmInitialEquityRatio);
@@ -165,7 +173,7 @@ public class Firm {
 			System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
 		}
 		try{
-			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -203,7 +211,7 @@ public class Firm {
 			System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
 		}
 		try{
-			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -246,7 +254,7 @@ public class Firm {
 			System.out.println("     Firm "+identity+" production capital "+productionCapital+" debt "+debt+" equity "+equity);
 		}
 		try{
-			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -1112,7 +1120,7 @@ public class Firm {
 
 				myOffer = new LaborOffer(this,identity,(targetLevelOfworkersProductionCapacity-productionCapacityAfterWorkforceAdjustment),senderFirmReservationWage);
 				try{
-					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+					myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 				}
 				catch(ClassNotFoundException e){
 					System.out.println("Class not found");

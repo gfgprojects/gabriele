@@ -1,4 +1,4 @@
-package sfcabm;
+package gabriele.institutions;
 
 import java.util.Date;
 import java.io.FileWriter;
@@ -19,7 +19,13 @@ import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.essentials.RepastEssentials;
 import repast.simphony.engine.environment.RunState;
 
-import sfcabm.Firm;
+import gabriele.agents.Firm;
+import gabriele.agents.Bank;
+import gabriele.agents.Industry;
+import gabriele.agents.Consumer;
+import gabriele.Context;
+import gabriele.bargaining.AProductDemand;
+import gabriele.utils.AbsoluteRankNonAggregateDataSource;
 
 public class OfficeForStatistics{
 	public repast.simphony.context.Context<Object> myContext;
@@ -201,9 +207,9 @@ LHs aggregateHouseholdAllowedChangeInCredit
 public void loadAgents(){
 		try{
 			firmsList=myContext.getObjects(Firm.class);
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
-			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
+			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -249,9 +255,9 @@ public void loadAgents(){
 		*/
 		try{
 			firmsList=myContext.getObjects(Firm.class);
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
-			banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
+			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institution.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -264,8 +270,8 @@ public void loadAgents(){
 		minimumAbsoluteRankDataSource.reset();
 		industriesList = new ArrayList<Industry>();
 		try{
-			maximumAbsoluteRank=(double)maximumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("sfcabm.Firm")),0);
-			minimumAbsoluteRank=(double)minimumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("sfcabm.Firm")),0);
+			maximumAbsoluteRank=(double)maximumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("gabriele.agents.Firm")),0);
+			minimumAbsoluteRank=(double)minimumAbsoluteRankDataSource.get(myContext.getObjects(Class.forName("gabriele.agents.Firm")),0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -397,7 +403,7 @@ public void loadAgents(){
 
 	public void resetProducAttractiveness(){
 		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -428,7 +434,7 @@ public void loadAgents(){
 
 
 		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -480,7 +486,7 @@ public void loadAgents(){
 
 
 		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -540,7 +546,7 @@ public void loadAgents(){
 
 
 		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -678,7 +684,7 @@ public void loadAgents(){
 			System.out.println("LABOR AGENCY");
 		}
 		try{
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.instituions.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -795,7 +801,7 @@ System.out.println("     number of firms before exit "+firmsList.size());
 
 
 		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -846,7 +852,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		if(newFirmsList.size()>0){
 /*
 		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -884,7 +890,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 	}
 
 		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -906,7 +912,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		if(newFirmsList.size()>0){
 
 		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -953,7 +959,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 	}
 
 		try{
-			firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -984,7 +990,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 
 	public void publishIndustriesStats(){
 		try{
-			consumersList=myContext.getObjects(Class.forName("sfcabm.Consumer"));
+			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");

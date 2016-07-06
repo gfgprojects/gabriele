@@ -1,4 +1,9 @@
-package sfcabm;
+package gabriele.financialContracts;
+
+import gabriele.agents.Bank;
+import gabriele.agents.Firm;
+import gabriele.agents.Consumer;
+import gabriele.Context;
 
 public class BankAccount{
 	double account=0;

@@ -1,4 +1,4 @@
-package sfcabm;
+package gabriele;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,12 +15,12 @@ import repast.simphony.engine.schedule.Schedule;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 //import repast.simphony.random.RandomHelper;
-//import sfcabm.LaborMkt;
-import sfcabm.Consumer;
-import sfcabm.Firm;
-import sfcabm.LaborMarket;
-import sfcabm.OfficeForStatistics;
-import sfcabm.Bank;
+//import gabriele.LaborMkt;
+import gabriele.agents.Consumer;
+import gabriele.agents.Firm;
+import gabriele.institutions.LaborMarket;
+import gabriele.institutions.OfficeForStatistics;
+import gabriele.agents.Bank;
 
 public class Context implements ContextBuilder<Object> {
 	public static boolean verboseFlag=true;
@@ -135,6 +135,7 @@ public class Context implements ContextBuilder<Object> {
 		//int maxIter=30;
 
 //		RandomHelper.setSeed(1469873);
+
 	Parameters params = RunEnvironment.getInstance().getParameters();
 	verboseFlag=(boolean)params.getValue("verboseFlag");
         numConsumers = (Integer)params.getValue("numConsumers");
@@ -155,14 +156,16 @@ public class Context implements ContextBuilder<Object> {
 //        debtCancelledOnfinancialDifficulty = (Boolean)params.getValue("debtCancelledOnfinancialDifficulty");
 //        betaStud = (Double)params.getValue("betaStud");
 //        betaWorker = (Double)params.getValue("betaWorker");
+
         unemploymentDole=(Integer)params.getValue("unemploymentDole");
         subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
-        costEdu=(Integer)params.getValue("studentConsumption");
-        int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        //			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
+	costEdu=(Integer)params.getValue("studentConsumption");
+        wageSettingRule=(Integer)params.getValue("wageSettingRule");
+        int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
+	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
         //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
-  
 
-		if(verboseFlag){
+	if(verboseFlag){
 			System.out.println("");
 			System.out.println("");
 			System.out.println("BEGINNING OF INITIAL SETUP");
@@ -209,9 +212,9 @@ public class Context implements ContextBuilder<Object> {
 		context.add(theLaborMarket);
 
 		try{
-			consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
-			firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
-			banksList=context.getObjects(Class.forName("sfcabm.Bank"));
+			consumersList=context.getObjects(Class.forName("gabriele.agents.Consumer"));
+			firmsList=context.getObjects(Class.forName("gabriele.agents.Firm"));
+			banksList=context.getObjects(Class.forName("gabriele.agents.Bank"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -327,9 +330,9 @@ public class Context implements ContextBuilder<Object> {
 		contextAction.execute();
 
 		try{
-			consumersList=context.getObjects(Class.forName("sfcabm.Consumer"));
-			firmsList=context.getObjects(Class.forName("sfcabm.Firm"));
-			banksList=context.getObjects(Class.forName("sfcabm.Bank"));
+			consumersList=context.getObjects(Class.forName("gabriele.agents.Consumer"));
+			firmsList=context.getObjects(Class.forName("gabriele.agents.Firm"));
+			banksList=context.getObjects(Class.forName("gabriele.agents.Bank"));
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");

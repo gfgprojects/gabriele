@@ -1,4 +1,6 @@
- package sfcabm;
+ package gabriele.bargaining;
+
+import gabriele.agents.Consumer;
 
 public class Curriculum {
 	int senderDegree;

@@ -1,6 +1,8 @@
-package sfcabm;
+package gabriele.agents;
 
 import java.util.ArrayList;
+
+import gabriele.Context;
 
 public class Industry{
 	int absoluteRank,relativeRank,numberOfFirms;

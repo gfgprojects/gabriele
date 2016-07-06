@@ -1,14 +1,21 @@
-package sfcabm;
+package gabriele.agents;
 
-//import sfcabm.Bank;
-//import sfcabm.LaborMkt; 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.io.IOException;
 
-import sfcabm.Firm;
-import sfcabm.Curriculum;
-import sfcabm.AProductDemand;
+import gabriele.agents.Bank;
+import gabriele.agents.Firm;
+import gabriele.bargaining.Curriculum;
+import gabriele.bargaining.AProductDemand;
+import gabriele.financialContracts.BankAccount;
+import gabriele.Context;
+import gabriele.institutions.OfficeForStatistics;
+import gabriele.institutions.LaborMarket;
+import gabriele.bargaining.LaborOffer;
+import gabriele.bargaining.LaborOffer;
+
+
 import repast.simphony.random.RandomHelper;
 //import repast.simphony.parameter.Parameters;
 //import repast.simphony.engine.environment.RunEnvironment;
@@ -16,6 +23,12 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 //import repast.simphony.context.Context;
 import repast.simphony.util.collections.IndexedIterable;
 import repast.simphony.essentials.RepastEssentials;
+/**
+ * The class defines all the methods needed to manage the various aspects an household is involved in (working, consuming and saving and more). The setDesiredConsumption method is the one where the consumption function is specified.
+ @author Gianfranco Giulioni
+ @since 2014
+ */
+
 public class Consumer {
 	int identity,age;
 	boolean isStudent,isWorking,isRetired;
@@ -111,7 +124,9 @@ public class Consumer {
 			wealth+=aBankAccount.getAccount();
 		}
 	}
-
+/**
+ * set consumer's identification number, age, student flag, initial level of education and productivity
+ */
 	public void initialize(){
 //		age=RandomHelper.nextIntFromTo(1,Context.consumerExitAge);
 		age=RandomHelper.nextIntFromTo(0,Context.consumerExitAge-1);
@@ -166,10 +181,12 @@ public class Consumer {
 
 
 	}
-
+/**
+ *Each consumer select randomly a number of banks equal to Context.numberOfBanksAConsumerCanBeCustumerOf and open a bank account in each of them. To set the amount of the bank account the code drawn a random integer from a uniform distribution U(Context.minConsumerInitialBankAccount,Context.maxConsumerInitialBankAccount). In case the figure is negative the amount is set to zero and the drawn number is assigned to the demandedCredit variable (it will managed when the bank account will be setup). Non negative number are assigner to the bank account amount.
+*/
 public void setupBankAccount(){
 	try{
-		banksList=myContext.getObjects(Class.forName("sfcabm.Bank"));
+		banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
 	}
 	catch(ClassNotFoundException e){
 		System.out.println("Class not found");
@@ -527,8 +544,8 @@ public void stepWorkerState() {
 			}
 			myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
 			try{
-				firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+				firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
+				myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 			}
 			catch(ClassNotFoundException e){
 				System.out.println("Class not found");
@@ -921,7 +938,9 @@ public void saveDataToFile(){
 			aProductDemand=demandsList.get(rankPosition);
 			aProductDemand.adjustDemand(identity,multiplier);
 		}	
-
+/**
+ * Method used only once at initialization to make non students send a job application to a randomly chosen firms with probability 1-Context.probabilityToBeUnemployedAtTheBeginning
+ */
 		public void sendInitialJobApplication(){
 			if(isStudent){
 				if(Context.verboseFlag){
@@ -940,8 +959,8 @@ public void saveDataToFile(){
 					}
 					myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
 					try{
-						firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+						firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
+						myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 					}
 					catch(ClassNotFoundException e){
 						System.out.println("Class not found");
@@ -985,8 +1004,8 @@ public void saveDataToFile(){
 					else{
 						myCurriculum=new Curriculum(this,degree,identity,10,productivity*Context.parameterOfProductivityInProductionFuncion,10.5);
 						try{
-							firmsList=myContext.getObjects(Class.forName("sfcabm.Firm"));
-							myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("sfcabm.LaborMarket"))).get(0);
+							firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
+							myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 						}
 						catch(ClassNotFoundException e){
 							System.out.println("Class not found");

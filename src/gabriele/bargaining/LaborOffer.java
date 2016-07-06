@@ -1,4 +1,6 @@
-package sfcabm;
+package gabriele.bargaining;
+
+import gabriele.agents.Firm;
 
 public class LaborOffer {
 //inteso come post vacancy
