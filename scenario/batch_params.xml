@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<sweep runs="1">
+    <parameter name="verboseFlag" type="constant" constant_type="boolean" value="true"></parameter>
+    <parameter name="numConsumers" type="constant" constant_type="int" value="10"></parameter>
+    <parameter name="numFirms" type="constant" constant_type="int" value="2"></parameter>
+    <parameter name="minAbilityStudent" type="constant" constant_type="double" value="0.35"></parameter>
+    <parameter name="maxAbilityStudent" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="maxNumberOfFailedPeriodsOfEducation" type="constant" constant_type="int" value="2"></parameter>
+    <parameter name="probabilityToBeUnemployedAtTheBeginning" type="constant" constant_type="double" value="0.2"></parameter>
+    <parameter name="numberOfBanksAConsumerCanBeCustumerOf" type="constant" constant_type="int" value="1"></parameter>
+    <parameter name="minConsumerInitialBankAccount" type="constant" constant_type="int" value="-500"></parameter>
+    <parameter name="maxConsumerInitialBankAccount" type="constant" constant_type="int" value="500"></parameter>
+    <parameter name="numberOfBanksAFirmCanBeCustumerOf" type="constant" constant_type="int" value="1"></parameter>
+    <parameter name="minFirmInitialEquityRatio" type="constant" constant_type="double" value="0.1"></parameter>
+    <parameter name="maxFirmInitialEquityRatio" type="constant" constant_type="double" value="0.3"></parameter>
+    <parameter name="minBankInitialEquityRatio" type="constant" constant_type="double" value="0.1"></parameter>
+    <parameter name="maxBankInitialEquityRatio" type="constant" constant_type="double" value="0.1"></parameter>
+    <parameter name="parameterOfProductivityInProductionFuncion" type="constant" constant_type="int" value="100"></parameter>
+    <parameter name="debtCancelledOnfinancialDifficulty" type="constant" constant_type="boolean" value="true"></parameter>
+    <parameter name="betaStud" type="constant" constant_type="double" value="0.003"></parameter>
+    <parameter name="betaWorker" type="constant" constant_type="double" value="0.03"></parameter>
+    <parameter name="unemploymentDole" type="constant" constant_type="int" value="30"></parameter>
+    <parameter name="subsistenceConsumption" type="constant" constant_type="int" value="30"></parameter>
+    <parameter name="studentConsumption" type="constant" constant_type="int" value="30"></parameter>
+    <parameter name="wageSettingRule" type="constant" constant_type="int" value="2"></parameter>
+    <parameter name="batchStoppingTime" type="constant" constant_type="int" value="10"></parameter>
+</sweep>

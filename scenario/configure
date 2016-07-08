@@ -1,0 +1,14 @@
+repastPosition=$(sed -n '1p' paths.txt)
+repastVersion=$(sed -n '2p' paths.txt)
+codePosition=$(sed -n '3p' paths.txt)
+
+#create the bin directory if not exists
+mkdir -p "$codePosition/bin"
+
+#create the compile script
+find "$codePosition/src/gabriele" -name "*.java" > sourcefilespath
+echo "javac -d $codePosition/bin -cp $repastPosition/repast.simphony.dataLoader_$repastVersion/bin:$repastPosition/repast.simphony.core_$repastVersion/bin:$repastPosition/repast.simphony.essentials_$repastVersion/bin:$repastPosition/repast.simphony.data_$repastVersion/bin:$repastPosition/repast.simphony.data.ui_$repastVersion/bin:. @sourcefilespath" > compile
+
+#create the run_batch script 
+echo "java -cp $repastPosition/repast.simphony.runtime_$repastVersion/lib/*:$repastPosition/repast.simphony.runtime_$repastVersion/bin repast.simphony.runtime.RepastBatchMain -params $codePosition/scenario/batch_params.xml $codePosition/scenario"> run_batch
+
