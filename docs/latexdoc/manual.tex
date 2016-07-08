@@ -385,7 +385,7 @@ The following colors are used:\\
 
 \subsection{Java Development Kit (JDK)}
 Follow the instructions given in the previous chapter to install or update JDK if needed. 
-\subsection{Install Repast}
+\subsection{Repast Simphony (RS)}
 Also in this case, you can follow the instructions given in the previous chapter. However, the process therein described implies the installation of eclipse. We will give here an alternative way to install the repast library and using it directly.
 
 First of all you have to download all the packages which make up the repast symphony library.\footnote{Note that the installation process described in RS web site implies downloading the RS library and put them in the eclipse plugins folder.}
@@ -394,11 +394,12 @@ You can download all the jars by using the \verb+wget+ command with the recursio
 
 To install repast, make the following steps.
 
-Suppose, for example, you have the home directory \verb+/Users/coolcoder+. Create a temporary directory\\
-\verb+mkdir repast_simphony+\\
-then move to this directory\\
-\verb+cd repast_simphony+\\
-and download the files from the Repast update site\\
+Suppose, for example, you have the directory \verb+/Users/coolcoder/abm_java_libraries+. Create the directory\\
+\verb+mkdir repast+\\
+inside this directory an move into it\\
+\verb+cd repast+\\
+
+Download the files from the Repast update site\\
 %\verb+wget -r http://mirror.anl.gov/repastsimphony/plugins/+\\
 \verb+wget -r -l1 --no-parent -nd --no-check-certificate +\\
 \verb+             https://repo.anl-external.org/repos/repast/plugins/+\\
@@ -417,8 +418,8 @@ Remove all the jar files by typing:\\
 Now the RS library is installed in your system and is ready to be used.
 To test your installation type the command:\\
 \begin{verbatim}
-java -cp /Users/coolcoder/repast_simphony/repast.simphony.runtime_<version>/lib/*:
-         /Users/coolcoder/repast_simphony/repast.simphony.runtime_<version>/bin 
+java -cp /Users/coolcoder/abm_java_libraries/repast/repast.simphony.runtime_<version>/lib/*:
+         /Users/coolcoder/abm_java_libraries/repast/repast.simphony.runtime_<version>/bin 
 	  repast.simphony.runtime.RepastMain
 \end{verbatim}
 where you have to replace \verb+<version>+ with the version identification number (for example \verb+2.3.0+).
@@ -429,7 +430,7 @@ Close the window because we will run the model in BATCH mode only.
 
 
 
-\subsection{Install GABRIELE}
+\subsection{GABRIELE}
 
 Now you have to choose or create the GABRIELE destination folder.
 Suppose it is called \verb+models+ and has the following absolute path: \\
@@ -437,7 +438,7 @@ Suppose it is called \verb+models+ and has the following absolute path: \\
 
 You can use again the two methods described in the previous chapter (git or compressed archive) to install the model. 
 
-Briefly, using git, change directory in models and give the following command:
+Briefly, using git, change directory in \verb+models+ and give the following command:
 
 \vskip2mm
 \noindent\verb+~/models$ +\color{red}\verb+git clone https://github.com/ggiulion/gabriele.git+ \color{black}
@@ -460,7 +461,7 @@ Rename the \verb+gabriele-master+ in \verb+gabriele+.
 Delete the \verb+gabriele-master.zip+ file.
 
 \vskip1cm
-Regardless of the method you use you should have the following directories tree: 
+Regardless of the method used, you should have the following directories tree: 
 
 \begin{verbatim}
 /Users/coolcoder/models/gabriele
@@ -470,7 +471,7 @@ Regardless of the method you use you should have the following directories tree:
 /Users/coolcoder/models/gabriele/scenario
 \end{verbatim}
 
-\verb+cd+ into the \verb+gabriele+ directory and get its absolute path  
+Now, \verb+cd+ into the \verb+gabriele+ directory and get its absolute path  
 
 
 
@@ -519,7 +520,7 @@ You must adapt the paths and the repast version of this file to your settings.
 
 Save this file into the data directory.
 
-move the \verb+configuration+ file from the gabriele scenario folder to the data directory:
+move the \verb+configure+ file from the gabriele scenario folder to the data directory:
 
 \verb+mv /Users/coolcoder/models/gabriele/scenario/configure . +
 
