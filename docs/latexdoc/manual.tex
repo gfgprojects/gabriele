@@ -520,7 +520,7 @@ You must adapt the paths and the repast version of this file to your settings.
 
 Save this file into the data directory.
 
-move the \verb+configure+ file from the gabriele scenario folder to the data directory:
+Move the \verb+configure+ file from the gabriele scenario folder to the data directory:
 
 \verb+mv /Users/coolcoder/models/gabriele/scenario/configure . +
 
@@ -604,33 +604,33 @@ The data file have the \verb+zdata_+ prefix for ease of their identification:
 
 \part{Understanding GABRIELE}
 
-\chapter{Introduction}
+%\chapter{Introduction}
 This model aims at reproducing the dynamics of an economic systems.
 
 Describing the functioning of a dynamic system implies to know the components of the systems, how they behave and how they interact with each other. 
 
-Throughout this document we will extensively use the two visual representations reported in figures \ref{fig:components} and \ref{fig:sequence}. The first one aims at showing the \textbf{model components} and the second one describes the dynamics of events. This includes the initialization phase who is performed just once at the beginning of the simulation and the \textbf{sequence of events} repeated in each time step.
+%Throughout this document we will extensively use the two visual representations reported in figures \ref{fig:components} and \ref{fig:sequence}. 
+
+Chapter \ref{chap:components} aims at showing the \textbf{model components}.
+
+
+Chapter \ref{chap:events} describes the dynamics of events. This includes the initialization phase who is performed just once at the beginning of the simulation and the \textbf{sequence of events} repeated in each time step.
 
 
 %In the following subsections we will carefully describe these two representations because they will be used in combination throughout the whole document. 
+
+
+
+\newpage
+
+%\subsection{System Components}
+\chapter{The components of the system}\label{chap:components}
 
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1.pdf}
 	\caption{Components of the economic system}
 	\label{fig:components}
 \end{figure}
-
-\begin{figure}[htp]
-	\centering
-\includegraphics[scale=0.5]{visual.pdf}
-	\caption{sequence of events}
-	\label{fig:sequence}
-\end{figure}
-
-\newpage
-
-%\subsection{System Components}
-\chapter{The components of the system}
 We divide systems components in the following categories:
 \begin{itemize}
 	\item agents;
@@ -664,7 +664,15 @@ Goods are exchanged on markets.
 In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
 
 \newpage
-\chapter{The Dynamics of Events}
+\chapter{The Dynamics of Events}\label{chap:events}
+
+\begin{figure}[htp]
+	\centering
+\includegraphics[scale=0.5]{visual.pdf}
+	\caption{sequence of events}
+	\label{fig:sequence}
+\end{figure}
+
 \section{Initialization}
 The initialization phase allow firms to determine their initial production reducing exogenous setting to the minimum. 
 
