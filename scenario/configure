@@ -12,3 +12,4 @@ echo "javac -d $codePosition/bin -cp $repastPosition/repast.simphony.dataLoader_
 #create the run_batch script 
 echo "java -cp $repastPosition/repast.simphony.runtime_$repastVersion/lib/*:$repastPosition/repast.simphony.runtime_$repastVersion/bin repast.simphony.runtime.RepastBatchMain -params $codePosition/scenario/batch_params.xml $codePosition/scenario"> run_batch
 
+
