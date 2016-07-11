@@ -640,36 +640,76 @@ For a systematic description of the system components, we divide them in the fol
 	\item financial assets.
 \end{itemize}
 \section{Agents}
-\begin{figure}[htp]
-\hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c1-0.pdf}
-	\caption{Components of the economic system}
-	\label{fig:componentsc1}
-\end{figure}
+%The standard economic modeling characterization is used. The model is therefore populated by the following agents:
 
-The standard economic modeling characterization is used. The model is therefore populated by the following agents:
+Let us distinguish between multi-instances and single-instance agents.  
+
+Multi-instances are
 \begin{itemize}
 	\item consumers
 	\item firms
-	\item government
-	\item the banking sector
-
-%		$f\in \{1, 2, \cdots, F\}$
-
+	\item banks
 \end{itemize}
-Beside these agents we have an additional agent, the Office for statistics, that have a global view of the system. It computes aggregate variables, and using this information it supervises the functioning of the models regulating markets and revising agents' individual variables where needed.
 
+while single-instance agents are:
+\begin{itemize}
+	\item government
+	\item labor office
+	\item Office for statistics
+\end{itemize}
+
+Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights them with gray.
+
+
+\begin{figure}[htp]
+\hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c1-0.pdf}
+	\caption{Components of the economic system: institutional sectors and other single-instance agents.}
+	\label{fig:componentsc1}
+\end{figure}
+
+The other two single-instance agents are highlighted in light blue. The labor office acts in the labor market, while the Office for statistics, have a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
+
+Figure \ref{fig:componentsc1} shows that the firms and consumers sectors have sub-structures. 
+
+Consumers are classified in students and non-students. The latter in turn can be employed and unemployed. Therefore, each consumer of the model falls into one of the these three groups.
+
+The sub-structure of the firms sector is designed to allow for product differentiation. In case the researcher is interested in having multiple products, firms are organized into industries that groups firms making the same item.
+
+
+\clearpage
 \section{Goods}
+In this section we focus on the real part of the model while the financial part is treated in the next section.
+
+In the present version of the model, the real part of the economy consists in exchanges of the following items:
 \begin{itemize}
 	\item consumption goods
 	\item investment goods
 	\item labor
 \end{itemize}
 
-Goods are exchanged on markets.
+These items are exchanged in the relative markets. They are highlighted in gray in figure \ref{fig:componentsc2}.
+
+
+\begin{figure}[htp]
+\hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c2-0.pdf}
+	\caption{Components of the economic system: real markets.}
+	\label{fig:componentsc2}
+\end{figure}
+
+
 
 \section{Financial assets}
 
 In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
+
+\begin{figure}[htp]
+\hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c3-0.pdf}
+	\caption{Components of the economic system: real markets.}
+	\label{fig:componentsc3}
+\end{figure}
+
+
+
 
 \newpage
 \chapter{The Dynamics of Events}\label{chap:events}
@@ -1936,6 +1976,20 @@ A numerical example of the sequence of action of the above explained process can
 \part{Modifying GABRIELE}
 
 \part{Documenting GABRIELE}
+
+
+\chapter{\LaTeX documentation}
+The \LaTeX typesetting system is used to produce the GABRIELE manual.
+
+All the files needed to obtain the electronic version of the manual are in the \verb+docs/latexdoc+ folder.
+
+The manual source file is named \verb+manual.tex+
+
+Some figures (for example \ref{fig:components} and \ref{fig:componentsc1}) are obtained by using metapost.
+To modify these figures, you have to edit the corresponding mp source file. Once finished, compile the file with the \verb+mptopdf+ command. If the command is not in your system you can either install it or obtain the final pdf by fist compiling with the \verb+mpost+ command and the converting the output using \verb+epstopdf+.
+
+
+
 \chapter{Unified Modeling Language (UML)}
 
 
