@@ -658,7 +658,7 @@ while single-instance agents are:
 	\item Office for statistics
 \end{itemize}
 
-Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights them with gray.
+Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights the institutional sectors in gray.
 
 
 \begin{figure}[htp]
@@ -669,9 +669,9 @@ Multi-instances agents are grouped in sectors: the consumers, firms and banking 
 
 The other two single-instance agents are highlighted in light blue. The labor office acts in the labor market, while the Office for statistics, have a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
 
-Figure \ref{fig:componentsc1} shows that the firms and consumers sectors have sub-structures. 
+Figure \ref{fig:componentsc1} also shows the sub-structure of the firms and consumers sectors. 
 
-Consumers are classified in students and non-students. The latter in turn can be employed and unemployed. Therefore, each consumer of the model falls into one of the these three groups.
+Consumers are classified in students and non-students. The latter in turn can be employed and unemployed. Therefore, each consumer of the model falls into one of the these three groups: student, worker and unemployed.
 
 The sub-structure of the firms sector is designed to allow for product differentiation. In case the researcher is interested in having multiple products, firms are organized into industries that groups firms making the same item.
 
@@ -683,8 +683,11 @@ In this section we focus on the real part of the model while the financial part 
 In the present version of the model, the real part of the economy consists in exchanges of the following items:
 \begin{itemize}
 	\item consumption goods
-	\item investment goods
-	\item labor
+	\item production inputs
+		\begin{itemize}
+			\item investment goods
+			\item labor
+		\end{itemize}
 \end{itemize}
 
 These items are exchanged in the relative markets. They are highlighted in gray in figure \ref{fig:componentsc2}.
@@ -696,19 +699,35 @@ These items are exchanged in the relative markets. They are highlighted in gray 
 	\label{fig:componentsc2}
 \end{figure}
 
+The model allows for product differentiation. It concerns consumption products. We have signaled this possibility by indexing the products in the goods market.
+
+Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are included in the firms balance sheet. Production capital used in the production process gradually depreciates. However, it ca happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
+Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm ask for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought at a different rate than the production capital employed in the production.
+
+Finally, to realize the production, labor is needed.  The labor market completes set of markets of this model.  
 
 
+
+\clearpage
 \section{Financial assets}
 
 In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
 
-Financial exchanges are performed in the credit market.
+In the present version of the model, we include the financial contract which is the cornerstone of nowadays financial systems: the bank account.
+
+Every consumer or firm of the model has at leas a bank account. The bank account is a convenient modeling device. It can be used to store wealth, but it is also a mean to obtain credit. In the latter case the amount on the bank account will be negative.
+
+In the present version of the model, we have intermediated finance only. Some agents have positive bank accounts (deposits) while others have negative bank accounts borrowing from the bank. 
+
+Financial exchanges are thus performed in the credit market (highlighted in gray in figure \ref{fig:componentsc3})
 
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c3-0.pdf}
-	\caption{Components of the economic system: real markets.}
+	\caption{Components of the economic system: the credit market.}
 	\label{fig:componentsc3}
 \end{figure}
+
+Considering additional financial contracts, and therefore adding to the model other financial markets, should be done in the near future to let the model gradually approach the reality of nowadays financial markets.
 
 
 
