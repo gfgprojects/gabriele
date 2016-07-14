@@ -4,8 +4,8 @@
 \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
 \usepackage{sidenotes}
 \usepackage[toc]{glossaries}
-\newglossary[nlg]{variable}{vin}{vot}{Notation: variables}
-\newglossary[nlg]{parameter}{pin}{pot}{Notation: Parameters}
+\newglossary[nlg]{variable}{vin}{vot}{List of variables}
+\newglossary[nlg]{parameter}{pin}{pot}{List of Parameters}
 \makeglossaries
 \newcommand{\umllocation}{file:///Users/giulioni/Dropbox/svn/sfcabm_my/documentation}
 \title{GABRIELE}
@@ -50,7 +50,7 @@
 	
 	\vspace{1.5cm}
 	\noindent
-	{\scshape\Huge Instructions Manual \par}
+	{\scshape\Huge Users Manual \par}
 
 	\vspace{2cm}
 	\noindent
@@ -742,6 +742,7 @@ Considering additional financial contracts, and therefore adding to the model ot
 	\label{fig:sequence}
 \end{figure}
 
+\clearpage
 \section{Initialization}
 The initialization phase allow firms to determine their initial production reducing exogenous setting to the minimum. 
 
@@ -2005,6 +2006,50 @@ The \LaTeX typesetting system is used to produce the GABRIELE manual.
 All the files needed to obtain the electronic version of the manual are in the \verb+docs/latexdoc+ folder.
 
 The manual source file is named \verb+manual.tex+
+
+\section{Lists in the table of contents}
+The \verb+glossaries+ package is used to produce the lists to be included in the table of contents.
+
+Here we will briefly explain how it works. First of all a new glossary must be created. In the following example, the glossary called \verb+variable+ is created: 
+
+\begin{verbatim}
+\usepackage[toc]{glossaries}
+\newglossary[nlg]{variable}{vin}{vot}{List of variables}
+\end{verbatim}
+
+The glossary entries are defined in a separate file that will be included in the main document. Suppose the entries for the \verb+variable+ are created in the \verb+glossary_notation_variables.tex+ file. 
+
+The entries definitions are imported in the preamble with the following command\\
+\verb+\input{glossary_notation_variables}+
+
+Glossaries entries definition format is as follows:
+
+\begin{verbatim}
+\newglossaryentry{var:WWf}% label 
+{ 
+  type=variable,% glossary type 
+  name={$WW_{f,j}$}, 
+  description={Sum of wages payed by firm $f$ producing good $j$} 
+}
+\end{verbatim}
+
+Note that the type entry must report the glossary name.
+
+Once the glossary entry is defined in the \verb+glossary_notation_variables.tex+ file, it can be used in the main document. To do that, the 
+\verb+\gls{glossary entry label}+ must be used. In our case, for example we can write:
+
+\verb+where \gls{var:WWf} denotes the sum of wages ...+
+
+Finally, the \verb+\printglossaries+ command must be included in the main file to make the defined glossaries show up. 
+
+An additional compilation step is needed to generate the glossaries.
+
+Once compiled a first time using the \verb+pdflatex+ command, the \verb+manual.ist+ file is created. Now give the command\\
+\verb+makeindex -s manual.ist -o manual.vin manual.vot+\\
+to generate the auxiliary files taken as input by the following \verb+pdflatex+ runs. Note that we defined the extension of the files used in the \verb+makeindex+ command in the \verb+\newglossary+ line options.
+
+
+\section{Figures}
 
 Some figures (for example \ref{fig:components} and \ref{fig:componentsc1}) are obtained by using metapost.
 To modify these figures, you have to edit the corresponding mp source file. Once finished, compile the file with the \verb+mptopdf+ command. If the command is not in your system you can either install it or obtain the final pdf by fist compiling with the \verb+mpost+ command and the converting the output using \verb+epstopdf+.
