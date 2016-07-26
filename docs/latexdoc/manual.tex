@@ -444,8 +444,9 @@ Briefly, using git, change directory in \verb+models+ and give the following com
 \noindent\verb+~/models$ +\color{red}\verb+git clone https://github.com/ggiulion/gabriele.git+ \color{black}
 
 \vskip2mm
+That's it!
 
-Otherwise, point your browser to\\ 
+Otherwise, you have to download the zip archive: point your browser to\\ 
 \verb+https://github.com/ggiulion/gabriele+\\
 Click on the ``clone or download'' button and choose ``download zip''.
 
@@ -571,7 +572,7 @@ First of all compile the model by typing:
 \noindent\verb+~/Documents/gabriele_data$ +\color{red}\verb|./compile| \color{black}
 \vskip2mm
 
-The batch run is started wuth the following command:
+The batch run is started with the following command:
 \vskip2mm
 \noindent\verb+~/Documents/gabriele_data$ +\color{red}\verb|./run_batch| \color{black}
 \vskip2mm
@@ -618,7 +619,7 @@ Describing the functioning of a dynamic system implies to know the components of
 Chapter \ref{chap:components} aims at showing the \textbf{model components}.
 
 
-Chapter \ref{chap:events} describes the dynamics of events. This includes the initialization phase who is performed just once at the beginning of the simulation and the \textbf{sequence of events} repeated in each time step.
+Chapter \ref{chap:events} describes the dynamics of events. This includes the initialization phase which is performed just once at the beginning of the simulation and the \textbf{sequence of events} repeated in each time step.
 
 
 %In the following subsections we will carefully describe these two representations because they will be used in combination throughout the whole document. 
@@ -648,13 +649,12 @@ For a systematic description of the system components, we divide them in the fol
 
 Let us distinguish between multi-instances and single-instance agents.  
 
-Multi-instances are
+In this version of the model, Multi-instances agents are
 \begin{itemize}
 	\item consumers
 	\item firms
 	\item banks
 \end{itemize}
-
 while single-instance agents are:
 \begin{itemize}
 	\item government
@@ -663,15 +663,12 @@ while single-instance agents are:
 \end{itemize}
 
 Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights the institutional sectors in gray.
-
-
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c1-0.pdf}
 	\caption{Components of the economic system: institutional sectors and other single-instance agents.}
 	\label{fig:componentsc1}
 \end{figure}
-
-The other two single-instance agents are highlighted in light blue. The labor office acts in the labor market, while the Office for statistics, have a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
+The other two single-instance agents are highlighted in light blue. The Labor Office acts in the labor market, while the Office for Statistics, has a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
 
 Figure \ref{fig:componentsc1} also shows the sub-structure of the firms and consumers sectors. 
 
@@ -705,24 +702,23 @@ These items are exchanged in the relative markets. They are highlighted in gray 
 
 The model allows for product differentiation. It concerns consumption products. We have signaled this possibility by indexing the products in the goods market.
 
-Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are included in the firms balance sheet. Production capital used in the production process gradually depreciates. However, it ca happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
-Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm ask for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought at a different rate than the production capital employed in the production.
+Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are included in the firms balance sheet. Production capital used in the production process gradually depreciates. It can happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
+Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm ask for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought the researcher can decide to make it happen at a different rate than the production capital employed in the production.
 
-Finally, to realize the production, labor is needed.  The labor market completes set of markets of this model.  
+Finally, to realize the production, labor is needed.  The labor market completes set of real markets of this model.  
 
 
 
 \clearpage
 \section{Financial assets}
 
-In the previous section we have identified the type of goods present in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
+In the previous section we have identified the type of goods in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
 
 In the present version of the model, we include the financial contract which is the cornerstone of nowadays financial systems: the bank account.
 
-Every consumer or firm of the model has at leas a bank account. The bank account is a convenient modeling device. It can be used to store wealth, but it is also a mean to obtain credit. In the latter case the amount on the bank account will be negative.
+In this model, every consumer or firm has at leas one bank account. The bank account is a convenient modeling device: it can be either used to store wealth or as a means to obtain credit. In the latter case, the amount on the bank account will be negative.
 
-In the present version of the model, we have intermediated finance only. Some agents have positive bank accounts (deposits) while others have negative bank accounts borrowing from the bank. 
-
+Having no other financial contracts, in the present version of the model we have intermediated finance only. %Some agents have positive bank accounts (deposits) while others have negative bank accounts borrowing from the bank. 
 Financial exchanges are thus performed in the credit market (highlighted in gray in figure \ref{fig:componentsc3})
 
 \begin{figure}[htp]
@@ -731,13 +727,31 @@ Financial exchanges are thus performed in the credit market (highlighted in gray
 	\label{fig:componentsc3}
 \end{figure}
 
-Considering additional financial contracts, and therefore adding to the model other financial markets, should be done in the near future to let the model gradually approach the reality of nowadays financial markets.
+Considering additional financial contracts, and therefore adding to the model other financial markets, is a goal for the near future to let the model gradually approach the reality of nowadays financial markets.
 
 
 
 
 \newpage
 \chapter{The Dynamics of Events}\label{chap:events}
+
+We start the description by the visual representation of the dynamics of events given in figure \ref{fig:sequence}. The figure shows that after the initialization phase (that will be detailed in section \ref{sec:initialization}) the software enters in the main loop (deeply discussed in section \ref{sec:mainloop}). Figure \ref{fig:sequence} gives a brief description of the various events together with the information on the agent(s) involved in them. To save space we use the following abbreviations:
+
+\begin{itemize}
+	\item $OFS$: office for statistics
+	\item $F$: firms
+	\item $C$: consumers
+	\item $C_S$: the subset of consumers that are students
+	\item $C_U$: the subset of consumer that are unemployed
+	\item $B$: banks
+	\item $LM$: labor market
+\end{itemize}
+
+When an event implies a flux from an agent to another, an arrow is added to give this information. As an example,\\
+$C \rightarrow B$: pay back if possible\\
+stands for: Consumers refund banks if possible.
+
+The initialization and the main loop are detailed in the following subsections.
 
 \begin{figure}[htp]
 	\centering
@@ -747,17 +761,22 @@ Considering additional financial contracts, and therefore adding to the model ot
 \end{figure}
 
 \clearpage
-\section{Initialization}
+\section{Initialization}\label{sec:initialization}
 The initialization phase allow firms to determine their initial production reducing exogenous setting to the minimum. 
 
-When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a stock flow consistent way.
+When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a stock flow consistent way.\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+\end{marginfigure}
+
+
 The details on the initialization process are given hereafter.
+
 
 To realize production firms need two production input: capital and labor. We use the following Leontief type production function:
 \[
 Y_f=\min(Y_f^{PK},Y_f^{PL})
 \]
-That is, production realized by firm $f$ is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, $Y_f^{PK}$, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, $Y_f^{PL}$. 
+That is, production realized by firm $f$, \gls{var:Yf}, is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, \gls{var:YPKf}, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, \gls{var:YPLf}. 
 
 
 The capital potential production is assumed to be equal to the level of capital:
@@ -766,9 +785,9 @@ The capital potential production is assumed to be equal to the level of capital:
 \]
 
 The potential production of labor is more tricky because workers are heterogeneous and has different productivities.
-If we identify a worker's productivity with $wp_{w,f}$, we compute the sum of workers productivities
+If we identify a worker's productivity with \gls{var:psiwf}, we compute the sum of workers productivities, \gls{var:psif},
 \[
-	wp_f=\sum_{w}wp_{w,f}
+	\psi_f=\sum_{w}\psi_{w,f}
 \]
 the potential production is thus
 \[
@@ -777,10 +796,10 @@ the potential production is thus
 parameter:\\
 \begin{tabular}{l l l}
 	\hline
-	in papers& in code&value\\
+	in equations& in code&value\\
 	\hline
 	\hline
-$\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
+	\gls{par:thetaYL}&\verb+parameterOfProductivityInProductionFuncion+&100\\
 	\hline
 \end{tabular}
 
@@ -793,7 +812,7 @@ To arrive at the very first $Y_f$ we adopt the following strategy.
 
 Note how the first step implies a preliminary setup of household working state, while the second step allows the setup of firms assets balance sheet item. 
 
-Knowing firms balance sheet assets we set the liabilities in such a way that the balace sheet identity is satisfied.
+Knowing firms balance sheet assets we set the liabilities in such a way that the balance sheet identity is satisfied.
 
 Next, we initialize the household balance sheet.
 
@@ -804,7 +823,10 @@ So the whole initialization sequence has the following phases:
 	\item Create agents
 	\item set consumers working state
 	\item set agents balance sheet
-	\item revise agents balance sheet for stock consistency
+	\item revise agents balance sheet for stock consistency\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+\end{marginfigure}
+
 \end{enumerate}
 
 These phases are explained in details in the documentation ?????. There, we present the steps taken for initializing the model in a sequential order. We also document those method that are not trivial by using UML activity diagrams.
@@ -1061,7 +1083,7 @@ In this way, stock consistency in each bank balance sheet is restored:
 \]
 
 \newpage
-\section{The main loop}
+\section{The main loop}\label{sec:mainloop}
 The main loop can be divided into two parts:
 \begin{enumerate}
 	\item the process that leads to the production of goods
@@ -2011,8 +2033,10 @@ All the files needed to obtain the electronic version of the manual are in the \
 
 The manual source file is named \verb+manual.tex+
 
-\section{Lists in the table of contents}
-The \verb+glossaries+ package is used to produce the lists to be included in the table of contents.
+In the following subsection we report on the various tools used to produce the additional elements that are integrated into the main file. 
+
+\section{Additional lists in the table of contents}
+The \verb+glossaries+ package is used to produce the additional lists to be included in the table of contents.
 
 Here we will briefly explain how it works. First of all a new glossary must be created. In the following example, the glossary called \verb+variable+ is created: 
 
@@ -2052,12 +2076,26 @@ Once compiled a first time using the \verb+pdflatex+ command, the \verb+manual.i
 \verb+makeindex -s manual.ist -o manual.vin manual.vot+\\
 to generate the auxiliary files taken as input by the following \verb+pdflatex+ runs. Note that we defined the extension of the files used in the \verb+makeindex+ command in the \verb+\newglossary+ line options.
 
+Presently, we have created two glossaries, one for variables and one for parameters.
+To simplify the updating of the auxiliary files, we create the \verb+makeglossaries+ script. So, to update the master document when a new glossary entry is created and cited, enter the following commands in the command line:
+
+\begin{verbatim}
+pdflatex
+./makeglossaries
+pdflatex
+pdflatex
+\end{verbatim}
+
 
 \section{Figures}
 
-Some figures (for example \ref{fig:components} and \ref{fig:componentsc1}) are obtained by using metapost.
-To modify these figures, you have to edit the corresponding mp source file. Once finished, compile the file with the \verb+mptopdf+ command. If the command is not in your system you can either install it or obtain the final pdf by fist compiling with the \verb+mpost+ command and the converting the output using \verb+epstopdf+.
+Some figures (for example \ref{fig:components}-\ref{fig:componentsc3}) are obtained by using metapost.
+The metapost work flow is as follows: metapost code is written in an ascii file.   
+Once finished, the file is compiled with the \verb+mptopdf+ command. If the command is not in the system it can be installed. Alternatively, the final pdf can be obtained by fist compiling with the \verb+mpost+ command and then converting the output using \verb+epstopdf+.
+Therefore, to modify these figures, you have to edit the corresponding mp source file an recompile it. 
 
+Figures \ref{fig:sequence} and \ref{fig:clockcolor} are also obtained as metapost output, but the process is more structured to ease possible changes. The complication of this figure is that events are represented as evenly spaced sun rays. Imagine a new event must be added. It would be a significant work to manually change the positions of all the events labels. We use the R software (\href{https://www.r-project.org}{https://www.r-project.org}) to ``automate'' the process that leads to the figure. The \verb+visual.R+ script, for example, produces figure \ref{fig:sequence}. It takes as input two text files: \verb+visual.txt+ and \verb+items_in_main_loop_black.txt+. The first one contains metapost drawing commands for all the elements except the events descriptions (the sun rays). This file has to be edited to include new such elements. The second file lists the labels of the rays (note, they are in inverted order and include \LaTeX commands). The R script loads the list from the file, computes the angle between rays and produces metapost command to draw the labels. All the metapost drawing commands are written in the \verb+visual.mp+ file. The R script also takes care of running metapost on this file.
+At the end of the day, to modify the figure one has to edit one of the text files and run the script in R. The same process applies to the production of figure \ref{fig:clockcolor}. The file involved here are \verb+visual1.txt+ and \verb+items_in_main_loop.txt+ and the R script \verb+visual1.R+.
 
 
 \chapter{Unified Modeling Language (UML)}
