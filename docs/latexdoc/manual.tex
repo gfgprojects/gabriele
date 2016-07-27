@@ -1,13 +1,13 @@
 \documentclass{book}
 \usepackage{graphicx,xcolor}
 \usepackage{fancyvrb}
-\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=cyan]{hyperref}
 \usepackage{sidenotes}
 \usepackage[toc]{glossaries}
 \newglossary[nlg]{variable}{vin}{vot}{List of variables}
 \newglossary[nlg]{parameter}{pin}{pot}{List of Parameters}
 \makeglossaries
-\newcommand{\umllocation}{file:///Users/giulioni/Dropbox/svn/sfcabm_my/documentation}
+\newcommand{\doclocation}{file:///Users/giulioni/Documents/workspace/gabriele/docs}
 \title{GABRIELE}
 \author{Gianfranco Giulioni}
 \begin{document}
@@ -794,12 +794,14 @@ the potential production is thus
 	Y^{PL}_f=\theta_{YL}wp_f
 \]
 parameter:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in equations& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-	\gls{par:thetaYL}&\verb+parameterOfProductivityInProductionFuncion+&100\\
+	\gls{par:thetaYL}&\verb+parameterOfProductivityInProductionFuncion+&100&yes\\
 	\hline
 \end{tabular}
 
@@ -829,7 +831,7 @@ So the whole initialization sequence has the following phases:
 
 \end{enumerate}
 
-These phases are explained in details in the documentation ?????. There, we present the steps taken for initializing the model in a sequential order. We also document those method that are not trivial by using UML activity diagrams.
+These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document those method that are not trivial by using UML activity diagrams.
 
 We will now discuss the initialization for each type of agent.
 
@@ -840,19 +842,22 @@ We will now discuss the initialization for each type of agent.
 
 \subsubsection*{Students}
 
-In an attempt to reduce the number of parameters to the minimum, it is assumed that each worker is characterized by its fundamental ability. It characterize each consumer performance during the education period. The latter in turn determine the productivity as a worker.
+In an attempt to reduce the number of parameters to the minimum, it is assumed that each worker is characterized by its fundamental ability. It characterizes each consumer performance during the education period. The latter in turn determine the productivity as a worker.
 
-We call this parameter the student ability.\\
-parameters:\\
-\begin{tabular}{l l l}
+We call this parameter the ability (as) student and denote it \gls{par:thetaas}. We set it during initialization by drawing from a uniform distribution \gls{par:Thetaas}:
+\[
+	\Theta_{as}\sim U(\theta_{minas},\theta_{maxas})
+\]
+having the following parameters:\\
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-$\theta_{as}$&\verb+abilityStudent+&\verb+U(Context.minAbilityStudent,+\\
-& &\verb+Context.maxAbilityStudent)+\\
- $\theta_{minas}$&\verb+Context.minAbilityStudent+&$0.35$\\
- $\theta_{maxas}$&\verb+Context.maxAbilityStudent+&$0.5$\\
+	\gls{par:thetaminas}&\verb+Context.minAbilityStudent+&$0.35$&yes\\
+ \gls{par:thetamaxas}&\verb+Context.maxAbilityStudent+&$0.5$&yes\\
 	\hline
 \end{tabular}
 
@@ -861,35 +866,41 @@ The most important observation about this parameter is that its upper value is 0
 
 Next important variable is the consumers age, which is initialized as a random number between zero and a parameter denoting the retirement age.\\
 parameter:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{cea}$&\verb+Context.consumerExitAge+&$70$\\
+\gls{par:thetacea}&\verb+Context.consumerExitAge+&$70$&yes\\
 	\hline
 \end{tabular}
 
 \vskip5mm
-Using the \verb+abilityStudent+ and the \verb+consumerAge+ the education history of consumers is initialized. Each year of education is set to successful if that year uniform random draw $u$ is less that two times the student ability:\footnote{Note how $2\theta_{as}\le 1$ and $u$ is drawn from a $U(0,1)$.}
+Using the \verb+abilityStudent+ and the \verb+consumerAge+ the education history of consumers is initialized. Each year of education is set to successful if that year uniform random draw $u$ is less that two times the student ability:\footnote{Note how $2\theta_{c,as}\le 1$ and $u$ is drawn from a $U(0,1)$.}
 \[
-	u<2\theta_{as}
+	u<2\theta_{c,as}
 \]
-and unsuccessful otherwise.  Note that best students has $\theta_{as}=0.5$, so they will be alway successful because $2\theta_{as}=1$. Students with less abilities has lower probability to be successful.\\
+and unsuccessful otherwise.  Note that best students has $\theta_{c,as}=0.5$, so they will be alway successful because $2\theta_{c,as}=1$. Students with less abilities has lower probability to be successful.\\
 
-To initialize the education history we need the following\\ 
+To initialize the education history we use the following\\ 
 parameters:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{mnfpe}$&\verb+maxNumberOfFailedPeriodsOfEducation+&$2$\\
- $\theta_{mnpe}$&\verb+maxNumberPeriodsOfEducation+&$21$\\
+\gls{par:thetamnfpe}&\verb+maxNumberOfFailedPeriodsOfEducation+&$2$&yes\\
+\gls{par:thetamnfpe}&\verb+maxNumberPeriodsOfEducation+&$21$&no\\
 	\hline
 \end{tabular}
 
 \vskip5mm
+
+
 Starting from age 0, the process is repeated until 
 \begin{enumerate}
 	\item the maximum number of failures admitted ($\theta_{mnfpe}$) or
@@ -898,9 +909,9 @@ Starting from age 0, the process is repeated until
 \end{enumerate}
 is reached.
 
-We then count the number of successful periods of education, $n_{sye}$. 
+We then count the number of successful periods of education, \gls{var:nsye}. 
 
-When the process is stopped by conditions 1 or 2, the consumer state is set to non students. At this stage, all non students are unemployed. This state will be revised in the next step. Both the education degree and the productivity as a worker are assigned using $n_{sye}$. 
+When the process is stopped by conditions 1 or 2, the consumer state is set to non students. At this stage, all non students are unemployed. This state will be revised in the next step. Both the education degree and the productivity as a worker are assigned using \gls{var:nsye}. 
 
 The degree of education is assigned as follows:
 \[
@@ -916,14 +927,14 @@ The degree of education is assigned as follows:
 	\end{array}
 \]
 
-The productivity is assigned as follows. Each year of education increases the consumers ability by a fixed amount. So, the productivity assigned to a non worker with  $n_{sye}$ successful year of education is
+The productivity is assigned as follows. Each year of education increases the consumers ability by a fixed amount. So, the productivity assigned to a non worker \gls{var:psic} with \gls{var:nsye} successful year of education is
 \[
-	wp=\theta_{as}+\frac{0.5}{\theta_{mnpe}}n_{sye}
+	\psi_c=\theta_{c,as}+0.5\frac{n_{c,sye}}{\theta_{mnpe}}
 \]
-Note that $\theta_{as}=0.5$ implies $n_{sye}=\theta_{mnpe}$ so that $wp=1$.
+Note that $\theta_{c,as}=0.5$ implies $n_{c,sye}=\theta_{mnpe}$ so that $\psi_c=1$.
 
-Once the productivity of a non student is known, we compute his/her potential production 
-\[Y^{Pns}=\theta_{YL}wp\]
+Once the productivity of a non student is known, we compute his/her potential production \gls{var:YPc} as the product of \gls{par:thetaYL} and \gls{var:psic}: 
+\[Y^{P}_c=\theta_{YL}\psi_c\]
 
 The education history initialization is stopped by condition 3 when the consumer is young. In this case the subject is assigned the state of student and its education history will be evolved in the main loop using the rules explained above.
 
@@ -933,12 +944,14 @@ At this stage all non students are unemployed. Now, some of them will be employe
 
 To perform this task we introduce the following\\
 parameter:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{ptbub}$&\verb+Context.probabilityToBeUnemployedAtTheBeginning+&$0.2$\\
+	\gls{par:thetaptbub}&\verb+Context.probabilityToBeUnemployedAtTheBeginning+&$0.2$&yes\\
 	\hline
 \end{tabular}
 
@@ -950,14 +963,16 @@ With probability $1-\theta_{ptbub}$, each non student selects a firm randomly an
 This is a first action to setup the consumers balance sheet. 
 
 The involved parameters are:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{nbcc}$&\verb+Context.numberOfBanksAConsumerCanBeCustumerOf+&$1$\\
- $\theta_{mincba}$&\verb+Context.minConsumerInitialBankAccount+&$-500$\\
- $\theta_{maxcba}$&\verb+Context.maxConsumerInitialBankAccount+&$500$\\
+ \gls{par:thetanbcc}&\verb+Context.numberOfBanksAConsumerCanBeCustumerOf+&$1$&yes\\
+ \gls{par:thetamincba}&\verb+Context.minConsumerInitialBankAccount+&$-500$&yes\\
+ \gls{par:thetamaxcba}&\verb+Context.maxConsumerInitialBankAccount+&$500$&yes\\
 	\hline
 \end{tabular}
 
@@ -965,7 +980,10 @@ The involved parameters are:\\
 
 Each consumer select randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of the bank account the code drawn a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the demandedCredit variable (it will managed when the bank account will be setup). Non negative number are assigner to the bank account amount.
 
-The amount will be revised in the final step of the initialization to ensure stock consistency.
+The amount will be revised in the final step of the initialization to ensure stock consistency.\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+\end{marginfigure}
+
 
 \subsection{Firms initialization}
 \subsubsection{Potential production of labor}
@@ -1171,7 +1189,7 @@ As mentioned above, this parameter can take three possible values that are: 0, 1
 
 \end{itemize}
 
-The UML sequence diagram of this event is available here \href{\umllocation/setWorkersWage.html}{here}
+The UML sequence diagram of this event is available here \href{\doclocation/umldoc/setWorkersWage.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1218,7 +1236,7 @@ $pr_{is}$&\verb+Context.probabilityToBeAskedToRefundForIndebtedWorkers+&\\
 
 \vskip2mm
 
-The UML sequence diagram of this event is available \href{\umllocation/updateConsumersAccounts.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/updateConsumersAccounts.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1232,7 +1250,7 @@ In this model households can have more than one bank account. In principle, some
 
 Households first try to fulfill bank requests by moving funds from positive to negative bank accounts. It this is not enough, they use their income. However, income can be used to fulfill banks requests as long as its amount is not lower than the subsistence level of consumption. In the worst case where banks request cannot be satisfied by using all the available financial resources, the household consumes the subsistence level of consumption and the bank reduces the negative amount of the bank account by an amount lower than it would and consequently record a positive unpaid amount.     
 
-The UML sequence diagram of this event is available \href{\umllocation/payBackBankDebt.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/payBackBankDebt.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1248,7 +1266,7 @@ The evolution of a student state follows the process already described in the in
 
 In particular, the current period of education is successful if the new uniform random draw $u$ is less that two times the student ability:
 \[
-	u<2\theta_{as}
+	u<2\theta_{c,as}
 \]
 and unsuccessful otherwise.
 
@@ -1271,7 +1289,7 @@ and the degree of education is updated according to the table already reported a
 \]
 and the subject's productivity is improved as explained in the initialization section: 
 \[
-	wp=\theta_{as}+\frac{0.5}{\theta_{mnpe}}n_{sye}
+	\psi_c=\theta_{c,as}+\frac{0.5}{\theta_{mnpe}}n_{c,sye}
 \]
 
 The subject looses his/her state of student 
@@ -1281,7 +1299,7 @@ The subject looses his/her state of student
 \end{enumerate}
 is reached. In these cases, his/her status change in unemployed.
 
-The UML sequence diagram of this event is available \href{\umllocation/stepStudentState.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/stepStudentState.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1307,7 +1325,7 @@ If the available financial resources are not enough to realize desired consumpti
 Credit is also asked to the bank with the best bank account to satisfy unpaid amounts that exist in other banks. 
 
 
-The UML sequence diagram of this event is available \href{\umllocation/stepDesiredConsumption.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/stepDesiredConsumption.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1351,7 +1369,7 @@ parameters:\\
 \end{tabular}
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/setAllowedConsumersCredit.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setAllowedConsumersCredit.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1371,7 +1389,7 @@ and the we scale the demand of each single item by this amount
 	D_j^a=r_{ad}D_j^d
 \]
 
-The UML sequence diagram of this event is available \href{\umllocation/adjustConsumptionAccordingToExtendedCredit.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustConsumptionAccordingToExtendedCredit.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1414,7 +1432,7 @@ The desired aggregate demand is also computed as
 D^d=\sum_jD^d_j
 \]
 
-The UML sequence diagram of this event is available \href{\umllocation/computeDesiredDemand.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeDesiredDemand.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1425,7 +1443,7 @@ The UML sequence diagram of this event is available \href{\umllocation/computeDe
 \]
 Note that firms in some industries may have $D^d_{fj}>Y_{fj}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
 
-The UML sequence diagram of this event is available \href{\umllocation/allocateDesiredDemand.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1442,7 +1460,7 @@ Consumers are then informed of the demand reallocation and their final demand is
 \]
 
 
-The UML sequence diagram of this event is available \href{\umllocation/matchDemandAndSupply.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/matchDemandAndSupply.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1455,7 +1473,7 @@ Firms are also informed on the items they have sold:
 \]
 This information will be then used to compute profit.
 
-The UML sequence diagrams of this event are available \href{\umllocation/computeDemand.html}{here} and \href{\umllocation/allocateDemand.html}{here}.
+The UML sequence diagrams of this event are available \href{\doclocation/umldoc/computeDemand.html}{here} and \href{\doclocation/umldoc/allocateDemand.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1469,14 +1487,14 @@ The consumers financial position is adjusted accordingly.
 
 Those who consumes less that their income brings saving their saving to the bank with the worst position. Those who were allowed credit decreases their best bank account by the amount needed to consume. If additional allowed credit remains, it is used to reduce or cancel the unpaid amounts possibly present in the other bank accounts.   
 
-The UML sequence diagram of this event is available \href{\umllocation/updateBankAccountAccordingToEffectiveConsumption.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/updateBankAccountAccordingToEffectiveConsumption.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
 \subsubsection{Example}
 
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_consumer_bank_relationship.html}{here}
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_consumer_bank_relationship.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
@@ -1563,7 +1581,7 @@ The production capital is thus updated as follows:
 
 
 
-The UML sequence diagram of this event is available \href{\umllocation/computeEconomicResultAndCapitalDepreciation.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeEconomicResultAndCapitalDepreciation.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1573,7 +1591,7 @@ The UML sequence diagram of this event is available \href{\umllocation/computeEc
 
 In this basic version of the model, firms turnover is very simple: each firm that becomes too small is replaced with a new firm.
 
-The UML sequence diagram of this event is available \href{\umllocation/performFirmsExit.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/performFirmsExit.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1625,7 +1643,7 @@ $pr_{fbren}$&\verb+Context.firmsProbabilityToHaveOutstanding+&\\
 
 \vskip2mm
 
-The UML sequence diagram of this event is available \href{\umllocation/updateFirmsAccounts.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/updateFirmsAccounts.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1639,7 +1657,7 @@ In this model firms can have more than one bank account. In principle, some of t
 In case refund is asked on some accounts, the entrepreneur starts checking its bank account list from the beginning and when s/he find a positive amount use it to fulfill the other banks refunding requests.
 If the positive amounts are not enough, the cash on hand is used. If Even cash on hand is not enough, a positive unpaid amount is recoded.
 
-The UML sequence diagram of this event is available \href{\umllocation/firms_payBackBankDebt.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/firms_payBackBankDebt.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1651,7 +1669,7 @@ Firms may need new credit to increase the level of their production capital or t
 
 If credit is needed, the entrepreneur check the possibility to ask it to the banks it is customer of. This possibility is prevented if positive unpaid amount are present in all the firm bank accounts. If one or more bank accounts have no unpaid amount, the entrepreneur choses the bank account having the best account to ask new credit. Because all the bank accounts are evaluated by all firms, the code also identify the worst bank account. It will be used by The residual cash on hand that possibly remains in the following steps will be used to improve the amount of this bank account. 
 
-The UML sequence diagram of this event is available \href{\umllocation/setDesiredCredit.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setDesiredCredit.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1696,7 +1714,7 @@ parameters:\\
 \end{tabular}
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/setAllowedFirmsCredit.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setAllowedFirmsCredit.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1731,7 +1749,7 @@ and the case in which the cash on hand is higher than investments:\\
 In the latter case the cash on hand in excess is deposited in the worst bank account.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/setPossibleInvestment.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setPossibleInvestment.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1762,7 +1780,7 @@ New firms thus opens a number of bank accounts and ask for funds to finance the 
 The bank allows for all the credit asked by a new firm.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/performFirmsEntry.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/performFirmsEntry.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1801,7 +1819,7 @@ If it is higher than the demand expected for the next period, the firm fire work
 The firm continue firing until firing an additional worker will bring the workers production capacity lower than the expected demand.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/laborForceDownwardAdjustment.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/laborForceDownwardAdjustment.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1851,7 +1869,7 @@ So, in case 0, unemployed consumers send $\theta_{lm-match}$ curricula, in case 
 
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/sendJobApplications.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/sendJobApplications.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1867,7 +1885,7 @@ If the decentralized matching mechanism is involved (cases 0 and 1), each firm h
 In case 1, the residual vacancies are posted to the labor office, while in case 2, all the vacancies are posted. The Labor office will try to fill the vacancies. 
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/laborForceUpwardAdjustment.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/laborForceUpwardAdjustment.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1899,7 +1917,7 @@ The sequence of events in the adjustment of production capital is as follows
 \end{itemize}
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/adjustProductionCapitalAndBankAccount.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustProductionCapitalAndBankAccount.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1928,7 +1946,7 @@ If the demand for investments cannot be completely fulfilled by the reusable pro
 The office for statistics is charged for the  provisioning of such goods. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/computeInvestments.html}{here} and \href{\umllocation/allocateInvestments.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeInvestments.html}{here} and \href{\doclocation/umldoc/allocateInvestments.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1942,7 +1960,7 @@ The UML sequence diagram of this event is available \href{\umllocation/computeIn
 Consumer turnover is managed in a very simple way. When a consumer reaches the maximum age \verb+Context.ConsumerExitAge+ it is replaced with a new one having age equal to zero. The new consumers inherit the bank accounts of the exited consumer.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/performConsumersTurnover.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/performConsumersTurnover.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1987,7 +2005,7 @@ $\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
 \end{tabular}
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/makeProduction.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/makeProduction.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -1999,7 +2017,7 @@ Now we are ready to go again through the process that lead to consumption. Howev
 
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\umllocation/setupNewFirmsToComputeProductAttractiveness.html}{here}.
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setupNewFirmsToComputeProductAttractiveness.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
@@ -2008,13 +2026,13 @@ The UML sequence diagram of this event is available \href{\umllocation/setupNewF
 
 \section*{Examples of firm-bank relationship}
 
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_firm_bad_conditions.html}{here}
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_firm_bad_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
 
 \vskip1cm
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\umllocation/example_firm_good_conditions.html}{here}
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_firm_good_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
