@@ -23,6 +23,6 @@ B$\rightarrow$\color{red}C\color{black}: set allowed credit
 \color{red}C\color{black}$\rightarrow$B: set desired consumption (ask for credit if needed)
 \color{red}C\color{black}$_S$: step state
 \color{red}C\color{black}$\rightarrow$B: pay back if possible
-B$\rightarrow$\color{red}C\color{black}: pay interest and ask refunding
-F$\rightarrow$\color{red}C\color{black}: pay wages
+B$\rightarrow$\color{red}C\color{black}: account interest and ask refunding
+\color{red}C\color{black}: receive income (wage or dole)
 OFS: compute variables
