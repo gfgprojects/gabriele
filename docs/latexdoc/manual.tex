@@ -779,7 +779,7 @@ Y_f=\min(Y_f^{PK},Y_f^{PL})
 That is, production realized by firm $f$, \gls{var:Yf}, is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, \gls{var:YPKf}, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, \gls{var:YPLf}. 
 
 
-The capital potential production is assumed to be equal to the level of capital:
+The capital potential production is assumed to be equal to the level of capital (\gls{var:Kf}):
 \[
 	Y^{PK}_f=K_f
 \]
@@ -791,7 +791,7 @@ If we identify a worker's productivity with \gls{var:psiwf}, we compute the sum 
 \]
 the potential production is thus
 \[
-	Y^{PL}_f=\theta_{YL}wp_f
+	Y^{PL}_f=\theta_{YL}\psi_f
 \]
 parameter:\\
 \begin{tabular}{l l l l}
@@ -831,7 +831,7 @@ So the whole initialization sequence has the following phases:
 
 \end{enumerate}
 
-These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document those method that are not trivial by using UML activity diagrams.
+These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document those more demanding methods by using UML activity diagrams.
 
 We will now discuss the initialization for each type of agent.
 
@@ -841,6 +841,7 @@ We will now discuss the initialization for each type of agent.
 
 
 \subsubsection*{Students}
+\label{pref:tudentevolution}
 
 In an attempt to reduce the number of parameters to the minimum, it is assumed that each worker is characterized by its fundamental ability. It characterizes each consumer performance during the education period. The latter in turn determine the productivity as a worker.
 
@@ -916,14 +917,14 @@ When the process is stopped by conditions 1 or 2, the consumer state is set to n
 The degree of education is assigned as follows:
 \[
 	\begin{array}{l l l}
-		n_{sye}& \textnormal{degree}& \textnormal{degree id}\\
-	0\le n_{sye}<5 & \textnormal{none}&0\\
-	5\le n_{sye}<8 & \textnormal{elementary}&1\\
-	8\le n_{sye}<13 & \textnormal{intermediate}&2\\
-	13\le n_{sye}<16 & \textnormal{college}&3\\
-	16\le n_{sye}<18 & \textnormal{bachelor}&4\\
-	18\le n_{sye}<21 & \textnormal{master}&5\\
-	21= n_{sye} & \textnormal{PhD degree}&6
+		n_{c,sye}& \textnormal{degree}& \textnormal{degree id}\\
+	0\le n_{c,sye}<5 & \textnormal{none}&0\\
+	5\le n_{c,sye}<8 & \textnormal{elementary}&1\\
+	8\le n_{c,sye}<13 & \textnormal{intermediate}&2\\
+	13\le n_{c,sye}<16 & \textnormal{college}&3\\
+	16\le n_{c,sye}<18 & \textnormal{bachelor}&4\\
+	18\le n_{c,sye}<21 & \textnormal{master}&5\\
+	21= n_{c,sye} & \textnormal{PhD degree}&6
 	\end{array}
 \]
 
@@ -991,19 +992,19 @@ In the consumers initialization we saw that some non student sent their CV to fi
 
 Each Firm now has a list of CVs. Each firm employs all the senders of the CVs that are in the received CVs list. The CV senders state is switched from unemployed to employed.
 
-Summing the potential production of each employee, the firm determine the potential production of its labor force:
+As already explained at the beginning of this section, the firm determines the potential production of its labor force (\gls{var:psif}) by summing the potential production of each employee (\gls{var:psiwf}):
 \[
-	wp_f=\sum_{w}wp_{w,f}
+	\psi_f=\sum_{w}\psi_{w,f}
 \]
 the potential production is thus
 \[
-	Y^{PL}_f=\theta_{YL}wp_f
+	Y^{PL}_f=\theta_{YL}\psi_f
 \]
 
 \subsubsection{Production capital}
 As we told above, due to the Leontif production function, the production capital is set in such a way that the potential production from capital is equal to the potential production of labor. We have already defined the potential production of capital as
 \[Y_f^{PK}=K_f\]
-So, the initial level of capital for each firm is set to
+So, the initial level of capital (\gls{var:Kf}) for each firm is set to
 \[
 K_f=Y^{PL}_f
 \]
@@ -1015,89 +1016,104 @@ As explained above, we have two liabilities: equity and bank account. We set up 
 
 To setup equity we use the following\\
 parameters:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{minfieb}$&\verb+Context.minFirmInitialEquityRatio+&$0.1$\\
- $\theta_{maxfieb}$&\verb+Context.maxFirmInitialEquityRatio+&$0.3$\\
+ \gls{par:thetaminfier}&\verb+Context.minFirmInitialEquityRatio+&$0.1$&yes\\
+ \gls{par:thetaminfier}&\verb+Context.maxFirmInitialEquityRatio+&$0.3$&yes\\
 	\hline
 \end{tabular}
 
 \vskip5mm
-Each firm equity is set as follow
+Each firm equity base (\gls{var:Ef}) is set as follow
 \[
-	EF_f=u_{Ef}K_f
+	E_f=u_{Ef}K_f
 \]
-where $u_{Ef}$ is drawn from $U(\theta_{minfieb},\theta_{maxfieb})$.
+where $u_{Ef}$ is drawn from $U(\theta_{minfier},\theta_{maxfier})$.
 
-Finally, each firm sets her bank accounts. First of all the level of bank account is computed as
+Finally, each firm sets her debt (\gls{var:Bf}) by using the balance sheet identity:
 \[
-BA_f=K_f-EF_f
+B_f=K_f-E_f
 \]
 
-The model has a parameter for the number of banks a firm can be costumer of\\
+As specified above, debt is obtained through bank accounts.
+In this version of the model a firm is be costumer of a number of banks given by the following\\
 parameter:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{nbbc}$&\verb+Context.numberOfBanksAFirmCanBeCustumerOf+&$1$\\
+ \gls{par:thetanbfc}&\verb+Context.numberOfBanksAFirmCanBeCustumerOf+&$1$&yes\\
 	\hline
 \end{tabular}
 
 \vskip5mm
-each firm selects randomly a number of banks equal to $\theta_{nbbc}$ and open a bank account in each of them. The amount of the bank account is set to zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit in each bank account is set to $BA_f/\theta_{nbbc}$.
-
+each firm selects randomly a number of banks equal to \gls{par:thetanbfc} and open a bank account in each of them. The amount of the bank account (\gls{var:BAfb}) is set to
+%zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit in each bank account is set to:
+\[
+	BA_{fb}=-\frac{B_f}{\theta_{nbfc}}
+\]
 
 \subsection{Banks initialization}
-We remember that in this version of the model, we have only one financial contract: the Bank account ($BA$). Bank accounts can have a positive amount or a negative one. Hereafter, we denote a bank account with a positive amount with $BA^+$ and  $BA^-$ denotes a negative amount.
+We remember that in this version of the model, we have only one financial contract: the Bank account ($BA$). Bank accounts can have a positive amount or a negative one. Hereafter, we denote a bank account with a positive amount with \gls{var:BA+} and \gls{var:BA-} denotes a negative amount.
 
 To setup the banks balance sheet, we start again from their assets. Bank assets are households' and firms financial liabilities. In this version of the model, financial liabilities are given by negative bank accounts. 
-The sum of negative bank accounts gives the loans extended by a bank:
+The sum of negative bank accounts gives the loans extended by a bank (\gls{var:Lb}):
 \[
-L_b=\sum BA_b^-
+	L_b=\sum_f BA_{fb}^- + \sum_c BA_{cb}^-
 \]
 
 
 
-Given each bank assets, we setup the equity by using the following\\
+Given assets of a bank, we setup the its equity (\gls{var:Eb}) by using the following\\
 parameters:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{minbier}$&\verb+Context.minBankInitialEquityRatio+&$0.1$\\
- $\theta_{maxbier}$&\verb+Context.maxBankInitialEquityRatio+&$0.3$\\
+ \gls{par:thetaminbier}&\verb+Context.minBankInitialEquityRatio+&$0.1$&yes\\
+ \gls{par:thetamaxbier}&\verb+Context.maxBankInitialEquityRatio+&$0.3$&yes\\
 	\hline
 \end{tabular}
 
 \vskip5mm
 A bank equity base is then computed as
 \[
-	EB_b=u_{Eb}L_b
+	E_b=u_{Eb}L_b
 \]
 where $u_{Eb}$ is drawn from $U(\theta_{minbieb},\theta_{maxbieb})$.
 
-Now, the level of deposits compatible with the balance sheet relationship is computed:
+Now, the level of deposits (\gls{var:Db}) compatible with the balance sheet relationship is computed:
 \[
-D_b=L_b-EB_b
+D_b=L_b-E_b
 \]
 
 Due to the random elements in the initialization of consumers and firms, we usually have
 \[
-	\sum BA^+_b \neq D_b
+	\sum BA^+_{cb} \neq D_b
 \]
-To satisfy the balance sheet identity, the amount of positive bank accounts is adjusted as follows:
+note that only consumers' deposits are considered because firms have no deposits at initialization.
+
+To satisfy the balance sheet identity, the amount of each positive bank account is adjusted as follows:
 \[
-	BA^{+adj}=BA^+\frac{D_b}{\sum BA^+_b}
+	BA^{+}_{cb}=BA^+_{cb}\frac{D_b}{\sum BA^+_{cb}}
 \]
-In this way, stock consistency in each bank balance sheet is restored:
+In this way, stock consistency in each bank balance sheet is restored:\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+\end{marginfigure}
+
 \[
-	\sum BA^{+adj}_b=D_b
+	\sum BA^{+}_{cb}=D_b
 \]
 
 \newpage
@@ -1107,6 +1123,7 @@ The main loop can be divided into two parts:
 	\item the process that leads to the production of goods
 	\item the process that leads to the consumption of what has been produced
 \end{enumerate}
+The parts of the main cycle where these two processes develop are highlighted with colors: in red the consumption process and in violet the production one. The figure also highlights which markets are interested by the two processes.
 
 \begin{figure}[htp]
 	\centering
@@ -1117,10 +1134,10 @@ The main loop can be divided into two parts:
 
 \subsection{The process that leads to the consumption of what has been produced}
 %\subsection{Consumer-market-bank relationship}
-We present here the sequence of events and will enter in the details in the following subsections.
+We present here the sequence of events and will enter in the details of each item in the following subsections.
 
 \begin{enumerate}
-	\item consumers receive wages;
+	\item consumers receive income: wage if employed and dole if unemployed;
 	\item banks 
 		\begin{enumerate}
 			\item account interest
@@ -1136,45 +1153,62 @@ We present here the sequence of events and will enter in the details in the foll
 	\item consumers adjust their bank accounts (deposits and loans) according to effective consumption.
 \end{enumerate}
 
-We now will enter into details of each event.
+As for the initialization, these phases are explained in details in the \href{\doclocation/index_loop.html}{technical documentation}.
+We will now enter into details of each event.
 
 \subsubsection{Consumers receive wages}
 
-This step involves only employed consumers. The wage each employed consumer receives is a mark up on the unemployment dole: 
+Unemployed people receive the unemployment dole (\gls{par:ud}) from the government.
+The computation of workers' wage is less straightforward. The wage each employed consumer receives is a mark up on the unemployment dole: 
 
 \begin{equation}
-	ww=ud+\theta_{wp}*\theta_{YL}*f(wp)
+	w_w=ud+\theta_{w}\theta_{YL}f(\psi)
 	\label{eq:ww}
 \end{equation}
 where:\\
 
 \vskip2mm
-\begin{tabular}{l l l}
+\noindent
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-$ud$&\verb+Context.unemploymentDole+&\\
-$\theta_{wp}$&\verb+Context.laborMarketStateToSetWage+&0.5\\
-$\theta_{YL}$&\verb+Context.parameterOfProductivityInProductionFuncion+&100\\
+\gls{par:ud}&\verb+Context.unemploymentDole+&30&yes\\
+\gls{par:thetaLM}&\verb+Context.laborMarketStateToSetWage+&0.5&yes\\
+%\gls{par:thetaYL}&\verb+Context.parameterOfProductivityInProductionFuncion+&100\\
 	\hline
 \end{tabular}
 
 \vskip2mm
-and $f(wp)$ is a function of workers' productivity.
+\gls{par:thetaYL} is the parameter of productivity in production function (already defined) and $f(\psi)$ is a function of workers' productivity.
 
-Three possibilities for $f(wp)$ are presently implemented:
+Three possibilities for $f(\psi)$ are presently implemented:
 \begin{enumerate}
-	\item $f(wp)$ is the worker's productivity;
-	\item $f(wp)$ is average productivity of workers having the worker's degree in the employer's firm
-	\item $f(wp)$ is average productivity of workers having the worker degree in the economy
+	\item $f(\psi)$ is the worker's productivity;
+	\item $f(\psi)$ is average productivity of workers having the worker's degree in the employer's firm
+	\item $f(\psi)$ is average productivity of workers having the worker degree in the economy
 \end{enumerate}
 
 
 This leads to three different wage setting rules. One of these rules can be chosen by means of the following\\
 parameter:\\
-\verb+Context.wageSettingRule+
+\vskip2mm
+\noindent
+\begin{tabular}{l l l l}
+	\hline
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
+	\hline
+	\hline
+\gls{par:wsr}&\verb+Context.wageSettingRule+&2&yes\\
+	\hline
+\end{tabular}
 
+\vskip2mm
 The researcher can choose which one to use in a given run by setting the \verb+value+ of this parameter in the \verb+batch_parameters.xml+ file located in the scenario folder.
 
 As mentioned above, this parameter can take three possible values that are: 0, 1 and 2.
@@ -1189,26 +1223,26 @@ As mentioned above, this parameter can take three possible values that are: 0, 1
 
 \end{itemize}
 
-The UML sequence diagram of this event is available here \href{\doclocation/umldoc/setWorkersWage.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/setWorkersWage.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
 \subsubsection{Banks account interests and ask for loan repayments}
 
-The accounting of interest updates the households bank accounts.
+The accounting of interest updates the households bank accounts. This is done at different interest rates according to the bank account sign \gls{var:BAcb}.
 
-Positive bank accounts are updated using the interest rate on deposits $i^+$, so that if $BA_{hb,t}\ge 0$
+Positive bank accounts are updated using the interest rate on deposits (\gls{var:i+}), so that if $BA_{cb,t}\ge 0$
 \[
-BA_{hb,t+1}=BA_{hb,t}(1+i^+)
+BA_{cb,t+1}=BA_{cb,t}(1+i^+)
 \]
 
-The model has two different interest rates on loans. The ordinary interest rate ($i^-_{w}$) is charged on bank accounts with negative amount owned by workers, while a lower interest rate ($i^-_{nw}$) is charged on negative bank accounts owned by students and unemployed people. 
+The model has two different interest rates on loans. The ordinary interest rate (\gls{var:i-}) which is charged on bank accounts with negative amount owned by workers, and the subsidized interest rate \gls{var:isub-}, charged on negative bank accounts owned by unemployed people and students. 
 
 Once the accrued interest has been accounted, the bank may ask the reduction of some negative accounts. This involves only the accounts owned by workers.
 
  
-The amount of a negative bank account owned by a worker desired by the bank is thus determined as follows:
+The amount of a negative bank account owned by a worker desired by the bank (\gls{var:BAdb}) is thus determined as follows:
 \[
 	BA^{db}=\left\{ 
 		\begin{array}{l l l}
@@ -1221,16 +1255,20 @@ The amount of a negative bank account owned by a worker desired by the bank is t
 The parameters involved in this computation are:
 
 \vskip2mm
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-$i^+$&\verb+Context.interestRateOnDeposits+&\\
-$i^-_{w}$&\verb+Context.interestRateOnLoans+&\\
-$i^-_{nw}$&\verb+Context.interestRateOnSubsidizedLoans+&\\
-$\theta_{is}$&\verb+Context.percentageOfLoanToRefundForIndebtedWorkersIfAsked+&\\
-$pr_{is}$&\verb+Context.probabilityToBeAskedToRefundForIndebtedWorkers+&\\
+	\gls{var:i+}&\verb+Context.interestRateOnDeposits+&0.001&yes\\
+\gls{var:i-}&\verb+Context.interestRateOnLoans+&0.004&yes\\
+\gls{var:isub-}&\verb+Context.interestRateOnSubsidizedLoans+&0.001&yes\\
+\gls{par:thetais}&\verb+Context.percentageOfLoanToRefundFor+&0.1&yes\\
+&\verb+          IndebtedWorkersIfAsked+&&\\
+\gls{par:pris}&\verb+Context.probabilityToBeAskedToRefund+&0.5&yes\\
+&\verb+          ForIndebtedWorkers+&&\\
 	\hline
 \end{tabular}
 
@@ -1248,7 +1286,7 @@ In the previous step banks can ask to reduce amount of negative bank accounts.
 
 In this model households can have more than one bank account. In principle, some of them can be positive, and others negative. The downward adjustment can be asked on some of the negative accounts.  Households can face banks refunding request using all their financial assets: income (wage) and their positive bank account. 
 
-Households first try to fulfill bank requests by moving funds from positive to negative bank accounts. It this is not enough, they use their income. However, income can be used to fulfill banks requests as long as its amount is not lower than the subsistence level of consumption. In the worst case where banks request cannot be satisfied by using all the available financial resources, the household consumes the subsistence level of consumption and the bank reduces the negative amount of the bank account by an amount lower than it would and consequently record a positive unpaid amount.     
+Households first try to fulfill bank requests by moving funds from positive to negative bank accounts. If this is not enough, they use their income. However, income can be used to fulfill banks requests as long as its amount is not lower than the subsistence level of consumption. In the worst case where banks request cannot be satisfied by using all the available financial resources, the household consumes the subsistence level of consumption and the bank reduces the negative amount of the bank account by an amount lower than it would and consequently record a positive unpaid amount.     
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/payBackBankDebt.html}{here}
 \begin{marginfigure}
@@ -1262,7 +1300,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/pa
 
 \subsubsection{Students update their states}
 
-The evolution of a student state follows the process already described in the initialization.
+The evolution of a student state follows the process already described in the initialization (see page \pageref{pref:tudentevolution}).
 
 In particular, the current period of education is successful if the new uniform random draw $u$ is less that two times the student ability:
 \[
@@ -1270,21 +1308,21 @@ In particular, the current period of education is successful if the new uniform 
 \]
 and unsuccessful otherwise.
 
-If the education period is successful, the number of successful years of education ($n_{sye}$) is increased:
+If the education period is successful, the number of successful years of education (\gls{var:nsye}) is increased:
 \[
-n_{sye}=n_{sye}+1
+n_{c,sye}=n_{c,sye}+1
 \]
 and the degree of education is updated according to the table already reported above:
 \[
 	\begin{array}{l l l}
-		n_{sye}& \textnormal{degree}& \textnormal{degree id}\\
-	0\le n_{sye}<5 & \textnormal{none}&0\\
-	5\le n_{sye}<8 & \textnormal{elementary}&1\\
-	8\le n_{sye}<13 & \textnormal{intermediate}&2\\
-	13\le n_{sye}<16 & \textnormal{college}&3\\
-	16\le n_{sye}<18 & \textnormal{bachelor}&4\\
-	18\le n_{sye}<21 & \textnormal{master}&5\\
-	21= n_{sye} & \textnormal{PhD degree}&6
+		n_{c,sye}& \textnormal{degree}& \textnormal{degree id}\\
+	0\le n_{c,sye}<5 & \textnormal{none}&0\\
+	5\le n_{c,sye}<8 & \textnormal{elementary}&1\\
+	8\le n_{c,sye}<13 & \textnormal{intermediate}&2\\
+	13\le n_{c,sye}<16 & \textnormal{college}&3\\
+	16\le n_{c,sye}<18 & \textnormal{bachelor}&4\\
+	18\le n_{c,sye}<21 & \textnormal{master}&5\\
+	21= n_{c,sye} & \textnormal{PhD degree}&6
 	\end{array}
 \]
 and the subject's productivity is improved as explained in the initialization section: 
@@ -1294,8 +1332,8 @@ and the subject's productivity is improved as explained in the initialization se
 
 The subject looses his/her state of student 
 \begin{enumerate}
-	\item in case of a success, if the maximum periods of possible education ($\theta_{mnpe}+\theta_{mnfpe}$) or
-	\item in case of failure, if the maximum number of failures admitted ($\theta_{mnfpe}$)
+	\item in case of a success, if the maximum periods of possible education (\gls{par:thetamnpe} $+$ \gls{par:thetamnfpe}) or
+	\item in case of failure, if the maximum number of failures admitted (\gls{par:thetamnfpe})
 \end{enumerate}
 is reached. In these cases, his/her status change in unemployed.
 
@@ -1308,17 +1346,21 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/st
 \subsubsection{Consumers compute desired consumption and ask for credit in order to achieve the desired level}
 This task is performed by taking the following steps.
 
-Each consumer computes her/his income. Workers have the wage as an income, unemployed have the dole and students have no income. Consumers also computes their financial resources by looking at their bank accounts. 
+Each consumer check her/his income: workers have the wage as an income, unemployed have the dole and students have no income. Consumers also computes their financial resources by looking at their bank accounts. 
 
-Based on this information the desired consumption is computed using a consumption function. In the current version of the model this amount is computed randomly and it can be higher or lower than the available income.  
+Based on this information the desired consumption is computed using a consumption function. In the current version of the model this amount is computed randomly and it can be higher or lower than the available income. 
+\begin{marginfigure}
+	\hskip2.5cm\includegraphics[scale=0.1]{edit.jpg}
+\end{marginfigure}
 
-This allows to compute the desired total level of expenditure of consumption: $D^d$.
 
-In this model we can have product differentiation. In this case, the desired demand for each item is computed as follows:
+This allows to compute the desired total level of expenditure of consumption: \gls{var:Ddc}.
+
+In this model we can have product differentiation. When more than one product are present, the desired demand for each item (\gls{var:Ddcj}) is computed as follows:
 \[
-D_j^d=\alpha_jD^d
+	D_{c,j}^d=\alpha_{c,j}D^d_{c}
 \]
-where $\alpha_j$ is an index of the consumers appreciation for the given item. Of course the condition $\sum_j \alpha_j$ must be verified.
+where \gls{var:alphacj} is an index of the consumers appreciation for the given item. Of course the condition $\sum_j \alpha_{c,j}=1$ must hold.
 
 If the available financial resources are not enough to realize desired consumption, consumers evaluate the possibility to ask for credit. This possibility is precluded if all the consumers' bank accounts have a positive unpaid amount. Otherwise, the consumer asks all the credit needed to the bank with the best bank account. 
 
@@ -1332,39 +1374,42 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/st
 
 \subsubsection{Banks decide how much credit to allow}
 
-In the previous step, consumers who need credit set the desired amount on one of their bank accounts having null unpaid amount if such account exists. Let us identify this variable with $BA^{dc}$ (where the $dc$ upper script means \textbf desired by \textbf consumers). Because they are asking for credit, this amount is negative:  $BA^{dc}<0$. Note that the best bank account con have both a positive and negative amount. 
+In the previous step, consumers who need credit set its desired amount on one of their bank accounts (the best bank account) having null unpaid amount if such account exists. Let us identify this variable with \gls{var:BAdc} (where the $d$ upper script means \textbf desired). Because they are asking for credit, this amount is negative:  \gls{var:BAdc} $<0$. Note that the best bank account con have both a positive and negative amount. 
 
-In the present version of the model, the bank decides the allowed credit $BA^{ab}<0$ (\textbf allowed by \textbf bank) as follows
+In the present version of the model, the bank decides the allowed credit \gls{var:BAac} $<0$ ( superscript $a$ means \textbf allowed) as follows
 
 \begin{itemize}
-	\item if $BA\ge 0$ and $BA^{ab}<0$
-		\[BA^{ab}=\left\{
+	\item if \gls{var:BAcb} $\ge 0$ and \gls{var:BAdc} $<0$
+		\[BA^{a}_c=\left\{
 			\begin{array}{l l l}
-				BA^{dc}&\textnormal{with probability}&pr_{ab}\\
-				\theta_{ab}BA^{dc}&\textnormal{with probability}&1-pr_{ab}\\
+				BA^{d}_c&\textnormal{with probability}&pr_{ab}\\
+				\theta_{ab}BA^{d}_c&\textnormal{with probability}&1-pr_{ab}\\
 			\end{array}
 		\right.
 		\]
-	\item if $BA< 0$ and $BA^{ab}<BA$
-		\[BA^{ab}=\left\{
+	\item if \gls{var:BAcb} $< 0$ and \gls{var:BAdc} $<$ \gls{var:BAcb}
+		\[BA^{a}_c=\left\{
 			\begin{array}{l l l}
-				BA^{dc}&\textnormal{with probability}&pr_{ab}\\
-				BA-\theta_{ab}(BA-BA^{dc})&\textnormal{with probability}&1-pr_{ab}\\
+				BA^{d}_c&\textnormal{with probability}&pr_{ab}\\
+				BA_{cb}-\theta_{ab}(BA_{cb}-BA^{d}_c)&\textnormal{with probability}&1-pr_{ab}\\
 			\end{array}
 		\right.
 		\]
 \end{itemize}
+This does not apply to students to whom the asked credit is always allowed.
 
 We have thus the following\\
 parameters:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{ab}$&\verb+Context.percentageOfCreditAllowedTo+&\\
- &\hskip1.5cm\verb+ConsumersWhenCreditIsNotTotallyFunded+&\\
- $pr_{ab}$&\verb+Context.consumersProbabilityToGetFunded+&\\
+	\gls{par:thetaab}&\verb+Context.percentageOfCreditAllowedTo+&\\
+ &\hskip1.5cm\verb+ConsumersWhenCreditIsNotTotallyFunded+&0.0&yes\\
+ \gls{par:prab}&\verb+Context.consumersProbabilityToGetFunded+&0.5&yes\\
 	\hline
 \end{tabular}
 
@@ -1376,18 +1421,20 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 \subsubsection{Consumers adjust their desired consumption according to allowed credit} 
 
-Because there is the possibility that bank does not allow all the demanded credit, we introduce a new variable: the allowed demand. 
+Because there is the possibility that bank does not allow all the demanded credit, we introduce a new variable: the allowed demand (\gls{var:Dac}). 
 
 This variable can differ from the desired demand only for consumers who asked for credit an whose request was not satisfied by banks.
 
-Because we can have product differentiation, we compute the allowed-desired demand ratio:
+Because we can have product differentiation, we first compute the allowed-desired demand ratio on the whole consumption expenditure:
 \[
-	r_{ad}=\frac{D^a}{D^d}
+	r_{c}^d=\frac{D^a_c}{D^d_c}
 \]
-and the we scale the demand of each single item by this amount
+Then we scale the demand of each single item by this amount
 \[
-	D_j^a=r_{ad}D_j^d
+	\textnormal{\gls{var:Dacj}} =r_{c}^dD_{c,j}^d
 \]
+
+In this resizing, we do not account of unpaid amounts because we assume that credit is first used to satisfy consumption. The possible residual id then used to reduce unpaid amounts. 
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustConsumptionAccordingToExtendedCredit.html}{here}.
 \begin{marginfigure}
@@ -1395,41 +1442,43 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ad
 \end{marginfigure}
 
 \subsubsection{Good markets open: office for statistics helps finding goods}
-We code the goods market function in such a way that both centralized and decentralized matching mechanisms can be mimicked. 
-In particular we make the Office for Statistic to supervise goods allocation.
+We code the goods market functioning in such a way that both centralized and decentralized matching mechanisms can be mimicked. 
+In particular, the Office for Statistic supervise the allocation of demand.
 
 The task is performed by taking the following steps:
 \begin{itemize}
-	\item compute the desired demand
-	\item allocate desired demand to firms
-	\item match demand and supply
-	\item update firms sales
+	\item compute the desired allowed demand for each good type;
+	\item allocate it to firms;
+	\item manage unsatisfied demand;
+	\item update firms sales.
 \end{itemize}
 These items are detailed hereafter.
 
-\noindent$\bullet$ \textit{Compute the desired demand.} The Office for Statistics computes the demand of each industry by summing over all the consumers. Therefore, provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D_1,\cdots,D_J\}$.
+\noindent$\bullet$ \textit{Compute the allowed demand for each good type.} The Office for Statistics computes the demand of each industry by summing over all the consumers. Therefore, provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D^a_1,\cdots,D^a_J\}$.
 
 The elements of the vector are computed as follows:
 \[
-	D^d_j=\sum_c (1-\theta_{gmi}) D_{cj}^{ac}
+	\textnormal{\gls{var:Daj}}=\sum_c (1-\theta_{gmi}) \textnormal{\gls{var:Dacj}}
 \]
 This formulation is motivated by the attempt to mimic decentralized markets and the deriving imperfections that cause demand get lost in the consumers searching process.
 We introduce thus the following\\
 parameter:\\
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{gmi}$&\verb+Context.percentageOfDemandMissed+&\\
- &\hskip1.5cm\verb+BecauseOfGoodsMarketImperfections+&\\
+ \gls{par:thetagmi}&\verb+Context.percentageOfDemandMissed+&\\
+ &\hskip1.5cm\verb+BecauseOfGoodsMarketImperfections+&0.0&yes\\
 	\hline
 \end{tabular}
 
 \vskip3mm
-The desired aggregate demand is also computed as
+The desired allowed aggregate demand is also computed as
 \[
-D^d=\sum_jD^d_j
+D^a=\sum_jD^a_j
 \]
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeDesiredDemand.html}{here}.
@@ -1437,26 +1486,26 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\noindent$\bullet$ \textit{Allocate desired demand to firms.} In this step, the demand ($D^d_j$) computed in the previous step is allocated to the various firms according to their share of production in the industry they belong to:
+\noindent$\bullet$ \textit{Allocate desired allowed demand to firms.} In this step, the demand (\gls{var:Daj}) computed in the previous step is allocated to the various firms according to their share of production in the industry they belong to:
 \[
-	D^d_{fj}=D^d_j\frac{Y_{fj}}{Y_j}
+	\textnormal{\gls{var:Dafj}}=D^a_j\frac{\textnormal{\gls{var:Yfj}}}{\textnormal{\gls{var:Yj}}}
 \]
-Note that firms in some industries may have $D^d_{fj}>Y_{fj}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
+Note that firms in some industries may have $D^a_{f,j}>Y_{f,j}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\noindent$\bullet$ \textit{Match demand an supply.} In this model we have vertical differentiation. This means that products with higher $j$ are preferred. It may thus happens that demand on these product is higher than supply. 
+\noindent$\bullet$ \textit{Manage unsatisfied demand.} In this model we have vertical differentiation. This means that products with higher $j$ are more advanced and, therefore, preferred. It may thus happens that demand on these product is higher than supply. 
 In case the demand of a given product cannot be entirely satisfied, the office for statistics try to fulfill consumers excess demand of this product with the product that precede it in the quality ladder. The Office for statistic moves demand across industries starting from the most advanced product and proceeding backward. 
 This mechanism aims to mimic consumer decision to buy a less advanced product if the item s/he desire is in short supply.
 
-At the end of this process the demand received by each industry ($D_j$) and that received by each firm ($D_{fj}$) is known.
+At the end of this process the demand received by each industry (\gls{var:Dj}) and that received by each firm (\gls{var:Dfj}) is known.
 
 Consumers are then informed of the demand reallocation and their final demand is computed:
 \[
-	D_{cj}=D_{cj}^{ac}\frac{D_j}{D_j^d}
+	\textnormal{\gls{var:Dcj}}= \textnormal{\gls{var:Dacj}}\frac{\textnormal{\gls{var:Dj}}}{\textnormal{\gls{var:Daj}}}
 \]
 
 
@@ -1469,7 +1518,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ma
 \noindent$\bullet$ \textit{Update firms sales.}
 Firms are also informed on the items they have sold:
 \[
-	D_{fj}=D_j \frac{Y_{fj}}{Y_j}
+	\textnormal{\gls{var:Dfj}}=D_j \frac{Y_{f,j}}{Y_j}
 \]
 This information will be then used to compute profit.
 
@@ -1480,12 +1529,14 @@ The UML sequence diagrams of this event are available \href{\doclocation/umldoc/
 
 
 \subsubsection{consumers adjust their bank accounts (deposits and loans) according to effective consumption}
+Summing up, in this model the desired consumption can be resized two times. The first one when the consumer asks for credit to achieve its desired consumption, but the bank does not allow the demanded credit. In this case we have that the allowed consumption (\gls{var:Dac}) is lower than desired consumption (\gls{var:Dac}). The second one is when the asked good is in short supply. In this case, we say that the effective consumption (\gls{var:Dc}) is lower than the allowed consumption (\gls{var:Dac}). The effective consumption is computed as follows:
+\[
+\textnormal{\gls{var:Dc}}=\sum_j \textnormal{\gls{var:Dcj}}
+\]
 
-Once the effective consumption is known, consumers buy the product by and pay them to firms.
-
+Once the effective consumption is known, consumers pay them due amounts to firms.
 The consumers financial position is adjusted accordingly.
-
-Those who consumes less that their income brings saving their saving to the bank with the worst position. Those who were allowed credit decreases their best bank account by the amount needed to consume. If additional allowed credit remains, it is used to reduce or cancel the unpaid amounts possibly present in the other bank accounts.   
+Those who consumes less that their income brings their saving to the bank with the worst position. Those who were allowed credit decrease their best bank account by the amount needed to consume. If additional allowed credit remains, it is used to reduce or cancel the unpaid amounts possibly present in the other bank accounts.   
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/updateBankAccountAccordingToEffectiveConsumption.html}{here}.
 \begin{marginfigure}
@@ -1494,7 +1545,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/up
 
 \subsubsection{Example}
 
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_consumer_bank_relationship.html}{here}
+A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/latexdoc/example_consumer_bank_relationship.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
