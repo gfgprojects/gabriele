@@ -1162,7 +1162,7 @@ Unemployed people receive the unemployment dole (\gls{par:ud}) from the governme
 The computation of workers' wage is less straightforward. The wage each employed consumer receives is a mark up on the unemployment dole: 
 
 \begin{equation}
-	w_w=ud+\theta_{w}\theta_{YL}f(\psi)
+	w_w=ud+\theta_{LM}\theta_{YL}f(\psi)
 	\label{eq:ww}
 \end{equation}
 where:\\
@@ -1454,14 +1454,8 @@ The task is performed by taking the following steps:
 \end{itemize}
 These items are detailed hereafter.
 
-\noindent$\bullet$ \textit{Compute the allowed demand for each good type.} The Office for Statistics computes the demand of each industry by summing over all the consumers. Therefore, provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D^a_1,\cdots,D^a_J\}$.
-
-The elements of the vector are computed as follows:
-\[
-	\textnormal{\gls{var:Daj}}=\sum_c (1-\theta_{gmi}) \textnormal{\gls{var:Dacj}}
-\]
-This formulation is motivated by the attempt to mimic decentralized markets and the deriving imperfections that cause demand get lost in the consumers searching process.
-We introduce thus the following\\
+\noindent$\bullet$ \textit{Compute the allowed demand for each good type.} The Office for Statistics computes the demand of each industry by summing over all the consumers. 
+We mimic decentralized markets and the deriving imperfections that cause demand get lost in the consumers searching process by introducing thus the following\\
 parameter:\\
 \begin{tabular}{l l l l}
 	\hline
@@ -1476,9 +1470,17 @@ parameter:\\
 \end{tabular}
 
 \vskip3mm
+The demand of industry producing item $j$ is therefore computed as follows:
+\[
+	\textnormal{\gls{var:Dajc}}=\sum_c (1-\theta_{gmi}) \textnormal{\gls{var:Dacj}}
+\]
+where the $\leftarrow c$ signal that demand comes from consumers. This notation allows to identify the various sources of demand below and in future extensions. 
+
+Provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D^a_{1\leftarrow c},\cdots,D^a_{J\leftarrow c}\}$.
+
 The desired allowed aggregate demand is also computed as
 \[
-D^a=\sum_jD^a_j
+	D^a_{\leftarrow c}=\sum_j\textnormal{\gls{var:Dajc}}
 \]
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeDesiredDemand.html}{here}.
@@ -1486,11 +1488,11 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\noindent$\bullet$ \textit{Allocate desired allowed demand to firms.} In this step, the demand (\gls{var:Daj}) computed in the previous step is allocated to the various firms according to their share of production in the industry they belong to:
+\noindent$\bullet$ \textit{Allocate desired allowed demand to firms.} In this step, the demand computed in the previous step (\gls{var:Dajc}) is allocated to the various firms according to their share of production in the industry they belong to:
 \[
-	\textnormal{\gls{var:Dafj}}=D^a_j\frac{\textnormal{\gls{var:Yfj}}}{\textnormal{\gls{var:Yj}}}
+	\textnormal{\gls{var:Dafjc}}=\textnormal{\gls{var:Dajc}}\frac{\textnormal{\gls{var:Yfj}}}{\textnormal{\gls{var:Yj}}}
 \]
-Note that firms in some industries may have $D^a_{f,j}>Y_{f,j}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
+Note that firms in some industries may have \gls{var:Dajc} $>Y_{f,j}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
 \begin{marginfigure}
@@ -1505,7 +1507,7 @@ At the end of this process the demand received by each industry (\gls{var:Dj}) a
 
 Consumers are then informed of the demand reallocation and their final demand is computed:
 \[
-	\textnormal{\gls{var:Dcj}}= \textnormal{\gls{var:Dacj}}\frac{\textnormal{\gls{var:Dj}}}{\textnormal{\gls{var:Daj}}}
+	\textnormal{\gls{var:Dcj}}= \textnormal{\gls{var:Dacj}}\frac{\textnormal{\gls{var:Dj}}}{\textnormal{\gls{var:Dajc}}}
 \]
 
 
@@ -1518,7 +1520,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ma
 \noindent$\bullet$ \textit{Update firms sales.}
 Firms are also informed on the items they have sold:
 \[
-	\textnormal{\gls{var:Dfj}}=D_j \frac{Y_{f,j}}{Y_j}
+	\textnormal{\gls{var:Dfj}}=\textnormal{\gls{var:Dj}} \frac{Y_{f,j}}{Y_j}
 \]
 This information will be then used to compute profit.
 
@@ -1534,7 +1536,7 @@ Summing up, in this model the desired consumption can be resized two times. The 
 \textnormal{\gls{var:Dc}}=\sum_j \textnormal{\gls{var:Dcj}}
 \]
 
-Once the effective consumption is known, consumers pay them due amounts to firms.
+Once the effective consumption is known, consumers pay the due amounts to firms.
 The consumers financial position is adjusted accordingly.
 Those who consumes less that their income brings their saving to the bank with the worst position. Those who were allowed credit decrease their best bank account by the amount needed to consume. If additional allowed credit remains, it is used to reduce or cancel the unpaid amounts possibly present in the other bank accounts.   
 
@@ -1617,11 +1619,11 @@ We will now enter into details of each step. The gray backgrounded headings will
 Each firm economic result is computed as follows
 
 \[
-	CoH_{f,j}=D_{f\leftarrow h,j}+D_{f\leftarrow f,j}-WW_{f,j}
+	\textnormal{\gls{var:pifj}} =\textnormal{\gls{var:Dfj}}+D_{f\leftarrow f,j}-\textnormal{\gls{var:Wfj}}
 \]
-where \gls{var:coh} is cash on hand, \gls{var:Dfh} is demand from households, \gls{var:Dff} is demand from firms and \gls{var:WWf} is the amount of wages payed by the firm.
+where \gls{var:Dfj} is demand from consumers, \gls{var:Dff} is demand from firms and \gls{var:Wfj} is the amount of wages payed by the firm.
 
-Concerning \gls{var:WWf}, it is given by the sum of the individual wage ($ww$) payed by the firm to the workers it employs. We saw above how $ww$ is computed (see equation \ref{eq:ww}), so we can write
+Concerning \gls{var:Wfj}, it is given by the sum of the individual wage ($ww$) payed by the firm to the workers it employs. We saw above how $ww$ is computed (see equation \ref{eq:ww}), so we can write
 \[
 	WW_{f,j}=\sum ww
 \]
