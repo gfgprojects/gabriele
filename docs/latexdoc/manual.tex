@@ -1629,14 +1629,33 @@ Concerning \gls{var:Wfj}, it is given by the sum of the individual wage ($ww$) p
 \]
 
 
-Profit (a positive economic result) can be used to integrate production capital if needed. To see if the cash on has to be used to buy production capital, we have to update the sate of this variable taking account of its depreciation.
+Profit (a positive economic result) can be used to integrate production capital if needed. To see if profit is to be used to buy production capital, we have to update the state of this variable taking account of its depreciation.
 
-The production capital of the firm is identified by the $K_f$ variable. We divide this amount into two parts: $D_{f\leftarrow h,j}+D_{f\leftarrow f,j}$ is the production capital that was employed in the production and $K_f-D_{f\leftarrow h,j}-D_{f\leftarrow f,j}$ that was not used. In this model, these two parts of production capital have two distinct depreciation rate $\psi_D$ and $\psi_{!D}$.
+The production capital of the firm is identified by the \gls{var:Kf} variable. We divide this amount into two parts: the production capital that was employed in the production and that in excess (if any). Remembering the production function, the production capital used in the production is \gls{var:Dfj} $+$ \gls{var:Dff} and the unused part is \gls{var:Kf} $-$ \gls{var:Dfj} $-$ \gls{var:Dff}.
+
+
+In this model, these two parts of production capital have two distinct depreciation rate \gls{par:thetadrD} and \gls{par:thetadrU}.
 
 The production capital is thus updated as follows:
 \[
-	K_f=(D_{f\leftarrow h,j}+D_{f\leftarrow f,j})(1-\psi_D)+(K_f-D_{f\leftarrow h,j}-D_{f\leftarrow f,j})(1-\psi_{!D})
+	K_f=(D_{f,j\leftarrow c}+D_{f,j\leftarrow f})(1-\theta_{drD})+(K_f-D_{f,j\leftarrow c}-D_{f,j\leftarrow f})(1-\theta_{drU})
 \]
+
+We thus have the following\\
+parameters\\
+\begin{tabular}{l l l l}
+	\hline
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
+	\hline
+	\hline
+ \gls{par:thetadrD}&\verb+Context.percentageOfUsedCapitalDepreciation+&0.01&yes\\
+ \gls{par:thetadrU}&\verb+Context.percentageOfUnusedCapitalDepreciation+&0.0&yes\\
+	\hline
+\end{tabular}
+
+\vskip3mm
 
 
 
