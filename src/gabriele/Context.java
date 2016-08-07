@@ -35,7 +35,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double minPreferenceParameter=1.0;
 	public static double maxPreferenceParameter=1.5;
 	public static double consumersProbabilityToGetFunded=0.5;
-	public static double percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded=0;
+	public static double percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded=0.0;
 	public static double firmsProbabilityToHaveOutstandingDebtCompletelyRenewed=0.5;
 	public static double percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed=0.9;
 	public static double firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed=0.5;
@@ -142,6 +142,7 @@ public class Context implements ContextBuilder<Object> {
         numFirms = (Integer)params.getValue("numFirms");
 	minAbilityStudent=(Double)params.getValue("minAbilityStudent");
 	maxAbilityStudent=(Double)params.getValue("maxAbilityStudent");
+        consumerExitAge = (Integer)params.getValue("consumerExitAge");
         parameterOfProductivityInProductionFuncion = (Integer)params.getValue("parameterOfProductivityInProductionFuncion");
 	maxNumberOfFailedPeriodsOfEducation=(Integer)params.getValue("maxNumberOfFailedPeriodsOfEducation");
 	probabilityToBeUnemployedAtTheBeginning=(Double)params.getValue("probabilityToBeUnemployedAtTheBeginning");
@@ -158,8 +159,19 @@ public class Context implements ContextBuilder<Object> {
 //        betaWorker = (Double)params.getValue("betaWorker");
 
         unemploymentDole=(Integer)params.getValue("unemploymentDole");
-        subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
-	costEdu=(Integer)params.getValue("studentConsumption");
+        laborMarketStateToSetWage=(Double)params.getValue("laborMarketStateToSetWage");
+    	interestRateOnDeposits=(Double)params.getValue("interestRateOnDeposits");
+    	interestRateOnLoans=(Double)params.getValue("interestRateOnLoans");
+    	interestRateOnSubsidizedLoans=(Double)params.getValue("interestRateOnSubsidizedLoans");
+    	percentageOfLoanToRefundForIndebtedWorkersIfAsked=(Double)params.getValue("percentageOfLoanToRefundForIndebtedWorkersIfAsked");
+    	probabilityToBeAskedToRefundForIndebtedWorkers=(Double)params.getValue("probabilityToBeAskedToRefundForIndebtedWorkers");
+    	consumersProbabilityToGetFunded=(Double)params.getValue("consumersProbabilityToGetFunded");
+    	percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded=(Double)params.getValue("percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded");
+    	percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=(Double)params.getValue("percentageOfDemandMissedBecauseOfGoodsMarketsInperfections");
+    	percentageOfUsedCapitalDepreciation=(Double)params.getValue("percentageOfUsedCapitalDepreciation");
+    	percentageOfUnusedCapitalDepreciation=(Double)params.getValue("percentageOfUnusedCapitalDepreciation");
+    	subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
+        costEdu=(Integer)params.getValue("studentConsumption");
         wageSettingRule=(Integer)params.getValue("wageSettingRule");
         int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
