@@ -773,9 +773,10 @@ The details on the initialization process are given hereafter.
 
 
 To realize production firms need two production input: capital and labor. We use the following Leontief type production function:
-\[
+\begin{equation}
 Y_f=\min(Y_f^{PK},Y_f^{PL})
-\]
+	\label{eq:production_function}
+\end{equation}
 That is, production realized by firm $f$, \gls{var:Yf}, is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, \gls{var:YPKf}, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, \gls{var:YPLf}. 
 
 
@@ -1162,7 +1163,7 @@ Unemployed people receive the unemployment dole (\gls{par:ud}) from the governme
 The computation of workers' wage is less straightforward. The wage each employed consumer receives is a mark up on the unemployment dole: 
 
 \begin{equation}
-	w_w=ud+\theta_{LM}\theta_{YL}f(\psi)
+	\textnormal{\gls{var:ww}}=ud+\theta_{LM}\theta_{YL}f(\psi)
 	\label{eq:ww}
 \end{equation}
 where:\\
@@ -1490,9 +1491,9 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 
 \noindent$\bullet$ \textit{Allocate desired allowed demand to firms.} In this step, the demand computed in the previous step (\gls{var:Dajc}) is allocated to the various firms according to their share of production in the industry they belong to:
 \[
-	\textnormal{\gls{var:Dafjc}}=\textnormal{\gls{var:Dajc}}\frac{\textnormal{\gls{var:Yfj}}}{\textnormal{\gls{var:Yj}}}
+	\textnormal{\gls{var:Dafjc}}=\textnormal{\gls{var:Dajc}}\frac{\textnormal{\gls{var:Yfjc}}}{\textnormal{\gls{var:Yjc}}}
 \]
-Note that firms in some industries may have \gls{var:Dajc} $>Y_{f,j}$ while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
+Note that firms in some industries may have \gls{var:Dajc} $>$ \gls{var:Yfjc} while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
 \begin{marginfigure}
@@ -1619,11 +1620,11 @@ We will now enter into details of each step. The gray backgrounded headings will
 Each firm economic result is computed as follows
 
 \[
-	\textnormal{\gls{var:pifj}} =\textnormal{\gls{var:Dfj}}+D_{f\leftarrow f,j}-\textnormal{\gls{var:Wfj}}
+	\textnormal{\gls{var:pifj}} =\textnormal{\gls{var:Dfj}}+\textnormal{\gls{var:Dff}}-\textnormal{\gls{var:Wfj}}
 \]
 where \gls{var:Dfj} is demand from consumers, \gls{var:Dff} is demand from firms and \gls{var:Wfj} is the amount of wages payed by the firm.
 
-Concerning \gls{var:Wfj}, it is given by the sum of the individual wage ($ww$) payed by the firm to the workers it employs. We saw above how $ww$ is computed (see equation \ref{eq:ww}), so we can write
+Concerning \gls{var:Wfj}, it is given by the sum of the individual wage (\gls{var:ww}) payed by the firm to the workers it employs. We saw above how \gls{var:ww} is computed (see equation \ref{eq:ww}), so we can write
 \[
 	\textnormal{\gls{var:Wfj}}=\sum_w \textnormal{\gls{var:wwf}}
 \]
@@ -1631,7 +1632,7 @@ Concerning \gls{var:Wfj}, it is given by the sum of the individual wage ($ww$) p
 
 Profit (a positive economic result) can be used to integrate production capital if needed. To see if profit is to be used to buy production capital, we have to update the state of this variable taking account of its depreciation.
 
-The production capital of the firm is identified by the \gls{var:Kf} variable. We divide this amount into two parts: the production capital that was employed in the production and that in excess (if any). Remembering the production function, the production capital used in the production is \gls{var:Dfj} $+$ \gls{var:Dff} and the unused part is \gls{var:Kf} $-$ \gls{var:Dfj} $-$ \gls{var:Dff}.
+The production capital of the firm is identified by the \gls{var:Kf} variable. We divide this amount into two parts: the production capital that was employed in the production and that which is in excess (if any). Remembering the production function, the production capital used in the production is \gls{var:Dfj} $+$ \gls{var:Dff} and the unused part is \gls{var:Kf} $-$ \gls{var:Dfj} $-$ \gls{var:Dff}.
 
 
 In this model, these two parts of production capital have two distinct depreciation rate \gls{par:thetadrD} and \gls{par:thetadrU}.
@@ -2066,9 +2067,9 @@ the potential production is thus
 \[
 	Y^{PL}_f=\theta_{YL}wp_f
 \]
-finally, the potential output is given by the Leontief type production function
+finally, the firm output output is given by the Leontief type production function
 \[
-Y^P_f=\min(Y^{PK},Y^{PL})
+Y_f=\min(Y^{PK},Y^{PL})
 \]
 
 Involved parameter:
@@ -2081,6 +2082,13 @@ Involved parameter:
 $\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
 	\hline
 \end{tabular}
+
+\vskip2mm
+Now, we know that the demand for investment goods \gls{var:Dfjf} is satisfied in full before that of consumers. We can think investments products are ordered, and the market for these goods always cleans: \gls{var:Dfjf} $=$ \gls{var:Yfjf}. This allows us to compute the supply of consumption goods:
+\[
+	\textnormal{\gls{var:Yfjc}}=\textnormal{\gls{var:Yfj}}-\textnormal{\gls{var:Yfjf}}
+\]
+
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/makeProduction.html}{here}
