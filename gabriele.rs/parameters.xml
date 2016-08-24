@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <parameters>
-					<parameter name="minConsumerInitialBankAccount" displayName="min of consumer bank account at initialization" type="int" 
-						defaultValue="-500" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="minAbilityStudent" displayName="min student ability" type="double" 
-						defaultValue="0.35" 
+					<parameter name="laborMarketStateToSetWage" displayName="laborMarketStateToSetWage" type="double" 
+						defaultValue="0.5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="unemploymentDole" displayName="unemployment Dole" type="int" 
-						defaultValue="30" 
+				<parameter name="percentageOfUnusedCapitalDepreciation" displayName="percentageOfUnusedCapitalDepreciation" type="double" 
+						defaultValue="0.0" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="studentConsumption" displayName="cost of education studentConsumption" type="int" 
-						defaultValue="30" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="numFirms" displayName="number of firms" type="int" 
@@ -33,18 +20,6 @@
 		/>
 				<parameter name="subsistenceConsumption" displayName="subsistence Consumption" type="int" 
 						defaultValue="30" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="maxFirmInitialEquityRatio" displayName="max firm equity ratio at initialization" type="double" 
-						defaultValue="0.3" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-				<parameter name="numConsumers" displayName="number of consumers" type="int" 
-						defaultValue="10" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
@@ -61,22 +36,22 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
-				<parameter name="maxBankInitialEquityRatio" displayName="max bank equity ratio at initialization" type="double" 
-						defaultValue="0.3" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
 				<parameter name="batchStoppingTime" displayName="batchStoppingTime" type="int" 
 						defaultValue="5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="randomSeed" displayName="Default Random Seed" type="int" 
-						defaultValue="__NULL__"
+				<parameter name="probabilityToBeAskedToRefundForIndebtedWorkers" displayName="probabilityToBeAskedToRefundForIndebtedWorkers" type="double" 
+						defaultValue="0.5" 
 						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded" displayName="percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded" type="double" 
+						defaultValue="0.0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="numberOfBanksAConsumerCanBeCustumerOf" displayName="numberOfBanksAConsumerCanBeCustumerOf" type="int" 
@@ -85,28 +60,10 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
-				<parameter name="maxConsumerInitialBankAccount" displayName="max of consumer bank account at initialization" type="int" 
-						defaultValue="500" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
 				<parameter name="wageSettingRule" displayName="wageSettingRule" type="int" 
 						defaultValue="2" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
-									
-		/>
-				<parameter name="minFirmInitialEquityRatio" displayName="min firm equity ratio at initialization" type="double" 
-						defaultValue="0.1" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
-									
-		/>
-				<parameter name="minBankInitialEquityRatio" displayName="min bank equity ratio at initialization" type="double" 
-						defaultValue="0.1" 
-						isReadOnly="false" 
-						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
 				<parameter name="numberOfBanksAFirmCanBeCustumerOf" displayName="numberOfBanksAFirmCanBeCustumerOf" type="int" 
@@ -127,12 +84,138 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+				<parameter name="consumersProbabilityToGetFunded" displayName="consumersProbabilityToGetFunded" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="minConsumerInitialBankAccount" displayName="min of consumer bank account at initialization" type="int" 
+						defaultValue="-500" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="interestRateOnLoans" displayName="interestRateOnLoans" type="double" 
+						defaultValue="0.004" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="percentageOfLoanToRefundForIndebtedWorkersIfAsked" displayName="percentageOfLoanToRefundForIndebtedWorkersIfAsked" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="minAbilityStudent" displayName="min student ability" type="double" 
+						defaultValue="0.35" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="percentageOfUsedCapitalDepreciation" displayName="percentageOfUsedCapitalDepreciation" type="double" 
+						defaultValue="0.01" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="unemploymentDole" displayName="unemployment Dole" type="int" 
+						defaultValue="30" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="studentConsumption" displayName="cost of education studentConsumption" type="int" 
+						defaultValue="30" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="consumerExitAge" displayName="consumerExitAge" type="int" 
+						defaultValue="70" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="maxFirmInitialEquityRatio" displayName="max firm equity ratio at initialization" type="double" 
+						defaultValue="0.3" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="numConsumers" displayName="number of consumers" type="int" 
+						defaultValue="10" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="maxBankInitialEquityRatio" displayName="max bank equity ratio at initialization" type="double" 
+						defaultValue="0.3" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="randomSeed" displayName="Default Random Seed" type="int" 
+						defaultValue="__NULL__"
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="maxConsumerInitialBankAccount" displayName="max of consumer bank account at initialization" type="int" 
+						defaultValue="500" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
+				<parameter name="interestRateOnSubsidizedLoans" displayName="interestRateOnSubsidizedLoans" type="double" 
+						defaultValue="0.001" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="minFirmInitialEquityRatio" displayName="min firm equity ratio at initialization" type="double" 
+						defaultValue="0.1" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="firmsProbabilityToHaveOutstandingDebtCompletelyRenewed" displayName="firmsProbabilityToHaveOutstandingDebtCompletelyRenewed" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="minBankInitialEquityRatio" displayName="min bank equity ratio at initialization" type="double" 
+						defaultValue="0.1" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="interestRateOnDeposits" displayName="interestRateOnDeposits" type="double" 
+						defaultValue="0.001" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="maxAbilityStudent" displayName="max student ability" type="double" 
 						defaultValue="0.5" 
 						isReadOnly="false" 
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
+				<parameter name="percentageOfDemandMissedBecauseOfGoodsMarketsInperfections" displayName="percentageOfDemandMissedBecauseOfGoodsMarketsInperfections" type="double" 
+						defaultValue="0.0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed" displayName="percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed" type="double" 
+						defaultValue="0.9" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 		</parameters>
 
-  
+
