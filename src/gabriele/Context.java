@@ -173,6 +173,11 @@ public class Context implements ContextBuilder<Object> {
     	subsistenceConsumption=(Integer)params.getValue("subsistenceConsumption");
         costEdu=(Integer)params.getValue("studentConsumption");
         wageSettingRule=(Integer)params.getValue("wageSettingRule");
+    	firmsProbabilityToHaveOutstandingDebtCompletelyRenewed=(Double)params.getValue("firmsProbabilityToHaveOutstandingDebtCompletelyRenewed");
+    	percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed=(Double)params.getValue("percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed");
+
+        
+        
         int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
         //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
