@@ -1490,9 +1490,12 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 \end{marginfigure}
 
 \noindent$\bullet$ \textit{Allocate desired allowed demand to firms.} In this step, the demand computed in the previous step (\gls{var:Dajc}) is allocated to the various firms according to their share of production in the industry they belong to:
-\[
+\begin{equation}
 	\textnormal{\gls{var:Dafjc}}=\textnormal{\gls{var:Dajc}}\frac{\textnormal{\gls{var:Yfjc}}}{\textnormal{\gls{var:Yjc}}}
-\]
+	\label{eq:Dafjc}
+\end{equation}
+It will be clarified in the \verb+make production+ step that firms produces both investment goos that are sold to other firms (\gls{var:Yfjf}) and consumption good sold to consumers (\gls{var:Yfjc}). The just written computation involves the latter.
+
 Note that firms in some industries may have \gls{var:Dajc} $>$ \gls{var:Yfjc} while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
@@ -1521,7 +1524,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ma
 \noindent$\bullet$ \textit{Update firms sales.}
 Firms are also informed on the items they have sold:
 \[
-	\textnormal{\gls{var:Dfj}}=\textnormal{\gls{var:Dj}} \frac{Y_{f,j}}{Y_j}
+	\textnormal{\gls{var:Dfj}}=\textnormal{\gls{var:Dj}}  \frac{\textnormal{\gls{var:Yfjc}}}{\textnormal{\gls{var:Yjc}}}
 \]
 This information will be then used to compute profit.
 
@@ -1632,7 +1635,7 @@ Concerning \gls{var:Wfj}, it is given by the sum of the individual wage (\gls{va
 
 Profit (a positive economic result) can be used to integrate production capital if needed. To see if profit is to be used to buy production capital, we have to update the state of this variable taking account of its depreciation.
 
-The production capital of the firm is identified by the \gls{var:Kf} variable. We divide this amount into two parts: the production capital that was employed in the production and that which is in excess (if any). Remembering the production function, the production capital used in the production is \gls{var:Dfj} $+$ \gls{var:Dff} and the unused part is \gls{var:Kf} $-$ \gls{var:Dfj} $-$ \gls{var:Dff}.
+The production capital of the firm is identified by the \gls{var:Kf} variable. We divide this amount into two parts: the production capital that was employed in the production and that which is in excess (if any). Remembering the production function, the production capital used in the production is \gls{var:Dfj} $+$ \gls{var:Dff} and the unused part (if any) is \gls{var:Kf} $-$ \gls{var:Dfj} $-$ \gls{var:Dff}.
 
 
 In this model, these two parts of production capital have two distinct depreciation rate \gls{par:thetadrD} and \gls{par:thetadrU}.
@@ -1669,36 +1672,38 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 \subsubsection{Perform firms turnover}
 
 In this basic version of the model, firms turnover is very simple: each firm that becomes too small is replaced with a new firm.
+\begin{marginfigure}
+	\hskip2.5cm\includegraphics[scale=0.1]{edit.jpg}
+\end{marginfigure}
+
+In this part of the code, the list of new entrants is updated but firms are not yet included in the model. This is because new entrants have to participate in the production factor markets in order to start the production. Note that in the previous step, incumbent prepare for the adjustment of production capital. Thus, the demand for production capital that will be computed below will account for the demand of both incumbent and new firms. This will also apply to the labor demand.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/performFirmsExit.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-
-
-
 \subsubsection{Banks account interests and ask for loan repayments to indebted firms}
 
 The accounting of interest updates the firms bank accounts.
 
-Positive bank accounts are updated using the interest rate on deposits $i^+$, so that if $BA_{fb,t}\ge 0$
+Positive bank accounts are updated using the interest rate on deposits \gls{var:i+}, so that if \gls{var:BAfb} $\ge 0$
 \[
 BA_{fb,t+1}=BA_{fb,t}(1+i^+)
 \]
 
-Differently from consumers, firms have not a subsidized interest rate, and negative bank accounts are charged by the ordinary interest rate ($i^-_{w}$):
+Differently from consumers, firms have not a subsidized interest rate, and negative bank accounts are charged by the ordinary interest rate (\gls{var:i-}):
 \[
-BA_{fb,t+1}=BA_{fb,t}(1+i^.)
+BA_{fb,t+1}=BA_{fb,t}(1+i^-)
 \]
 
 Once the accrued interest has been accounted, the bank may ask the reduction of some negative accounts.
 The amount of a negative bank account owned by a firm desired by the bank is thus determined as follows:
 \[
-	BA^{db}=\left\{ 
+	\textnormal{\gls{var:BAdb}} =\left\{ 
 		\begin{array}{l l l}
-			BA_{t+1}&\textnormal{with probability}& pr_{fbren}\\
-			BA_{t+1}\theta_{fbncr}&\textnormal{with probability}& 1-pr_{fbren}\\
+			BA_{fb}&\textnormal{with probability}& pr_{fbren}\\
+			BA_{fb}\theta_{fbncr}&\textnormal{with probability}& 1-pr_{fbren}\\
 		\end{array}
 		\right.
 \]
@@ -1706,21 +1711,22 @@ The amount of a negative bank account owned by a firm desired by the bank is thu
 The parameters involved in this computation are:
 
 \vskip2mm
-\begin{tabular}{l l l}
+\noindent
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-$i^+$&\verb+Context.interestRateOnDeposits+&\\
-$i^-$&\verb+Context.interestRateOnLoans+&\\
-$\theta_{fbncr}$&\verb+Context.percentageOfOutstandingCreditAllowedTo+&\\
-&\hskip1.5cm\verb+FirmsWhenCreditIsNotCompletelyRenewed+&\\
-$pr_{fbren}$&\verb+Context.firmsProbabilityToHaveOutstanding+&\\
-&\hskip3cm\verb+DebtCompletelyRenewed+&\\
+\gls{par:thetafbncr}&\verb+Context.percentageOfOutstandingCreditAllowedTo+&\\
+&\hskip1.5cm\verb+FirmsWhenCreditIsNotCompletelyRenewed+&0.9&yes\\
+\gls{par:prfbren}&\verb+Context.firmsProbabilityToHaveOutstanding+&\\
+&\hskip3cm\verb+DebtCompletelyRenewed+&0.5&yes\\
 	\hline
 \end{tabular}
 
-\vskip2mm
+\vskip3mm
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/updateFirmsAccounts.html}{here}
 \begin{marginfigure}
@@ -1731,10 +1737,10 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/up
 \subsubsection{Firms refund if possible}
 In the previous step banks can ask to reduce amount of negative bank accounts. 
 
-In this model firms can have more than one bank account. In principle, some of them can be positive, and others negative. The downward adjustment can be asked on some of the negative accounts.  Firms can face banks refunding request using all their financial assets: cash flow and their positive bank account. 
+In this model firms can have more than one bank account. In principle, some of them can be positive, and others negative. The downward adjustment can be asked on some of the negative accounts.  Firms can face banks refunding requests using all their financial assets: cash flow and their positive bank account. 
 
 In case refund is asked on some accounts, the entrepreneur starts checking its bank account list from the beginning and when s/he find a positive amount use it to fulfill the other banks refunding requests.
-If the positive amounts are not enough, the cash on hand is used. If Even cash on hand is not enough, a positive unpaid amount is recoded.
+If the positive amounts are not enough, the cash on hand is used. If Even cash on hand is not enough, a positive unpaid amount is recorded.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/firms_payBackBankDebt.html}{here}
 \begin{marginfigure}
@@ -1745,6 +1751,23 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/fi
 \subsubsection{Firms ask for new credit}
 
 Firms may need new credit to increase the level of their production capital or to pay residual unpaid amounts on banks accounts.
+
+First a firm need to evaluate if it has to increase its production capital. In doing that it has to forecast the level of next period demand. We know there are two sources of demand: from consumers and from firms. To forecast the consumers demand, the firm uses the desired-allowed demand \gls{var:Dafjc} as computed in equation \ref{eq:Dafjc}.   
+The demand from other firms is assumed to be equal to that received in the previous period. The demand expected by the firm is thus
+\[
+	\textnormal{\gls{var:Def}}=\textnormal{\gls{var:Dafjc}}+\textnormal{\gls{var:Dfjf}}
+\]
+Now, remembering the production function, we have that the desired level of production capital is:
+\[
+	\textnormal{\gls{var:Kdf}}=\textnormal{\gls{var:Def}}
+\]
+If 
+\[
+\textnormal{\gls{var:Kdf}}>\textnormal{\gls{var:Kf}}
+\]
+financial resources are needed to make the desired adjustment. The firm checks its internal financial resources, i.e. cash on hand and positive bank account, and if they are not enough ask for credit. 
+
+If existing production capital is enough to realize the production, credit is also needed in case unpaid amount exists.
 
 If credit is needed, the entrepreneur check the possibility to ask it to the banks it is customer of. This possibility is prevented if positive unpaid amount are present in all the firm bank accounts. If one or more bank accounts have no unpaid amount, the entrepreneur choses the bank account having the best account to ask new credit. Because all the bank accounts are evaluated by all firms, the code also identify the worst bank account. It will be used by The residual cash on hand that possibly remains in the following steps will be used to improve the amount of this bank account. 
 
