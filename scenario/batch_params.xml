@@ -5,6 +5,7 @@
     <parameter name="numFirms" type="constant" constant_type="int" value="2"></parameter>
     <parameter name="minAbilityStudent" type="constant" constant_type="double" value="0.35"></parameter>
     <parameter name="maxAbilityStudent" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="consumerExitAge" type="constant" constant_type="int" value="70"></parameter>
     <parameter name="maxNumberOfFailedPeriodsOfEducation" type="constant" constant_type="int" value="2"></parameter>
     <parameter name="probabilityToBeUnemployedAtTheBeginning" type="constant" constant_type="double" value="0.2"></parameter>
     <parameter name="numberOfBanksAConsumerCanBeCustumerOf" type="constant" constant_type="int" value="1"></parameter>
@@ -20,8 +21,21 @@
     <parameter name="betaStud" type="constant" constant_type="double" value="0.003"></parameter>
     <parameter name="betaWorker" type="constant" constant_type="double" value="0.03"></parameter>
     <parameter name="unemploymentDole" type="constant" constant_type="int" value="30"></parameter>
+    <parameter name="laborMarketStateToSetWage" type="constant" constant_type="double" value="0.5"></parameter>
     <parameter name="subsistenceConsumption" type="constant" constant_type="int" value="30"></parameter>
     <parameter name="studentConsumption" type="constant" constant_type="int" value="30"></parameter>
+    <parameter name="interestRateOnDeposits" type="constant" constant_type="double" value="0.001"></parameter>
+    <parameter name="interestRateOnLoans" type="constant" constant_type="double" value="0.004"></parameter>
+    <parameter name="interestRateOnSubsidizedLoans" type="constant" constant_type="double" value="0.001"></parameter>
+    <parameter name="percentageOfLoanToRefundForIndebtedWorkersIfAsked" type="constant" constant_type="double" value="0.1"></parameter>
+    <parameter name="probabilityToBeAskedToRefundForIndebtedWorkers" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="consumersProbabilityToGetFunded" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="percentageOfCreditAllowedToConsumersWhenCreditIsNotTotallyFunded" type="constant" constant_type="double" value="0.0"></parameter>
+    <parameter name="percentageOfDemandMissedBecauseOfGoodsMarketsInperfections" type="constant" constant_type="double" value="0.0"></parameter>
+    <parameter name="percentageOfUsedCapitalDepreciation" type="constant" constant_type="double" value="0.01"></parameter>
+    <parameter name="percentageOfUnusedCapitalDepreciation" type="constant" constant_type="double" value="0.0"></parameter>
     <parameter name="wageSettingRule" type="constant" constant_type="int" value="2"></parameter>
+    <parameter name="firmsProbabilityToHaveOutstandingDebtCompletelyRenewed" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed" type="constant" constant_type="double" value="0.9"></parameter>
     <parameter name="batchStoppingTime" type="constant" constant_type="int" value="10"></parameter>
 </sweep>
