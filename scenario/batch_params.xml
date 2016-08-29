@@ -37,5 +37,7 @@
     <parameter name="wageSettingRule" type="constant" constant_type="int" value="2"></parameter>
     <parameter name="firmsProbabilityToHaveOutstandingDebtCompletelyRenewed" type="constant" constant_type="double" value="0.5"></parameter>
     <parameter name="percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed" type="constant" constant_type="double" value="0.9"></parameter>
+    <parameter name="firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed" type="constant" constant_type="double" value="0.5"></parameter>
+    <parameter name="percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed" type="constant" constant_type="double" value="0.9"></parameter>
     <parameter name="batchStoppingTime" type="constant" constant_type="int" value="10"></parameter>
 </sweep>
