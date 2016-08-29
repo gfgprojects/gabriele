@@ -175,6 +175,8 @@ public class Context implements ContextBuilder<Object> {
         wageSettingRule=(Integer)params.getValue("wageSettingRule");
     	firmsProbabilityToHaveOutstandingDebtCompletelyRenewed=(Double)params.getValue("firmsProbabilityToHaveOutstandingDebtCompletelyRenewed");
     	percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed=(Double)params.getValue("percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed");
+    	firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed=(Double)params.getValue("firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed");
+    	percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed=(Double)params.getValue("percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed");
 
         
         
