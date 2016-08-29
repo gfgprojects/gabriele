@@ -66,6 +66,18 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+				<parameter name="firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed" displayName="firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
+				<parameter name="percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed" displayName="percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed" type="double" 
+						defaultValue="0.9" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="numberOfBanksAFirmCanBeCustumerOf" displayName="numberOfBanksAFirmCanBeCustumerOf" type="int" 
 						defaultValue="1" 
 						isReadOnly="false" 
