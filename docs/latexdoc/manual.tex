@@ -1786,16 +1786,16 @@ In the present version of the model, the bank decides the allowed credit \gls{va
 	\item if \gls{var:BAfb} $\ge 0$ and \gls{var:BAabf} $<0$
 		\[\textnormal{\gls{var:BAabf}} =\left\{
 			\begin{array}{l l l}
-				BA^{df}&\textnormal{with probability}&pr_{abf}\\
-				\theta_{abf}BA^{df}&\textnormal{with probability}&1-pr_{abf}\\
+			\textnormal{\gls{var:BAdf}}&\textnormal{with probability}&\textnormal{\gls{par:prabf}}\\
+			\textnormal{\textnormal{\gls{par:thetaabf}}\gls{var:BAdf}}&\textnormal{with probability}&1-\textnormal{\gls{par:prabf}}\\
 			\end{array}
 		\right.
 		\]
-	\item if $BA< 0$ and $BA^{abf}<BA$
-		\[BA^{abf}=\left\{
+	\item  if \gls{var:BAfb} $< 0$ and \gls{var:BAabf} $<0$
+		\[\textnormal{\gls{var:BAabf}} =\left\{
 			\begin{array}{l l l}
-				BA^{df}&\textnormal{with probability}&pr_{abf}\\
-				BA-\theta_{afb}(BA-BA^{df})&\textnormal{with probability}&1-pr_{abf}\\
+			\textnormal{\gls{var:BAdf}}&\textnormal{with probability}&\textnormal{\gls{par:prabf}}\\
+			\textnormal{\gls{var:BAfb} $-$ \gls{par:thetaabf}(\gls{var:BAfb} $-$ \gls{var:BAdf})}&\textnormal{with probability}&1-\textnormal{\gls{par:prabf}}\\
 			\end{array}
 		\right.
 		\]
@@ -1803,14 +1803,19 @@ In the present version of the model, the bank decides the allowed credit \gls{va
 
 We have thus the following\\
 parameters:\\
-\begin{tabular}{l l l}
+\vskip2mm
+\noindent
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
- $\theta_{abf}$&\verb+Context.percentageOfNewDemandedCredit+&\\
- &\hskip1.5cm\verb+AllowedToFirmsWhenCreditIsNotCompletelyAllowed+&\\
- $pr_{abf}$&\verb+Context.firmsProbabilityToHaveNewDemanded+&\\
+ \gls{par:thetaabf}&\verb+Context.percentageOfNewDemandedCredit+&\\
+ &\hskip1.5cm\verb+AllowedToFirmsWhenCreditIsNot+\\
+ &\hskip2.5cm\verb+CompletelyAllowed+&\\
+ \gls{par:prabf}&\verb+Context.firmsProbabilityToHaveNewDemanded+&\\
  &\hskip1.5cm\verb+CreditCompletelyAllowed+&\\
 	\hline
 \end{tabular}
