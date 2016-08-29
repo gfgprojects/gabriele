@@ -1765,9 +1765,9 @@ If
 \[
 \textnormal{\gls{var:Kdf}}>\textnormal{\gls{var:Kf}}
 \]
-financial resources are needed to make the desired adjustment. The firm checks its internal financial resources, i.e. cash on hand and positive bank account, and if they are not enough ask for credit. 
+financial resources are needed to make the desired adjustment. The firm checks its internal financial resources, i.e. cash on hand and positive bank accounts and, if they are not enough, asks for credit. 
 
-If existing production capital is enough to realize the production, credit is also needed in case unpaid amount exists.
+If existing production capital is enough to produce the expected demand, credit could be also needed; this happen if unpaid amounts exist.
 
 If credit is needed, the entrepreneur check the possibility to ask it to the banks it is customer of. This possibility is prevented if positive unpaid amount are present in all the firm bank accounts. If one or more bank accounts have no unpaid amount, the entrepreneur choses the bank account having the best account to ask new credit. Because all the bank accounts are evaluated by all firms, the code also identify the worst bank account. It will be used by The residual cash on hand that possibly remains in the following steps will be used to improve the amount of this bank account. 
 
@@ -1778,13 +1778,13 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 \subsubsection{Banks decide how much credit to allow}
 
-In the previous step, firms who need credit set the desired amount on one of their bank accounts having null unpaid amount if such account exists. Let us identify this variable with $BA^{df}$ (where the $df$ upper script means \textbf desired by \textbf firms). Because they are asking for credit, this amount is negative:  $BA^{df}<0$. Note that the best bank account con have both a positive and negative amount. 
+In the previous step, firms who need credit set the desired amount on one (the best) of their bank accounts having null unpaid amount if such account exists. Let us identify this variable with \gls{var:BAdf} (where the $d$ upper script means \textbf desired). Because they are asking for credit, this amount is negative: \gls{var:BAdf} $<0$. Note that the best bank account con have either a positive and negative amount. 
 
-In the present version of the model, the bank decides the allowed credit $BA^{abf}<0$ (\textbf allowed by \textbf bank to \textbf firm) as follows
+In the present version of the model, the bank decides the allowed credit \gls{var:BAabf} $<0$ (\textbf allowed by \textbf bank to \textbf firm) as follows
 
 \begin{itemize}
-	\item if $BA\ge 0$ and $BA^{abf}<0$
-		\[BA^{abf}=\left\{
+	\item if \gls{var:BAfb} $\ge 0$ and \gls{var:BAabf} $<0$
+		\[\textnormal{\gls{var:BAabf}} =\left\{
 			\begin{array}{l l l}
 				BA^{df}&\textnormal{with probability}&pr_{abf}\\
 				\theta_{abf}BA^{df}&\textnormal{with probability}&1-pr_{abf}\\
