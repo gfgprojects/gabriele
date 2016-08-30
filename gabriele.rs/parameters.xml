@@ -114,6 +114,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+				<parameter name="firmsWorkersMatching" displayName="firmsWorkersMatching" type="int" 
+						defaultValue="0" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
 				<parameter name="interestRateOnLoans" displayName="interestRateOnLoans" type="double" 
 						defaultValue="0.004" 
 						isReadOnly="false" 
