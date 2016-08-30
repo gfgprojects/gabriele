@@ -35,6 +35,7 @@
     <parameter name="percentageOfUsedCapitalDepreciation" type="constant" constant_type="double" value="0.01"></parameter>
     <parameter name="percentageOfUnusedCapitalDepreciation" type="constant" constant_type="double" value="0.0"></parameter>
     <parameter name="wageSettingRule" type="constant" constant_type="int" value="2"></parameter>
+    <parameter name="firmsWorkersMatching" type="constant" constant_type="int" value="0"></parameter>
     <parameter name="firmsProbabilityToHaveOutstandingDebtCompletelyRenewed" type="constant" constant_type="double" value="0.5"></parameter>
     <parameter name="percentageOfOutstandingCreditAllowedToFirmsWhenCreditIsNotCompletelyRenewed" type="constant" constant_type="double" value="0.9"></parameter>
     <parameter name="firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed" type="constant" constant_type="double" value="0.5"></parameter>
