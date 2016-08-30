@@ -1813,10 +1813,10 @@ parameters:\\
 	\hline
 	\hline
  \gls{par:thetaabf}&\verb+Context.percentageOfNewDemandedCredit+&\\
- &\hskip1.5cm\verb+AllowedToFirmsWhenCreditIsNot+\\
- &\hskip2.5cm\verb+CompletelyAllowed+&\\
+ &\hskip1.5cm\verb+AllowedToFirmsWhenCreditIsNot+&\\
+ &\hskip2.5cm\verb+CompletelyAllowed+&0.9&yes\\
  \gls{par:prabf}&\verb+Context.firmsProbabilityToHaveNewDemanded+&\\
- &\hskip1.5cm\verb+CreditCompletelyAllowed+&\\
+ &\hskip1.5cm\verb+CreditCompletelyAllowed+&0.5&yes\\
 	\hline
 \end{tabular}
 
@@ -1828,32 +1828,80 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 
 
-\subsubsection{Firms compute investment demand and supply and adjust unpaid amount if possible}
+\subsubsection{Firms compute investment demand and investment supply; they adjust unpaid amount if possible}
+
+The following variables are managed in this step
+\begin{itemize}
+	\item \verb+firmInvestment+,
+	\item \verb+cashOnHand+,
+	\item \verb+promissoryNotes+,
+	\item \verb+unpaidAmount+
+\end{itemize}
+
+
+The way they are managed depends on the outcome of the previous steps. 
+Because there are a variety of possible states a firm can be at this stage, we will give here a selection of examples starting from bad to good situations. 
+
+In the worst case, 
+\begin{itemize}
+	\item the firm suffered a loss;
+	\item available financial resources are not enough to cover it;
+	\item a bank that lend money cannot be found;
+	\item one or more banks ask for refunding.
+\end{itemize}
+In this case we allow the firm to issue promissory notes that are delivered to consumers. These promissory notes will be payed in the future whenever possible.
+It is highly probable that the loss is caused by a fall in demand, so that the firm want to decrease its production capital. 
+The variables listed above will probably be as follows:
+\begin{itemize}
+	\item \verb+firmInvestment+ $<0$, 
+	\item \verb+cashOnHand+ $=0$, 
+	\item \verb+promissoryNotes+ $>0$, 
+	\item\verb+unpaidAmount+ $>0$
+\end{itemize}
+
+In another difficult situation the firm has profits and positive bank accounts that are not enough to pay back the bank. In this case the firm end up with positive unpaid amounts:\\
+\begin{itemize}
+	\item \verb+firmInvestment+ $<0$, 
+		\item \verb+cashOnHand+ $=0$,
+			\item \verb+promissoryNotes+ $=0$,
+				\item \verb+unpaidAmount+ $>0$
+\end{itemize}
+
+A better situation in the one in which the fall of demand is not so heavy to cause a loss:\\
+\begin{itemize}
+	\item \verb+firmInvestment+ $<0$,
+	\item \verb+cashOnHand+ $>0$,
+	\item \verb+promissoryNotes+ $=0$,
+	\item \verb+unpaidAmount+ $=0$
+\end{itemize}
+
+A promising situation is that in which the level of demand increase so that the firm want to invest and it has a positive economic result. Here we can distinguish between the case in which the cash on hand is not enough to finance investments:\\  
+\begin{itemize}
+	\item \verb+firmInvestment+$>$\verb|cashOnHand+sum of positive banck accounts| $>0$, 
+	\item \verb+promissoryNotes+ $=0$, 
+	\item \verb+unpaidAmount+ $=0$
+\end{itemize}
+and the case in which the cash on hand is higher than investments:\\
+\begin{itemize}
+	\item \verb+firmInvestment+$ < $\verb|cashOnHand+sum of positive banck accounts| $>0$, 
+	\item \verb+promissoryNotes+ $=0$, 
+	\item \verb+unpaidAmount+ $=0$
+\end{itemize}
+In the latter case the cash on hand in excess is deposited in the worst bank account.
+
+Even though the variety of cases presented is incomplete, it can be used to star reasoning on the supply and demand of production capital.
+
+It is straightforward that entrepreneurs who want to disinvest, i.e. those having \verb+fitmInvestment+ $<0$ are offering their production capital excesses in the used production capital market. 
+The sum of these desired disinvestments is the supply in the existing production capital market. 
+The possibility of existing capital to have market value depends on the possibility that existing production goods can be used by other firms which gives the degree of investment reversibility. The \gls{par:thetadrU} parameter presented above, can be used in this model to tune investment reversibility. 
+
 At the current state, some firm asked for new credit while other do not. 
 Those which asked for, now know the amount of credit the best bank (if it exist) is willing to allow.
 Therefore, they can check if the available credit is enough to cover their losses or to realize the desired investments. 
-Firms that want to invest, both those who asked for credit and those who do not, now know the level of investments they could achieve according to the available financial resources. However, we cannot set the amount of investment demand at this stage: firms have first to check for the availability of workers. If workers are not available, the desired level of investment is resized and the demand of investments is set. But this will happen in a later step.
+Firms that want to invest, both those who asked for credit and those who do not, now know the level of investments they could achieve according to the available financial resources. 
 
-Three variables are set in this step: the \verb+firmInvestment+, the \verb+cashOnHand+, the \verb+promissoryNotes+, the \verb+unpaidAmount+.
 
-Several economic conditions are managed in this step. 
-
-In the worst case, the firm suffer a loss and available financial resources are not enough to cover it and a bank that lend money cannot be found. In this case we allow the firm to issue promissory notes that are delivered to consumers. These promissory notes will be payed in the future whenever possible.
-It highly probable that the loss is caused by a fall in demand, so that the firm want to decrease its production capital. 
-The variables listed above will probably appear as follows:\\
-\verb+firmInvestment<0+, \verb+cashOnHand=0+, \verb+promissoryNotes>0+, \verb+unpaidAmount>0+
-
-In another difficult situation the firm has profits and positive bank accounts that are not enough to pay back the bank. In this case the firm end up with positive unpaid amounts:\\
-\verb+firmInvestment<0+, \verb+cashOnHand=0+, \verb+promissoryNotes=0+, \verb+unpaidAmount>0+
-
-A better situation in that in which the fall of demand is not so heavy to cause a loss:\\
-\verb+firmInvestment<0+, \verb+cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+
-
-A promising situation is that in which the level of demand increase so that the firm want to invest and it has a positive economic result. Here we can distinguish between the case in which the cash on hand is not enough to finance investments:\\  
-\verb+firmInvestment > cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+ \\
-and the case in which the cash on hand is higher than investments:\\
-\verb+firmInvestment < cashOnHand>0+, \verb+promissoryNotes=0+, \verb+unpaidAmount=0+ \\
-In the latter case the cash on hand in excess is deposited in the worst bank account.
+However, even though the firm has enough financial resources we cannot set the amount of investment demand at this stage: firms have first to check for the availability of workers. If the needed workers will not be found, the desired level of investment will be resized. Therefore, the demand of investments will be set in a later step.
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/setPossibleInvestment.html}{here}
