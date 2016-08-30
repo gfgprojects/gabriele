@@ -78,6 +78,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
+				<parameter name="numberOfJobApplicationAnUneployedSends" displayName="numberOfJobApplicationAnUneployedSends" type="int" 
+						defaultValue="2" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
 				<parameter name="percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed" displayName="percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed" type="double" 
 						defaultValue="0.9" 
 						isReadOnly="false" 
