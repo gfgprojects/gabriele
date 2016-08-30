@@ -1919,13 +1919,16 @@ The entering of new firms also impacts on banks because they are involved in the
 All these aspects are managed in this step.
 In particular, the desired size of each new firm is a parameter:\\
 
-\vskip3mm
-\begin{tabular}{l l l}
+\vskip2mm
+\noindent
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-	$K_{entry}$&\verb+Context.productionOfNewEnteringFirm+&\\
+ \gls{par:Kentry}&\verb+Context.productionOfNewEnteringFirm+&50&yes\\
 	\hline
 \end{tabular}
 
@@ -1934,6 +1937,8 @@ This amount is also identified as \verb+firmInvestment+ and thus enters in the d
 
 New firms thus opens a number of bank accounts and ask for funds to finance the new investment to one of these banks (the fist one created for coding convenience).
 The bank allows for all the credit asked by a new firm.
+
+Like incumbent firms, the production capital of new entrants will be resized in case of a work force shortage.
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/performFirmsEntry.html}{here}
