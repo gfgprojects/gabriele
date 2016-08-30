@@ -1911,7 +1911,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 \end{marginfigure}
 
 
-\subsubsection{entry of new firms that will ask for production capital}
+\subsubsection{Entry of new firms that will ask for production capital}
 
 In the previous step we computed the potential demand and supply of production capital by incumbent firms. However, the demand of production capital must be integrated with that of firms that intend to enter the market. 
 The entering of new firms also impacts on banks because they are involved in the financing of these new activities. Furthermore, the new entries modifies the position each firms has on the goods market because it will attract a share of demand.
@@ -1960,14 +1960,16 @@ The downward adjustment of the labor force follows two motivations:
 
 Concerning retirement, the software checks each worker's age against the parameter:\\
 
-\vskip3mm
+\vskip2mm
 \noindent
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-	$\theta_{retire}$&\verb+Context.ConsumerExitAge+&\\
+	\gls{par:thetaretire}&\verb+Context.ConsumerExitAge+&70&yes\\
 	\hline
 \end{tabular}
 
@@ -1990,14 +1992,16 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/la
 
 The way Unemployed people send curricula depends on the labor market matching mechanism. The latter can be chosen by setting the following parameter:\\
 
-\vskip3mm
+\vskip2mm
 \noindent
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-	$\theta_{lm-match}$&\verb+Context.FirmsWorkersMatching+&\\
+	\gls{par:thetaLMmatch}&\verb+Context.FirmsWorkersMatching+&0&yes\\
 	\hline
 \end{tabular}
 
@@ -2011,12 +2015,14 @@ If the decentralized matching mechanism is involved (cases 0 and 1), unemployed 
 
 \vskip3mm
 \noindent
-\begin{tabular}{l l l}
+\begin{tabular}{l l l l}
 	\hline
-	in papers& in code&value\\
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
 	\hline
 	\hline
-	$\theta_{retire}$&\verb+Context.numberOfJobApplicationAnUnemployedSends+&\\
+	\gls{par:thetanjasu}&\verb+Context.numberOfJobApplicationAnUnemployedSends+&2&yes\\
 	\hline
 \end{tabular}
 
@@ -2025,7 +2031,7 @@ and send to each of them the curriculum.
 
 If the centralized matching mechanism is involved (cases 1 and 2), unemployed consumers send their curriculum to the labor office.
 
-So, in case 0, unemployed consumers send $\theta_{lm-match}$ curricula, in case 1 they send $\theta_{lm-match}+1$ curricula while in case 2 they send just one curriculum.
+So, in case 0, unemployed consumers send \gls{par:thetanjasu} curricula, in case 1 they send \gls{par:thetanjasu} $+1$ curricula while in case 2 they send just one curriculum.
 
 
 
