@@ -1892,10 +1892,10 @@ In the latter case the cash on hand in excess is deposited in the worst bank acc
 Even though the variety of cases presented is incomplete, it can be used to star reasoning on the supply and demand of production capital.
 
 It is straightforward that entrepreneurs who want to disinvest, i.e. those having \verb+fitmInvestment+ $<0$ are offering their production capital excesses in the used production capital market. 
-The sum of these desired disinvestments is the supply in the existing production capital market. 
-The possibility of existing capital to have market value depends on the possibility that existing production goods can be used by other firms which gives the degree of investment reversibility. The \gls{par:thetadrU} parameter presented above, also tunes investment reversibility. Above, we presented it as the capacity of production capital to preserve its potentiality in time, i.e. its the depreciation rate of unused capital. 
-However it also gives the potentiality of production capital to be employed by other entrepreneur.
-Setting it to zero, the unused production capital preserves it production capacity both in time and across different users. While setting it to 1, production capital that is not used by its initial owner completely looses it production capacity. It thus cannot enter the supply of unused production capital in the next period.  
+However, as we will see in one of the following step, the sum of these desired disinvestments cannot be considered as the supply in the existing production capital market. This is because we have to take into account the possibility of existing production goods to be used by other firms. In other words we have to account for the degree of investment reversibility.
+%The \gls{par:thetadrU} parameter presented above, also tunes investment reversibility. Above, we presented it as the capacity of production capital to preserve its potentiality in time, i.e. its the depreciation rate of unused capital. 
+%However it also gives the potentiality of production capital to be employed by other entrepreneur.
+%Setting it to zero, the unused production capital preserves it production capacity both in time and across different users. While setting it to 1, production capital that is not used by its initial owner completely looses it production capacity. It thus cannot enter the supply of unused production capital in the next period.  
 
 The demand of new production capital is affected by the credit supply.
 At the current state, some firm asked for new credit while other do not. 
@@ -2046,7 +2046,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 In this step, firms that want to increase their production try to hire new workers. At this stage they know the level of production capital that can be achieved given the credit allowed by banks. The attempt here is to line up the workers production capacity to the capital production capacity allowed by banks.
 
-Workers search mechanisms depends on the matching mechanism chosen (the $\theta_{lm-match}$ parameter presented in the previous paragraph).
+Workers search mechanisms depends on the matching mechanism chosen (the \gls{par:thetaLMmatch} parameter presented in the previous paragraph).
 If the decentralized matching mechanism is involved (cases 0 and 1), each firm hires among those who sent the curriculum to it (those who were already hired by other firms are not considered by the firm).
 
 In case 1, the residual vacancies are posted to the labor office, while in case 2, all the vacancies are posted. The Labor office will try to fill the vacancies. 
@@ -2065,12 +2065,23 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/la
 
 \subsubsection{Firms try to adjust their production capital on the market for used production capital}
 
-First of all, a further check on the workers production capacity is done.
-It ca happen that workers production capacity and potential production capital cannot be lined up because of workers shortage. In this case, the capital production capacity, and hence investment demand, is resized to meet the workers production capacity.
+%First of all, a further check on the workers production capacity is done.
+As explained above, it can happen that workers production capacity and potential production capital cannot be lined up because of workers shortage. In this case, the capital production capacity, and hence investment demand, is resized to meet the workers production capacity.
 
-Through the previous steps we show that a number of firms in the economy want to increase their production capital while other have an excess of it.
+After this resizing, the demand of production capital can be finally computed.
+\vskip3mm
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustProductionCapitalAndBankAccount.html}{here}
+\begin{marginfigure}
+	\includegraphics[scale=0.1]{uml.png}
+\end{marginfigure}
 
-In this model, there is a market for exchanging existing unused production capital.
+
+
+
+%Through the previous steps we show that a number of firms in the economy want to increase their production capital while other have an excess of it.
+
+\vskip3mm
+Next, the code check for possible adjustments on the market for exchanging existing unused production capital.
 
 First of all, there is a parameter that transforms unused production capital into reusable production capital.
 This parameter $\in[0,1]$.
@@ -2084,11 +2095,11 @@ The sequence of events in the adjustment of production capital is as follows
 \end{itemize}
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustProductionCapitalAndBankAccount.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeInvestments.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
-
+\vskip3mm
 
 
 The reuse of existing production capital is relevant for credit creation and aggregate demand.
@@ -2113,7 +2124,7 @@ If the demand for investments cannot be completely fulfilled by the reusable pro
 The office for statistics is charged for the  provisioning of such goods. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
 
 \vskip3mm
-The UML sequence diagram of this event is available \href{\doclocation/umldoc/computeInvestments.html}{here} and \href{\doclocation/umldoc/allocateInvestments.html}{here}
+The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateInvestments.html}{here}
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
