@@ -180,6 +180,7 @@ public class Context implements ContextBuilder<Object> {
     	productionOfNewEnteringFirm=(Integer)params.getValue("productionOfNewEnteringFirm");
     	firmsWorkersMatching=(Integer)params.getValue("firmsWorkersMatching");
     	numberOfJobApplicationAnUneployedSends=(Integer)params.getValue("numberOfJobApplicationAnUneployedSends");
+    	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
         
         int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
