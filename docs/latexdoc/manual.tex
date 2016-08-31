@@ -2084,7 +2084,22 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ad
 Next, the code check for possible adjustments on the market for exchanging existing unused production capital.
 
 First of all, there is a parameter that transforms unused production capital into reusable production capital.
-This parameter $\in[0,1]$.
+
+\vskip3mm
+\noindent
+\begin{tabular}{l l l l}
+	\hline
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
+	\hline
+	\hline
+	\gls{par:thetaprupc}&\verb+Context.percentageOfRealized+&&\\
+	&\hskip2cm \verb+UnusedProductionCapital+&0.9&yes\\
+	\hline
+\end{tabular}
+
+\vskip3mm
 
 The sequence of events in the adjustment of production capital is as follows
 \begin{itemize}
