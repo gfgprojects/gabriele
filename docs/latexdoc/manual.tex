@@ -771,7 +771,7 @@ When the production is computed, the sequence of events can progress by entering
 
 The details on the initialization process are given hereafter.
 
-
+\label{pg:inputs1}
 To realize production firms need two production input: capital and labor. We use the following Leontief type production function:
 \begin{equation}
 Y_f=\min(Y_f^{PK},Y_f^{PL})
@@ -1575,7 +1575,10 @@ The upward adjustment is instead more tricky because
 %the joint availability of resources must be checked.
 %Both production capital and labor force are involved in the adjustment. S
 several impediments to reach the desired level of inputs can occur.
-The level of financial resources, including new available credit, can be the first constraint to the inputs increase. The availability of the inputs on the market is a second constraint. Finally, if one of these constraints are binding for one of the inputs, the demand of the others must be adjusted coherently. Inputs shortages deserves additional care by making a distinction between inputs that can be produced and those whose production is not possible or cannot be easily obtained in the short run. In the present version of the model we have two inputs: production capital and labor. We treat production capital as ``producible'' while labor as non producible. So when a production capital shortage is detected, it can be produced to satisfy the shortage. However the model does a preliminary check before new production capital is asked. This check stem from the following consideration.  
+The level of financial resources, including new available credit, can be the first constraint to the inputs increase. The availability of the inputs on the market is a second constraint. Finally, if one of these constraints are binding for one of the inputs, the demand of the others must be adjusted coherently. Inputs shortages deserves additional care by making a distinction between inputs that can be produced and those whose production is not possible or cannot be easily obtained in the short run. 
+
+\label{pg:inputs2}
+In the present version of the model we have two inputs: production capital and labor. We treat production capital as ``producible'' while labor as non producible. So when a production capital shortage is detected, it can be produced to satisfy the shortage. However the model does a preliminary check before new production capital is asked. This check stem from the following consideration.  
 Production capital, as labor, keeps a part of its production power for the future even if it is not employed in a given period. We account for this by including a market for existing unused production capital. So, firms that needs additional production capital, first try to buy already existing production goods that are not used by other firms. Firms that after this adjustment still needs production capital ask for new production goods to other firms. To keep the model simple, we assume that production goods are made up of the same goods available to consumers, so that, at the end, new investments affect the demand on the existing goods markets.
 
 
@@ -2139,9 +2142,14 @@ However, in the second case the first firm buys new production goods and the agg
 
 \subsubsection{Firms that need additional capital ask for new production goods}
 
-If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods. 
+If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods. This gives the demand of a firm directed to other firms:
+\[\textnormal{\gls{var:Dff}}\]
 
-The office for statistics is charged for the  provisioning of such goods. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
+Summig over $f$ we get the aggregate demand of new production goods
+
+\[D_f=\sum_f \textnormal{\gls{var:Dff}}\]
+
+The office for statistics is charged for allocating such source of demand. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateInvestments.html}{here}
@@ -2168,41 +2176,21 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/pe
 
 
 \subsection*{\colorbox{lightgray}{Make production}}
-To realize production firms need two production input: capital and labor.
 
-For each of these two production input we compute the potential production, that is the production that can realize with the current level of the factor provided the other factor is not in short supply.
+Now that firms have performed the possible adjustments on the production capital and labor market, they are ready to perform production.  
 
-The capital potential production is assumed to be equal to the level of capital:
+After the adjustments each firm knows its available production capital (\gls{var:Kf}) and the set of productivities of the workers it hired (\gls{var:psiwf}).  
+
+This allows the computation of both the production capital potential production and the labor force potential production following the equations given in the initialization section (page \pageref{pg:inputs1}):
 \[
-	Y^{PK}_f=K_f
+	Y^{PK}_f=K_f \qquad \textnormal{and} \qquad	Y^{PL}_f=\theta_{YL}\sum_{w}\psi_{w,f}
 \]
 
-The potential production of labor is more tricky because workers are heterogeneous and has different productivities.
-If we identify a worker's productivity with $wp_{w,f}$, we compute the sum of workers productivities
-\[
-	wp_f=\sum_{w}wp_{w,f}
-\]
-the potential production is thus
-\[
-	Y^{PL}_f=\theta_{YL}wp_f
-\]
-finally, the firm output output is given by the Leontief type production function
+Finally, the firm output is computed using the Leontief type production function (equation \ref{eq:production_function}):
 \[
 Y_f=\min(Y^{PK},Y^{PL})
 \]
 
-Involved parameter:
-
-\begin{tabular}{l l l}
-	\hline
-	in papers& in code&value\\
-	\hline
-	\hline
-$\theta_{YL}$&\verb+parameterOfProductivityInProductionFuncion+&100\\
-	\hline
-\end{tabular}
-
-\vskip2mm
 Now, we know that the demand for investment goods \gls{var:Dfjf} is satisfied in full before that of consumers. We can think investments products are ordered, and the market for these goods always cleans: \gls{var:Dfjf} $=$ \gls{var:Yfjf}. This allows us to compute the supply of consumption goods:
 \[
 	\textnormal{\gls{var:Yfjc}}=\textnormal{\gls{var:Yfj}}-\textnormal{\gls{var:Yfjf}}
