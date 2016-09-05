@@ -106,34 +106,35 @@
 \part{Setting up GABRIELE}
 
 
-In this part of the manual we describe two ways of setting up for running the model. The first one is the standard way where one can take advantage of various wizards to set up and running the model. Although this provides several facilities, some user could feel uncomfortable with this standard process and would like to revert to a more basic process. The streamlined installation is for these users. It behooves to point out that the streamlined process was especially designed for running the model in the local machine and in batch mode. Therefore, funs of the Unix like command line interface will particularly enjoy it. To help clarifying, it is worth to say that the streamlined procedure was developed to avoid the slowness of the wizards when continuously checking the effects of introducing new lines of code. It allows to run the model from the command line by typing two keys (i.e arrow up key - to recall the execution command, and the enter key). 
+In this part of the manual we describe two ways of setting up for running simulations. The first one is the standard Repast procedure, where one can take advantage of various wizards to set up and running simulations. Although this provides several facilities, some user could feel uncomfortable with this standard process and would like to revert to a more basic procedure. The streamlined installation is for these users. It behooves to point out that the streamlined procedure was especially designed for running the model in the local machine and in batch mode. Therefore, funs of the Unix like command line interface will appreciate it. To help clarifying, it is worth to say that the streamlined procedure was developed to avoid the slowness of the wizards when continuously checking the effects of introducing new lines of code. It allows to run the model from the command line by typing two keys (i.e arrow up key - to recall the execution command, and the enter key). 
+%An efficient way to process is thus to use the streamlined procedure during the development phase and for local simulation. 
+
 
 \chapter{Standard Installation}
 \section{Installation}
 
-In this section we describe the standard installation process needed to prepare the system to run the model. After taking the steps described below, the user should be able to run the model regardless of the operative system s/he is using.
+In this section we describe the standard installation process needed to prepare the system to run simulations. After taking the steps described below, the user should be able to run the model regardless of the operative system s/he is using.
 
 The model needs Repast Symphony (RS), who in turn needs the Java Development Kit (JDK). Therefore we need first to check if the JDK is installed in the system and install it if needed. Once JDK is properly running, we have to install RS. Finally the model can be installed and run in RS.
 
 \subsection{Java Development Kit (JDK)}
 
-Check in the list of installed software if JDK is installed in your system. If yes, note the JDK version.
+Check the list of installed software to know if JDK is installed in your system. If yes, note the JDK version.
+Alternatively, you can open the command line interface of your system, type \verb+javac -version+ and hit the return key. 
 
-The fastest way to check all this is to open the command line interface of your system, type \verb+javac -version+ and hit the return key. 
+Once verified if JDK is installed and, if yes, its version, visit the following URL:\\
+\url{http://www.oracle.com/technetwork/java/javase/downloads/index.html}\\
+to know which is latest released version of JDK.
 
-Once verified if JDK is installed and, if yes, its version, visit the following url\\
-http://www.oracle.com/technetwork/java/javase/downloads/index.html\\
-to check the leatest released version of JDK.
+If JDK is not installed in your system or if it is not at the latest release, follow the instruction found in the JDK download page to install or upgrade it. You can also search the internet for alternative ways to install or upgrade the JDK on your system.
 
-If JDK is not installed in your system or it is not at the latest release, follow the instruction found in the JDK download page to install or upgrade it. You can also search the internet for alternative ways to install or upgrade the JDK on your system.
-
-This installation phase is completed when the \verb+javac -version+ command returns what you expect.
-If not, you should fist check if the folder containing the JDK executables are in your execution path. If not, it must be added manually.
+This installation phase is complete when the \verb+javac -version+ command returns what you expect.
+If not, you should fist check if the folder containing the JDK executables are in your execution path and add it manually if needed.
 Furthermore, some Linux distribution must be informed on which JDK to use using the \verb+update-alternatives+ command. 
 
 \subsection{Repast Simphony (RS)}
 
-The Repast suite website: http://repast.sourceforge.net has all the information needed to download and install RS.
+The Repast suite website: \url{http://repast.sourceforge.net} has all the information needed to download and install RS.
 
 Note that RS is provided as a plugin of the eclipse Integrated Development Environment. The Repast development team provides a customized version of eclipse, so you could encounter problems with already installed versions of eclipse. Note that the streamlined installation provided below show how to avoid using eclipse.
 
@@ -148,12 +149,13 @@ Suppose your workspace has the following path:\\
 
 Open the RS perspective (window $\rightarrow$ open perspective).
 
-Create a new RS project called grabriele (file $\rightarrow$ new $\rightarrow$ Repast Simphony project)
+Create a new RS project called GABRIELE (file $\rightarrow$ new $\rightarrow$ Repast Simphony project)
 
 This creates the \verb+gabriele+ folder and a series of sub folders inside the workspace:
 
-The following figure show how the gabriele RS project folders tree.
+The following figure show the GABRIELE RS project folders tree.
 
+\vskip2mm
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_navigation}
 
@@ -171,6 +173,7 @@ The following figure show how the gabriele RS project folders tree.
 \fi
 %Now, the source code of the \verb+gabriele+ package and the parameters file have to be added to the gabriele project.
 
+\vskip2mm
 Now, the GABRIELE files have to be added to the just created RS project folders tree.
 
 We give here two alternatives: via git and using a zipped archive.
@@ -179,7 +182,7 @@ We give here two alternatives: via git and using a zipped archive.
 
 As you probably know, this is the best option to share the code developments you will do.
 
-So, let us show how to fetch the GABRIELE files via git. To do that you must have a git client installed in your system. Many system comes with a git client already installed, otherwise you have to install it. Mac and windows users can consider to install the GitHub Desktop software.
+So, let us show how to fetch the GABRIELE files via git. To do that, you must have a git client installed in your system. Many system comes with a git client already installed, otherwise you have to install it. Mac and windows users can consider to install the GitHub Desktop software.
 
 You can verify if git is installed in your system by checking if your command line interface recognize the \verb+git+ command.  
 If your check is successful, change directory to the gabriele project folder:\\
@@ -200,9 +203,11 @@ Refresh the gabriele RS project with the navigation tab selected in the side bar
 
 The following figure show how the src sub folders should look like.
 
+\vskip2mm
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_navigation1}
 
+\vskip2mm
 
 \subsubsection{Using a zip archive}
 
@@ -212,11 +217,10 @@ Click on the ``clone or download'' button and choose ``download zip''.
 
 This will download the \verb+gabriele-master.zip+ file in your system.
 
-Unpacking it, the gabriele-master folder is created.
+Unpacking it creates the gabriele-master folder.
 Move the whole content of this folder in the gabriele RS project folder:\\  
 \verb+/Users/coolcoder/Documents/workspace/gabriele/+\\
-if your procedure asks about what should be done with existing files and folder, choose to overwrite them (merging the folders). 
-
+Choose to overwrite existing files and folders if you will be asked (this will merge folders). 
 \iffalse
 At the end of this process one must have
 
@@ -242,8 +246,6 @@ Finally you have to overwrite the \verb+parameter.xml+ file already present in\\
 \verb+/Users/coolcoder/Documents/workspace/gabriele/gabriele.rs+\\
 with that supplied with \verb+gabriele+.
 \fi
-
-
 Now refresh eclipse (file $\rightarrow$ refresh).
 
 
@@ -262,12 +264,12 @@ After clicking, a menu opens as shown by the following figure. Click the \verb+g
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_execution2}
 
-After a while, the RS GUI displayed in the following figure will show up
+After a while, the RS GUI (displayed in the following figure) will show up
 
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_gui1}
 
-The first time you start the RS GUI with the GABRIELE scenario you have to setup the custom dataloader. As you can see in the scenario tree under the Data Loades item the XML \& Model data loader is present. This must be changed in the custom loader for this model. To do so right click on the Data loaders item and choose set Data Loader as shown in the following figures
+The first time you start the RS GUI with the GABRIELE scenario you have to setup the custom dataloader. As you can see in the scenario tree under the Data Loaders item, the XML \& Model data loader is present. This must be changed in the custom loader for this model. To do so right click on the Data loaders item and choose set Data Loader as shown in the following figures
 
 
 \noindent
@@ -310,21 +312,24 @@ Click on the floppy disk icon to make the changes permanent.
 
 There are two ways of running RS models: The GUI and the BATCH mode.
 
-The GUI mode can be of great visual impact because several monitoring devices continuously updating during runtime can be added to the RS GUI window. The flip side of the coin is that these devices slow down simulation execution. Second, the simulation runs exclusively in a machine running an X server. Notwithstanding the GUI mode can be a valid tool during the model development, when massive simulations are performed, the BATCH mode should be used. BATCH mode runs are faster because all the graphics elements are turned off. Furthermore, the absence of graphics makes it possible to run the model in parallel on several machines. It is worth saying that RS has very useful facilities for running a model in parallel.
+The GUI mode can be of great visual impact because several monitoring devices continuously updating during runtime can be added to the RS GUI window. The flip side of the coin is that these devices slow down simulation execution. Second, the simulation runs exclusively in a machine running an X server. Notwithstanding the GUI mode can be a valid tool during the model development, when massive simulations are performed, the BATCH mode should be used instead. BATCH mode runs are faster because all the graphics elements are turned off. Furthermore, the absence of graphics makes it possible to run the model in parallel on several machines. It is worth saying that RS has very useful facilities for running a model in parallel.
 
 
 Let us start this section from the very beginning i.e. with the eclipse software just opened and show how to run the model both in GUI and BATCH mode.
 
 First of all, click on the down black arrow highlighted by the red circle in the following picture
 
+\vskip2mm
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_execution1}
 
 After clicking, a menu opens as shown by the following figure. 
 
+\vskip2mm
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_execution2}
 
+\vskip2mm
 The GUI execution is activated by clicking the \verb+gabriele Model+ item, while the BATCH execution can be started by clicking the \verb+Batch gabriele model+.
 
 
@@ -336,10 +341,12 @@ Use the RS GUI window intuitive buttons to interact with the simulation. A more 
 
 The current version of the model has no runtime monitoring graphical element, so one can check the progress of the simulation watching at the tick count number in upper right corner of the RS GUI window or looking at the text output in the console panel of Eclipse window as shown in the following figure. 
 
+\vskip2mm
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_gui7}
 
-On the other hand, GABRIELE record data in text and csv files. So, running the model they will be added to the model base directory\\
+\vskip2mm
+On the other hand, GABRIELE record data in text and csv files. So, running the model they will be added to the model base directory:\\
 \verb+/Users/coolcoder/Documents/workspace/gabriele+\\
 Data files can be easily identified because their name starts with \verb+zdata+.
 
@@ -362,7 +369,7 @@ We only point out that the present version of the model uses custom output recor
 \includegraphics[scale=0.35]{fig_gabriele_rs_batch}
 
 This configuration instructs RS to fetch from all the machines running the model in parallel all the file whose name begins with \verb+zdata+  and move them in an output sub-folder named 
-\verb+batch_date+. Needless to say that the sub-folder name can be chosen at your convenience, and it can be changed at each batch run in order to avoid overwriting the data.
+\verb+batch_date+. Needless to say that the sub-folder name can be chosen at your convenience, and it can be changed at each batch run in order to avoid overwriting the data (perhaps you want to have memory of the time of your runs. It is why we add \verb+_date+ to the folder name.
 
 
 The following figure shows the contents of the model output folder after a local batch run using Eclipse navigator panel\\ 
@@ -386,20 +393,20 @@ The following colors are used:\\
 \subsection{Java Development Kit (JDK)}
 Follow the instructions given in the previous chapter to install or update JDK if needed. 
 \subsection{Repast Simphony (RS)}
-Also in this case, you can follow the instructions given in the previous chapter. However, the process therein described implies the installation of eclipse. We will give here an alternative way to install the repast library and using it directly.
+Also in this case, you can follow the instructions given in the previous chapter. However, the process therein described implies the installation of eclipse. We will give here an alternative way to install the RS library and using it directly.
 
-First of all you have to download all the packages which make up the repast symphony library.\footnote{Note that the installation process described in RS web site implies downloading the RS library and put them in the eclipse plugins folder.}
+First of all you have to download all the packages which make up the RS library.\footnote{Note that the installation process described in RS web site implies downloading the RS library and put them in the eclipse plugins folder.}
 
 You can download all the jars by using the \verb+wget+ command with the recursion option (\verb+-r+).\footnote{If the command is not available in your system you have to install it.}
 
-To install repast, make the following steps.
+The following steps have to be taken to install RS.
 
 Suppose, for example, you have the directory \verb+/Users/coolcoder/abm_java_libraries+. Create the directory\\
 \verb+mkdir repast+\\
 inside this directory an move into it\\
 \verb+cd repast+\\
 
-Download the files from the Repast update site\\
+Download the files from the RS repository\\
 %\verb+wget -r http://mirror.anl.gov/repastsimphony/plugins/+\\
 \verb+wget -r -l1 --no-parent -nd --no-check-certificate +\\
 \verb+             https://repo.anl-external.org/repos/repast/plugins/+\\
@@ -418,9 +425,11 @@ Remove all the jar files by typing:\\
 Now the RS library is installed in your system and is ready to be used.
 To test your installation type the command:\\
 \begin{verbatim}
-java -cp /Users/coolcoder/abm_java_libraries/repast/repast.simphony.runtime_<version>/lib/*:
-         /Users/coolcoder/abm_java_libraries/repast/repast.simphony.runtime_<version>/bin 
-	  repast.simphony.runtime.RepastMain
+java -cp /Users/coolcoder/abm_java_libraries/
+               repast/repast.simphony.runtime_<version>/lib/*:
+         /Users/coolcoder/abm_java_libraries/
+               repast/repast.simphony.runtime_<version>/bin 
+         repast.simphony.runtime.RepastMain
 \end{verbatim}
 where you have to replace \verb+<version>+ with the version identification number (for example \verb+2.3.0+).
 
@@ -662,7 +671,7 @@ while single-instance agents are:
 	\item Office for statistics
 \end{itemize}
 
-Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights the institutional sectors in gray.
+Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government to these three sectors, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights the institutional sectors in gray.
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c1-0.pdf}
 	\caption{Components of the economic system: institutional sectors and other single-instance agents.}
