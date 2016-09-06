@@ -711,17 +711,17 @@ These items are exchanged in the relative markets. They are highlighted in gray 
 
 The model allows for product differentiation. It concerns consumption products. We have signaled this possibility by indexing the products in the goods market.
 
-Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are included in the firms balance sheet. Production capital used in the production process gradually depreciates. It can happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
-Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm ask for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought the researcher can decide to make it happen at a different rate than the production capital employed in the production.
+Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are accounted as assets in the firms balance sheet. Production capital used in the production process gradually depreciates. It can happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
+Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm asks for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought the researcher can decide to make it happen at a different rate than the production capital employed in the production.
 
 Finally, to realize the production, labor is needed.  The labor market completes set of real markets of this model.  
 
-
+More details on the implementation of these processes are given in the next part of the manual.
 
 \clearpage
 \section{Financial assets}
 
-In the previous section we have identified the type of goods in our model. The identification and specification of financial products to be included in the model has the same importance and is performed in this section. 
+In the previous section we have identified the type of goods in our model. The identification and specification of financial products to be included in the model are equally important and are performed in this section. 
 
 In the present version of the model, we include the financial contract which is the cornerstone of nowadays financial systems: the bank account.
 
@@ -736,7 +736,7 @@ Financial exchanges are thus performed in the credit market (highlighted in gray
 	\label{fig:componentsc3}
 \end{figure}
 
-Considering additional financial contracts, and therefore adding to the model other financial markets, is a goal for the near future to let the model gradually approach the reality of nowadays financial markets.
+Considering additional financial contracts, and therefore adding to the model other financial markets, is a goal for the near future. This enrichment will allow the model gradually approach the reality of nowadays financial markets.
 
 
 
@@ -771,10 +771,10 @@ The initialization and the main loop are detailed in the following subsections.
 
 \clearpage
 \section{Initialization}\label{sec:initialization}
-The initialization phase allow firms to determine their initial production reducing exogenous setting to the minimum. 
+The initialization phase allows firms to determine their initial production. % reducing exogenous setting to the minimum. 
 
-When the production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a stock flow consistent way.\begin{marginfigure}
-	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+When the initial level of production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a consistent way.\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
 
