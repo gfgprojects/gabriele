@@ -786,7 +786,7 @@ To realize production firms need two production input: capital and labor. We use
 Y_f=\min(Y_f^{PK},Y_f^{PL})
 	\label{eq:production_function}
 \end{equation}
-That is, production realized by firm $f$, \gls{var:Yf}, is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, \gls{var:YPKf}, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, \gls{var:YPLf}. 
+According to this function, production realized by firm $f$, \gls{var:Yf}, is the minimum between the potential production that can be realized with the outstanding production capital without labor constraints, \gls{var:YPKf}, and the potential production that can be obtained by the labor force employed by the firm without capital constraint, \gls{var:YPLf}. 
 
 
 The capital potential production is assumed to be equal to the level of capital (\gls{var:Kf}):
@@ -794,15 +794,12 @@ The capital potential production is assumed to be equal to the level of capital 
 	Y^{PK}_f=K_f
 \]
 
-The potential production of labor is more tricky because workers are heterogeneous and has different productivities.
-If we identify a worker's productivity with \gls{var:psiwf}, we compute the sum of workers productivities, \gls{var:psif},
+Computing the potential production of labor is more tricky because workers are heterogeneous and have different productivities. 
+We will explain in details how workers' productivities are set in the next section when the consumers initialization will be discussed. For now, it is enough to know that it is heterogeneous and that it will be identified with \gls{var:psiwf}.  To compute the potential production of the workforce employed in a firm, the sum of workers productivities is first computed:
 \[
-	\psi_f=\sum_{w}\psi_{w,f}
+	\psi_f=\sum_{w \ \textnormal{in} \ f}\psi_{w,f}
 \]
-the potential production is thus
-\[
-	Y^{PL}_f=\theta_{YL}\psi_f
-\]
+Then, we introduce the following\\ 
 parameter:\\
 \begin{tabular}{l l l l}
 	\hline
@@ -816,13 +813,25 @@ parameter:\\
 \end{tabular}
 
 \vskip5mm
-To arrive at the very first $Y_f$ we adopt the following strategy. 
+
+The potential production of labor is finally computed as:
+\[
+	Y^{PL}_f=\theta_{YL}\psi_f.
+\]
+
+
+
+
+To arrive at the very first $Y_f$,  several preliminary steps, such as initializing the working state of each consumer, are needed. Some of these steps call for additional operations such as setting up the various agents balance sheets and checking for their consistency.
+In the remainder of this section we sketch the process, while more details will be given in the following sections.
+
+We adopt the following strategy: 
 \begin{itemize}
 	\item compute the potential output from workers
 	\item adjust capital such as the potential output from capital is equal to the potential output from workers 
 \end{itemize}
 
-Note how the first step implies a preliminary setup of household working state, while the second step allows the setup of firms assets balance sheet item. 
+As already mentioned, the first step implies a preliminary setup of household working state. The second step, instead, allows the setup of firms assets balance sheet item. 
 
 Knowing firms balance sheet assets we set the liabilities in such a way that the balance sheet identity is satisfied.
 
@@ -832,18 +841,19 @@ Once the amount of households' and firms banks accounts are known, we setup bank
 
 So the whole initialization sequence has the following phases:
 \begin{enumerate}
-	\item Create agents
-	\item set consumers working state
-	\item set agents balance sheet
-	\item revise agents balance sheet for stock consistency\begin{marginfigure}
-	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+	\item create agents;
+	\item set consumers working state;
+	\item compute each firm labor potential production and set the production capital to a level that allows a potential production equal to that of labor;
+	\item set agents balance sheet;
+	\item revise agents balance sheet for stock consistency.\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
 \end{enumerate}
 
-These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document those more demanding methods by using UML activity diagrams.
+These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document the above mentioned phases by using UML activity diagrams.
 
-We will now discuss the initialization for each type of agent.
+However, before looking at the technical documentation, some readers will probably have a look at the following sections where we discuss deeply the initialization for each type of agent.
 
 \subsection{Consumers initialization}
 
