@@ -853,7 +853,7 @@ So the whole initialization sequence has the following phases:
 
 These phases are explained in details in the \href{\doclocation/index_initialization.html}{technical documentation}. There, we present the steps taken for initializing the model in a sequential order. We also document the above mentioned phases by using UML activity diagrams.
 
-However, before looking at the technical documentation, some readers will probably have a look at the following sections where we discuss deeply the initialization for each type of agent.
+Readers that would not delve into the technical documentation at this point can progress to the following sections where we discuss deeply the initialization for each type of agent.
 
 \subsection{Consumers initialization}
 
@@ -863,13 +863,13 @@ However, before looking at the technical documentation, some readers will probab
 \subsubsection*{Students}
 \label{pref:tudentevolution}
 
-In an attempt to reduce the number of parameters to the minimum, it is assumed that each worker is characterized by its fundamental ability. It characterizes each consumer performance during the education period. The latter in turn determine the productivity as a worker.
+Each worker is characterized by its fundamental ability. It characterizes each consumer performance during the education period. The latter in turn determine the productivity as a worker.
 
 We call this parameter the ability (as) student and denote it \gls{par:thetaas}. We set it during initialization by drawing from a uniform distribution \gls{par:Thetaas}:
 \[
 	\Theta_{as}\sim U(\theta_{minas},\theta_{maxas})
 \]
-having the following parameters:\\
+The following parameters are thus used:\\
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -885,8 +885,10 @@ having the following parameters:\\
 \vskip5mm
 The most important observation about this parameter is that its upper value is 0.5.
 
-Next important variable is the consumers age, which is initialized as a random number between zero and a parameter denoting the retirement age.\\
-parameter:\\
+Another important variable is the consumers age, which is initialized as a random number between zero and the parameter \gls{par:thetacea} denoting the retirement age:\\
+
+\vskip2mm
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -907,6 +909,8 @@ and unsuccessful otherwise.  Note that best students has $\theta_{c,as}=0.5$, so
 
 To initialize the education history we use the following\\ 
 parameters:\\
+
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -936,23 +940,26 @@ When the process is stopped by conditions 1 or 2, the consumer state is set to n
 
 The degree of education is assigned as follows:
 \[
-	\begin{array}{l l l}
-		n_{c,sye}& \textnormal{degree}& \textnormal{degree id}\\
-	0\le n_{c,sye}<5 & \textnormal{none}&0\\
-	5\le n_{c,sye}<8 & \textnormal{elementary}&1\\
-	8\le n_{c,sye}<13 & \textnormal{intermediate}&2\\
-	13\le n_{c,sye}<16 & \textnormal{college}&3\\
-	16\le n_{c,sye}<18 & \textnormal{bachelor}&4\\
-	18\le n_{c,sye}<21 & \textnormal{master}&5\\
-	21= n_{c,sye} & \textnormal{PhD degree}&6
-	\end{array}
+	\begin{tabular}{l l l}
+	\hline
+	$n_{c,sye}$& \textnormal{degree}& \textnormal{degree id}\\
+	\hline
+	$0\le n_{c,sye}<5$ & \textnormal{none}&0\\
+	$5\le n_{c,sye}<8$ & \textnormal{elementary}&1\\
+	$8\le n_{c,sye}<13$ & \textnormal{intermediate}&2\\
+	$13\le n_{c,sye}<16$ & \textnormal{college}&3\\
+	$16\le n_{c,sye}<18$ & \textnormal{bachelor}&4\\
+	$18\le n_{c,sye}<21$ & \textnormal{master}&5\\
+	$21= n_{c,sye}$ & \textnormal{PhD degree}&6\\
+	\hline
+	\end{tabular}
 \]
 
-The productivity is assigned as follows. Each year of education increases the consumers ability by a fixed amount. So, the productivity assigned to a non worker \gls{var:psic} with \gls{var:nsye} successful year of education is
+The productivity is assigned as follows. Each year of education increases the consumers ability by a fixed amount. So, the productivity (\gls{var:psic}) assigned to a consumer  with \gls{var:nsye} successful year of education is
 \[
 	\psi_c=\theta_{c,as}+0.5\frac{n_{c,sye}}{\theta_{mnpe}}
 \]
-Note that $\theta_{c,as}=0.5$ implies $n_{c,sye}=\theta_{mnpe}$ so that $\psi_c=1$.
+Note that \gls{par:thetaas} $=0.5$ implies $n_{c,sye}=$ \gls{par:thetamnpe} so that $\psi_c=1$.
 
 Once the productivity of a non student is known, we compute his/her potential production \gls{var:YPc} as the product of \gls{par:thetaYL} and \gls{var:psic}: 
 \[Y^{P}_c=\theta_{YL}\psi_c\]
@@ -963,8 +970,10 @@ The education history initialization is stopped by condition 3 when the consumer
 
 At this stage all non students are unemployed. Now, some of them will be employed by firms. 
 
-To perform this task we introduce the following\\
-parameter:\\
+To perform this task we introduce the following parameter:
+
+\vskip2mm
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -972,11 +981,12 @@ parameter:\\
 	in equations& in code&value&file\\
 	\hline
 	\hline
-	\gls{par:thetaptbub}&\verb+Context.probabilityToBeUnemployedAtTheBeginning+&$0.2$&yes\\
+	\gls{par:thetaptbub}&\verb+Context.probabilityToBe+&&\\
+	&\hskip2cm\verb+UnemployedAtTheBeginning+&$0.2$&yes\\
 	\hline
 \end{tabular}
 
-\vskip5mm
+\vskip2mm
 With probability $1-\theta_{ptbub}$, each non student selects a firm randomly and send his/her CV to this firm. Subjects who do not send a CV (this happens with probability $\theta_{ptbub}$) enter the main loop in the unemployment state. 
 
 \subsubsection{Initializing consumers bank account}
@@ -999,22 +1009,21 @@ The involved parameters are:\\
 
 \vskip5mm
 
-Each consumer select randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of the bank account the code drawn a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the demandedCredit variable (it will managed when the bank account will be setup). Non negative number are assigner to the bank account amount.
+Each consumer selects randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of each bank account the code draw a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the \verb+demandedCredit+ variable (it will managed later in the initialization process). Non negative number are assigner to the bank account amount.
 
-The amount will be revised in the final step of the initialization to ensure stock consistency.\begin{marginfigure}
-	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+However, the amount of the various bank accounts will be revised in the final step of the initialization to ensure all the agents' balance sheet consistency.\begin{marginfigure}
+	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
 
 \subsection{Firms initialization}
 \subsubsection{Potential production of labor}
 In the consumers initialization we saw that some non student sent their CV to firms.
-
-Each Firm now has a list of CVs. Each firm employs all the senders of the CVs that are in the received CVs list. The CV senders state is switched from unemployed to employed.
+So, each firm now has a list of CVs. Each firm employs all the senders of the CVs that are in the received CVs list. The CV senders state is switched from unemployed to employed.
 
 As already explained at the beginning of this section, the firm determines the potential production of its labor force (\gls{var:psif}) by summing the potential production of each employee (\gls{var:psiwf}):
 \[
-	\psi_f=\sum_{w}\psi_{w,f}
+	\psi_f=\sum_{w \ \textnormal{in} \ f}\psi_{w,f}
 \]
 the potential production is thus
 \[
@@ -1028,7 +1037,7 @@ So, the initial level of capital (\gls{var:Kf}) for each firm is set to
 \[
 K_f=Y^{PL}_f
 \]
-\subsubsection{Balance sheet}
+\subsubsection{Initialization of the firm balance sheet}
 
 In the previous step we set up the assets side of the firms balance sheet.
 
