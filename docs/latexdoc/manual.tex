@@ -1037,14 +1037,20 @@ So, the initial level of capital (\gls{var:Kf}) for each firm is set to
 \[
 K_f=Y^{PL}_f
 \]
-\subsubsection{Initialization of the firm balance sheet}
 
-In the previous step we set up the assets side of the firms balance sheet.
+\subsubsection{The level of production}
+
+Now that the levels of both production inputs are known, the production made by each firm is computed by  using the production function (equation (\ref{eq:production_function})).
+
+\subsubsection{Initialization of firms balance sheet}
+
+In the previous step we set up the assets side of the firms balance sheet that is equal to the production capital.
 
 As explained above, we have two liabilities: equity and bank account. We set up equity and determine the bank account residually.
 
-To setup equity we use the following\\
-parameters:\\
+To setup equity we use the following parameters:
+
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -1070,8 +1076,11 @@ B_f=K_f-E_f
 \]
 
 As specified above, debt is obtained through bank accounts.
-In this version of the model a firm is be costumer of a number of banks given by the following\\
-parameter:\\
+In this version of the model a firm is costumer of a number of banks given by the following\\
+parameter:
+
+\vskip2mm
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -1083,8 +1092,8 @@ parameter:\\
 	\hline
 \end{tabular}
 
-\vskip5mm
-each firm selects randomly a number of banks equal to \gls{par:thetanbfc} and open a bank account in each of them. The amount of the bank account (\gls{var:BAfb}) is set to
+\vskip2mm
+Each firm selects randomly a number of banks equal to \gls{par:thetanbfc} and open a bank account in each of them. The amount of the bank account (\gls{var:BAfb}) is set to
 %zero (will be assigned in the next step when the bank balance sheet will be initialized), but the variable demanded credit in each bank account is set to:
 \[
 	BA_{fb}=-\frac{B_f}{\theta_{nbfc}}
@@ -1124,25 +1133,25 @@ where $u_{Eb}$ is drawn from $U(\theta_{minbieb},\theta_{maxbieb})$.
 
 Now, the level of deposits (\gls{var:Db}) compatible with the balance sheet relationship is computed:
 \[
-D_b=L_b-E_b
+Dep_b=L_b-E_b
 \]
 
 Due to the random elements in the initialization of consumers and firms, we usually have
 \[
-	\sum BA^+_{cb} \neq D_b
+	\sum BA^+_{cb} \neq Dep_b
 \]
-note that only consumers' deposits are considered because firms have no deposits at initialization.
+note that only consumers' positive bank accounts are considered because firms have no deposits at initialization.
 
 To satisfy the balance sheet identity, the amount of each positive bank account is adjusted as follows:
 \[
-	BA^{+}_{cb}=BA^+_{cb}\frac{D_b}{\sum BA^+_{cb}}
+	BA^{+}_{cb}=BA^+_{cb}\frac{Dep_b}{\sum BA^+_{cb}}
 \]
 In this way, stock consistency in each bank balance sheet is restored:\begin{marginfigure}
-	\hskip1cm\includegraphics[scale=1.0]{sfc_logo-0.pdf}
+	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
 \[
-	\sum BA^{+}_{cb}=D_b
+	\sum BA^{+}_{cb}=Dep_b
 \]
 
 \newpage
