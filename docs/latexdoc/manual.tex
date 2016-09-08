@@ -1040,7 +1040,7 @@ K_f=Y^{PL}_f
 
 \subsubsection{The level of production}
 
-Now that the levels of both production inputs are known, the production made by each firm is computed by  using the production function (equation (\ref{eq:production_function})).
+Now that the levels of both production inputs are known, the production made by each firm is computed by using equation (\ref{eq:production_function}).
 
 \subsubsection{Initialization of firms balance sheet}
 
@@ -1153,6 +1153,26 @@ In this way, stock consistency in each bank balance sheet is restored:\begin{mar
 \[
 	\sum BA^{+}_{cb}=Dep_b
 \]
+\subsection{Conclusions}
+
+At the end of the initialization phase, all the consumers know if they are student, employed or unemployed. Non students know their level of productivity. Employed know in which firm they are working.
+
+Firms knows their employees and the level of their production capital. The supply of goods is thus computed.
+
+All the agents are also endowed with a balance sheet. We think it useful to look at the following figure which gives a visual representation of the balance sheet at the sector level. 
+The notation is similar to that used above, but we have used capital letters in lower scripts to denote sectors. So, $F$ denotes the production sector, $B$ the banking sector and $C$ the consumers sector. 
+
+\begin{figure}[htp]
+	\centering
+\includegraphics[scale=0.7]{manual_balances-0.pdf}
+	\caption{balance sheets of the various sectors and their relationship}
+	\label{fig:balances}
+\end{figure}
+
+The figure also highlights the coherence of the balance sheets and what this coherence implies. As one can easily check, the net wealth of the consumers sector ($NW_C$) is equal to production capital ($K_F$). Second, the figure shows that equities of banks and firms make up consumers wealth together with the more straightforward item represented by deposits. 
+
+We pointed out above that the bank account is the sole financial contract in this model. The accounting is thus performed at the individual level for the wealth stored in bank accounts. Equities are not represented by shares, thus we have not a measure of individual wealth hold in shares. The amount of wealth that is represented by equity is computed at the aggregate level. This represent a variable that consumers can take into account when taking decisions.   
+
 
 \newpage
 \section{The main loop}\label{sec:mainloop}
