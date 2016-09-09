@@ -1160,7 +1160,7 @@ At the end of the initialization phase, all the consumers know if they are stude
 Firms knows their employees and the level of their production capital. The supply of goods is thus computed.
 
 All the agents are also endowed with a balance sheet. We think it useful to look at the following figure which gives a visual representation of the balance sheet at the sector level. 
-The notation is similar to that used above, but we have used capital letters in lower scripts to denote sectors. So, $F$ denotes the production sector, $B$ the banking sector and $C$ the consumers sector. 
+The notation is similar to that used above, but capital letters in lower scripts are used to denote sectors. So, $F$ denotes the production sector, $B$ the banking sector and $C$ the consumers sector. 
 
 \begin{figure}[htp]
 	\centering
@@ -1171,8 +1171,11 @@ The notation is similar to that used above, but we have used capital letters in 
 
 The figure also highlights the coherence of the balance sheets and what this coherence implies. As one can easily check, the net wealth of the consumers sector ($NW_C$) is equal to production capital ($K_F$). Second, the figure shows that equities of banks and firms make up consumers wealth together with the more straightforward item represented by deposits. 
 
-We pointed out above that the bank account is the sole financial contract in this model. The accounting is thus performed at the individual level for the wealth stored in bank accounts. Equities are not represented by shares, thus we have not a measure of individual wealth hold in shares. The amount of wealth that is represented by equity is computed at the aggregate level. This represent a variable that consumers can take into account when taking decisions.   
+We pointed out above that the bank account is the sole financial contract in this model. The accounting is thus performed at the individual level for the wealth stored in bank accounts. Equities are not represented by shares, thus we have not a measure of individual wealth hold in shares. The amount of wealth that is represented by equity is computed at the aggregate level. These aggregate variables could be taken into account by consumers when taking decisions.   
 
+\subsection{Technical documentation}
+
+People who need more details can fint them in the \href{\doclocation/index_initialization.html}{technical documentation}.
 
 \newpage
 \section{The main loop}\label{sec:mainloop}
@@ -1194,6 +1197,7 @@ The parts of the main cycle where these two processes develop are highlighted wi
 %\subsection{Consumer-market-bank relationship}
 We present here the sequence of events and will enter in the details of each item in the following subsections.
 
+The reader can easily check the correspondence between the numbering of events in figure \ref{fig:clockcolor} and that in the following list. The sequence of events is the following:
 \begin{enumerate}
 	\item consumers receive income: wage if employed and dole if unemployed;
 	\item banks 
@@ -1206,13 +1210,15 @@ We present here the sequence of events and will enter in the details of each ite
 	\item consumers compute desired consumption and ask for credit in order to achieve the desired level 
 	\item banks decide how much credit to allow;
 	\item Allowed consumption is computed: consumers adjust their desired consumption according to allowed credit. 
-	\item Goods markets open: Office for statistics helps finding goods.
+	\item Goods markets open: Office for statistics allocate demand
+	\item Office for statistic satisfies unsatisfied demand if possible.
 	\item The \textit{effective} level of consumption is established: it may be less or equal to the allowed consumption.
 	\item consumers adjust their bank accounts (deposits and loans) according to effective consumption.
 \end{enumerate}
 
-As for the initialization, these phases are explained in details in the \href{\doclocation/index_loop.html}{technical documentation}.
-We will now enter into details of each event.
+As for the initialization, these phases are explained in details in the \href{\doclocation/index_loop.html}{technical documentation}. There, we present the steps of the main loop in a sequential order and each step is detailed by means of an UML activity diagrams.
+
+We will present hereafter the steps in less schematic more verbal way. In any case, the UML diagrams can be visualized by a link provided at the end of each paragraph.
 
 \subsubsection{Consumers receive wages}
 
@@ -1246,13 +1252,12 @@ where:\\
 Three possibilities for $f(\psi)$ are presently implemented:
 \begin{enumerate}
 	\item $f(\psi)$ is the worker's productivity;
-	\item $f(\psi)$ is average productivity of workers having the worker's degree in the employer's firm
-	\item $f(\psi)$ is average productivity of workers having the worker degree in the economy
+	\item $f(\psi)$ is average productivity of workers having the worker's degree in the employer's firm;
+	\item $f(\psi)$ is average productivity of workers having the worker degree in the economy.
 \end{enumerate}
 
 
-This leads to three different wage setting rules. One of these rules can be chosen by means of the following\\
-parameter:\\
+This leads to three different wage setting rules. One of these rules can be chosen by means of the following parameter:\\
 \vskip2mm
 \noindent
 \begin{tabular}{l l l l}
@@ -1267,10 +1272,8 @@ parameter:\\
 \end{tabular}
 
 \vskip2mm
-The researcher can choose which one to use in a given run by setting the \verb+value+ of this parameter in the \verb+batch_parameters.xml+ file located in the scenario folder.
-
-As mentioned above, this parameter can take three possible values that are: 0, 1 and 2.
-
+The researcher can choose which rule to use in a given run by setting the \verb+value+ of this parameter in the \verb+batch_parameters.xml+ file located in the scenario folder.
+The possible values that can be specified in the parameter file are: 0, 1 and 2. Their meaning is as follows:
 \begin{itemize}
 	\item 
 		If \verb+value=0+ the wage depends on the worker's productivity.
@@ -1288,24 +1291,31 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 \subsubsection{Banks account interests and ask for loan repayments}
 
-The accounting of interest updates the households bank accounts. This is done at different interest rates according to the bank account sign \gls{var:BAcb}.
+The accounting of interest updates the households bank accounts. This is done at different interest rates according to the sign of the bank account (\gls{var:BAcb}).
 
 Positive bank accounts are updated using the interest rate on deposits (\gls{var:i+}), so that if $BA_{cb,t}\ge 0$
 \[
-BA_{cb,t+1}=BA_{cb,t}(1+i^+)
+BA_{cb}=BA_{cb}(1+i^+)
 \]
 
-The model has two different interest rates on loans. The ordinary interest rate (\gls{var:i-}) which is charged on bank accounts with negative amount owned by workers, and the subsidized interest rate \gls{var:isub-}, charged on negative bank accounts owned by unemployed people and students. 
+The model has two different interest rates on loans. The ordinary interest rate (\gls{var:i-}) which is charged on bank accounts with negative amount owned by workers, and the subsidized interest rate \gls{var:isub-}, charged on negative bank accounts owned by unemployed people and students. Thus, a negative bank account hold by a workers is updated as follows 
+\[
+BA_{cb}=BA_{cb}(1+i^-)
+\]
+while if the bank account belongs to a student or an unemployed we will have 
+\[
+	BA_{cb}=BA_{cb}(1+i^-_{sub})
+\]
 
 Once the accrued interest has been accounted, the bank may ask the reduction of some negative accounts. This involves only the accounts owned by workers.
 
  
-The amount of a negative bank account owned by a worker desired by the bank (\gls{var:BAdb}) is thus determined as follows:
+The amount of a negative bank account owned by a worker desired by the bank (\gls{var:BAdb}) is determined as follows:
 \[
 	BA^{db}=\left\{ 
 		\begin{array}{l l l}
-			BA_{t+1}(1-\theta_{is})&\textnormal{with probability}& pr_{is}\\
-			BA_{t+1}&\textnormal{with probability}& 1-pr_{is}\\
+			BA_{}(1-\theta_{is})&\textnormal{with probability}& pr_{is}\\
+			BA_{}&\textnormal{with probability}& 1-pr_{is}\\
 		\end{array}
 		\right.
 \]
@@ -1383,7 +1393,7 @@ and the degree of education is updated according to the table already reported a
 	21= n_{c,sye} & \textnormal{PhD degree}&6
 	\end{array}
 \]
-and the subject's productivity is improved as explained in the initialization section: 
+The subject's productivity is the undated as explained in the initialization section: 
 \[
 	\psi_c=\theta_{c,as}+\frac{0.5}{\theta_{mnpe}}n_{c,sye}
 \]
@@ -1393,7 +1403,7 @@ The subject looses his/her state of student
 	\item in case of a success, if the maximum periods of possible education (\gls{par:thetamnpe} $+$ \gls{par:thetamnfpe}) or
 	\item in case of failure, if the maximum number of failures admitted (\gls{par:thetamnfpe})
 \end{enumerate}
-is reached. In these cases, his/her status change in unemployed.
+is reached. In these cases, his/her status changes in unemployed.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/stepStudentState.html}{here}
 \begin{marginfigure}
@@ -1432,7 +1442,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/st
 
 \subsubsection{Banks decide how much credit to allow}
 
-In the previous step, consumers who need credit set its desired amount on one of their bank accounts (the best bank account) having null unpaid amount if such account exists. Let us identify this variable with \gls{var:BAdc} (where the $d$ upper script means \textbf desired). Because they are asking for credit, this amount is negative:  \gls{var:BAdc} $<0$. Note that the best bank account con have both a positive and negative amount. 
+In the previous step, consumers who need credit set its desired amount on one of their bank accounts (the best bank account) having null unpaid amount if such account exists. Let us identify this variable with \gls{var:BAdc} (where the $d$ upper script means \textbf desired). Because they are asking for credit, this amount is negative:  \gls{var:BAdc} $<0$. Note that the best bank account  has either a positive or a negative amount. 
 
 In the present version of the model, the bank decides the allowed credit \gls{var:BAac} $<0$ ( superscript $a$ means \textbf allowed) as follows
 
@@ -1456,8 +1466,7 @@ In the present version of the model, the bank decides the allowed credit \gls{va
 \end{itemize}
 This does not apply to students to whom the asked credit is always allowed.
 
-We have thus the following\\
-parameters:\\
+We have thus introduced the following parameters:\\
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -1492,14 +1501,14 @@ Then we scale the demand of each single item by this amount
 	\textnormal{\gls{var:Dacj}} =r_{c}^dD_{c,j}^d
 \]
 
-In this resizing, we do not account of unpaid amounts because we assume that credit is first used to satisfy consumption. The possible residual id then used to reduce unpaid amounts. 
+In this resizing, we do not account of unpaid amounts because we assume that credit is first used to satisfy consumption. The possible residual is then used to reduce unpaid amounts. 
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/adjustConsumptionAccordingToExtendedCredit.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\subsubsection{Good markets open: office for statistics helps finding goods}
+\subsubsection{Good markets open: office for statistics computes and allocate desired demand and satisfy unsatisfied demand if possible}
 We code the goods market functioning in such a way that both centralized and decentralized matching mechanisms can be mimicked. 
 In particular, the Office for Statistic supervise the allocation of demand.
 
@@ -1513,8 +1522,11 @@ The task is performed by taking the following steps:
 These items are detailed hereafter.
 
 \noindent$\bullet$ \textit{Compute the allowed demand for each good type.} The Office for Statistics computes the demand of each industry by summing over all the consumers. 
-We mimic decentralized markets and the deriving imperfections that cause demand get lost in the consumers searching process by introducing thus the following\\
-parameter:\\
+We mimic decentralized markets and the losses of exchange opportunities due to the matching process by introducing  the following parameter:\\
+
+
+\vskip1mm
+\noindent
 \begin{tabular}{l l l l}
 	\hline
 	& &&read\\
@@ -1530,7 +1542,7 @@ parameter:\\
 \vskip3mm
 The demand of industry producing item $j$ is therefore computed as follows:
 \[
-	\textnormal{\gls{var:Dajc}}=\sum_c (1-\theta_{gmi}) \textnormal{\gls{var:Dacj}}
+	\textnormal{\gls{var:Dajc}}=(1-\theta_{gmi})\sum_c  \textnormal{\gls{var:Dacj}}
 \]
 where the $\leftarrow c$ signal that demand comes from consumers. This notation allows to identify the various sources of demand below and in future extensions. 
 
