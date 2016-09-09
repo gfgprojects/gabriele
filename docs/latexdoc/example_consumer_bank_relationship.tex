@@ -73,7 +73,8 @@ bank 1 account =   15  demanded credit =    0 allowed credit =    0
 bank 2 account = -150  demanded credit = -150 allowed credit = -130 
 bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
 \end{verbatim}
-and suppose the consumer's income is 15 instead of 40. Now resources available to refund banks (the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption) are given by:
+the only difference with the previous situation is that the amount in bank 1 is 15 instead of 10.
+Suppose furthermore that the consumer's income is 15 instead of 40. Now resources available to refund banks (the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption) are given by:
 
 \verb/resourceAvailableToRefund = 15 + 15 - 10 = 20/
 
@@ -144,7 +145,7 @@ Note that the funds now available to the consumers are
 
 \subsubsection*{step 6: adjust desired consumption according to allowed credit}
 
-In this step, the desired consumption is reduced by the difference between the demanded and the allowed credit. This reduction cannot make the desired consumption be lower than the subsistence level.
+In this step, the allowed consumption is introduced and it is given by the difference between the demanded and the allowed credit. In any case, the allowed consumption cannot be lower than the subsistence level.
 
 In the example we have
 
@@ -153,10 +154,10 @@ bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
 bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
 bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
 
-disposableIncome = 10  desiredConsumption = {\bf18}
+disposableIncome = 10 desiredConsumption = 20 allowedConsumption = {\bf18}
 \end{Verbatim}
 
-Now, the consumer goes in the goods market trying to satisfy her desires. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
+Now, the consumer goes in the goods market trying to satisfy her desired-allowed consumption. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
 
 \subsubsection*{step 7: the consumer adjust bank accounts}
 
@@ -169,7 +170,8 @@ bank 1: account =  {\bf-15}  demanded credit = -20 allowed credit = -18 unpaid =
 bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
 bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
 
-disposableIncome = {\bf0}  desiredConsumption = 18 effectiveConsumption = 15
+disposableIncome = {\bf0}  desiredConsumption = 20 allowedConsumption = 18 
+                                              effectiveConsumption = 15
 \end{Verbatim}
 
 \newpage
