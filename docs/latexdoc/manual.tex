@@ -1544,11 +1544,11 @@ The demand of industry producing item $j$ is therefore computed as follows:
 \[
 	\textnormal{\gls{var:Dajc}}=(1-\theta_{gmi})\sum_c  \textnormal{\gls{var:Dacj}}
 \]
-where the $\leftarrow c$ signal that demand comes from consumers. This notation allows to identify the various sources of demand below and in future extensions. 
+where the $\leftarrow c$ signal that demand comes from consumers. This notation allows to identify the various sources of demand that will be introduced below in the text and in future extensions. 
 
 Provided that in the economy there are $J$ industries, the software computes an array of dimension $J$: $\{D^a_{1\leftarrow c},\cdots,D^a_{J\leftarrow c}\}$.
 
-The desired allowed aggregate demand is also computed as
+The desired allowed aggregate demand is also computed:
 \[
 	D^a_{\leftarrow c}=\sum_j\textnormal{\gls{var:Dajc}}
 \]
@@ -1563,18 +1563,19 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 	\textnormal{\gls{var:Dafjc}}=\textnormal{\gls{var:Dajc}}\frac{\textnormal{\gls{var:Yfjc}}}{\textnormal{\gls{var:Yjc}}}
 	\label{eq:Dafjc}
 \end{equation}
-It will be clarified in the \verb+make production+ step that firms produces both investment goos that are sold to other firms (\gls{var:Yfjf}) and consumption good sold to consumers (\gls{var:Yfjc}). The just written computation involves the latter.
-
-Note that firms in some industries may have \gls{var:Dajc} $>$ \gls{var:Yfjc} while in other industries the opposite may hold. These inequalities could be used by firms to guide their production choices.
+It will be clarified in the \verb+make production+ step that firms produce goods that are sold to other firms (\gls{var:Yfjf}) to let them adjust their production capital and consumption good sold to consumers (\gls{var:Yfjc}). The just written computation involves the latter.
+ 
+The specific step we are discussing allows firms to know the appreciation of the item they produce among consumers. 
+Note that firms in some industries may be in a short supply situation (\gls{var:Dajc} $>$ \gls{var:Yfjc}) while in other industries the opposite may hold. This information will be used by firms to guide their production choices.
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateDesiredDemand.html}{here}.
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\noindent$\bullet$ \textit{Manage unsatisfied demand.} In this model we have vertical differentiation. This means that products with higher $j$ are more advanced and, therefore, preferred. It may thus happens that demand on these product is higher than supply. 
+\noindent$\bullet$ \textit{Manage unsatisfied demand.} In this model we have vertical differentiation. This means that products with higher $j$ are more advanced and, therefore, preferred. It may thus happen that demand on these product is higher than supply. 
 In case the demand of a given product cannot be entirely satisfied, the office for statistics try to fulfill consumers excess demand of this product with the product that precede it in the quality ladder. The Office for statistic moves demand across industries starting from the most advanced product and proceeding backward. 
-This mechanism aims to mimic consumer decision to buy a less advanced product if the item s/he desire is in short supply.
+This mechanism aims to mimic consumer decision to buy a less advanced product if the item s/he desires is in short supply.
 
 At the end of this process the demand received by each industry (\gls{var:Dj}) and that received by each firm (\gls{var:Dfj}) is known.
 
@@ -1582,7 +1583,6 @@ Consumers are then informed of the demand reallocation and their final demand is
 \[
 	\textnormal{\gls{var:Dcj}}= \textnormal{\gls{var:Dacj}}\frac{\textnormal{\gls{var:Dj}}}{\textnormal{\gls{var:Dajc}}}
 \]
-
 
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/matchDemandAndSupply.html}{here}.
 \begin{marginfigure}
@@ -1597,14 +1597,13 @@ Firms are also informed on the items they have sold:
 \]
 This information will be then used to compute profit.
 
-The UML sequence diagrams of this event are available \href{\doclocation/umldoc/computeDemand.html}{here} and \href{\doclocation/umldoc/allocateDemand.html}{here}.
-\begin{marginfigure}
+Two UML sequence diagrams describe this event. \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
+The first one describe the computation performed by the office for statistics of the demand starting from the consumer data. This allows a double check on the computation of \gls{var:Dj} an is available \href{\doclocation/umldoc/computeDemand.html}{here}. The second one describes the allocation of demand to firms and is available \href{\doclocation/umldoc/allocateDemand.html}{here}.
 
-
-\subsubsection{consumers adjust their bank accounts (deposits and loans) according to effective consumption}
-Summing up, in this model the desired consumption can be resized two times. The first one when the consumer asks for credit to achieve its desired consumption, but the bank does not allow the demanded credit. In this case we have that the allowed consumption (\gls{var:Dac}) is lower than desired consumption (\gls{var:Dac}). The second one is when the asked good is in short supply. In this case, we say that the effective consumption (\gls{var:Dc}) is lower than the allowed consumption (\gls{var:Dac}). The effective consumption is computed as follows:
+\subsubsection{Consumers adjust their bank accounts (deposits and loans) according to effective consumption}
+Summing up, in this model the desired consumption can be resized two times. The first one when the consumer asks for credit to achieve its desired consumption, but the bank does not allow the demanded credit. In this case we have that the allowed consumption (\gls{var:Dac}) is lower than desired consumption (\gls{var:Ddc}). The second one is when the asked good is in short supply. In this case, we say that the effective consumption (\gls{var:Dc}) is lower than the allowed consumption (\gls{var:Dac}). The effective consumption is computed as follows:
 \[
 \textnormal{\gls{var:Dc}}=\sum_j \textnormal{\gls{var:Dcj}}
 \]
