@@ -1763,6 +1763,28 @@ In this basic version of the model, firms turnover is very simple: each firm tha
 	\hskip2.5cm\includegraphics[scale=0.1]{edit.jpg}
 \end{marginfigure}
 
+In particular, the exit condition is
+\[
+	\textnormal{\gls{var:Dfj}}+\textnormal{\gls{var:Dfj}}<\textnormal{\gls{par:Dexit}}
+\]
+
+where we use the following parameter 
+
+\noindent
+\begin{tabular}{l l l l}
+	\hline
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
+	\hline
+	\hline
+\gls{par:Dexit}&\verb+Context.thresholdDemandForFirmsExit+&20&yes\\
+	\hline
+\end{tabular}
+
+\vskip3mm
+
+
 In this part of the code, the list of new entrants is created but firms are not yet included in the model. This is because new entrants have to participate in the production factor markets in order to start the production. % Note that in the previous step, incumbent prepared for the adjustment of production capital. Thus, 
 The demand for production capital that will be computed below will account for the demand of both incumbent and new firms. This will also apply to the labor demand.
 
@@ -1891,9 +1913,8 @@ In the present version of the model, the bank decides the allowed credit \gls{va
 		\]
 \end{itemize}
 
-We have thus the following\\
-parameters:\\
-\vskip2mm
+We have thus the following parameters:\\
+
 \noindent
 \begin{tabular}{l l l l}
 	\hline
@@ -1957,7 +1978,7 @@ In another difficult situation the firm has profits and positive bank accounts t
 				\item \verb+unpaidAmount+ $>0$
 \end{itemize}
 
-A better situation in the one in which the fall of demand is not so heavy to cause a loss:\\
+A better situation is the one in which the fall of demand is not so heavy to cause a loss:\\
 \begin{itemize}
 	\item \verb+firmInvestment+ $<0$,
 	\item \verb+cashOnHand+ $>0$,
@@ -1981,7 +2002,7 @@ In the latter case the cash on hand in excess is deposited in the worst bank acc
 
 Even though the variety of cases presented is incomplete, it can be used to star reasoning on the supply and demand of production capital.
 
-It is straightforward that entrepreneurs who want to disinvest, i.e. those having \verb+fitmInvestment+ $<0$ are offering their production capital excesses in the used production capital market. 
+It is straightforward that entrepreneurs who want to disinvest, i.e. those having \verb+firmInvestment+ $<0$ are offering their production capital excesses in the used production capital market. 
 However, as we will see in one of the following step, the sum of these desired disinvestments cannot be considered as the supply in the existing production capital market. This is because we have to take into account the possibility of existing production goods to be used by other firms. In other words we have to account for the degree of investment reversibility.
 %The \gls{par:thetadrU} parameter presented above, also tunes investment reversibility. Above, we presented it as the capacity of production capital to preserve its potentiality in time, i.e. its the depreciation rate of unused capital. 
 %However it also gives the potentiality of production capital to be employed by other entrepreneur.
@@ -1989,7 +2010,7 @@ However, as we will see in one of the following step, the sum of these desired d
 
 The demand of new production capital is affected by the credit supply.
 At the current state, some firm asked for new credit while other do not. 
-Those which asked for, now know the amount of credit the best bank (if it exist) is willing to allow.
+Those which asked for, now know the amount of credit the best bank (if it exists) is willing to allow.
 Therefore, they can check if the available credit is enough to cover their losses or to realize the desired investments. 
 Firms that want to invest, both those who asked for credit and those who do not, now know the level of investments they could achieve according to the available financial resources. 
 However, even though the firm has enough financial resources we cannot set the amount of investment demand at this stage: firms have first to check for the availability of workers. If the needed workers will not be found, the desired level of investment will be resized. Therefore, the demand of investments will be set in a later step.
@@ -2042,7 +2063,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/pe
 
 \subsubsection{Firms perform labor force downward adjustment}
 
-The downward adjustment of the labor force follows two motivations:
+The downward adjustment of the labor force has two motivations:
 \begin{itemize}
 	\item workers retirement;
 	\item excess of labor production capacity with respect to the expected demand.
@@ -2171,7 +2192,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ad
 %Through the previous steps we show that a number of firms in the economy want to increase their production capital while other have an excess of it.
 
 \vskip3mm
-Next, the code check for possible adjustments on the market for exchanging existing unused production capital.
+Next, the code checks for possible adjustments on the market for existing unused production capital.
 
 First of all, there is a parameter that transforms unused production capital into reusable production capital.
 
@@ -2191,7 +2212,7 @@ First of all, there is a parameter that transforms unused production capital int
 
 \vskip3mm
 
-The sequence of events in the adjustment of production capital is as follows
+The sequence of events to adjust the production capital is as follows
 \begin{itemize}
 	\item computation of aggregate investments and aggregate unused capital;
 	\item unused capital is transformed in reusable production capital;
@@ -2229,14 +2250,18 @@ However, in the second case the first firm buys new production goods and the agg
 
 \subsubsection{Firms that need additional capital ask for new production goods}
 
-If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods. This gives the demand of a firm directed to other firms:
-\[\textnormal{\gls{var:Dff}}\]
+If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods.
+We denote this variable with $I_f$. 
+Summing over $f$ we get the aggregate demand of new production goods
+\[I=\sum_f I:f\]
 
-Summig over $f$ we get the aggregate demand of new production goods
+%This gives the demand of a firm directed to other firms:
+%\[\textnormal{\gls{var:Dff}}\]
 
-\[D_f=\sum_f \textnormal{\gls{var:Dff}}\]
+The office for statistics is charged for allocating such source of demand. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of
+using the same allocation method. From this process, each firm will know the demand from other firms, \gls{var:Dff}, that will be added to that from consumers.
 
-The office for statistics is charged for allocating such source of demand. Because it also has the role of allocating the aggregate demand from consumers, the easiest way to proceed is that of joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
+%joining the aggregate demand of consumption good to the aggregate demand of investment goods and then allocate the joined aggregate demand to firms.
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/allocateInvestments.html}{here}
@@ -2250,7 +2275,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/al
 
 \subsection*{\colorbox{lightgray}{Consumer turnover}}
 
-Consumer turnover is managed in a very simple way. When a consumer reaches the maximum age \verb+Context.ConsumerExitAge+ it is replaced with a new one having age equal to zero. The new consumers inherit the bank accounts of the exited consumer.
+Consumer turnover is managed in a very simple way. When a consumer reaches the maximum age \gls{par:thetacea} s/he is replaced with a new one having age equal to zero. The new consumers inherit the bank accounts of the exited consumer.
 
 \vskip3mm
 The UML sequence diagram of this event is available \href{\doclocation/umldoc/performConsumersTurnover.html}{here}
@@ -2293,7 +2318,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/ma
 
 
 
-Now we are ready to go again through the process that lead to consumption. However, as mentioned above, new entry of firms changes the market power of incumbents. Thus, a step done before the aggregate demand is allocated is the update of such market shares.   
+Now we are ready to go again through the process that leads to consumption. However, as mentioned above, new entry of firms changes the market power of incumbents. Thus, a step done before the aggregate demand is allocated is the update of such market shares.   
 
 
 \vskip3mm
@@ -2306,13 +2331,13 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 
 \section*{Examples of firm-bank relationship}
 
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_firm_bad_conditions.html}{here}
+A numerical example of the sequence of action for a firm in {\bf bad} economic conditions can be reached by clicking \href{\doclocation/latexdoc/example_firm_bad_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
 
 \vskip1cm
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/umldoc/example_firm_good_conditions.html}{here}
+A numerical example of the sequence of action for a firm in {\bf good} economic conditions can be reached by clicking \href{\doclocation/latexdoc/example_firm_good_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
