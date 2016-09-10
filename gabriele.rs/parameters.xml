@@ -6,6 +6,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+				<parameter name="thresholdDemandForFirmsExit" displayName="thresholdDemandForFirmsExit" type="int" 
+						defaultValue="20" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
+									
+		/>
 				<parameter name="laborMarketStateToSetWage" displayName="laborMarketStateToSetWage" type="double" 
 						defaultValue="0.5" 
 						isReadOnly="false" 
