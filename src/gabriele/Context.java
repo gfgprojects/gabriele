@@ -59,6 +59,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double probabilityToBeAskedToRefundForIndebtedWorkers=0.5;
 	public static double percentageOfLoanToRefundForIndebtedWorkersIfAsked=0.1;
 	public static int productionOfNewEnteringFirm=50;
+	public static int thresholdDemandForFirmsExit=20;
 	public static double percentageOfDemandMissedBecauseOfGoodsMarketsInperfections=0.0;
 	public static double percentageOfUsedCapitalDepreciation=0.01;
 	public static double percentageOfUnusedCapitalDepreciation=0.0;
@@ -178,6 +179,7 @@ public class Context implements ContextBuilder<Object> {
     	firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed=(Double)params.getValue("firmsProbabilityToHaveNewDemandedCreditCompletelyAllowed");
     	percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed=(Double)params.getValue("percentageOfNewDemandedCreditAllowedToFirmsWhenCreditIsNotCompletelyAllowed");
     	productionOfNewEnteringFirm=(Integer)params.getValue("productionOfNewEnteringFirm");
+    	thresholdDemandForFirmsExit=(Integer)params.getValue("thresholdDemandForFirmsExit");
     	firmsWorkersMatching=(Integer)params.getValue("firmsWorkersMatching");
     	numberOfJobApplicationAnUneployedSends=(Integer)params.getValue("numberOfJobApplicationAnUneployedSends");
     	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
