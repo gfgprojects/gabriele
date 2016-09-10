@@ -767,7 +767,7 @@ public void loadAgents(){
 			//check firms
 			if(anObj instanceof Firm){
 				aFirm=(Firm)anObj;
-				if((aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose())<20){
+				if((aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose())<Context.thresholdDemandForFirmsExit){
 //					System.out.println("   firm Exit "+(aFirm.getDemand()+aFirm.getOrdersOfProductsForInvestmentPurpose()));
 					exitingFirmsList.add(aFirm);
 					aFirm.setBankAccountsShutDown();
