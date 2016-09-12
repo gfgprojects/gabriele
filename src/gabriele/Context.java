@@ -48,6 +48,7 @@ public class Context implements ContextBuilder<Object> {
 	public static int maxNumberOfFailedPeriodsOfEducation=2;
 	public static int maxNumberPeriodsOfEducation=21;
 	public static double probabilityToBeUnemployedAtTheBeginning=0.2;
+	public static double probabilityOfAProductInnovation=0.1;
 	public static int parameterOfProductivityInProductionFuncion=100;
 //	public static int parameterOfnumberOfWorkersToDetermineProductionCapitalInProductionFuncion=50;
 	public static int minConsumerInitialBankAccount=-500;
@@ -183,8 +184,9 @@ public class Context implements ContextBuilder<Object> {
     	firmsWorkersMatching=(Integer)params.getValue("firmsWorkersMatching");
     	numberOfJobApplicationAnUneployedSends=(Integer)params.getValue("numberOfJobApplicationAnUneployedSends");
     	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
-        
-        int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
+       	probabilityOfAProductInnovation=(Double)params.getValue("probabilityOfAProductInnovation");
+
+	int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
         //			intervalInRecordingConsumersData=(Integer)params.getValue("intervalInRecordingConsumersData");
 

@@ -1103,6 +1103,9 @@ System.out.println("     number of firms after exit "+firmsList.size());
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,32.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsPayBackBankDebt");
 
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,31.5);
+		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsStepProductInnovationProcess");
+
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,31.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksResetFirmsDemandedAndAllowedCredit");
 
@@ -1282,6 +1285,15 @@ public void scheduleSaveFirmsData(){
 		statAction=statActionFactory.createActionForIterable(firmsList,"payBackBankDebt",false);
 		statAction.execute();
 	}
+
+	public void scheduleFirmsStepProductInnovationProcess(){
+		if(Context.verboseFlag){
+			System.out.println("FIRMS: STEP PRODUCT INNOVATION PROCESS");
+		}
+		statAction=statActionFactory.createActionForIterable(firmsList,"stepProductInnovationProcess",false);
+		statAction.execute();
+	}
+
 	public void scheduleBanksResetFirmsDemandedAndAllowedCredit(){
 		if(Context.verboseFlag){
 			System.out.println("BANKS: RESET FIRMS DEMANDED AND ALLOWED CREDIT");

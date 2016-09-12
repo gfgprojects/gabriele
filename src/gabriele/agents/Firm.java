@@ -1284,6 +1284,14 @@ Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanB
 		return ordersOfProductsForInvestmentPurpose;
 	}
 
+	public void stepProductInnovationProcess(){
+		if(RandomHelper.nextDouble()<Context.probabilityOfAProductInnovation){
+			productAbsoluteRank++;
+			if(Context.verboseFlag){
+				System.out.println("     Firm "+identity+" product Absolute Rank "+productAbsoluteRank);
+			}
+		}
+	}
 	public void innovate(){
 		productAbsoluteRank++;
 	}
