@@ -30,6 +30,7 @@ public class Firm {
 	double cashOnHand,depreciationOfUsedCapital,depreciationOfUnusedCapital,capitalDepreciation,financialResourcesInBankAccounts,amountToWithdrawFromBanksForInvestments,creditToAskInSetDesiredCredit,cashOnHandWhenComputingEconomicResult,cashOnHandAfterRefundingBank;
 	double unpaidAmountInBankAccounts=0;	
 	double firmInvestment=0;
+	double promissoryNotes=0;
 	double firmRealizedInvestment=0;
 	double ordersOfProductsForInvestmentPurpose=0;
 	double previousPeriodOrdersOfProductsForInvestmentPurpose=0;
@@ -547,7 +548,7 @@ Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanB
 			catch(IOException e) {System.out.println("IOException");}
 		}
 
-		double promissoryNotes=0;
+		promissoryNotes=0;
 		//if credit was asked in setDesiredCredit method
 		if(creditToAskInSetDesiredCredit>0){
 			//get new available credit
@@ -768,7 +769,7 @@ Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanB
 		cashOnHandAfterRefundingBank=cashOnHand;
 
 		if(Context.verboseFlag){
-			System.out.println("     Firm "+identity+" possible investment "+firmInvestment+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital);
+			System.out.println("      Firm "+identity+" possible investment "+firmInvestment+" production Capital "+productionCapital+" desiredProductionCapital "+desiredProductionCapital+" promissory notes "+promissoryNotes);
 			System.out.println("     -----------");
 		}
 
@@ -1229,6 +1230,9 @@ Then, selects randomly a number of banks equal to Context.numberOfBanksAFirmCanB
 
 	public long getProduction(){
 		return production;
+	}
+	public double getPromissoryNotes(){
+		return promissoryNotes;
 	}
 	public int[] getnumberOfWokersInADegree(){
 		return numberOfWokersInADegree;
