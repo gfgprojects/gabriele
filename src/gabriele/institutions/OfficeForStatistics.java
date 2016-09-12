@@ -55,6 +55,7 @@ public class OfficeForStatistics{
 	public static double[] averageProductivityOfWorkersInADegree;
 	int numberOfWorkers=0;
 	int numberOfFirms,numberOfConsumers,numberOfStudents,numberOfFirmExits;
+	double aggregatePromissoryNotes=0;
 	int numberOfRetirements=0;
 	double totalProductivity=0;
 	public static double averageProductivity=0;
@@ -376,11 +377,21 @@ public void loadAgents(){
 
 		}
 		averageProductivity=totalProductivity/numberOfWorkers;
+
+	// compute aggregate promissory notes
+		aggregatePromissoryNotes=0;
+		for(int i=0;i<firmsList.size();i++){
+			aFirm=(Firm)firmsList.get(i);
+			aggregatePromissoryNotes+=aFirm.getPromissoryNotes();
+		}
+
+
 		if(Context.verboseFlag){
 			for(int z=0;z<7;z++){
 				System.out.println("     system level: degree "+z+" workers "+numberOfWokersInADegree[z]+" total Productivity "+totalProductivityOfWorkersInADegree[z]+" average Prod "+averageProductivityOfWorkersInADegree[z]);
 			}
 			System.out.println("     system: number of workers "+numberOfWorkers+" total Productivity "+totalProductivity+" average productivity "+averageProductivity);
+			System.out.println("     system: aggregate promissory notes "+aggregatePromissoryNotes);
 		}
 	//compute aggregate loans and Deposits	
 		aggregateLoans=0;
