@@ -1617,12 +1617,183 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/up
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
 
-\subsubsection{Example}
+\subsection{Example of consumer-banks relationship}
 
-A numerical example of the sequence of action of the above explained process can be reached by clicking \href{\doclocation/latexdoc/example_consumer_bank_relationship.html}{here}
+A numerical example of the sequence of action of the above explained process is given hereafter.% can be reached by clicking \href{\doclocation/latexdoc/example_consumer_bank_relationship.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
+
+The focus is on an indebted Consumer.
+
+We trace hereafter the steps explained in the manual.  
+%\subsubsection*{Step 1: interests and ask for repayments}
+\subsubsection*{Step 1: interests and loans repayment}
+
+In this example, each consumer is customer of three banks.
+
+First of all, banks account the interest rate.
+
+Suppose that after accounting interest rate, the consumer's bank accounts have the following amounts:
+\begin{verbatim}
+bank 1 account =   10
+bank 2 account = -150
+bank 3 account =  -50
+\end{verbatim}
+
+The bank assumes that indebted consumers (those with a negative bank account) ask for the whole renewal of the debt:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0
+bank 2 account = -150  demanded credit = -150
+bank 3 account =  -50  demanded credit =  -50
+\end{verbatim}
+
+Each bank with a negative account can ask for refunding. If this happens, the allowed credit is lower (in absolute value) than the demanded credit.
+Suppose banks 2 and 3 intend to reduce their exposition as follows:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
+\end{verbatim}
+
+In this example, the consumer needs 25 to satisfy banks requests.
+
+\subsubsection*{step 2: refunding}
+The consumer refunds her bank account if she has enough income (to refund) and, in any case, refunds an amount that allows a subsistence consumption level. 
+\\Let's consider this example:
+
+\verb+disposableIncome=40+\\
+and that the subsistence consumption is 10.
+
+The software first computes the resources available to refund. They are given by 
+the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption. In this example we have:
+
+\verb/resourceAvailableToRefund = 10 + 40 - 10 = 40/
+
+These resources are enough to satisfy banks' requests; the consumer refunds totally banks because her financial resources allow both debt repayment and a consumption greater than the subsistence level. 
+Therefore, the new situation is:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -130  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -45  demanded credit =  -50 allowed credit =  -45
+
+disposableIncome = 15
+\end{verbatim}
+
+
+%If the income is not enough to refund and have the minimum consumption, the consumers makes a proposal to the bank by reducing the demand for credit. 
+
+Consider now a slightly different situation in bank accounts:
+\begin{verbatim}
+bank 1 account =   15  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -45
+\end{verbatim}
+the only difference with the previous situation is that the amount in bank 1 is 15 instead of 10.
+Suppose furthermore that the consumer's income is 15 instead of 40. Now resources available to refund banks (the sum of positive amounts in bank accounts plus the disposable income minus the subsistence consumption) are given by:
+
+\verb/resourceAvailableToRefund = 15 + 15 - 10 = 20/
+
+They are not enough to satisfy banks' requests (25 is needed). Suppose 15 is used to refund bank 1 and 5 to refund bank 2. Unpaid amounts are recorded and disposable income is set to allow the subsistence consumption:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    {\bf0}  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -135  demanded credit = -150 allowed credit = -130 unpaid =  5
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -45 unpaid =  5
+
+disposableIncome = {\bf10}
+\end{Verbatim}
+
+We continue this example with this second situation.
+
+\subsubsection*{Step 3: account resetting}
+In this step, banks set the demanded and allowed credit to zero.
+
+Banks accounts are the updated as follows:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
+bank 2: account = -135  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
+bank 3: account =  -50  demanded credit =  {\bf0} allowed credit = {\bf0} unpaid =  5
+
+disposableIncome = 10
+\end{Verbatim}
+
+
+
+
+\subsubsection*{step 4: consumers set desired credit}
+Now each consumer can asks for new credit. This can be done for two reasons: 1) to achieve a desired consumption higher than disposable income and 2) to pay unsatisfied lenders.
+
+Suppose now that the consumer would like to consume 20.
+
+She asks for additional financial resources both to finance consumption (10) and to pay back bank 2 and 3 (5+5).
+
+The additional credit amount of 20 is asked to one bank. In particular, the bank with the ``best'' account (bank 1) is chosen. 
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = {\bf-20} allowed credit = 0 unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit = 0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  5
+
+disposableIncome = 10  desiredConsumption = 20
+\end{Verbatim}
+
+
+\subsubsection*{Step 5: credit supply}
+
+%The bank decides how much credit to allow.
+
+The bank decides about the amount of loans to give out.
+Suppose allowed credit is 18
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = -20 allowed credit = {\bf-18} unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+
+disposableIncome = 10  desiredConsumption = 20
+\end{Verbatim}
+
+Note that the funds now available to the consumers are 
+
+\verb\disposableIncome + allowed credit=10+18=28\ 
+
+\subsubsection*{step 6: adjust desired consumption according to allowed credit}
+
+In this step, the allowed consumption is introduced and it is given by the difference between the demanded and the allowed credit. In any case, the allowed consumption cannot be lower than the subsistence level.
+
+In the example we have
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =    0  demanded credit = -20 allowed credit = -18 unpaid =  0
+bank 2: account = -135  demanded credit =   0 allowed credit =   0 unpaid =  5
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  5
+
+disposableIncome = 10 desiredConsumption = 20 allowedConsumption = {\bf18}
+\end{Verbatim}
+
+Now, the consumer goes in the goods market trying to satisfy her desired-allowed consumption. It may happen that goods are in short supply. Suppose this is the case and she can buy 15 instead of 18. 
+
+\subsubsection*{step 7: the consumer adjust bank accounts}
+
+The consumer can thus consume 15. 10 of them are payed with disposable income and 5 of them are borrowed from bank 1. 
+
+Bank 1 is also willing to lend additional resources (18-5=13), so the consumer uses them to satisfy bank 2 and 3 refunding requests:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+bank 1: account =  {\bf-15}  demanded credit = -20 allowed credit = -18 unpaid =  0
+bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+bank 3: account =  -45  demanded credit =   0 allowed credit =   0 unpaid =  {\bf0}
+
+disposableIncome = {\bf0}  desiredConsumption = 20 allowedConsumption = 18 
+                                              effectiveConsumption = 15
+\end{Verbatim}
+
+
 
 
 \subsection{The process that leads to production}
@@ -1665,6 +1836,7 @@ The actions leading to production are numerous and not so straightforward. To ea
 	\item perform firms exit;
 	\item banks account interests and ask for loan repayments to indebted firms;
 	\item firms refund if possible;
+	\item firms step the product innovation process;
 	\item[- - ] the software performs a technical step by resetting some variables of the bank accounts;
 	\item firms ask for new credit;
 	\item banks decide how much credit to allow;
@@ -1856,6 +2028,100 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/fi
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
+
+\subsubsection{Firms step the product innovation process}
+
+Innovation in this model comes into the form of product innovations. We model this process by introducing the variable \gls{var:ARf} which denotes the Absolute Rank of the good produced by firm $f$.  
+\gls{var:ARf} gives the position of the good in the quality ladder where higher values denote the higher quality.
+
+The product innovation is implemented as follows
+\[
+	\textnormal{\gls{var:ARf}} =\left\{ 
+		\begin{array}{l l l}
+			AR_{f}+1&\textnormal{with probability}& pr_{pi}\\
+			AR_{f}&\textnormal{with probability}& 1-pr_{pi}\\
+		\end{array}
+		\right.
+\]
+
+The parameters involved in this computation is:
+
+\vskip2mm
+\noindent
+\begin{tabular}{l l l l}
+	\hline
+	& &&read\\
+	notation& name &&from\\
+	in equations& in code&value&file\\
+	\hline
+	\hline
+\gls{par:prpi}&\verb+Context.probabilityOfAProductInnovation+&0.0&yes\\
+	\hline
+\end{tabular}
+
+\vskip3mm
+We saw above that the office for statistics allocate demand. In doing that it accounts for goods quality: higher quality attracts more demand.
+%The assumption is that the demand of a products depends on its quality. In this way, products with low quality are not demanded and 
+This implies that firms that do not innovate are penalized. This can lead less advanced products to disappear. 
+
+As time passes, a \gls{par:prpi} $>0$ implies that absolute ranks of the products that are exchanged in the economy always increase. Because low ranked goods disappear, we introduce the Relative Rank  \gls{var:RRf} to perform computation. It is defined as:
+\[
+RR_f=AR_f-\min(AR_f)+1
+\]
+
+In this way, even if the absolute rank of the less advanced good that is exchanged at a given time ($\min(AR_f)$) increases, its relative rank is alway 1.
+
+Consider for example companies producing smart phones. Suppose we identify these companies with uppercase letters A, B, C and so on. Suppose furthermore that they name their product by the company name and the absolute rank of the product. Suppose the variety of smart phones available on the market is A6, B6, C5. We can compute the relative rank as explained above. The following table reports the situation
+\begin{center}
+\begin{tabular}{c c c c}
+	\hline
+	$f$ & model & $AR_f$ & $RR_f$\\
+	\hline
+	A & A6 & 6 & 2\\
+	B & B6 & 6 & 2\\
+	C & C5 & 5 & 1\\
+	\hline
+\end{tabular}
+\end{center}
+
+Suppose company A launches its new A7 smart phone. The previous table evolve as follows
+\begin{center}
+\begin{tabular}{c c c c}
+	\hline
+	$f$ & model & $AR_f$ & $RR_f$\\
+	\hline
+	A & A7 & 7 & 3\\
+	B & B6 & 6 & 2\\
+	C & C5 & 5 & 1\\
+	\hline
+\end{tabular}
+\end{center}
+
+After the introduction of this new product, consumers see C5 outdated. So company C either exits from the market or succeeds in innovating and launches the C6. In both cases, the relative rank is updated: 
+\begin{center}
+\hskip1cm if C exits \hskip5cm if C innovates
+
+\begin{tabular}[t]{c c c c}
+	\hline
+	$f$ & model & $AR_f$ & $RR_f$\\
+	\hline
+	A & A7 & 7 & 2\\
+	B & B6 & 6 & 1\\
+	\hline
+\end{tabular}
+\hskip2cm
+\begin{tabular}[t]{c c c c}
+	\hline
+	$f$ & model & $AR_f$ & $RR_f$\\
+	\hline
+	A & A7 & 7 & 2\\
+	B & B6 & 6 & 1\\
+	C & C6 & 6 & 1\\
+	\hline
+\end{tabular}
+
+\end{center}
+
 
 
 \subsubsection{Firms ask for new credit}
@@ -2253,7 +2519,7 @@ However, in the second case the first firm buys new production goods and the agg
 If the demand for investments cannot be completely fulfilled by the reusable production capital, firms ask for newly produced investment goods.
 We denote this variable with $I_f$. 
 Summing over $f$ we get the aggregate demand of new production goods
-\[I=\sum_f I:f\]
+\[I=\sum_f I_f\]
 
 %This gives the demand of a firm directed to other firms:
 %\[\textnormal{\gls{var:Dff}}\]
@@ -2329,22 +2595,272 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 \vskip3mm
 
 
-\section*{Examples of firm-bank relationship}
+\subsection{Examples of firm-bank relationship}
 
-A numerical example of the sequence of action for a firm in {\bf bad} economic conditions can be reached by clicking \href{\doclocation/latexdoc/example_firm_bad_conditions.html}{here}
+A numerical example of the sequence of actions for a firm in {\bf bad} economic conditions is given hereafter.% can be reached by clicking \href{\doclocation/latexdoc/example_firm_bad_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
+\subsubsection{Bad condition}
+\subsubsection*{Step 1: interests and ask for repayments}
+Firms can be customers of several banks.
+
+First of all, the banks account the interest rate.
+
+Suppose that after accounting interests we have the following situation
+\begin{verbatim}
+bank 1 account =   10
+bank 2 account = -150
+bank 3 account =  -50
+\end{verbatim}
+
+The bank assumes that indebted firms ask for the whole renewal of the debt:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0
+bank 2 account = -150  demanded credit = -150
+bank 3 account =  -50  demanded credit =  -50
+\end{verbatim}
+
+Each bank with a negative account can ask for refunding. In this case the allowed credit is lower (in absolute value) to the demanded credit.
+Suppose bank 2 asks for refunding and bank 3 does not:
+
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
+\end{verbatim}
+
+In this example, the firm needs 20 to satisfy banks requests.
+
+\subsubsection*{Step 2: refunding}
+
+The possibility to refund depends on the resources available on banks and on the economic result. In our example, 10 is available in bank 1.
+
+To go on with our example, let us assume that the economic result is \verb+-50+ i.e. the firm is suffering a loss.
+
+The firm use 10 available in bank 1, but it is not enough to satisfy banks requests. Shortages are recorded as unpaid amounts.
+
+The firm financial situation is represented as follows
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -140  demanded credit = -150 allowed credit = -130 unpaid = 10
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+\subsubsection*{Step 3: account resetting}
+In this step, banks set the demanded and allowed credit to zero.
+
+The new situation is
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =  0 allowed credit = 0 unpaid =  0
+bank 2: account = -140  demanded credit =  0 allowed credit = 0 unpaid = 10
+bank 3: account =  -50  demanded credit =  0 allowed credit = 0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+
+
+\subsubsection*{Step 4: set desired credit}
+
+Now the firm can ask for new credit. This can be done for two reasons: 1) to finance new investments and 2) to pay unsatisfied lenders.
+
+Suppose now that our firm does not invest, and asks for credit to pay unsatisfied lenders.
+
+Credit in this step is asked to one of the banks, in particular to that with the ``best'' account.
+
+In this example, the new asked credit is \verb/10+50=60/. The update situation is 
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit = -60 allowed credit = 0 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit = 0 unpaid = 10
+bank 3: account =  -50  demanded credit =   0 allowed credit = 0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+
+
+
+
+
+\subsubsection*{Step 5: credit supply}
+
+The bank now decides the allowed credit.
+
+The situation evolves differently according to the allowed amount.
+
+We will present here two situations. 
+
+In the firs one, the bank allows all the demanded credit. In this case the accounting evolves as follows
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit = -60 allowed credit = -60 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit =   0 unpaid = 10
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+In the second situation, the bank allows only 30 of the 60 that was asked. In this case the accounting is
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit = -60 allowed credit = -30 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit =   0 unpaid = 10
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = -50
+\end{verbatim}
+
+
+\subsubsection*{Step 6: the firm adjust bank accounts}
+
+The resources made available by bank 1 are used and the situation evolves as follows.
+
+If the \verb+allowed credit = -60+, the new credit is enough to pay the unpaid amount to bank 2 and to cover the loss:  
+
+\begin{verbatim}
+bank 1: account =  -60  demanded credit = -60 allowed credit = -60 unpaid =  0
+bank 2: account = -130  demanded credit =   0 allowed credit =   0 unpaid =  0
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = 0
+\end{verbatim}
+
+If the \verb+allowed credit = -30+, new credit is not enough. The entrepreneur now uses the 30 to partially cover the loss. The residual loss is covered by issuing promissory notes. The unpaid amount remains in bank 2:
+
+\begin{verbatim}
+bank 1: account =  -30  demanded credit = -60 allowed credit = -30 unpaid =  0
+bank 2: account = -140  demanded credit =   0 allowed credit =   0 unpaid =  10
+bank 3: account =  -50  demanded credit =   0 allowed credit =   0 unpaid =  0
+
+cashOnHand = 0 promissoryNotes=20
+\end{verbatim}
+
+
 
 \vskip1cm
-A numerical example of the sequence of action for a firm in {\bf good} economic conditions can be reached by clicking \href{\doclocation/latexdoc/example_firm_good_conditions.html}{here}
+A numerical example of the sequence of action for a firm in {\bf good} economic conditions is given hereafter. %can be reached by clicking \href{\doclocation/latexdoc/example_firm_good_conditions.html}{here}
 \begin{marginfigure}
 \hskip8mm	\includegraphics[scale=0.07]{example.png}
 \end{marginfigure}
 
+\subsubsection{Good conditions}
+	\subsubsection*{Step 1: interests and repayments}
+	Suppose we start from the same conditions as in the bad case.
 
+	There are no differences in the evolution of this step, so that the situation at the end of this step is the same:
+\begin{verbatim}
+bank 1 account =   10  demanded credit =    0 allowed credit =    0
+bank 2 account = -150  demanded credit = -150 allowed credit = -130 
+bank 3 account =  -50  demanded credit =  -50 allowed credit =  -50
+\end{verbatim}
+
+
+	\subsubsection*{Step 2: refunding}
+	Good conditions here means that the firm realized a profit and thus has a positive cash on hand, say
+
+	\verb+cashOnHand = 50+
+
+20 of them are used to refund the bank. So, now, the situation is 
+
+\begin{verbatim}
+bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit = -150 allowed credit = -130 unpaid =  0
+bank 3: account =  -50  demanded credit =  -50 allowed credit =  -50 unpaid =  0
+
+cashOnHand = 30
+\end{verbatim}
+
+
+
+	\subsubsection*{Step 3: account resetting}
+
+\begin{verbatim}
+bank 1: account =   10  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 30
+\end{verbatim}
+
+	\subsubsection*{Step 4: set desired credit}
+	Imagine now, the firm had a production capital equal to 100 before starting production. 
+	
+	Suppose production depreciates capital to 95.
+
+	Furthermore, suppose the firm expects an increase of demand and wants to increase its production capital to 110.
+
+	So, to bring production capital to the desired level 15 is needed.
+
+	Checking financial resources available internally the firm conclude that it can achieve the objective without asking to banks. 
+
+	Furthermore there is an inconsistency in firms bank accounts: the positive one should be used to reduce the negative ones. The software at this stage withdraws positive bank accounts and store them in the variable \verb+financialResourcesInBankAccounts+:
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -130  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 30 financialResourcesInBankAccounts = 10
+\end{verbatim}
+
+	\subsubsection*{Step 5: credit supply}
+In this step no change is performed because credit was not asked.
+
+	\subsubsection*{Step 6: adjust production capital and banks accounts}
+
+	Production capital is adjusted by using internal financial resources. 
+
+	So, after this step we have
+
+	\verb+productionCapital=110+
+
+	\verb/cashOnHand + financialResourcesInBankAccounts = 25/
+
+	finally, the residual internal funds are used to improve the ``worst'' bank account:
+
+\begin{verbatim}
+bank 1: account =    0  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 2: account = -105  demanded credit =    0 allowed credit =    0 unpaid =  0
+bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
+
+cashOnHand = 0 financialResourcesInBankAccounts = 0
+\end{verbatim}
+
+\chapter{Selected topics}
+
+\section{Stock-Flow consistency}
+
+Uncontrolled flows
 
 \part{Modifying GABRIELE}
+
+\chapter{How to modify GABRIELE}
+
+\section{Initialization}
+The step for initialization are performed in the \verb+Context.java+ file.
+
+In particulate, the lines of code between the
+
+\verb+System.out.println("BEGINNING OF INITIAL SETUP");+
+
+and the
+
+\verb+System.out.println("END OF INITIAL SETUP");+
+
+instructions perform the initialization steps.
+
+
+\section{Main loop}
+
+The main loop is scheduled in the\\ \verb+OfficeForStatistics.scheduleEvents()+\\ method.
+
 
 \part{Documenting GABRIELE}
 
