@@ -69,7 +69,8 @@ public class Context implements ContextBuilder<Object> {
 	public static double interestRateOnDeposits=0.001;
 	public static double interestRateOnLoans=0.004;
 	public static double interestRateOnSubsidizedLoans=0.001;
-	public static double taxRate=0.1;
+	public static double initialTaxRate=0.1;
+	public static double taxRate=initialTaxRate;
 	public static int unemploymentDole=10;
 	public static int subsistenceConsumption=10;
 	public static int costEdu=10;
@@ -184,6 +185,8 @@ public class Context implements ContextBuilder<Object> {
     	numberOfJobApplicationAnUneployedSends=(Integer)params.getValue("numberOfJobApplicationAnUneployedSends");
     	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
        	probabilityOfAProductInnovation=(Double)params.getValue("probabilityOfAProductInnovation");
+       	initialTaxRate=(Double)params.getValue("initialTaxRate");
+	taxRate=initialTaxRate;
 
 	int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
