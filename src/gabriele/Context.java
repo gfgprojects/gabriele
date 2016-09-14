@@ -69,6 +69,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double interestRateOnDeposits=0.001;
 	public static double interestRateOnLoans=0.004;
 	public static double interestRateOnSubsidizedLoans=0.001;
+	public static double taxRate=0.1;
 	public static int unemploymentDole=10;
 	public static int subsistenceConsumption=10;
 	public static int costEdu=10;
@@ -111,8 +112,6 @@ public class Context implements ContextBuilder<Object> {
 	//propensioni rivedere calibration
 	public static double alpha = 0.4;
 	public static double beta = 0.4;
-	//taxes on consumption, tax rate evolves??...T = \phi c
-	public static double taxRate = 0.1;
 
 
 	Consumer aConsumer;

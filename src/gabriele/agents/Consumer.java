@@ -40,7 +40,9 @@ public class Consumer {
 	 //double workerWage=RandomHelper.nextDoubleFromTo(100, 2000);
 	  double abilityStudent = RandomHelper.nextDoubleFromTo(Context.minAbilityStudent,Context.maxAbilityStudent);
 	 //double taxConsumTot=taxRate*consumption;
+	 double dole=0;
 	 double wage=0;
+	 double taxes=0;
 	 double disposableIncome=0;
 	 //DEBT
 	 //double workerLoan;
@@ -248,7 +250,7 @@ public void stepState(){
 		}
 
 
-//compute totalSmountoToRefund and FinancialResourcesInBankAccounts
+//compute totalAmountToRefund and FinancialResourcesInBankAccounts
 		double amountOfThisBankAccount,resourcesAvailableToRefund;
 		double totalAmountToRefund=0;
 		financialResourcesInBankAccounts=0;
@@ -263,7 +265,7 @@ public void stepState(){
 			}
 		}
 //assign disposableIncome
-		disposableIncome=wage;
+//		disposableIncome=wage;
 //resize disposableIncome
 		if(totalAmountToRefund>0){
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.subsistenceConsumption;
@@ -418,9 +420,13 @@ public void stepState(){
 		demandsList = new ArrayList<AProductDemand>();
 		desiredDemand=0;
 
+		dole=0;
+
 		if(!isWorking){
-			wage=(double)Context.unemploymentDole;
-			disposableIncome=wage;
+			dole=(double)Context.unemploymentDole;
+			wage=0;
+			taxes=0;
+			disposableIncome=dole;
 			if(preferenceParameter<1){
 				preferenceParameter=1;
 			}
@@ -579,8 +585,10 @@ public void stepWorkerState() {
 		int positionOfBestAccount,positionOfWorstAccount;
 		demandsList = new ArrayList<AProductDemand>();
 		desiredDemand=0;
-
+		
+		dole=0;
 		wage=0;
+		taxes=0;
 		disposableIncome=0;
 		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
 
@@ -1073,8 +1081,10 @@ public void saveDataToFile(){
 		}
 		public void setWage(double w){
 			wage=w;
+			taxes=wage*Context.taxRate;
+			disposableIncome=wage-taxes;
 			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
+				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage+" taxes "+taxes+" disposableIncome "+disposableIncome);
 			}
 		}
 		public void receiveRetirementNew(){
