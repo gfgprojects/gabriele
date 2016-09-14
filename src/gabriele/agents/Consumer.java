@@ -448,7 +448,7 @@ public void stepState(){
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" dole "+dole+" taxes "+taxes+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
 		desiredDemand=preferenceParameter*disposableIncome;
@@ -600,7 +600,7 @@ public void stepWorkerState() {
 		}
 
 		if(Context.verboseFlag){
-			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" disposableIncome "+disposableIncome+" wealth "+wealth);
+			System.out.println("     Consumer "+identity+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" dole "+dole+" taxes "+taxes+" disposableIncome "+disposableIncome+" wealth "+wealth);
 		}
 
 		desiredDemand=Context.costEdu;

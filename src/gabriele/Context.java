@@ -537,7 +537,7 @@ public class Context implements ContextBuilder<Object> {
 
 
 			//if(verboseFlag){
-			System.out.println("FIRMS COMPUTE DESIRED CREDIT");
+			System.out.println("FIRMS: COMPUTE DESIRED CREDIT");
 			//		}
 			contextAction=contextActionFactory.createActionForIterable(firmsList,"setDesiredCredit",false);
 			contextAction.execute();

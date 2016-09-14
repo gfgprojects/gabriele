@@ -1218,7 +1218,7 @@ System.out.println("     number of firms after exit "+firmsList.size());
 	}
 	public void scheduleConsumersStepDesiredConsumption(){
 		if(Context.verboseFlag){
-			System.out.println("CONSUMERS: STEP CONSUMPTION");
+			System.out.println("CONSUMERS: STEP DESIRED CONSUMPTION");
 		}
 		statAction=statActionFactory.createActionForIterable(consumersList,"stepDesiredConsumption",false);
 		statAction.execute();
@@ -1266,7 +1266,7 @@ public void scheduleSaveFirmsData(){
 	}
 	public void scheduleFirmsComputeEconomicResultAndCapitalDepreciation(){
 		if(Context.verboseFlag){
-			System.out.println("FIRMS COMPUTE ECONOMIC RESULT");
+			System.out.println("FIRMS: COMPUTE ECONOMIC RESULT");
 		}
 		statAction=statActionFactory.createActionForIterable(firmsList,"computeEconomicResultAndCapitalDepreciation",false);
 		statAction.execute();
