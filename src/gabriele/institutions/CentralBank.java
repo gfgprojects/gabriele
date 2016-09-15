@@ -1,9 +1,12 @@
 package gabriele.institutions;
 
-import gabriele.agents.Bank;
+import gabriele.financialContracts.BankAccount;
 
 public class CentralBank {
-	Bank aBank;
-	Government theGovernment;
+BankAccount governmentBankAccount;
+
+public void setGovernmentBankAccount(BankAccount gba){
+	governmentBankAccount=gba;
+}
 
 }

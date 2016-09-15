@@ -1,10 +1,22 @@
 package gabriele.institutions;
 
-import gabriele.agents.Consumer;
-import gabriele.agents.Firm;
+import gabriele.financialContracts.BankAccount;
+import gabriele.Context;
 
 public class Government {
-Consumer aConsumer;
-Firm aFirm;
-//OfficeForStatistics ofs;
+BankAccount bankAccount;
+
+public Government(){
+	bankAccount=new BankAccount(0,null,null);
+}
+public void setInitialAmountInBankAccount(double initialAnountInBankAccount){
+	bankAccount.setAccount(initialAnountInBankAccount);
+	if(Context.verboseFlag){
+	System.out.println("      public debt "+initialAnountInBankAccount*-1);
+	}
+}
+public BankAccount getBankAccount(){
+	return bankAccount;
+}
+
 }

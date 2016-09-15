@@ -46,5 +46,6 @@
     <parameter name="percentageOfRealizedUnusedProductionCapital" type="constant" constant_type="double" value="0.9"></parameter>
     <parameter name="probabilityOfAProductInnovation" type="constant" constant_type="double" value="0.0"></parameter>
     <parameter name="initialTaxRate" type="constant" constant_type="double" value="0.2"></parameter>
+    <parameter name="initialPublicDebtCoefficient" type="constant" constant_type="double" value="0.5"></parameter>
     <parameter name="batchStoppingTime" type="constant" constant_type="int" value="1"></parameter>
 </sweep>

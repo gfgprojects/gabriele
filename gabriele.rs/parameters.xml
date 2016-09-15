@@ -120,6 +120,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
 									
 		/>
+				<parameter name="initialPublicDebtCoefficient" displayName="initialPublicDebtCoefficient" type="double" 
+						defaultValue="0.5" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="minConsumerInitialBankAccount" displayName="min of consumer bank account at initialization" type="int" 
 						defaultValue="-500" 
 						isReadOnly="false" 

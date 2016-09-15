@@ -20,6 +20,8 @@ import gabriele.agents.Consumer;
 import gabriele.agents.Firm;
 import gabriele.institutions.LaborMarket;
 import gabriele.institutions.OfficeForStatistics;
+import gabriele.institutions.CentralBank;
+import gabriele.institutions.Government;
 import gabriele.agents.Bank;
 
 public class Context implements ContextBuilder<Object> {
@@ -71,6 +73,7 @@ public class Context implements ContextBuilder<Object> {
 	public static double interestRateOnSubsidizedLoans=0.001;
 	public static double initialTaxRate=0.1;
 	public static double taxRate=initialTaxRate;
+	public static double initialPublicDebtCoefficient=0.5;
 	public static int unemploymentDole=10;
 	public static int subsistenceConsumption=10;
 	public static int costEdu=10;
@@ -121,6 +124,8 @@ public class Context implements ContextBuilder<Object> {
 
 	IndexedIterable consumersList,firmsList,banksList;
 	OfficeForStatistics officeForStatistics;
+	CentralBank centralBank;
+	Government government;
 
 	DefaultActionFactory contextActionFactory= new DefaultActionFactory();
 	IAction contextAction;
@@ -186,7 +191,8 @@ public class Context implements ContextBuilder<Object> {
     	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
        	probabilityOfAProductInnovation=(Double)params.getValue("probabilityOfAProductInnovation");
        	initialTaxRate=(Double)params.getValue("initialTaxRate");
-	taxRate=initialTaxRate;
+       	taxRate=initialTaxRate;
+       	initialPublicDebtCoefficient=(Double)params.getValue("initialPublicDebtCoefficient");
 
 	int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
 	//			startRecordingConsumersData=(Integer)params.getValue("startRecordingConsumersData");
@@ -253,6 +259,20 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("CREATING OFFICE FOR STATISTICS");
 		}
 		officeForStatistics=new OfficeForStatistics(context);
+
+		if(verboseFlag){
+			System.out.println("CREATING CENTRAL BANK");
+		}
+		centralBank=new CentralBank();
+
+		if(verboseFlag){
+			System.out.println("CREATING GOVERNMENT");
+		}
+		government=new Government();
+		double initialPublicDebt=numConsumers*(1-probabilityToBeUnemployedAtTheBeginning)*0.5*parameterOfProductivityInProductionFuncion*initialPublicDebtCoefficient;
+		government.setInitialAmountInBankAccount(-initialPublicDebt);
+		centralBank.setGovernmentBankAccount(government.getBankAccount());
+
 
 
 		if(verboseFlag){
