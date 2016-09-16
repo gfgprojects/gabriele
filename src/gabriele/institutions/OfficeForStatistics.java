@@ -23,6 +23,9 @@ import gabriele.agents.Firm;
 import gabriele.agents.Bank;
 import gabriele.agents.Industry;
 import gabriele.agents.Consumer;
+import gabriele.institutions.LaborMarket;
+import gabriele.institutions.Government;
+import gabriele.institutions.CentralBank;
 import gabriele.Context;
 import gabriele.bargaining.AProductDemand;
 import gabriele.utils.AbsoluteRankNonAggregateDataSource;
@@ -30,10 +33,12 @@ import gabriele.utils.AbsoluteRankNonAggregateDataSource;
 public class OfficeForStatistics{
 	public repast.simphony.context.Context<Object> myContext;
 	LaborMarket myLaborMarket;
+	Government myGovernment;
+	CentralBank myCentralBank;
 	AggregateDataSource maximumAbsoluteRankDataSource,minimumAbsoluteRankDataSource;
 	public static ArrayList<Industry> industriesList = new ArrayList<Industry>();
 
-	double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateInvestmentsBeforeExchangingExistingCapital,aggregateUnusedProductionCapital,aggregateUnusedProductionCapitalForSale,aggregateLoans,aggregateDeposits,aggregateHouseholdDesiredChangeInCredit,aggregateHouseholdAllowedChangeInCredit;
+	public double maximumAbsoluteRank,minimumAbsoluteRank,aggregateProduction,totalWeightedProduction,aggregateDemand,aggregateInvestments,aggregateInvestmentsBeforeExchangingExistingCapital,aggregateUnusedProductionCapital,aggregateUnusedProductionCapitalForSale,aggregateLoans,aggregateDeposits,aggregateHouseholdDesiredChangeInCredit,aggregateHouseholdAllowedChangeInCredit,aggregateWage;
 	public IndexedIterable firmsList,consumersList,banksList;
 
 	Firm aFirm;
@@ -54,7 +59,7 @@ public class OfficeForStatistics{
 	double[] totalProductivityOfWorkersInADegree;
 	public static double[] averageProductivityOfWorkersInADegree;
 	int numberOfWorkers=0;
-	int numberOfFirms,numberOfConsumers,numberOfStudents,numberOfFirmExits;
+	int numberOfFirms,numberOfConsumers,numberOfStudents,numberOfUnemployed,numberOfFirmExits;
 	double aggregatePromissoryNotes=0;
 	int numberOfRetirements=0;
 	double totalProductivity=0;
@@ -211,6 +216,8 @@ public void loadAgents(){
 			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
 			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
+			myGovernment=(Government)(myContext.getObjects(Class.forName("gabriele.institutions.Government"))).get(0);
+			myCentralBank=(CentralBank)(myContext.getObjects(Class.forName("gabriele.institutions.CentralBank"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -255,10 +262,10 @@ public void loadAgents(){
 		}
 		*/
 		try{
-			firmsList=myContext.getObjects(Firm.class);
+			firmsList=myContext.getObjects(Class.forName("gabriele.agents.Firm"));
 			consumersList=myContext.getObjects(Class.forName("gabriele.agents.Consumer"));
 			banksList=myContext.getObjects(Class.forName("gabriele.agents.Bank"));
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institution.LaborMarket"))).get(0);
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -402,14 +409,53 @@ public void loadAgents(){
 			aggregateLoans+=aBank.getLoans();
 			aggregateDeposits+=aBank.getDeposits();
 		}
-	//compute number of students
+	//compute number of students and unemployed
 		numberOfStudents=0;
+		numberOfUnemployed=0;
 		for(int i=0;i<consumersList.size();i++){
 			aConsumer=(Consumer)consumersList.get(i);
 			if(aConsumer.getIsStudentFlag()){
 				numberOfStudents++;
 			}
+			else{
+				if(!aConsumer.getIsWorkingFlag()){
+					numberOfUnemployed++;
+				}
+			}
 		}
+	}
+
+	public void implementFiscalPolicy(){
+			if(Context.verboseFlag){
+			System.out.println("OFFICE FOR STATISTICS, GOVERNMENT AND CENTRAL BANK: IMPLEMENT FISCAL POLICY");
+			System.out.println("  OFFICE FOR STATISTICS: COMPUTE VARIABLES FOR FISCAL POLICY DECISION");
+		}
+		aggregateWage=0;
+		for(int i=0;i<consumersList.size();i++){
+			aConsumer=(Consumer)consumersList.get(i);
+				if(aConsumer.getIsWorkingFlag()){
+					aggregateWage+=aConsumer.getWage();
+				}
+
+		}
+		if(Context.verboseFlag){
+			System.out.println("     taxableIncome = aggregateWage "+aggregateWage+" numberOfUnemployed "+numberOfUnemployed);
+		}
+
+		if(Context.verboseFlag){
+			System.out.println("  CENTRAL BANK: DECIDE ON GOVERNMENT FINANCING");
+		}
+		myCentralBank.setGovernmentAllowedCredit(aggregateProduction);
+		if(Context.verboseFlag){
+			System.out.println("  GOVERNMENT: DECIDE TAX RATE");
+		}
+		myGovernment.setTaxRate(numberOfUnemployed,aggregateWage);
+
+		if(Context.verboseFlag){
+			System.out.println("  CONSUMERS: ADJUST TO FISCAL POLICY");
+		}
+		statAction=statActionFactory.createActionForIterable(consumersList,"adjustToFiscalPolicy",false);
+		statAction.execute();
 	}
 
 	public void resetProducAttractiveness(){
@@ -695,7 +741,7 @@ public void loadAgents(){
 			System.out.println("LABOR AGENCY");
 		}
 		try{
-			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.instituions.LaborMarket"))).get(0);
+			myLaborMarket=(LaborMarket)(myContext.getObjects(Class.forName("gabriele.institutions.LaborMarket"))).get(0);
 		}
 		catch(ClassNotFoundException e){
 			System.out.println("Class not found");
@@ -1033,16 +1079,15 @@ System.out.println("     number of firms after exit "+firmsList.size());
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,50.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
-		//		Context.schedule.scheduleIterable(scheduleParameters,firmsList,"makeProduction",false);
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,49.0);
 		Context.schedule.schedule(scheduleParameters,this,"computeVariables");
 
-		//		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.5);
-		//		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsMakeProduction");
-
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,48.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleFirmsSetWage");
+
+		scheduleParameters=ScheduleParameters.createRepeating(1,1,47.5);
+		Context.schedule.schedule(scheduleParameters,this,"implementFiscalPolicy");
 
 		scheduleParameters=ScheduleParameters.createRepeating(1,1,47.0);
 		Context.schedule.schedule(scheduleParameters,this,"scheduleBanksUpdateConsumersAccounts");

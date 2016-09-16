@@ -227,6 +227,30 @@ public void stepState(){
 	    //-taxes
 	}
 */	    
+	public void adjustToFiscalPolicy(){
+		if(isStudent){
+			wage=0;
+			dole=0;
+			taxes=0;
+			disposableIncome=0;
+		}
+		else{
+			if(isWorking){
+				dole=0;
+				taxes=wage*Context.taxRate;
+				disposableIncome=wage-taxes;
+			}
+			else{
+				wage=0;
+				dole=(double)Context.unemploymentDole;
+				taxes=0;
+				disposableIncome=dole;
+			}
+		}
+		if(Context.verboseFlag){
+			System.out.println("     Consumer "+getIdentity()+" isStudent "+isStudent+" isWorking "+isWorking+" wage "+wage+" dole "+dole+" taxes "+taxes+" disposableIncome "+disposableIncome);
+		}
+	}
 
 	public void payBackBankDebt(){
 
@@ -264,8 +288,6 @@ public void stepState(){
 				financialResourcesInBankAccounts+=amountOfThisBankAccount;
 			}
 		}
-//assign disposableIncome
-//		disposableIncome=wage;
 //resize disposableIncome
 		if(totalAmountToRefund>0){
 			resourcesAvailableToRefund=financialResourcesInBankAccounts+disposableIncome-Context.subsistenceConsumption;
@@ -273,7 +295,7 @@ public void stepState(){
 				resourcesAvailableToRefund=0;
 			}
 			if(Context.verboseFlag){
-				System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" wage "+disposableIncome+" resourcesAvailableToRefund=(wage+deposits-minCinsumption) "+resourcesAvailableToRefund);
+				System.out.println("     Consumer "+getIdentity()+" to refund "+totalAmountToRefund+" financial resource in bank accounts "+financialResourcesInBankAccounts+" resourcesAvailableToRefund=(disposableIncome+deposits-minCinsumption) "+resourcesAvailableToRefund);
 			}
 			if(resourcesAvailableToRefund>=totalAmountToRefund){
 				for(int i=0;i<bankAccountsList.size();i++){
@@ -423,10 +445,6 @@ public void stepState(){
 		dole=0;
 
 		if(!isWorking){
-			dole=(double)Context.unemploymentDole;
-			wage=0;
-			taxes=0;
-			disposableIncome=dole;
 			if(preferenceParameter<1){
 				preferenceParameter=1;
 			}
@@ -586,10 +604,6 @@ public void stepWorkerState() {
 		demandsList = new ArrayList<AProductDemand>();
 		desiredDemand=0;
 		
-		dole=0;
-		wage=0;
-		taxes=0;
-		disposableIncome=0;
 		disposableIncomeWhenDecidingDesiredConsumption=disposableIncome;
 
 		wealth=0;
@@ -1081,10 +1095,8 @@ public void saveDataToFile(){
 		}
 		public void setWage(double w){
 			wage=w;
-			taxes=wage*Context.taxRate;
-			disposableIncome=wage-taxes;
 			if(Context.verboseFlag){
-				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage+" taxes "+taxes+" disposableIncome "+disposableIncome);
+				System.out.println("     Consumer "+identity+" isWorking "+isWorking+" degree "+degree+" productivity "+productivity+" my employer firm "+myEmployer.getID()+" sent me the wage "+wage);
 			}
 		}
 		public void receiveRetirementNew(){

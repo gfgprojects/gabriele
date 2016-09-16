@@ -71,9 +71,10 @@ public class Context implements ContextBuilder<Object> {
 	public static double interestRateOnDeposits=0.001;
 	public static double interestRateOnLoans=0.004;
 	public static double interestRateOnSubsidizedLoans=0.001;
-	public static double initialTaxRate=0.1;
-	public static double taxRate=initialTaxRate;
+	public static double maximumTaxRate=0.1;
+	public static double taxRate=maximumTaxRate;
 	public static double initialPublicDebtCoefficient=0.5;
+	public static double stepInPublicDebtProductionRatio=0.02;
 	public static int unemploymentDole=10;
 	public static int subsistenceConsumption=10;
 	public static int costEdu=10;
@@ -190,8 +191,7 @@ public class Context implements ContextBuilder<Object> {
     	numberOfJobApplicationAnUneployedSends=(Integer)params.getValue("numberOfJobApplicationAnUneployedSends");
     	percentageOfRealizedUnusedProductionCapital=(Double)params.getValue("percentageOfRealizedUnusedProductionCapital");
        	probabilityOfAProductInnovation=(Double)params.getValue("probabilityOfAProductInnovation");
-       	initialTaxRate=(Double)params.getValue("initialTaxRate");
-       	taxRate=initialTaxRate;
+       	maximumTaxRate=(Double)params.getValue("maximumTaxRate");
        	initialPublicDebtCoefficient=(Double)params.getValue("initialPublicDebtCoefficient");
 
 	int batchStoppingTime=(Integer)params.getValue("batchStoppingTime");        
@@ -259,11 +259,13 @@ public class Context implements ContextBuilder<Object> {
 			System.out.println("CREATING OFFICE FOR STATISTICS");
 		}
 		officeForStatistics=new OfficeForStatistics(context);
+		context.add(officeForStatistics);
 
 		if(verboseFlag){
 			System.out.println("CREATING CENTRAL BANK");
 		}
 		centralBank=new CentralBank();
+		context.add(centralBank);
 
 		if(verboseFlag){
 			System.out.println("CREATING GOVERNMENT");
@@ -272,6 +274,7 @@ public class Context implements ContextBuilder<Object> {
 		double initialPublicDebt=numConsumers*(1-probabilityToBeUnemployedAtTheBeginning)*0.5*parameterOfProductivityInProductionFuncion*initialPublicDebtCoefficient;
 		government.setInitialAmountInBankAccount(-initialPublicDebt);
 		centralBank.setGovernmentBankAccount(government.getBankAccount());
+		context.add(government);
 
 
 
