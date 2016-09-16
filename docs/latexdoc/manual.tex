@@ -1200,6 +1200,7 @@ We present here the sequence of events and will enter in the details of each ite
 The reader can easily check the correspondence between the numbering of events in figure \ref{fig:clockcolor} and that in the following list. The sequence of events is the following:
 \begin{enumerate}
 	\item consumers receive income: wage if employed and dole if unemployed;
+	\item Government decides fiscal policy
 	\item banks 
 		\begin{enumerate}
 			\item account interest
@@ -1288,6 +1289,134 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/se
 \begin{marginfigure}
 	\includegraphics[scale=0.1]{uml.png}
 \end{marginfigure}
+
+\subsubsection{Office for statistics, Government and Central Ban implement fiscal policy}
+
+{\it Office for statistics compute the taxable income and number of unemployed}
+
+The aggregate taxable income is given by the sum of wages:
+\[
+TI=\sum_w w_w
+\]
+
+The number of unemployed is denoted with $U$.
+
+\noindent
+{\it The central bank}
+
+First of all the Central Bank charge the interest rate on public debt:
+\[
+	PD=PD(1+\textnormal{\gls{var:i-}})
+\]
+
+Then, the Central Bank decides on the credit allowed to Government using the public debt-production ratio:
+\[
+	pd= \frac{PD}{Y}
+\]
+
+The outcome of the process can be:
+\begin{itemize}
+	\item $pd\uparrow$: the Government can increase the debt but the new $pd$ cannot be higher than $pd+dpd$;
+	\item $pd=$: the Government cannot increase its debt;
+	\item $pd\downarrow$: the Government must reduce the $pd$ at least to $pd+dpd$.
+\end{itemize}
+These events happen with the following probabilities:
+\[
+	\begin{array}{l c l}
+	pr(pd\uparrow) & = &0.5 e^{-0.69pd}\\
+	pr(pd=) &= &pr(pd\uparrow)\\
+	pr(pd\downarrow)&=&1-pr(pd\uparrow)-pr(pd=)
+	\end{array}
+\]
+
+The following table provides some numerical examples
+
+\begin{center}
+\begin{tabular}{c c c c}
+	\hline
+	$pd$& $pr(pd\uparrow)$ & $pr(pd=)$ & $pr(pd\downarrow)$\\
+	\hline
+	0   & 0.5 & 0.5 & 0\\
+	0.3 & 0.4 & 0.4& 0.2\\
+	0.6 & 0.33 & 0.33 & 0.33\\
+	2.0 & 0.126 & 0.126 & 0.748\\
+	\hline
+\end{tabular}
+\end{center}
+It can be easily checked that the probability that the central bank finances a public deficit decreases with the level of $pd$ while the probability that the Central Bank insists on the realization of a public surplus increases with $pd$.
+
+The outcome of the process is thus the $pd$ desired by the central bank:
+\[
+	pd^d=\left\{ 
+		\begin{array}{l l l}
+			pd+dpd& \textnormal{with probability} &pr(pd\uparrow)\\ 
+			pd& \textnormal{with probability} &pr(pd=)\\ 
+			pd-dpd& \textnormal{with probability} &pr(pd\downarrow)\\ 
+		\end{array}
+		\right.
+\]
+
+Thus, we can compute the desire public debt as
+\[
+PD^d=pd^dY
+\]
+and the desired public surplus as
+\[
+PD-PD^d
+\]
+
+\noindent
+{\it The government}
+
+The government decides the tax rate taking account of the Central Bank recommendations. However, as we will explain below, sometimes the government can oppose Central bank.
+%it is willing to accommodate the central bank requests if they does not implies a sacrifice too high. In other words, the government will not set a tax rate higher than $\bar{\tau}$. 
+
+Fist of all, the government computes the tax rate that satisfies the Central Bank recommendation by solving $\tau^d$ in the following equation:
+\[
+PD-PD^d=\tau^d \ TI - d \ U
+\]
+This gives
+\[
+	\tau^d= \frac{PD-PD^d+d \ U}{TI}
+\]
+
+Setting the tax rate is a little bit tricky. 
+First of all, we observe that the government can always set a tax rate higher than that desired by the central bank. Because we exclude that the government increases the consumers' sacrifice, this possibility is applied only when $\tau^d<0$. In this case the government set $\tau=0$ and uses only a part of the financial resources the Central Bank is willing to lend.
+
+In the other case, $\tau$ is set to $\tau^d$ except when $\tau^d$ is judged too high and the Government can enforce a lower tax rate. The Central bank suggestion can be opposed by rejecting its request to be refunded. Fulfilling a Central bank request of refunding, i.e. reducing the public debt, often causes an increase in the tax rate. When this increase is judged too high, the government can contain the increase by partially or totally denying The Central Bank request. In this case, an unpaid amount will be recorded for the government.
+
+To model this possibility, we introduce a tax rate that the government would not exceed, $\bar{\tau}$. We then compute the tax rate that would prevail with no amount refunded:
+\[
+	\tilde{\tau}= \frac{d \ U}{TI}
+\]
+Note that when refunding is asked, $\tau^d>\tilde{\tau}$. Now, when $\tilde{\tau}>\bar{\tau}$ the government cannot reduce the tax rate at the desired level  $\bar{\tau}$ and it is forced to sets the tax rate to $\tilde{\tau}$.  
+When $\tilde{\tau}<\bar{\tau}<\tau^d$ the government partially fulfills the Central Bank requests by setting the tax rate to $\bar{\tau}$.  
+
+So, the tax rate is set as follows:
+\[
+	\tau=\left\{ 
+		\begin{array}{l l l}
+			0& \textnormal{if} &\tau^d<0\\ 
+			\tau^d& \textnormal{if} &\tilde{\tau}>\tau^d \\ 
+			\tilde{\tau}& \textnormal{if} &\bar{\tau}<\tilde{\tau}<\tau^d\\ 
+			\bar{\tau}& \textnormal{if} &\tilde{\tau}<\bar{\tau}<\tau^d\\ 
+		\end{array}
+		\right.
+\]
+
+%Note that if $\tau^d<0$ the government , while if $\tau^d>\bar{\tau}$, the governments opposes the reduction of public debt asked by the Central Bank and does not repay all the amount asked.  
+%In the remaining case, Central Banks requests are fulfilled.
+
+\noindent
+{\it Consumers adjust to fiscal policy}
+
+Now, the government collects taxes and pays unemployment dole. The consumers can therefore compute their available income.
+
+Workers' vailable income is given by $w_w(1-\tau)$.
+
+Unemployed, receive the dole and pay no taxes, therefore their available income is equal tot he dole.
+
+Students have no income so their available income is equal to zero.
 
 \subsubsection{Banks account interests and ask for loan repayments}
 
@@ -2032,9 +2161,13 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/fi
 \subsubsection{Firms step the product innovation process}
 
 Innovation in this model comes into the form of product innovations. We model this process by introducing the variable \gls{var:ARf} which denotes the Absolute Rank of the good produced by firm $f$.  
-\gls{var:ARf} gives the position of the good in the quality ladder where higher values denote the higher quality.
+\gls{var:ARf} gives the position of the good in the quality ladder where higher values denote higher quality.
 
-The product innovation is implemented as follows
+The product innovation is implemented in a very simple way\begin{marginfigure}\hskip23mm
+	\includegraphics[scale=0.1]{edit.jpg}
+\end{marginfigure}
+
+
 \[
 	\textnormal{\gls{var:ARf}} =\left\{ 
 		\begin{array}{l l l}
@@ -2086,7 +2219,7 @@ Consider for example companies producing smart phones. Suppose we identify these
 \begin{center}
 \begin{tabular}{c c c c}
 	\hline
-	$f$ & model & $AR_f$ & $RR_f$\\
+	$f$ & product & $AR_f$ & $RR_f$\\
 	\hline
 	A & A6 & 6 & 2\\
 	B & B6 & 6 & 2\\
@@ -2099,7 +2232,7 @@ Suppose company A launches its new A7 smart phone. The previous table evolve as 
 \begin{center}
 \begin{tabular}{c c c c}
 	\hline
-	$f$ & model & $AR_f$ & $RR_f$\\
+	$f$ & product & $AR_f$ & $RR_f$\\
 	\hline
 	A & A7 & 7 & 3\\
 	B & B6 & 6 & 2\\
@@ -2114,7 +2247,7 @@ After the introduction of this new product, consumers see C5 outdated. So compan
 
 \begin{tabular}[t]{c c c c}
 	\hline
-	$f$ & model & $AR_f$ & $RR_f$\\
+	$f$ & product & $AR_f$ & $RR_f$\\
 	\hline
 	A & A7 & 7 & 2\\
 	B & B6 & 6 & 1\\
@@ -2123,7 +2256,7 @@ After the introduction of this new product, consumers see C5 outdated. So compan
 \hskip2cm
 \begin{tabular}[t]{c c c c}
 	\hline
-	$f$ & model & $AR_f$ & $RR_f$\\
+	$f$ & product & $AR_f$ & $RR_f$\\
 	\hline
 	A & A7 & 7 & 2\\
 	B & B6 & 6 & 1\\
