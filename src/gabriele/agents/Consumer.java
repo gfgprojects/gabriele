@@ -470,6 +470,10 @@ public void stepState(){
 		}
 
 		desiredDemand=preferenceParameter*disposableIncome;
+//when people switch from student to unemployed they have no income and no dole. The following lines of code let them demand the subsistence level of consumption.
+		if(disposableIncome==0){
+			desiredDemand=Context.unemploymentDole;
+		}
 
 		industriesListIterator=OfficeForStatistics.industriesList.iterator();
 		while(industriesListIterator.hasNext()){
