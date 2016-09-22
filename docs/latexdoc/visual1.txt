@@ -35,8 +35,8 @@ c3 = fullcircle scaled 8.0cm;
 c5 = fullcircle scaled 7.0cm;
 c6 = fullcircle scaled 6.5cm;
 c4=(0,0)--(15cm,0);
-fill buildcycle(subpath(4,10) of c1,c4 rotated -75,subpath(4,10) of c3,c4 rotated 75) withcolor red;
-fill buildcycle(subpath(0,7.9) of c1,c4 rotated -75,subpath(0,7.9) of c3,c4 rotated 75) withcolor 0.7[blue,white];
+fill buildcycle(subpath(4,10) of c1,c4 rotated -85,subpath(4,10) of c3,c4 rotated 90) withcolor red;
+fill buildcycle(subpath(0,7.9) of c1,c4 rotated -85,subpath(0,7.9) of c3,c4 rotated 90) withcolor 0.7[blue,white];
 
 
 draw c1;
@@ -50,14 +50,14 @@ draw ah rotated (i*45-3) shifted (5cm*dir (i*45-3));
 
 draw textpathFont("\usefont{T1}{bch}{m}{n}\huge","consumption",reverse(c2),1.1);
 draw textpathFont("\usefont{T1}{bch}{m}{n}\huge","Production",reverse(c2),1.65);
-draw textpathFont("\usefont{T1}{bch}{m}{n}\large","Labor mkt",reverse(c5),1.7);
-draw textpathFont("\usefont{T1}{bch}{m}{n}\large","Production capital and Credit mkts",reverse(c5),1.72);
+draw textpathFont("\usefont{T1}{bch}{m}{n}\large","Labor \& Capital mkts",reverse(c5),1.87);
+draw textpathFont("\usefont{T1}{bch}{m}{n}\large","Capital \& Credit mkts",reverse(c5),1.59);
 draw textpathFont("\usefont{T1}{bch}{m}{n}\large","Goods and Credit mkts",reverse(c5),2.35);
 
 draw c4 rotated 175 intersectionpoint c3--c4 rotated 175 intersectionpoint c6;
-draw c4 rotated 105 intersectionpoint c3--c4 rotated 105 intersectionpoint c6;
-draw c4 rotated -75 intersectionpoint c1--c4 rotated -75 intersectionpoint c6;
-draw c4 rotated 75 intersectionpoint c1--c4 rotated 75 intersectionpoint c6;
+%draw c4 rotated 105 intersectionpoint c3--c4 rotated 105 intersectionpoint c6;
+draw c4 rotated -85 intersectionpoint c1--c4 rotated -85 intersectionpoint c6;
+draw c4 rotated 90 intersectionpoint c1--c4 rotated 90 intersectionpoint c6;
 
 
 l1 = (1cm*dir 45)--(6cm*dir 45);
@@ -73,15 +73,15 @@ picture lab;
 lab=thelabel(btex demand side etex,origin) rotated -45 shifted (4.0cm*dir 45);
 %unfill bbox lab;
 
-fill fullcircle scaled 3mm shifted (0cm,13.25cm);
+fill fullcircle scaled 3mm shifted (0cm,14.25cm);
 
-draw fullcircle scaled 4mm shifted (0cm,13.25cm);
+draw fullcircle scaled 4mm shifted (0cm,14.25cm);
 
 picture tl;
 
-tl=thelabel(btex initialization etex scaled scalefactor,(0cm,12cm));
+tl=thelabel(btex initialization etex scaled scalefactor,(0cm,13.0cm));
 
-draw (0cm,13cm)--(0cm,5.2cm){dir -90}..{dir 0}(2mm,5cm);
+draw (0cm,14cm)--(0cm,5.2cm){dir -90}..{dir 0}(2mm,5cm);
 
 unfill bbox tl;
 draw tl;
