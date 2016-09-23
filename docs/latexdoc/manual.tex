@@ -1156,6 +1156,19 @@ In this way, stock consistency in each bank balance sheet is restored:\begin{mar
 \[
 	\sum BA^{+}_{cb}=Dep_b
 \]
+\subsection{Government and the Central Bank}
+Because we have only the bank account as financial contract, the Government can finance its deficit by borrowing on its bank account at Central Bank. 
+
+The initialization consists thus in opening the Government bank account at Central Bank and setting its amount. This is the initial level of the public Debt.
+
+Because the aggregate production has not been yet computed, we link this amount to an estimation of this variable.
+
+\[
+	Y^e_0=C(1-\textnormal{\gls{par:thetaptbub}})0.5\textnormal{\gls{par:thetaYL}}
+\]
+where $C(1-\textnormal{\gls{par:thetaptbub}})$ is an estimation of the number of workers and $0.5\textnormal{\gls{par:thetaYL}}$ an estimation of the average productivity of workers.
+
+
 \subsection{Conclusions}
 
 At the end of the initialization phase, all the consumers know if they are student, employed or unemployed. Non students know their level of productivity. Employed know in which firm they are working.
