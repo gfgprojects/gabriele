@@ -1581,7 +1581,7 @@ Each consumer check her/his income: workers have the wage as an income, unemploy
 
 Based on this information the desired consumption is computed using a consumption function. In the current version of the model this amount is computed randomly and it can be higher or lower than the available income. 
 \begin{marginfigure}
-	\hskip2.5cm\includegraphics[scale=0.1]{edit.jpg}
+	\hskip2.5cm\includegraphics[scale=0.2]{edit.png}
 \end{marginfigure}
 
 
@@ -2095,7 +2095,7 @@ The UML sequence diagram of this event is available \href{\doclocation/umldoc/co
 
 In this basic version of the model, firms turnover is very simple: each firm that becomes too small is replaced with a new firm.
 \begin{marginfigure}
-	\hskip2.5cm\includegraphics[scale=0.1]{edit.jpg}
+	\hskip2.5cm\includegraphics[scale=0.2]{edit.png}
 \end{marginfigure}
 
 In particular, the exit condition is
@@ -2198,7 +2198,7 @@ Innovation in this model comes into the form of product innovations. We model th
 \gls{var:ARf} gives the position of the good in the quality ladder where higher values denote higher quality.
 
 The product innovation is implemented in a very simple way\begin{marginfigure}\hskip23mm
-	\includegraphics[scale=0.1]{edit.jpg}
+	\includegraphics[scale=0.2]{edit.png}
 \end{marginfigure}
 
 
@@ -3114,14 +3114,76 @@ Therefore, to modify these figures, you have to edit the corresponding mp source
 Figures \ref{fig:sequence} and \ref{fig:clockcolor} are also obtained as metapost output, but the process is more structured to ease possible changes. The complication of this figure is that events are represented as evenly spaced sun rays. Imagine a new event must be added. It would be a significant work to manually change the positions of all the events labels. We use the R software (\href{https://www.r-project.org}{https://www.r-project.org}) to ``automate'' the process that leads to the figure. The \verb+visual.R+ script, for example, produces figure \ref{fig:sequence}. It takes as input two text files: \verb+visual.txt+ and \verb+items_in_main_loop_black.txt+. The first one contains metapost drawing commands for all the elements except the events descriptions (the sun rays). This file has to be edited to include new such elements. The second file lists the labels of the rays (note, they are in inverted order and include \LaTeX commands). The R script loads the list from the file, computes the angle between rays and produces metapost command to draw the labels. All the metapost drawing commands are written in the \verb+visual.mp+ file. The R script also takes care of running metapost on this file.
 At the end of the day, to modify the figure one has to edit one of the text files and run the script in R. The same process applies to the production of figure \ref{fig:clockcolor}. The file involved here are \verb+visual1.txt+ and \verb+items_in_main_loop.txt+ and the R script \verb+visual1.R+.
 
-
-\chapter{Unified Modeling Language (UML)}
-
-
 \chapter{Javadoc}
 
 From Repast project menu, choose Generate javadoc. Select gabriele from the list. Modify the destination folder to 
 \verb+<path to repast workspace>/gabriele/docs+ if needed and click on finish.
 
+
+
+\chapter{Unified Modeling Language (UML)}
+\section{Class diagrams}
+
+Class diagrams can be generated directly from the code by using the umlgraph.\footnote{\url{https://www.spinellis.gr/umlgraph/}} 
+As trated in the umlgraph installation page:  
+UmlGraph needs to be post-processed with the Graphviz dot program. Therefore, to draw class diagrams with UmlGraph class you will need to have javadoc and Graphviz\footnote{\url{http://www.graphviz.org}} installed on your computer. 
+ 
+First install the graphviz software. Now you should have the \verb+dot+ command available in your system.
+
+Now download the umlgraph and note down the path to its jar file.
+
+There are several ways to use the umlgraph program to generate class diagrams. Here we will give hints on how to use it via javadoc.
+
+\subsubsection{Documentig a Class}
+
+To document a class, the \verb+UmlGraph+ docled have to be used. It is supplied as the \verb+org.umlgraph.doclet.UmlGraph+ class in the umlgraph jar.
+
+The command to be given is:
+
+\begin{verbatim}
+javadoc -d <outputfolder> 
+-docletphath <path to umlgraph jar file>
+-doclet org.umlgraph.doclet.UmlGraph <options> <javafile with complete phath>
+\end{verbatim}
+
+See the umlgraph documentation for options.\footnote{\url{https://www.spinellis.gr/umlgraph/doc/cd-opt.html}} As a first hint, the \verb+-all+ option is perhaps the best one in case you are documenting a single class. 
+
+The command will generate a \verb+graph.dot+ file inside the \verb+outputfolder+ you specified with the \verb+-d+ option.
+
+Now, you have to run the \verb+dot+ on the \verb+graph.dot+ file to obtain a picture of the class diagram.
+
+
+\verb+dot -T<outputformat> -o<outputfilename> graph.dot+
+
+As an example,
+
+\verb+dot -Tjpg -otmp.jpg graph.dot+
+
+produces the \verb+tmp.jpg+ file.
+
+\subsubsection{Documentig packages}
+
+To document classes in packages, the \verb+UmlGraph+ docled have to be used as above.
+
+The command to be given is:
+
+\begin{verbatim}
+javadoc -d <outputfolder>
+-sourcepath <path to the packages source files>
+-docletphath <path to umlgraph jar file>
+-doclet org.umlgraph.doclet.UmlGraph <options> <packages separed by a white space>
+\end{verbatim}
+
+See the umlgraph documentation for options. As a first hint, the \verb+-all+ option should be avoided while the \verb+inferrel+ should be used to highlight the relationships among classes. 
+
+As above, the command will generate a \verb+graph.dot+ file inside the \verb+outputfolder+ you specified with the \verb+-d+ option.
+
+Post process the file with the \verb+dot+ program as explained above to obtain a picture.
+
+\subsubsection{API documentation with UML class diagrams}
+
+\section{Sequence diagrams}
+
+Use umlet
 
 \end{document}
