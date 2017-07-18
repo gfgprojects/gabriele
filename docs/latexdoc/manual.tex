@@ -685,13 +685,13 @@ Multi-instances agents are grouped in sectors: the consumers, firms and banking 
 	\caption{Components of the economic system: institutional sectors and other single-instance agents.}
 	\label{fig:componentsc1}
 \end{figure}
-The other two single-instance agents are highlighted in gray: the Labor Office operates in the labor market, while the Office for Statistics, has a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
+The other two single-instance agents are highlighted in gray: the Labor Office operates in the labor market, while the Office for Statistics, has a global view of the system. The latter computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and production capital markets.
 
-Figure \ref{fig:componentsc1} also shows the sub-structure of the firms and consumers sectors. 
+Figure \ref{fig:componentsc1} also shows the internal structure of the firms and consumers sectors. 
 
 Consumers are classified in students and non-students. The latter in turn can be employed and unemployed. Therefore, each consumer of the model falls into one of the these three groups: student, worker and unemployed.
 
-The sub-structure of the firms sector is designed to allow for product differentiation. In case the researcher is interested in having multiple products, firms are organized into industries that groups firms making the same item.
+The internal structure of the firms sector is designed to allow for product differentiation. In case the researcher is interested in having multiple products, firms are organized into industries that groups firms making similar item.
 
 
 \clearpage
@@ -708,7 +708,7 @@ In the present version of the model, the real part of the economy consists in ex
 		\end{itemize}
 \end{itemize}
 
-These items are exchanged in the relative markets. They are highlighted in gray in figure \ref{fig:componentsc2}.
+These items are exchanged in the three corresponding markets highlighted in gray in figure \ref{fig:componentsc2}.
 
 
 \begin{figure}[htp]
@@ -717,14 +717,15 @@ These items are exchanged in the relative markets. They are highlighted in gray 
 	\label{fig:componentsc2}
 \end{figure}
 
-The model allows for product differentiation. It concerns consumption products. We have signaled this possibility by indexing the products in the goods market.
+As explained above, the model allows for product differentiation. It concerns consumption products. We have signaled this possibility by indexing the products in the goods market.
 
-Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are accounted as assets in the firms balance sheet. Production capital used in the production process gradually depreciates. It can happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
-Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm asks for new product in the consumption goods market. The latter are then assembled to obtain new production capital. The exceeding production capital that cannot be sold gradually depreciates even thought the researcher can decide to make it happen at a different rate than the production capital employed in the production.
+Firms production capacity can be increased in two ways: by buying existing unused production capital or by buying newly produced investment goods. 
+To avoid the complication of including a specific industry producing investment goods, the following device is used. Investment goods are realized by assembling the existing consumption goods. Therefore, demand for new investment goods increases the demand in the consumption goods markets. Once assembled, these goods becomes production capital, and are accounted as assets in the firms balance sheet. Production capital used in the production process gradually depreciates. It can happen that a firm has an excess of production capital (especially in case of a decreasing demand). In this case, the firm can decide to offer the unused production capital on the corresponding market. 
+Firms having shortages of production capital, first check for its availability on the market for unused production capital. If, after these exchanges, additional production capital is needed, the firm asks for new product in the consumption goods market. The latter are then assembled to obtain new production capital. On the other hand, it can happen that the amount of existing unused production capital is larger than the amount asked on the market. In this case, the exceeding production capital that cannot be sold gradually depreciates at a depreciation rate that can be set at a different level to that wearing away the production capital employed in the production.
 
-Finally, to realize the production, labor is needed.  The labor market completes set of real markets of this model.  
+Finally, to realize the production, labor is needed.  The labor market completes the set of real markets of this model.  
 
-More details on the implementation of these processes are given in the next part of the manual.
+More details on the markets functioning are given in the next part of the manual.
 
 \clearpage
 \section{Financial assets}
@@ -744,7 +745,7 @@ Financial exchanges are thus performed in the credit market (highlighted in gray
 	\label{fig:componentsc3}
 \end{figure}
 
-Considering additional financial contracts, and therefore adding to the model other financial markets, is a goal for the near future. This enrichment will allow the model gradually approach the reality of nowadays financial markets.
+Considering additional financial contracts, and therefore adding other financial markets to the model, is a goal for the near future. This enrichment will allow the model gradually approach the reality of nowadays financial markets.
 
 
 
@@ -782,9 +783,10 @@ The initialization and the main loop are detailed in the following subsections.
 
 \clearpage
 \section{Initialization}\label{sec:initialization}
-The initialization phase allows firms to determine their initial production. % reducing exogenous setting to the minimum. 
-
-When the initial level of production is computed, the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a consistent way.\begin{marginfigure}
+The initialization phase aims at setting firms' potential production.  %  to determine their initial production. reducing exogenous setting to the minimum. 
+After this step,  
+%When the initial level of production is computed,  
+the sequence of events can progress by entering the main loop. During the initialization process, the stock variables of all agents are set in a consistent way.\begin{marginfigure}
 	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
@@ -806,9 +808,9 @@ The capital potential production is assumed to be equal to the level of capital 
 \]
 
 Computing the potential production of labor is more tricky because workers are heterogeneous and have different productivities. 
-We will explain in details how workers' productivities are set in the next section when the consumers initialization will be discussed. For now, it is enough to know that it is heterogeneous and that it will be identified with \gls{var:psiwf}.  To compute the potential production of the workforce employed in a firm, the sum of workers productivities is first computed:
+We will explain in details how workers' productivities are set in the next section when the consumers initialization will be discussed. For now, it is enough to know that labor is heterogeneous and that a worker's productivity will be identified with \gls{var:psiwf}.  To compute the potential production of the workforce employed in a firm, the sum of workers productivities is first computed:
 \[
-	\psi_f=\sum_{w \ \textnormal{in} \ f}\psi_{w,f}
+	\psi_f=\sum_{w \ \textnormal{ working in} \ f}\psi_{w,f}
 \]
 Then, we introduce the following\\ 
 parameter:\\
@@ -836,7 +838,7 @@ The potential production of labor is finally computed as:
 To arrive at the very first $Y_f$,  several preliminary steps, such as initializing the working state of each consumer, are needed. Some of these steps call for additional operations such as setting up the various agents balance sheets and checking for their consistency.
 In the remainder of this section we sketch the process, while more details will be given in the following sections.
 
-We adopt the following strategy: 
+We adopt the following strategy to set $Y^{PL}_f$ and $Y^{PK}_f$: 
 \begin{itemize}
 	\item compute the potential output from workers
 	\item adjust capital such as the potential output from capital is equal to the potential output from workers 
@@ -844,7 +846,7 @@ We adopt the following strategy:
 
 As already mentioned, the first step implies a preliminary setup of household working state. The second step, instead, allows the setup of firms assets balance sheet item. 
 
-Knowing firms balance sheet assets we set the liabilities in such a way that the balance sheet identity is satisfied.
+Knowing firms balance sheet assets, we set the liabilities in such a way that the balance sheet identity is satisfied.
 
 Next, we initialize the household balance sheet.
 
@@ -930,7 +932,7 @@ parameters:\\
 	\hline
 	\hline
 \gls{par:thetamnfpe}&\verb+maxNumberOfFailedPeriodsOfEducation+&$2$&yes\\
-\gls{par:thetamnfpe}&\verb+maxNumberPeriodsOfEducation+&$21$&no\\
+\gls{par:thetamnpe}&\verb+maxNumberPeriodsOfEducation+&$21$&no\\
 	\hline
 \end{tabular}
 
@@ -1002,7 +1004,7 @@ With probability $1-\theta_{ptbub}$, each non student selects a firm randomly an
 
 \subsubsection{Initializing consumers bank account}
 
-This is a first action to setup the consumers balance sheet. 
+This is the first action performed to setup the consumers balance sheet. Other actions will contribute to the formation of the consumers' bank account.  
 
 The involved parameters are:\\
 \begin{tabular}{l l l l}
@@ -1020,9 +1022,9 @@ The involved parameters are:\\
 
 \vskip5mm
 
-Each consumer selects randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of each bank account the code draw a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the \verb+demandedCredit+ variable (it will managed later in the initialization process). Non negative number are assigner to the bank account amount.
+Each consumer selects randomly a number of banks equal to $\theta_{nbcc}$ and open a bank account in each of them. To set the amount of each bank account the code draw a random integer from a uniform distribution $U(\theta_{mincba},\theta_{maxcba})$. In case the figure is negative the amount is set to zero and the drawn number is assigned to the \verb+demandedCredit+ variable (it will be managed later in the initialization process). Non negative number are assigner to the bank account amount.
 
-However, the amount of the various bank accounts will be revised in the final step of the initialization to ensure all the agents' balance sheet consistency.\begin{marginfigure}
+As hinted at above, the amount of the various bank accounts will be revised in the final step of the initialization to ensure all the agents' balance sheet consistency.\begin{marginfigure}
 	\hskip1cm\includegraphics[scale=1.0]{sc_logo-0.pdf}
 \end{marginfigure}
 
@@ -1034,7 +1036,7 @@ So, each firm now has a list of CVs. Each firm employs all the senders of the CV
 
 As already explained at the beginning of this section, the firm determines the potential production of its labor force (\gls{var:psif}) by summing the potential production of each employee (\gls{var:psiwf}):
 \[
-	\psi_f=\sum_{w \ \textnormal{in} \ f}\psi_{w,f}
+	\psi_f=\sum_{w \ \textnormal{working in} \ f}\psi_{w,f}
 \]
 the potential production is thus
 \[
@@ -1147,13 +1149,13 @@ Now, the level of deposits (\gls{var:Db}) compatible with the balance sheet rela
 Dep_b=L_b-E_b
 \]
 
-Due to the random elements in the initialization of consumers and firms, we usually have
+Due to the random elements in the initialization of consumers and firms, the normal situation at this stage of the initialization is a stock inconsistency:
 \[
-	\sum BA^+_{cb} \neq Dep_b
+	\sum_{c \textnormal{ customer of } b} BA^+_{cb} \neq Dep_b
 \]
-note that only consumers' positive bank accounts are considered because firms have no deposits at initialization.
+Note that only consumers' positive bank accounts are considered because firms have no deposits at initialization.
 
-To satisfy the balance sheet identity, the amount of each positive bank account is adjusted as follows:
+The following revision is performed to restore stock consistency. The amount of each positive bank account is adjusted as follows:
 \[
 	BA^{+}_{cb}=BA^+_{cb}\frac{Dep_b}{\sum BA^+_{cb}}
 \]
@@ -1179,7 +1181,9 @@ where $C(1-\textnormal{\gls{par:thetaptbub}})$ is an estimation of the number of
 
 \subsection{Conclusions}
 
-At the end of the initialization phase, all the consumers know if they are student, employed or unemployed. Non students know their level of productivity. Employed know in which firm they are working.
+At the end of the initialization phase the following results are chieved.
+
+Consumers know if they are student, employed or unemployed. Non students know their level of productivity. Employed know in which firm they are working.
 
 Firms knows their employees and the level of their production capital. The supply of goods is thus computed.
 
