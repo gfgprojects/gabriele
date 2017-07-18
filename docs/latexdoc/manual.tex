@@ -268,7 +268,8 @@ After a while, the RS GUI (displayed in the following figure) will show up
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_gui1}
 
-The first time you start the RS GUI with the GABRIELE scenario you have to setup the custom dataloader. As you can see in the scenario tree under the Data Loaders item, the XML \& Model data loader is present. This must be changed in the custom loader for this model. To do so right click on the Data loaders item and choose set Data Loader as shown in the following figures
+The first time you start the RS GUI % with the GABRIELE scenario 
+you have to setup the custom dataloader. As you can see in the scenario tree under the Data Loaders item, the XML \& Model data loader is present. This must be changed in the custom loader for this model. To do so right click on the Data loaders item and choose set Data Loader as shown in the following figures
 
 
 \noindent
@@ -297,7 +298,7 @@ Now, the previous data loader is replaced by the GABRIELE data loader (Context) 
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_gui6}
 
-Click on the floppy disk icon to make the changes permanent.
+Click on the floppy disk icon to make the change permanent.
 
 %Now, closing the window you are asked to make your change permanent: 
 
@@ -311,7 +312,7 @@ Click on the floppy disk icon to make the changes permanent.
 
 There are two ways of running RS models: The GUI and the BATCH mode.
 
-The GUI mode can be of great visual impact because several monitoring devices continuously updating during runtime can be added to the RS GUI window. The flip side of the coin is that these devices slow down simulation execution. Second, the simulation runs exclusively in a machine running an X server. Notwithstanding the GUI mode can be a valid tool during the model development, when massive simulations are performed, the BATCH mode should be used instead. BATCH mode runs are faster because all the graphics elements are turned off. Furthermore, the absence of graphics makes it possible to run the model in parallel on several machines. It is worth saying that RS has very useful facilities for running a model in parallel.
+The GUI mode can be of great visual impact because several monitoring devices continuously updating during the run can be added to the RS GUI window. The flip side of the coin is that these devices slow down simulation execution. Second, the simulation runs exclusively in a machine running an X server. Notwithstanding the GUI mode can be a valid tool during the model development. When massive simulations are performed, the BATCH mode should be used instead. BATCH mode runs are faster because all the graphics elements are turned off. Furthermore, the absence of graphics makes it possible to run the model in parallel on several machines. It is worth saying that RS has very useful facilities for running a model in parallel.
 
 
 Let us start this section from the very beginning i.e. with the eclipse software just opened and show how to run the model both in GUI and BATCH mode.
@@ -320,7 +321,7 @@ First of all, click on the down black arrow highlighted by the red circle in the
 
 \vskip2mm
 \noindent
-\includegraphics[scale=0.35]{fig_gabriele_rs_execution1}
+\includegraphics[scale=0.195]{fig_gabriele_rs_execution1a}
 
 After clicking, a menu opens as shown by the following figure. 
 
@@ -334,7 +335,7 @@ The GUI execution is activated by clicking the \verb+gabriele Model+ item, while
 
 \subsubsection{Running in GUI mode}
 
-So, the RS GUI window opens by clicking the \verb+gabriele Model+ item. Check if Context is listed under the Data Loaders item of the scenario tree.
+RS GUI window opens by clicking the \verb+gabriele Model+ item. Check if Context is listed under the Data Loaders item of the scenario tree.
 
 Use the RS GUI window intuitive buttons to interact with the simulation. A more detailed description on how to control the simulation is given at page 24 ``Repast Java Getting Started'' document available in RS web site.
 
@@ -345,7 +346,7 @@ The current version of the model has no runtime monitoring graphical element, so
 \includegraphics[scale=0.35]{fig_gabriele_rs_gui7}
 
 \vskip2mm
-On the other hand, GABRIELE record data in text and csv files. So, running the model they will be added to the model base directory:\\
+On the other hand, GABRIELE record data in text and csv files that will be created in the model base directory:\\
 \verb+/Users/coolcoder/Documents/workspace/gabriele+\\
 Data files can be easily identified because their name starts with \verb+zdata+.
 
@@ -367,8 +368,11 @@ We only point out that the present version of the model uses custom output recor
 \noindent
 \includegraphics[scale=0.35]{fig_gabriele_rs_batch}
 
-This configuration instructs RS to fetch from all the machines running the model in parallel all the file whose name begins with \verb+zdata+  and move them in an output sub-folder named 
-\verb+batch_date+. Needless to say that the sub-folder name can be chosen at your convenience, and it can be changed at each batch run in order to avoid overwriting the data (perhaps you want to have memory of the time of your runs. It is why we add \verb+_date+ to the folder name.
+This configuration instructs RS to fetch
+all the file whose name begins with \verb+zdata+  
+from all the machines running the model in parallel 
+and move them in an output sub-folder named 
+\verb+batch_date+. Needless to say that the sub-folder name can be chosen at your convenience, and it can be changed at each batch run in order to avoid overwriting the data (perhaps you want to have memory of the time of your runs. It is why we add \verb+_date+ to the folder name).
 
 
 The following figure shows the contents of the model output folder after a local batch run using Eclipse navigator panel\\ 
