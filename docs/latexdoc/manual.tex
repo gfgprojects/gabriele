@@ -396,9 +396,9 @@ The following colors are used:\\
 \subsection{Java Development Kit (JDK)}
 Follow the instructions given in the previous chapter to install or update JDK if needed. 
 \subsection{Repast Simphony (RS)}
-Also in this case, you can follow the instructions given in the previous chapter. However, the process therein described implies the installation of eclipse. We will give here an alternative way to install the RS library and using it directly.
+Also in this case, you can follow the instructions given in the previous chapter. However, the process therein described implies the installation of eclipse. We will give here an alternative way to install the RS library and to use it directly.
 
-First of all you have to download all the packages which make up the RS library.\footnote{Note that the installation process described in RS web site implies downloading the RS library and put them in the eclipse plugins folder.}
+First of all you have to download all the RS library packages.\footnote{Note that the installation process described in RS web site implies downloading the RS library and put them in the eclipse plugins folder.}
 
 You can download all the jars by using the \verb+wget+ command with the recursion option (\verb+-r+).\footnote{If the command is not available in your system you have to install it.}
 
@@ -406,7 +406,7 @@ The following steps have to be taken to install RS.
 
 Suppose, for example, you have the directory \verb+/Users/coolcoder/abm_java_libraries+. Create the directory\\
 \verb+mkdir repast+\\
-inside this directory an move into it\\
+and move into it\\
 \verb+cd repast+\\
 
 Download the files from the RS repository\\
@@ -438,7 +438,7 @@ where you have to replace \verb+<version>+ with the version identification numbe
 
 After a while, the RS GUI window should pop up.
 
-Close the window because we will run the model in BATCH mode only.
+%Close the window because we will run the model in BATCH mode only.
 
 
 
@@ -520,7 +520,7 @@ Find out the Repast installation directory:
 
 In this expression, \verb+/Users/coolcoder/abm_java_libraries/repast+ is repast base directory and \verb+2.3.1+ is repast version.
 
-Prepare a text file named \verb+paths.txt+ having the repast base directory in its first line, repast version in the second line and the model base directory in the third line:
+Prepare a text file named \verb+paths.txt+ having the repast base directory in its first line, repast version in the second line and the model base directory in the third line. The file content should look as follows:
 
 \color{magenta}
 \vskip2mm \noindent
@@ -624,7 +624,12 @@ The data file have the \verb+zdata_+ prefix for ease of their identification:
 %\chapter{Introduction}
 This model aims at reproducing the dynamics of an economic systems.
 
-Describing the functioning of a dynamic system implies to know the components of the systems, how they behave and how they interact with each other. 
+The functioning of a dynamic system is described by giving information on the following elements:
+\begin{itemize}
+	\item the components of the systems, 
+	\item how they behave and 
+	\item how they interact with each other. 
+\end{itemize}
 
 %Throughout this document we will extensively use the two visual representations reported in figures \ref{fig:components} and \ref{fig:sequence}. 
 
@@ -674,13 +679,13 @@ while single-instance agents are:
 	\item Office for statistics
 \end{itemize}
 
-Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government to these three sectors, we obtain the usual categorization of the economy into institutional sectors. Figure \ref{fig:componentsc1} highlights the institutional sectors in gray.
+Multi-instances agents are grouped in sectors: the consumers, firms and banking sectors. Adding the government to these three sectors, we obtain the usual categorization of the economy into the four institutional sectors: households, firms, financial sector and public sector. Figure \ref{fig:componentsc1} highlights the institutional sectors in light blue.
 \begin{figure}[htp]
 \hskip-1cm\includegraphics[scale=0.5]{agents_and_interactions_figure1c1-0.pdf}
 	\caption{Components of the economic system: institutional sectors and other single-instance agents.}
 	\label{fig:componentsc1}
 \end{figure}
-The other two single-instance agents are highlighted in light blue. The Labor Office acts in the labor market, while the Office for Statistics, has a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
+The other two single-instance agents are highlighted in gray: the Labor Office operates in the labor market, while the Office for Statistics, has a global view of the system. It computes aggregate variables making them available to all the other agents. Furthermore, it uses this information to moderate the goods and capital markets.
 
 Figure \ref{fig:componentsc1} also shows the sub-structure of the firms and consumers sectors. 
 
