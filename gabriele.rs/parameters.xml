@@ -36,6 +36,12 @@
 						converter="repast.simphony.parameter.StringConverterFactory$IntConverter"
 									
 		/>
+				<parameter name="maximumTaxRate" displayName="maximumTaxRate" type="double" 
+						defaultValue="0.1" 
+						isReadOnly="false" 
+						converter="repast.simphony.parameter.StringConverterFactory$DoubleConverter"
+									
+		/>
 				<parameter name="maxNumberOfFailedPeriodsOfEducation" displayName="max number of failures as student" type="int" 
 						defaultValue="2" 
 						isReadOnly="false" 
