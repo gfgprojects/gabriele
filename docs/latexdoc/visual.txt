@@ -16,7 +16,7 @@ etex
 
 beginfig(0);
 
-scalefactor:=1.0;
+scalefactor:=1.3;
 
 picture ah;
 

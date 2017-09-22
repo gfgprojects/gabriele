@@ -24,6 +24,7 @@ C$\rightarrow$B: set desired consumption (ask for credit if needed)
 C$_S$: step state
 C$\rightarrow$B: pay back if possible
 B$\rightarrow$C: account interest and ask refunding
-OFS-G-CB: fiscal policy decision and inplementation 
+C$_E$: pay taxes \& C$_U$ receive dole
+OFS-G-CB: fiscal policy decision and implementation 
 C$_E$: receive wage
 OFS: compute variables

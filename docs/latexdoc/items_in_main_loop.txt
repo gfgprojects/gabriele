@@ -24,6 +24,7 @@ B$\rightarrow$\color{red}C\color{black}: set allowed credit
 \color{red}C$_S$\color{black}: step state
 \color{red}C\color{black}$\rightarrow$B: pay back if possible
 B$\rightarrow$\color{red}C\color{black}: account interest and ask refunding
-OFS-G-CB: fiscal policy decision and inplementation 
+\color{red}C$_E$\color{black}: pay taxes \& \color{red}C$_U$\color{black}: receive dole
+OFS-G-CB: fiscal policy decision and implementation 
 \color{red}C$_E$\color{black}: receive wage
 OFS: compute variables
