@@ -3115,10 +3115,10 @@ Presently, we have created two glossaries, one for variables and one for paramet
 To simplify the updating of the auxiliary files, we create the \verb+makeglossaries+ script. So, to update the master document when a new glossary entry is created and cited, enter the following commands in the command line:
 
 \begin{verbatim}
-pdflatex
+pdflatex manual.tex
 ./makeglossaries
-pdflatex
-pdflatex
+pdflatex manual.tex
+pdflatex manual.tex
 \end{verbatim}
 
 
