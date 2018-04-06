@@ -133,6 +133,7 @@ public class Context implements ContextBuilder<Object> {
 
 	public static ISchedule schedule;
 
+
 //	public boolean debtCancelledOnfinancialDifficulty;
 //	public double betaStud,betaWorker;
 
