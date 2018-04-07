@@ -1,0 +1,2 @@
+javadoc -d ../html -docletpath ~/Scaricati/UMLGraph-5.6_6.6-SNAPSHOT/lib/UmlGraph.jar -doclet org.umlgraph.doclet.UmlGraph -hide "((java)|(Absolute)|(Context))" -inferrel -nodefillcolor lightyellow sfcabm
+

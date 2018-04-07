@@ -1,0 +1,2 @@
+javadoc -d . -cp ../../src -docletpath ~/abm_java_libraries/umlgraph/UmlGraph-5.7_2.32-SNAPSHOT.jar -doclet org.umlgraph.doclet.UmlGraph -hide "((Object)|(ArrayList)|(Iterator)|(Context))" -inferrel -nodefillcolor lightyellow gabriele gabriele.institutions gabriele.agents
+dot -Tjpg -o packages_classes.jpg graph.dot

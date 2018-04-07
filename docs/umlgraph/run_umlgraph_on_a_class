@@ -1,0 +1,2 @@
+javadoc -d . -docletpath ~/abm_java_libraries/umlgraph/UmlGraph-5.7_2.32-SNAPSHOT.jar -doclet org.umlgraph.doclet.UmlGraph -all -nodefillcolor lightyellow  ../../src/gabriele/institutions/Government.java
+dot -Tjpg -o government_class_diagram.jpg graph.dot

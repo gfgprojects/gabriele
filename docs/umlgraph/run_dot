@@ -1,0 +1,2 @@
+sed 's/<any>/any/g' graph.dot > graph1.dot
+dot -Tjpg -o tmp.jpg graph1.dot

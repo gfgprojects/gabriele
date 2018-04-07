@@ -1,0 +1,2 @@
+javadoc -d ../html -docletpath ~/abm_java_libraries/umlgraph/UmlGraph-5.7_2.32-SNAPSHOT.jar -doclet org.umlgraph.doclet.UmlGraphDoc -all -inferrel sfcabm
+
