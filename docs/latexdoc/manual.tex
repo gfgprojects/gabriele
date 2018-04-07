@@ -3061,7 +3061,8 @@ The main loop is scheduled in the\\ \verb+OfficeForStatistics.scheduleEvents()+\
 \part{Documenting GABRIELE}
 
 
-\chapter{\LaTeX documentation}
+\chapter{\LaTeX, javadoc and UML documentation}
+\section{\LaTeX documentation}
 The \LaTeX typesetting system is used to produce the GABRIELE manual.
 
 All the files needed to obtain the electronic version of the manual are in the \verb+docs/latexdoc+ folder.
@@ -3070,7 +3071,7 @@ The manual source file is named \verb+manual.tex+
 
 In the following subsection we report on the various tools used to produce the additional elements that are integrated into the main file. 
 
-\section{Additional lists in the table of contents}
+\subsection{Additional lists in the table of contents}
 The \verb+glossaries+ package is used to produce the additional lists to be included in the table of contents.
 
 Here we will briefly explain how it works. First of all a new glossary must be created. In the following example, the glossary called \verb+variable+ is created: 
@@ -3122,7 +3123,7 @@ pdflatex manual.tex
 \end{verbatim}
 
 
-\section{Figures}
+\subsection{Figures}
 
 Some figures (for example \ref{fig:components}-\ref{fig:componentsc3}) are obtained by using metapost.
 The metapost work flow is as follows: metapost code is written in an ascii file.   
@@ -3132,15 +3133,15 @@ Therefore, to modify these figures, you have to edit the corresponding mp source
 Figures \ref{fig:sequence} and \ref{fig:clockcolor} are also obtained as metapost output, but the process is more structured to ease possible changes. The complication of this figure is that events are represented as evenly spaced sun rays. Imagine a new event must be added. It would be a significant work to manually change the positions of all the events labels. We use the R software (\href{https://www.r-project.org}{https://www.r-project.org}) to ``automate'' the process that leads to the figure. The \verb+visual.R+ script, for example, produces figure \ref{fig:sequence}. It takes as input two text files: \verb+visual.txt+ and \verb+items_in_main_loop_black.txt+. The first one contains metapost drawing commands for all the elements except the events descriptions (the sun rays). This file has to be edited to include new such elements. The second file lists the labels of the rays (note, they are in inverted order and include \LaTeX commands). The R script loads the list from the file, computes the angle between rays and produces metapost command to draw the labels. All the metapost drawing commands are written in the \verb+visual.mp+ file. The R script also takes care of running metapost on this file.
 At the end of the day, to modify the figure one has to edit one of the text files and run the script in R. The same process applies to the production of figure \ref{fig:clockcolor}. The file involved here are \verb+visual1.txt+ and \verb+items_in_main_loop.txt+ and the R script \verb+visual1.R+.
 
-\chapter{Javadoc}
+\section{Javadoc}
 
 From Repast project menu, choose Generate javadoc. Select gabriele from the list. Modify the destination folder to 
 \verb+<path to repast workspace>/gabriele/docs+ if needed and click on finish.
 
 
 
-\chapter{Unified Modeling Language (UML)}
-\section{Class diagrams}
+\section{Unified Modeling Language (UML)}
+\subsection{Class diagrams}
 
 Class diagrams can be generated directly from the code by using the umlgraph.\footnote{\url{https://www.spinellis.gr/umlgraph/}} 
 As trated in the umlgraph installation page:  
@@ -3179,6 +3180,11 @@ As an example,
 
 produces the \verb+tmp.jpg+ file.
 
+The following figure gives an idea of the outcome. It is obtained by running \verb+ImlGraph+ on the \verb+Government.java+ file
+
+\includegraphics[scale=0.5]{../umlgraph/government_class_diagram.jpg}
+
+
 \subsubsection{Documentig packages}
 
 To document classes in packages, the \verb+UmlGraph+ docled have to be used as above.
@@ -3198,9 +3204,16 @@ As above, the command will generate a \verb+graph.dot+ file inside the \verb+out
 
 Post process the file with the \verb+dot+ program as explained above to obtain a picture.
 
+The following figure gives an idea of the outcome. It is obtained by running \verb+UmlGraph+ on the \verb+gabriele, gabriele.agents, gabriele.institutions+ packages
+
+
+\hskip-2cm\includegraphics[scale=0.5]{../umlgraph/packages_classes.jpg}
+
+
+
 \subsubsection{API documentation with UML class diagrams}
 
-\section{Sequence diagrams}
+\subsection{Sequence diagrams}
 
 Use umlet
 
