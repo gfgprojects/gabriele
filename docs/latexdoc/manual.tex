@@ -3029,6 +3029,8 @@ bank 3: account =  -50  demanded credit =    0 allowed credit =    0 unpaid =  0
 cashOnHand = 0 financialResourcesInBankAccounts = 0
 \end{verbatim}
 
+
+\iffalse
 \chapter{Selected topics}
 
 \section{Stock-Flow consistency}
@@ -3057,6 +3059,9 @@ instructions perform the initialization steps.
 
 The main loop is scheduled in the\\ \verb+OfficeForStatistics.scheduleEvents()+\\ method.
 
+
+
+\fi
 
 \part{Documenting GABRIELE}
 
@@ -3211,7 +3216,26 @@ The following figure gives an idea of the outcome. It is obtained by running \ve
 
 
 
-\subsubsection{API documentation with UML class diagrams}
+\subsection{Integrating javadoc with UML class diagrams}
+
+Integrate the javadoc output with UML graph showing the relationships of a class with the rest of the code the \verb+UmlGraphDoc+ docled has to be used instead that \verb+UmlGraph+.
+
+The command to be given is:
+
+\begin{verbatim}
+javadoc -d <outputfolder>
+-sourcepath <path to the packages source files>
+-docletphath <path to umlgraph jar file>
+-doclet org.umlgraph.doclet.UmlGraphDoc <options> <packages separed by a white space>
+\end{verbatim}
+
+Among the available options, \verb+-collapsible+ is perhaps one worth to be supplied.
+
+It inserts in the java documentation the button \raisebox{-1mm}{\includegraphics[scale=0.4]{fig_gabriele_umlgraph.png}}.
+
+When clicked, the graph showing the relationships of the Class with the other classes is showed.  
+
+
 
 \subsection{Sequence diagrams}
 
