@@ -3063,10 +3063,39 @@ The main loop is scheduled in the\\ \verb+OfficeForStatistics.scheduleEvents()+\
 
 \fi
 
-\part{Documenting GABRIELE}
+\part{Modifying and developing GABRIELE}
 
 
-\chapter{\LaTeX, javadoc and UML documentation}
+\chapter{Modifying the code}
+
+Modifying an existing code is a demanding task because the developer needs information distributed in several thousands lines of code.
+
+Even an open source code ends up to be proprietary if it is not properly documented.
+
+Because GABRIELE is provided with a collaborative intent, a particular care was dedicated to providing a documentation allowing new developers to easily understand where the code has to be modified.
+
+\section{Learning the current state of development}
+The reading of the above material of this document gives the idea of the state of development. However, developer need something more detailed. This more detailed information is included in the \verb+docs+ folder of GABRIELE distribution.  
+
+Opening the \verb+index.html+ file using a browser, a web page with three sections is displayed.
+
+The three sections are
+\begin{itemize}
+	\item Relationships among classes
+	\item UML activity diagrams for the sequence of events
+	\item javadoc API
+\end{itemize}
+
+The javadoc API documentation is standard, while the other two items represents unusual efforts in software documentation.
+
+The relationship among classes presents an UML diagram showing GABRIELE classes and the relationships among them. This represents a useful hint for understanding the software components, however, the bulk of the insights can be obtained in the UML activity diagrams for the sequence of events section.
+
+The latter presents the sequence of actions for both the initialization (giving a more detailed description of what presented in Section \ref{sec:initialization}) and the main loop (giving a more detailed description of what presented in Section \ref{sec:mainloop}).
+
+For each of these action a link to an UML activity diagram is provided. UML activity diagrams give a visual representation of the code and allow developers to easily pinpoint where the code should be modified in order to obtain the desired result.
+
+
+\chapter{Producing documentation: \LaTeX, javadoc and UML}
 \section{\LaTeX documentation}
 The \LaTeX typesetting system is used to produce the GABRIELE manual.
 
@@ -3158,11 +3187,11 @@ Now download the umlgraph and note down the path to its jar file.
 
 There are several ways to use the umlgraph program to generate class diagrams. Here we will give hints on how to use it via javadoc.
 
-\subsubsection{Documentig a Class}
+\subsubsection{Documenting a Class}
 
 To document a class, the \verb+UmlGraph+ docled have to be used. It is supplied as the \verb+org.umlgraph.doclet.UmlGraph+ class in the umlgraph jar.
 
-The command to be given is:
+The command to be executed is:
 
 \begin{verbatim}
 javadoc -d <outputfolder> 
@@ -3185,22 +3214,22 @@ As an example,
 
 produces the \verb+tmp.jpg+ file.
 
-The following figure gives an idea of the outcome. It is obtained by running \verb+ImlGraph+ on the \verb+Government.java+ file
+The following figure gives an idea of the outcome. It is obtained by running \verb+UmlGraph+ on the \verb+Government.java+ file
 
 \includegraphics[scale=0.5]{../umlgraph/government_class_diagram.jpg}
 
 
-\subsubsection{Documentig packages}
+\subsubsection{Documenting packages}
 
-To document classes in packages, the \verb+UmlGraph+ docled have to be used as above.
+To document classes in packages and the relationships among them, the \verb+UmlGraph+ docled has to be used as above but with different inputs.
 
-The command to be given is:
+The command to be executed is:
 
 \begin{verbatim}
 javadoc -d <outputfolder>
 -sourcepath <path to the packages source files>
 -docletphath <path to umlgraph jar file>
--doclet org.umlgraph.doclet.UmlGraph <options> <packages separed by a white space>
+-doclet org.umlgraph.doclet.UmlGraph <options> <packages separated by a white space>
 \end{verbatim}
 
 See the umlgraph documentation for options. As a first hint, the \verb+-all+ option should be avoided while the \verb+inferrel+ should be used to highlight the relationships among classes. 
@@ -3209,7 +3238,7 @@ As above, the command will generate a \verb+graph.dot+ file inside the \verb+out
 
 Post process the file with the \verb+dot+ program as explained above to obtain a picture.
 
-The following figure gives an idea of the outcome. It is obtained by running \verb+UmlGraph+ on the \verb+gabriele, gabriele.agents, gabriele.institutions+ packages
+The following figure gives an idea of this process outcome. It is obtained by running \verb+UmlGraph+ on the \verb+gabriele, gabriele.agents, gabriele.institutions+ packages
 
 
 \hskip-2cm\includegraphics[scale=0.5]{../umlgraph/packages_classes.jpg}
@@ -3218,15 +3247,15 @@ The following figure gives an idea of the outcome. It is obtained by running \ve
 
 \subsection{Integrating javadoc with UML class diagrams}
 
-Integrate the javadoc output with UML graph showing the relationships of a class with the rest of the code the \verb+UmlGraphDoc+ docled has to be used instead that \verb+UmlGraph+.
+The \verb+UmlGraphDoc+ docled has to be used instead of the \verb+UmlGraph+ doclet to integrate javadoc output with UML graph showing the relationships of a class with the rest of the code .
 
-The command to be given is:
+The command to be executed is:
 
 \begin{verbatim}
 javadoc -d <outputfolder>
 -sourcepath <path to the packages source files>
 -docletphath <path to umlgraph jar file>
--doclet org.umlgraph.doclet.UmlGraphDoc <options> <packages separed by a white space>
+-doclet org.umlgraph.doclet.UmlGraphDoc <options> <packages separated by a white space>
 \end{verbatim}
 
 Among the available options, \verb+-collapsible+ is perhaps one worth to be supplied.
@@ -3237,19 +3266,19 @@ When clicked, the graph showing the relationships of the Class with the other cl
 
 
 
-\subsection{Sequence diagrams}
+\subsection{Activity diagrams}
 
-Sequence diagrams are used to describe how the code implements simulations events.
+Activity diagrams are used to describe how the code implements simulations events.
 
-A sequence diagram is build for each one of the item reported in figure \ref{fig:sequence}. These diagrams are gathered in the \verb+gabriele/docs/umldoc+ folder.
+An activity diagram is build for each one of the item reported in figure \ref{fig:sequence}. These diagrams are gathered in the \verb+gabriele/docs/umldoc+ folder.
 
-When a developer add an event, s/he should provide the diagram for the event and integrate it in the current documentation.
+When a developer add an event, s/he is asked to provide the diagram for the event and integrate it in the current documentation.
 
-The existing diagram was made using The Umlet software. 
+The existing diagrams were made using The Umlet software. 
 The software comes in two version: the stand alone and the eclipse integration.
 Hereafter we will provide instructions on how to make new diagram with the stand alone version.
 
-When the software opens, the user faces the window displayed by the following figure
+The Umlet graphical user interface is displayed in the following figure
 
 \includegraphics[scale=0.35]{fig_gabriele_umlet0.png}
 
@@ -3269,14 +3298,9 @@ Now, the diagram displayed in the left frame can be integrated by typing in the 
 
 \includegraphics[scale=0.35]{fig_gabriele_umlet4.png}
 
-After some practice, the user is able to produce the graph which describing how the action is implemented in the code. As an example, we report hereafter the diagram for the \verb+activateOfficeForLabor+ action. 
+The text to be supplied is a pseudo code written using Umlet syntax. 
+Using this tool, the user is able to produce the graph which shows how the action is implemented in the code. As an example, we report hereafter the diagram for the \verb+activateOfficeForLabor+ action. 
 
 \includegraphics[scale=0.35]{fig_gabriele_umlet5.png}
-
-
-
-
-
-
 
 \end{document}
